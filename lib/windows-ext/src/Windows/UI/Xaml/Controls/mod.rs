@@ -33780,6 +33780,27 @@ impl Button {
                 .ok()
         }
     }
+    pub fn new() -> ::windows_core::Result<Button> {
+        Self::IButtonFactory(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateInstance)(
+                    ::windows_core::Interface::as_raw(this),
+                    ::core::ptr::null_mut(),
+                    &mut ::core::option::Option::<::windows::core::IInspectable>::None
+                        as *mut _ as _,
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn IButtonFactory<R, F: FnOnce(&IButtonFactory) -> ::windows_core::Result<R>>(
+        callback: F,
+    ) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<Button, IButtonFactory> = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
 }
 impl ::core::cmp::PartialEq for Button {
     fn eq(&self, other: &Self) -> bool {
@@ -42388,7 +42409,29 @@ unsafe impl ::core::marker::Send for TextBlock {}
 unsafe impl ::core::marker::Sync for TextBlock {}
 #[repr(transparent)]
 pub struct TextBox(::windows_core::IUnknown);
-impl TextBox {}
+impl TextBox {
+    pub fn new() -> ::windows_core::Result<TextBox> {
+        Self::ITextBoxFactory(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateInstance)(
+                    ::windows_core::Interface::as_raw(this),
+                    ::core::ptr::null_mut(),
+                    &mut ::core::option::Option::<::windows::core::IInspectable>::None
+                        as *mut _ as _,
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn ITextBoxFactory<R, F: FnOnce(&ITextBoxFactory) -> ::windows_core::Result<R>>(
+        callback: F,
+    ) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<TextBox, ITextBoxFactory> = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::core::cmp::PartialEq for TextBox {
     fn eq(&self, other: &Self) -> bool {
         self.0 == other.0

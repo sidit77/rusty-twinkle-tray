@@ -3,6 +3,7 @@ mod utils;
 mod whitelist;
 mod exporter;
 mod filter;
+mod constructors;
 
 use std::collections::{HashMap, HashSet};
 use std::ops::Sub;
@@ -12,6 +13,7 @@ use serde::{Deserialize, Serialize};
 use walkdir::WalkDir;
 use windows_bindgen::bindgen;
 use crate::attributes::strip_attributes;
+use crate::constructors::generate_constructors;
 use crate::exporter::generate_export;
 use crate::filter::should_process_file;
 use crate::whitelist::apply_whitelist;
@@ -26,6 +28,7 @@ struct Config {
     temp_dir: PathBuf,
     classes: HashSet<String>,
     features: HashSet<String>,
+    constructors: HashSet<String>,
     white_list: HashMap<String, HashSet<String>>,
     reexports: HashSet<String>
 }
@@ -158,6 +161,7 @@ fn transform<I: AsRef<Path>, O: AsRef<Path>>(in_file: I, out_file: O, config: &C
     let mut encountered = HashSet::new();
     strip_attributes(&mut file.items, &config.features, &mut encountered);
 
+    generate_constructors(&mut file.items, &config.constructors);
     //print_items(file.items);
     //delete_impl(&mut file.items);
     std::fs::create_dir_all(out_file.as_ref().parent().unwrap()).unwrap();

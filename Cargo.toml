@@ -3,6 +3,9 @@ name = "modern-win-gui"
 version = "0.1.0"
 edition = "2021"
 
+[profile.release]
+lto = true
+
 [workspace]
 default-members = ["."]
 members = [

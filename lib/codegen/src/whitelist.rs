@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
-use proc_macro2::Ident;
-use syn::{Expr, ImplItem, Item, parse_quote, Path, Type};
+use syn::{Expr, ImplItem, Item, parse_quote};
+use crate::utils::get_indent;
 
 pub fn apply_whitelist(items: &mut Vec<Item>, white_list: &HashMap<String, HashSet<String>>) {
     items
@@ -53,23 +53,3 @@ fn clean_impl(items: &mut Vec<ImplItem>, white_list: &HashSet<String>) {
     })
 }
 
-fn get_indent(ty: &Type) -> String {
-    match ty {
-        Type::Path(path) => {
-            simple_ident(&path.path)
-                .unwrap_or_else(|| panic!("Not an identifier: {:#?}", path))
-                .to_string()
-        },
-        _ => panic!("Not a path")
-    }
-}
-
-fn simple_ident(path: &Path) -> Option<&Ident> {
-    if path.leading_colon.is_none()
-        && path.segments.len() == 1
-    {
-        Some(&path.segments[0].ident)
-    } else {
-        None
-    }
-}

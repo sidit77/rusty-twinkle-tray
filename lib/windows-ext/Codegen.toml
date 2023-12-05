@@ -19,6 +19,12 @@ reexports = [
     "UI"
 ]
 
+constructors = [
+    "DesktopWindowXamlSource",
+    "Button",
+    "TextBox"
+]
+
 [white_list]
 Button = ["SetContent"]
 WindowsXamlManager = ["InitializeForCurrentThread", "IWindowsXamlManagerStatics"]

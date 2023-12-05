@@ -1,15 +1,12 @@
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
-use std::ffi::c_void;
-use std::mem::MaybeUninit;
-use std::ptr::null_mut;
 use std::sync::Once;
-use windows::core::{PCWSTR, w, Result, factory, HRESULT, Interface, IInspectable, ComInterface};
+use windows::core::{PCWSTR, w, Result, ComInterface};
 use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, WPARAM};
 use windows::Win32::Graphics::Gdi::UpdateWindow;
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUninitialize};
 use windows::Win32::UI::WindowsAndMessaging::{CreateWindowExW, CW_USEDEFAULT, DefWindowProcW, DispatchMessageW, GetMessageW, IDC_ARROW, LoadCursorW, MSG, PostQuitMessage, RegisterClassW, SetWindowPos, ShowWindow, SW_SHOW, SWP_SHOWWINDOW, TranslateMessage, WINDOW_EX_STYLE, WM_DESTROY, WNDCLASSW, WS_OVERLAPPEDWINDOW, WS_VISIBLE};
-use windows_ext::UI::Xaml::Controls::{Button, TextBox};
+use windows_ext::UI::Xaml::Controls::{TextBox};
 use windows_ext::UI::Xaml::Hosting::{DesktopWindowXamlSource, WindowsXamlManager};
 
 static REGISTER_WINDOW_CLASS: Once = Once::new();
@@ -43,8 +40,8 @@ fn main() -> Result<()> {
     };
 
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
-    let xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
-    let desktop_source = new_desktop_source()?;
+    let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
+    let desktop_source = DesktopWindowXamlSource::new()?;
     let interop = desktop_source.cast::<IDesktopWindowXamlSourceNative>()?;
     unsafe { interop.AttachToWindow(hwnd)?; }
     let island = unsafe { interop.WindowHandle() }?;
@@ -52,7 +49,7 @@ fn main() -> Result<()> {
         SetWindowPos(island, HWND::default(), 200, 100, 800, 200, SWP_SHOWWINDOW)?;
     }
 
-    let button = new_textfield()?;
+    let button = TextBox::new()?;
     //button.SetContent(&IInspectable::try_from("Hello World")?)?;
     desktop_source.SetContent(&button)?;
 
@@ -71,48 +68,6 @@ fn main() -> Result<()> {
 
     unsafe { RoUninitialize() }
     Ok(())
-}
-
-fn new_desktop_source() -> Result<DesktopWindowXamlSource> {
-    use windows_ext::UI::Xaml::Hosting::IDesktopWindowXamlSourceFactory;
-    let factory: IDesktopWindowXamlSourceFactory = factory::<DesktopWindowXamlSource, IDesktopWindowXamlSourceFactory>()?;
-    unsafe {
-        let mut result = MaybeUninit::<*mut c_void>::zeroed();
-        let hr: HRESULT = (Interface::vtable(&factory).CreateInstance)(
-            Interface::as_raw(&factory),
-            null_mut(),
-            &mut Option::<IInspectable>::None as *mut _ as _,
-            result.as_mut_ptr());
-        hr.from_abi::<DesktopWindowXamlSource>(result.assume_init())
-    }
-}
-
-fn new_button() -> Result<Button> {
-    use windows_ext::UI::Xaml::Controls::IButtonFactory;
-    let factory: IButtonFactory = factory::<Button, IButtonFactory>()?;
-    unsafe {
-        let mut result = MaybeUninit::<*mut c_void>::zeroed();
-        let hr: HRESULT = (Interface::vtable(&factory).CreateInstance)(
-            Interface::as_raw(&factory),
-            null_mut(),
-            &mut Option::<IInspectable>::None as *mut _ as _,
-            result.as_mut_ptr());
-        hr.from_abi::<Button>(result.assume_init())
-    }
-}
-
-fn new_textfield() -> Result<TextBox> {
-    use windows_ext::UI::Xaml::Controls::ITextBoxFactory;
-    let factory: ITextBoxFactory = factory::<TextBox, ITextBoxFactory>()?;
-    unsafe {
-        let mut result = MaybeUninit::<*mut c_void>::zeroed();
-        let hr: HRESULT = (Interface::vtable(&factory).CreateInstance)(
-            Interface::as_raw(&factory),
-            null_mut(),
-            &mut Option::<IInspectable>::None as *mut _ as _,
-            result.as_mut_ptr());
-        hr.from_abi::<TextBox>(result.assume_init())
-    }
 }
 
 unsafe extern "system" fn wnd_proc(window: HWND, message: u32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {

@@ -927,6 +927,31 @@ impl DesktopWindowXamlSource {
                 .ok()
         }
     }
+    pub fn new() -> ::windows_core::Result<DesktopWindowXamlSource> {
+        Self::IDesktopWindowXamlSourceFactory(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateInstance)(
+                    ::windows_core::Interface::as_raw(this),
+                    ::core::ptr::null_mut(),
+                    &mut ::core::option::Option::<::windows::core::IInspectable>::None
+                        as *mut _ as _,
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn IDesktopWindowXamlSourceFactory<
+        R,
+        F: FnOnce(&IDesktopWindowXamlSourceFactory) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            DesktopWindowXamlSource,
+            IDesktopWindowXamlSourceFactory,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
 }
 impl ::core::cmp::PartialEq for DesktopWindowXamlSource {
     fn eq(&self, other: &Self) -> bool {

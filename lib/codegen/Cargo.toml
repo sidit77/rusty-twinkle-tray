@@ -10,6 +10,7 @@ windows-bindgen = "0.51"
 rayon = "1"
 walkdir = "2"
 syn = "2"
+quote = "1"
 proc-macro2 = "1"
 prettyplease = "0.2"
 serde = { version = "1", features = ["derive"] }

@@ -1,0 +1,15 @@
+[package]
+name = "modern-win-gui"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+default-members = ["."]
+members = [
+    ".",
+    "lib/codegen",
+    "lib/windows-ext"
+]
+
+[dependencies]
+windows-ext = { path = "lib/windows-ext" }

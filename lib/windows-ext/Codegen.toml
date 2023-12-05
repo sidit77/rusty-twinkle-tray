@@ -1,0 +1,20 @@
+temp_dir = "../../target/codegen"
+
+classes = [
+    "Windows.UI.Xaml"
+]
+
+features = [
+    "UI_Xaml",
+    "Foundation",
+    "UI_Xaml_Controls",
+    "UI"
+]
+
+reexports = [
+    "Foundation",
+    "UI"
+]
+
+[white_list]
+Button = ["SetContent"]

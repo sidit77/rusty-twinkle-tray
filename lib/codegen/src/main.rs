@@ -54,12 +54,14 @@ fn main() {
     //};
     //std::fs::write("demo.toml", toml::to_string(&config).unwrap()).unwrap();
     //return;
-    let config: Config = {
+    let config = {
         let path = std::env::args().skip(1).next().expect("Missing path to target dir");
         std::env::set_current_dir(path).expect("Failed to go to target dir");
         let content = std::fs::read_to_string("Codegen.toml").expect("Failed to read config file");
 
-        toml::from_str(&content).expect("Failed to parse config file")
+        toml::from_str::<Config>(&content)
+            .expect("Failed to parse config file")
+            .with_expanded_features()
     };
 
     {
@@ -166,3 +168,20 @@ fn transform<I: AsRef<Path>, O: AsRef<Path>>(in_file: I, out_file: O, config: &C
     encountered
 }
 
+impl Config {
+    fn with_expanded_features(mut self) -> Self {
+        let mut expanded = HashSet::new();
+        for feature in &self.features {
+            let mut current = String::new();
+            for comp in feature.split("_") {
+                if !current.is_empty() {
+                    current.push('_');
+                }
+                current.push_str(comp);
+                expanded.insert(current.clone());
+            }
+        }
+        self.features = expanded;
+        self
+    }
+}

@@ -1,20 +1,26 @@
 temp_dir = "../../target/codegen"
 
 classes = [
-    "Windows.UI.Xaml"
+    "Windows.UI.Xaml",
+    "Windows.Win32.System.WinRT.Xaml"
 ]
 
 features = [
-    "UI_Xaml",
     "Foundation",
     "UI_Xaml_Controls",
-    "UI"
+    "UI_Xaml_Hosting",
+    "Win32_System_WinRT_Xaml",
+    "Win32_Foundation"
 ]
 
 reexports = [
+    "Win32_Foundation",
     "Foundation",
     "UI"
 ]
 
 [white_list]
 Button = ["SetContent"]
+WindowsXamlManager = ["InitializeForCurrentThread", "IWindowsXamlManagerStatics"]
+DesktopWindowXamlSource = ["SetContent"]
+IDesktopWindowXamlSourceNative = ["AttachToWindow", "WindowHandle"]

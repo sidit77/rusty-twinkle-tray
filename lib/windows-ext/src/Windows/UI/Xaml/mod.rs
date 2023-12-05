@@ -1,4 +1,5 @@
 pub mod Controls;
+pub mod Hosting;
 #[doc(hidden)]
 #[repr(transparent)]
 pub struct IAdaptiveTrigger(::windows_core::IUnknown);

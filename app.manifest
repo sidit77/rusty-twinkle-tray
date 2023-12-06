@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<assembly xmlns="urn:schemas-microsoft-com:asm.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" manifestVersion="1.0">
-    <assemblyIdentity name="Sample.Test" type="win32" version="1.0.0.0"/>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
     <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
-            <application>
-                <!-- Windows 10, version 1903 -->
-                <maxversiontested Id="10.0.18362.1"/>
-                <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}" />
-            </application>
-        </compatibility>
+        <application>
+            <!-- Windows 10 -->
+            <maxversiontested Id="10.0.18362.0"/>
+            <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}" />
+        </application>
+    </compatibility>
 </assembly>

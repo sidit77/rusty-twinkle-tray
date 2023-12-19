@@ -1416,7 +1416,12 @@ unsafe impl ::windows_core::ComInterface for IDependencyObjectCollectionFactory 
 #[doc(hidden)]
 pub struct IDependencyObjectCollectionFactory_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    CreateInstance: usize,
+    pub CreateInstance: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        baseinterface: *mut ::core::ffi::c_void,
+        innerinterface: *mut *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -2310,7 +2315,10 @@ pub struct IEventTrigger_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    Actions: usize,
+    pub Actions: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -2378,7 +2386,10 @@ unsafe impl ::windows_core::ComInterface for IFrameworkElement {
 #[doc(hidden)]
 pub struct IFrameworkElement_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Triggers: usize,
+    pub Triggers: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub Resources: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
@@ -3642,8 +3653,14 @@ pub struct IResourceDictionary_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    MergedDictionaries: usize,
-    ThemeDictionaries: usize,
+    pub MergedDictionaries: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub ThemeDictionaries: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -5252,7 +5269,12 @@ pub struct IUIElementOverrides_Vtbl {
     pub OnDisconnectVisualChildren: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    FindSubElementsForTouchTargeting: usize,
+    pub FindSubElementsForTouchTargeting: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        point: super::super::Foundation::Point,
+        boundingrect: super::super::Foundation::Rect,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -5274,7 +5296,10 @@ unsafe impl ::windows_core::ComInterface for IUIElementOverrides7 {
 #[doc(hidden)]
 pub struct IUIElementOverrides7_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    GetChildrenInTabFocusOrder: usize,
+    pub GetChildrenInTabFocusOrder: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     OnProcessKeyboardAccelerators: usize,
 }
 #[doc(hidden)]
@@ -6028,7 +6053,10 @@ pub struct IVisualState2_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    StateTriggers: usize,
+    pub StateTriggers: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -6099,8 +6127,14 @@ pub struct IVisualStateGroup_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut ::std::mem::MaybeUninit<::windows_core::HSTRING>,
     ) -> ::windows_core::HRESULT,
-    Transitions: usize,
-    States: usize,
+    pub Transitions: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub States: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub CurrentState: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
@@ -6258,7 +6292,11 @@ unsafe impl ::windows_core::ComInterface for IVisualStateManagerStatics {
 #[doc(hidden)]
 pub struct IVisualStateManagerStatics_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    GetVisualStateGroups: usize,
+    pub GetVisualStateGroups: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        obj: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub CustomVisualStateManagerProperty: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
@@ -6888,7 +6926,33 @@ unsafe impl ::core::marker::Send for BrushTransition {}
 unsafe impl ::core::marker::Sync for BrushTransition {}
 #[repr(transparent)]
 pub struct ColorPaletteResources(::windows_core::IUnknown);
-impl ColorPaletteResources {}
+impl ColorPaletteResources {
+    pub fn First(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::Foundation::Collections::IIterator<
+            super::super::Foundation::Collections::IKeyValuePair<
+                ::windows_core::IInspectable,
+                ::windows_core::IInspectable,
+            >,
+        >,
+    > {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IIterable<
+                super::super::Foundation::Collections::IKeyValuePair<
+                    ::windows_core::IInspectable,
+                    ::windows_core::IInspectable,
+                >,
+            >,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .First)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+}
 impl ::core::cmp::PartialEq for ColorPaletteResources {
     fn eq(&self, other: &Self) -> bool {
         self.0 == other.0
@@ -6919,9 +6983,43 @@ unsafe impl ::windows_core::ComInterface for ColorPaletteResources {
 impl ::windows_core::RuntimeName for ColorPaletteResources {
     const NAME: &'static str = "Windows.UI.Xaml.ColorPaletteResources";
 }
+impl ::core::iter::IntoIterator for ColorPaletteResources {
+    type Item = super::super::Foundation::Collections::IKeyValuePair<
+        ::windows_core::IInspectable,
+        ::windows_core::IInspectable,
+    >;
+    type IntoIter = super::super::Foundation::Collections::IIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        ::core::iter::IntoIterator::into_iter(&self)
+    }
+}
+impl ::core::iter::IntoIterator for &ColorPaletteResources {
+    type Item = super::super::Foundation::Collections::IKeyValuePair<
+        ::windows_core::IInspectable,
+        ::windows_core::IInspectable,
+    >;
+    type IntoIter = super::super::Foundation::Collections::IIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.First().unwrap()
+    }
+}
 ::windows_core::imp::interface_hierarchy!(
     ColorPaletteResources, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IIterable<
+        super::super::Foundation::Collections::IKeyValuePair<
+            ::windows_core::IInspectable,
+            ::windows_core::IInspectable,
+        >,
+    >,
+> for ColorPaletteResources {}
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IMap<
+        ::windows_core::IInspectable,
+        ::windows_core::IInspectable,
+    >,
+> for ColorPaletteResources {}
 impl ::windows_core::CanTryInto<ResourceDictionary> for ColorPaletteResources {}
 impl ::windows_core::CanTryInto<DependencyObject> for ColorPaletteResources {}
 unsafe impl ::core::marker::Send for ColorPaletteResources {}
@@ -7157,6 +7255,74 @@ impl ::windows_core::RuntimeName for DependencyObject {
 );
 unsafe impl ::core::marker::Send for DependencyObject {}
 unsafe impl ::core::marker::Sync for DependencyObject {}
+#[repr(transparent)]
+pub struct DependencyObjectCollection(::windows_core::IUnknown);
+impl DependencyObjectCollection {}
+impl ::core::cmp::PartialEq for DependencyObjectCollection {
+    fn eq(&self, other: &Self) -> bool {
+        self.0 == other.0
+    }
+}
+impl ::core::cmp::Eq for DependencyObjectCollection {}
+impl ::core::fmt::Debug for DependencyObjectCollection {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        f.debug_tuple("DependencyObjectCollection").field(&self.0).finish()
+    }
+}
+impl ::windows_core::RuntimeType for DependencyObjectCollection {
+    const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
+        b"rc(Windows.UI.Xaml.DependencyObjectCollection;pinterface({5917eb53-50b4-4a0d-b309-65862b3f1dbc};rc(Windows.UI.Xaml.DependencyObject;{5c526665-f60e-4912-af59-5fe0680f089d})))",
+    );
+}
+impl ::core::clone::Clone for DependencyObjectCollection {
+    fn clone(&self) -> Self {
+        Self(self.0.clone())
+    }
+}
+unsafe impl ::windows_core::Interface for DependencyObjectCollection {
+    type Vtable = super::super::Foundation::Collections::IObservableVector_Vtbl<
+        DependencyObject,
+    >;
+}
+unsafe impl ::windows_core::ComInterface for DependencyObjectCollection {
+    const IID: ::windows_core::GUID = <super::super::Foundation::Collections::IObservableVector<
+        DependencyObject,
+    > as ::windows_core::ComInterface>::IID;
+}
+impl ::windows_core::RuntimeName for DependencyObjectCollection {
+    const NAME: &'static str = "Windows.UI.Xaml.DependencyObjectCollection";
+}
+impl ::core::iter::IntoIterator for DependencyObjectCollection {
+    type Item = DependencyObject;
+    type IntoIter = super::super::Foundation::Collections::VectorIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        ::core::iter::IntoIterator::into_iter(&self)
+    }
+}
+impl ::core::iter::IntoIterator for &DependencyObjectCollection {
+    type Item = DependencyObject;
+    type IntoIter = super::super::Foundation::Collections::VectorIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        super::super::Foundation::Collections::VectorIterator::new(
+            ::windows_core::ComInterface::cast(self).ok(),
+        )
+    }
+}
+::windows_core::imp::interface_hierarchy!(
+    DependencyObjectCollection, ::windows_core::IUnknown, ::windows_core::IInspectable
+);
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IIterable<DependencyObject>,
+> for DependencyObjectCollection {}
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IObservableVector<DependencyObject>,
+> for DependencyObjectCollection {}
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IVector<DependencyObject>,
+> for DependencyObjectCollection {}
+impl ::windows_core::CanTryInto<DependencyObject> for DependencyObjectCollection {}
+unsafe impl ::core::marker::Send for DependencyObjectCollection {}
+unsafe impl ::core::marker::Sync for DependencyObjectCollection {}
 #[repr(transparent)]
 pub struct DependencyProperty(::windows_core::IUnknown);
 impl DependencyProperty {}
@@ -8162,7 +8328,33 @@ unsafe impl ::core::marker::Send for RectHelper {}
 unsafe impl ::core::marker::Sync for RectHelper {}
 #[repr(transparent)]
 pub struct ResourceDictionary(::windows_core::IUnknown);
-impl ResourceDictionary {}
+impl ResourceDictionary {
+    pub fn First(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::Foundation::Collections::IIterator<
+            super::super::Foundation::Collections::IKeyValuePair<
+                ::windows_core::IInspectable,
+                ::windows_core::IInspectable,
+            >,
+        >,
+    > {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IIterable<
+                super::super::Foundation::Collections::IKeyValuePair<
+                    ::windows_core::IInspectable,
+                    ::windows_core::IInspectable,
+                >,
+            >,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .First)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+}
 impl ::core::cmp::PartialEq for ResourceDictionary {
     fn eq(&self, other: &Self) -> bool {
         self.0 == other.0
@@ -8193,9 +8385,43 @@ unsafe impl ::windows_core::ComInterface for ResourceDictionary {
 impl ::windows_core::RuntimeName for ResourceDictionary {
     const NAME: &'static str = "Windows.UI.Xaml.ResourceDictionary";
 }
+impl ::core::iter::IntoIterator for ResourceDictionary {
+    type Item = super::super::Foundation::Collections::IKeyValuePair<
+        ::windows_core::IInspectable,
+        ::windows_core::IInspectable,
+    >;
+    type IntoIter = super::super::Foundation::Collections::IIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        ::core::iter::IntoIterator::into_iter(&self)
+    }
+}
+impl ::core::iter::IntoIterator for &ResourceDictionary {
+    type Item = super::super::Foundation::Collections::IKeyValuePair<
+        ::windows_core::IInspectable,
+        ::windows_core::IInspectable,
+    >;
+    type IntoIter = super::super::Foundation::Collections::IIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.First().unwrap()
+    }
+}
 ::windows_core::imp::interface_hierarchy!(
     ResourceDictionary, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IIterable<
+        super::super::Foundation::Collections::IKeyValuePair<
+            ::windows_core::IInspectable,
+            ::windows_core::IInspectable,
+        >,
+    >,
+> for ResourceDictionary {}
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IMap<
+        ::windows_core::IInspectable,
+        ::windows_core::IInspectable,
+    >,
+> for ResourceDictionary {}
 impl ::windows_core::CanTryInto<DependencyObject> for ResourceDictionary {}
 unsafe impl ::core::marker::Send for ResourceDictionary {}
 unsafe impl ::core::marker::Sync for ResourceDictionary {}
@@ -8425,9 +8651,31 @@ unsafe impl ::windows_core::ComInterface for SetterBaseCollection {
 impl ::windows_core::RuntimeName for SetterBaseCollection {
     const NAME: &'static str = "Windows.UI.Xaml.SetterBaseCollection";
 }
+impl ::core::iter::IntoIterator for SetterBaseCollection {
+    type Item = SetterBase;
+    type IntoIter = super::super::Foundation::Collections::VectorIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        ::core::iter::IntoIterator::into_iter(&self)
+    }
+}
+impl ::core::iter::IntoIterator for &SetterBaseCollection {
+    type Item = SetterBase;
+    type IntoIter = super::super::Foundation::Collections::VectorIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        super::super::Foundation::Collections::VectorIterator::new(
+            ::windows_core::ComInterface::cast(self).ok(),
+        )
+    }
+}
 ::windows_core::imp::interface_hierarchy!(
     SetterBaseCollection, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IIterable<SetterBase>,
+> for SetterBaseCollection {}
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IVector<SetterBase>,
+> for SetterBaseCollection {}
 unsafe impl ::core::marker::Send for SetterBaseCollection {}
 unsafe impl ::core::marker::Sync for SetterBaseCollection {}
 #[repr(transparent)]
@@ -8741,6 +8989,68 @@ impl ::windows_core::CanTryInto<DependencyObject> for TriggerAction {}
 unsafe impl ::core::marker::Send for TriggerAction {}
 unsafe impl ::core::marker::Sync for TriggerAction {}
 #[repr(transparent)]
+pub struct TriggerActionCollection(::windows_core::IUnknown);
+impl TriggerActionCollection {}
+impl ::core::cmp::PartialEq for TriggerActionCollection {
+    fn eq(&self, other: &Self) -> bool {
+        self.0 == other.0
+    }
+}
+impl ::core::cmp::Eq for TriggerActionCollection {}
+impl ::core::fmt::Debug for TriggerActionCollection {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        f.debug_tuple("TriggerActionCollection").field(&self.0).finish()
+    }
+}
+impl ::windows_core::RuntimeType for TriggerActionCollection {
+    const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
+        b"rc(Windows.UI.Xaml.TriggerActionCollection;pinterface({913337e9-11a1-4345-a3a2-4e7f956e222d};rc(Windows.UI.Xaml.TriggerAction;{a2c0df02-63d5-4b46-9b83-0868d3079621})))",
+    );
+}
+impl ::core::clone::Clone for TriggerActionCollection {
+    fn clone(&self) -> Self {
+        Self(self.0.clone())
+    }
+}
+unsafe impl ::windows_core::Interface for TriggerActionCollection {
+    type Vtable = super::super::Foundation::Collections::IVector_Vtbl<TriggerAction>;
+}
+unsafe impl ::windows_core::ComInterface for TriggerActionCollection {
+    const IID: ::windows_core::GUID = <super::super::Foundation::Collections::IVector<
+        TriggerAction,
+    > as ::windows_core::ComInterface>::IID;
+}
+impl ::windows_core::RuntimeName for TriggerActionCollection {
+    const NAME: &'static str = "Windows.UI.Xaml.TriggerActionCollection";
+}
+impl ::core::iter::IntoIterator for TriggerActionCollection {
+    type Item = TriggerAction;
+    type IntoIter = super::super::Foundation::Collections::VectorIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        ::core::iter::IntoIterator::into_iter(&self)
+    }
+}
+impl ::core::iter::IntoIterator for &TriggerActionCollection {
+    type Item = TriggerAction;
+    type IntoIter = super::super::Foundation::Collections::VectorIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        super::super::Foundation::Collections::VectorIterator::new(
+            ::windows_core::ComInterface::cast(self).ok(),
+        )
+    }
+}
+::windows_core::imp::interface_hierarchy!(
+    TriggerActionCollection, ::windows_core::IUnknown, ::windows_core::IInspectable
+);
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IIterable<TriggerAction>,
+> for TriggerActionCollection {}
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IVector<TriggerAction>,
+> for TriggerActionCollection {}
+unsafe impl ::core::marker::Send for TriggerActionCollection {}
+unsafe impl ::core::marker::Sync for TriggerActionCollection {}
+#[repr(transparent)]
 pub struct TriggerBase(::windows_core::IUnknown);
 impl TriggerBase {}
 impl ::core::cmp::PartialEq for TriggerBase {
@@ -8779,6 +9089,68 @@ impl ::windows_core::RuntimeName for TriggerBase {
 impl ::windows_core::CanTryInto<DependencyObject> for TriggerBase {}
 unsafe impl ::core::marker::Send for TriggerBase {}
 unsafe impl ::core::marker::Sync for TriggerBase {}
+#[repr(transparent)]
+pub struct TriggerCollection(::windows_core::IUnknown);
+impl TriggerCollection {}
+impl ::core::cmp::PartialEq for TriggerCollection {
+    fn eq(&self, other: &Self) -> bool {
+        self.0 == other.0
+    }
+}
+impl ::core::cmp::Eq for TriggerCollection {}
+impl ::core::fmt::Debug for TriggerCollection {
+    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        f.debug_tuple("TriggerCollection").field(&self.0).finish()
+    }
+}
+impl ::windows_core::RuntimeType for TriggerCollection {
+    const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
+        b"rc(Windows.UI.Xaml.TriggerCollection;pinterface({913337e9-11a1-4345-a3a2-4e7f956e222d};rc(Windows.UI.Xaml.TriggerBase;{e7ea222f-dee6-4393-a8b2-8923d641f395})))",
+    );
+}
+impl ::core::clone::Clone for TriggerCollection {
+    fn clone(&self) -> Self {
+        Self(self.0.clone())
+    }
+}
+unsafe impl ::windows_core::Interface for TriggerCollection {
+    type Vtable = super::super::Foundation::Collections::IVector_Vtbl<TriggerBase>;
+}
+unsafe impl ::windows_core::ComInterface for TriggerCollection {
+    const IID: ::windows_core::GUID = <super::super::Foundation::Collections::IVector<
+        TriggerBase,
+    > as ::windows_core::ComInterface>::IID;
+}
+impl ::windows_core::RuntimeName for TriggerCollection {
+    const NAME: &'static str = "Windows.UI.Xaml.TriggerCollection";
+}
+impl ::core::iter::IntoIterator for TriggerCollection {
+    type Item = TriggerBase;
+    type IntoIter = super::super::Foundation::Collections::VectorIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        ::core::iter::IntoIterator::into_iter(&self)
+    }
+}
+impl ::core::iter::IntoIterator for &TriggerCollection {
+    type Item = TriggerBase;
+    type IntoIter = super::super::Foundation::Collections::VectorIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        super::super::Foundation::Collections::VectorIterator::new(
+            ::windows_core::ComInterface::cast(self).ok(),
+        )
+    }
+}
+::windows_core::imp::interface_hierarchy!(
+    TriggerCollection, ::windows_core::IUnknown, ::windows_core::IInspectable
+);
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IIterable<TriggerBase>,
+> for TriggerCollection {}
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IVector<TriggerBase>,
+> for TriggerCollection {}
+unsafe impl ::core::marker::Send for TriggerCollection {}
+unsafe impl ::core::marker::Sync for TriggerCollection {}
 #[repr(transparent)]
 pub struct UIElement(::windows_core::IUnknown);
 impl UIElement {}
@@ -8851,9 +9223,31 @@ unsafe impl ::windows_core::ComInterface for UIElementWeakCollection {
 impl ::windows_core::RuntimeName for UIElementWeakCollection {
     const NAME: &'static str = "Windows.UI.Xaml.UIElementWeakCollection";
 }
+impl ::core::iter::IntoIterator for UIElementWeakCollection {
+    type Item = UIElement;
+    type IntoIter = super::super::Foundation::Collections::VectorIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        ::core::iter::IntoIterator::into_iter(&self)
+    }
+}
+impl ::core::iter::IntoIterator for &UIElementWeakCollection {
+    type Item = UIElement;
+    type IntoIter = super::super::Foundation::Collections::VectorIterator<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        super::super::Foundation::Collections::VectorIterator::new(
+            ::windows_core::ComInterface::cast(self).ok(),
+        )
+    }
+}
 ::windows_core::imp::interface_hierarchy!(
     UIElementWeakCollection, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IIterable<UIElement>,
+> for UIElementWeakCollection {}
+impl ::windows_core::CanTryInto<
+    super::super::Foundation::Collections::IVector<UIElement>,
+> for UIElementWeakCollection {}
 unsafe impl ::core::marker::Send for UIElementWeakCollection {}
 unsafe impl ::core::marker::Sync for UIElementWeakCollection {}
 #[repr(transparent)]

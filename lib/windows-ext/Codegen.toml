@@ -10,23 +10,38 @@ features = [
     "UI_Xaml_Controls",
     "UI_Xaml_Hosting",
     "Win32_System_WinRT_Xaml",
-    "Win32_Foundation"
+    "Win32_Foundation",
+    "Foundation_Collections"
 ]
 
 reexports = [
     "Win32_Foundation",
     "Foundation",
+    "Foundation_Collections",
     "UI"
 ]
 
 constructors = [
     "DesktopWindowXamlSource",
-    "Button",
-    "TextBox"
+    "StackPanel",
+    "Grid",
+    "FontIcon",
+    "TextBox",
+    "Slider"
 ]
 
 [white_list]
-Button = ["SetContent"]
 WindowsXamlManager = ["InitializeForCurrentThread", "IWindowsXamlManagerStatics"]
 DesktopWindowXamlSource = ["SetContent"]
 IDesktopWindowXamlSourceNative = ["AttachToWindow", "WindowHandle"]
+
+UIElementCollection = ["First", "Append"]
+ColorPaletteResources = ["First"]
+ResourceDictionary = ["First"]
+
+StackPanel = true
+Grid = true
+FontIcon = true
+TextBlock = true
+TextBox = true
+Slider = true

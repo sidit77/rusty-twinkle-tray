@@ -1,21 +1,23 @@
 use std::collections::{HashMap, HashSet};
 use syn::{Expr, ImplItem, Item, parse_quote};
 use crate::utils::get_indent;
+use crate::WhiteList;
 
-pub fn apply_whitelist(items: &mut Vec<Item>, white_list: &HashMap<String, HashSet<String>>) {
+pub fn apply_whitelist(items: &mut Vec<Item>, white_list: &HashMap<String, WhiteList>) {
     items
         .iter_mut()
         .for_each(|item| match item {
             Item::Impl(item) if item.trait_.is_none() => {
-                let mut required = find_required_methods(&item.items);
-                if !required.is_empty() {
-                    item.attrs.push(parse_quote!(#[allow(dead_code)]));
-                }
                 let ty = get_indent(&item.self_ty);
-                if let Some(white_list) = white_list.get(&ty) {
-                    required.extend(white_list.iter().cloned());
+                let mut white_list = white_list.get(&ty).cloned().unwrap_or_default();
+                if !white_list.all_enabled() {
+                    let required = find_required_methods(&item.items);
+                    if !required.is_empty() {
+                        item.attrs.push(parse_quote!(#[allow(dead_code)]));
+                    }
+                    white_list.add(required);
                 }
-                clean_impl(&mut item.items, &required);
+                clean_impl(&mut item.items, &white_list);
             }
             _ => { }
         });
@@ -46,9 +48,9 @@ fn extract_required(expr: &Expr, result: &mut HashSet<String>) {
     }
 }
 
-fn clean_impl(items: &mut Vec<ImplItem>, white_list: &HashSet<String>) {
+fn clean_impl(items: &mut Vec<ImplItem>, white_list: &WhiteList) {
     items.retain_mut(|item| match item {
-        ImplItem::Fn(item) if !white_list.contains(&item.sig.ident.to_string()) => false,
+        ImplItem::Fn(item) if !white_list.is_enabled(&item.sig.ident.to_string()) => false,
         _ => true
     })
 }

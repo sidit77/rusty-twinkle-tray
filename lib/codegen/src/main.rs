@@ -23,40 +23,54 @@ struct Cache {
     classes: HashSet<String>
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum WhiteList {
+    Subset(HashSet<String>),
+    All(bool)
+}
+
+impl Default for WhiteList {
+    fn default() -> Self {
+        Self::All(false)
+    }
+}
+
+impl WhiteList {
+    pub fn is_enabled(&self, name: &str) -> bool {
+        match self {
+            WhiteList::Subset(enabled) => enabled.contains(name),
+            WhiteList::All(r) => *r
+        }
+    }
+
+    pub fn all_enabled(&self) -> bool {
+        matches!(self, WhiteList::All(true))
+    }
+
+    pub fn add(&mut self, items: HashSet<String>) {
+        match self {
+            WhiteList::Subset(set) => set.extend(items.into_iter()),
+            WhiteList::All(false) => *self = WhiteList::Subset(items),
+            WhiteList::All(true) => {}
+        }
+    }
+}
+
+
+
 #[derive(Debug, Serialize, Deserialize)]
 struct Config {
     temp_dir: PathBuf,
     classes: HashSet<String>,
     features: HashSet<String>,
     constructors: HashSet<String>,
-    white_list: HashMap<String, HashSet<String>>,
+    white_list: HashMap<String, WhiteList>,
     reexports: HashSet<String>
 }
 
 fn main() {
 
-    //let config = Config {
-    //    classes: HashSet::from([
-    //        String::from("Windows.UI.Xaml"),
-    //    ]),
-    //    features: HashSet::from([
-    //        String::from("Foundation"),
-    //        String::from("UI"),
-    //        String::from("UI_Xaml"),
-    //        String::from("UI_Xaml_Controls")
-    //    ]),
-    //    white_list: HashMap::from([
-    //        (String::from("Button"), HashSet::from([
-    //            String::from("SetContent")
-    //        ])),
-    //    ]),
-    //    reexports: HashSet::from([
-    //        String::from("Foundation"),
-    //        String::from("UI")
-    //    ]),
-    //};
-    //std::fs::write("demo.toml", toml::to_string(&config).unwrap()).unwrap();
-    //return;
     let config = {
         let path = std::env::args().skip(1).next().expect("Missing path to target dir");
         std::env::set_current_dir(path).expect("Failed to go to target dir");

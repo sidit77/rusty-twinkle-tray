@@ -10,5 +10,6 @@ windows-core = "0.51"
 windows = {version = "0.51", features = [
     "Foundation",
     "Foundation_Collections",
-    "UI"
+    "UI",
+    "UI_Text"
 ]}

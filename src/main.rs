@@ -1,13 +1,16 @@
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use std::sync::Once;
-use windows::core::{PCWSTR, w, Result, ComInterface};
+use windows::core::{PCWSTR, w, Result, ComInterface, HSTRING};
+use windows::UI::Text::FontWeight;
 use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, RECT, WPARAM};
 use windows::Win32::Graphics::Gdi::UpdateWindow;
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUninitialize};
 use windows::Win32::UI::WindowsAndMessaging::{CreateWindowExW, CW_USEDEFAULT, DefWindowProcW, DispatchMessageW, GetClientRect, GetMessageW, GetWindowLongPtrW, GWLP_USERDATA, IDC_ARROW, LoadCursorW, MSG, PostQuitMessage, RegisterClassW, SetWindowLongPtrW, SetWindowPos, ShowWindow, SW_SHOW, SWP_SHOWWINDOW, TranslateMessage, WINDOW_EX_STYLE, WM_DESTROY, WM_NCCREATE, WM_NCDESTROY, WM_SIZE, WM_SIZING, WNDCLASSW, WS_OVERLAPPEDWINDOW, WS_VISIBLE};
-use windows_ext::UI::Xaml::Controls::{TextBox};
+use windows_ext::UI::Xaml::Controls::{ColumnDefinition, FontIcon, Grid, Orientation, Slider, StackPanel, TextBlock, TextBox};
 use windows_ext::UI::Xaml::Hosting::{DesktopWindowXamlSource, WindowsXamlManager};
+use windows_ext::UI::Xaml::{GridLength, GridUnitType, TextAlignment, Thickness, VerticalAlignment};
+use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
 
 static REGISTER_WINDOW_CLASS: Once = Once::new();
 const WINDOW_CLASS_NAME: PCWSTR = w!("modern-gui.Window");
@@ -106,7 +109,7 @@ unsafe extern "system" fn wnd_proc(hwnd: HWND, message: u32, wparam: WPARAM, lpa
 struct Window {
     parent_hwnd: HWND,
     child_hwnd: HWND,
-    desktop_source: DesktopWindowXamlSource
+    _desktop_source: DesktopWindowXamlSource
 }
 
 impl Window {
@@ -116,14 +119,102 @@ impl Window {
         unsafe { interop.AttachToWindow(parent)?; }
         let island = unsafe { interop.WindowHandle() }?;
 
-        let button = TextBox::new()?;
+        //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
+        let stack_panel = StackPanel::new()?;
+        stack_panel.SetSpacing(8.0)?;
+        stack_panel.SetPadding(Thickness {
+            Left: 8.0,
+            Top: 8.0,
+            Right: 8.0,
+            Bottom: 8.0,
+        })?;
+        let children = stack_panel.Children()?;
+        children.Append(&{
+            let stack_panel = StackPanel::new()?;
+            let children = stack_panel.Children()?;
+            children.Append(&{
+                let stack_panel = StackPanel::new()?;
+                stack_panel.SetOrientation(Orientation::Horizontal)?;
+                stack_panel.SetSpacing(8.0)?;
+                let children = stack_panel.Children()?;
+                children.Append(&{
+                    let icon = FontIcon::new()?;
+                    //icon.SetFontFamily(&icon_font)?;
+                    icon.SetGlyph(&HSTRING::from("\u{E7f4}"))?;
+                    icon.SetFontWeight(FontWeight { Weight: 500 })?;
+                    icon
+                })?;
+                children.Append(&{
+                    let text_block = TextBlock::new()?;
+                    text_block.SetText(&HSTRING::from("Monitor 1"))?;
+                    text_block.SetFontSize(20.0)?;
+                    text_block
+                })?;
+                stack_panel
+            })?;
+            children.Append(&{
+                //let grid = StackPanel::new()?;
+                let grid = Grid::new()?;
+                grid.SetColumnSpacing(8.0)?;
+                let columns = grid.ColumnDefinitions()?;
+                columns.Append(&{
+                    let def = ColumnDefinition::new()?;
+                    def.SetWidth(GridLength {
+                        Value: 1.0,
+                        GridUnitType: GridUnitType::Star,
+                    })?;
+                    def
+                })?;
+                columns.Append(&{
+                    let def = ColumnDefinition::new()?;
+                    def.SetWidth(GridLength {
+                        Value: 50.0,
+                        GridUnitType: GridUnitType::Pixel,
+                    })?;
+                    def
+                })?;
+                let text_box = {
+                    let text_box = TextBox::new()?;
+                    text_box.SetTextAlignment(TextAlignment::Center)?;
+                    text_box.SetBorderThickness(Thickness::default())?;
+                    text_box.SetFontSize(20.0)?;
+                    text_box.SetFontWeight(FontWeight { Weight: 500 })?;
+                    text_box.SetHeight(29.0)?;
+                    text_box.SetPadding(Thickness::default())?;
+                    text_box.SetText(&HSTRING::from("0"))?;
+                    Grid::SetColumn(&text_box, 1)?;
+                    text_box
+                };
+                let slider = {
+                    let slider = Slider::new()?;
+                    slider.SetVerticalAlignment(VerticalAlignment::Center)?;
+                    Grid::SetColumn(&slider, 0)?;
+                    slider
+                };
+                slider.ValueChanged(&RangeBaseValueChangedEventHandler::new({
+                    let text_box = text_box.clone();
+                    move |_, event| {
+                        if let Some(event) = event {
+                            text_box.SetText(&HSTRING::from(format!("{}", event.NewValue()?.round())))?;
+                        }
+                        Ok(())
+                    }
+                }))?;
+                let children = grid.Children()?;
+                children.Append(&slider)?;
+                children.Append(&text_box)?;
+                grid
+            })?;
+            stack_panel
+        })?;
+
         //button.SetContent(&IInspectable::try_from("Hello World")?)?;
-        desktop_source.SetContent(&button)?;
+        desktop_source.SetContent(&stack_panel)?;
 
         Ok(Self {
             parent_hwnd: parent,
             child_hwnd: island,
-            desktop_source,
+            _desktop_source: desktop_source,
         })
     }
 

@@ -789,8 +789,25 @@ unsafe impl ::windows_core::ComInterface for IXamlUIPresenterStatics2 {
 #[doc(hidden)]
 pub struct IXamlUIPresenterStatics2_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    GetFlyoutPlacementTargetInfo: usize,
-    GetFlyoutPlacement: usize,
+    pub GetFlyoutPlacementTargetInfo: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        placementtarget: *mut ::core::ffi::c_void,
+        preferredplacement: super::Controls::Primitives::FlyoutPlacementMode,
+        targetpreferredplacement: *mut super::Controls::Primitives::FlyoutPlacementMode,
+        allowfallbacks: *mut bool,
+        result__: *mut super::super::super::Foundation::Rect,
+    ) -> ::windows_core::HRESULT,
+    pub GetFlyoutPlacement: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        placementtargetbounds: super::super::super::Foundation::Rect,
+        controlsize: super::super::super::Foundation::Size,
+        mincontrolsize: super::super::super::Foundation::Size,
+        containerrect: super::super::super::Foundation::Rect,
+        targetpreferredplacement: super::Controls::Primitives::FlyoutPlacementMode,
+        allowfallbacks: bool,
+        chosenplacement: *mut super::Controls::Primitives::FlyoutPlacementMode,
+        result__: *mut super::super::super::Foundation::Rect,
+    ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
 pub struct DesignerAppExitedEventArgs(::windows_core::IUnknown);

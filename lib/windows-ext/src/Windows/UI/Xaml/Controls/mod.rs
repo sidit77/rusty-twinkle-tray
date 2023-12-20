@@ -1,3 +1,4 @@
+pub mod Primitives;
 #[doc(hidden)]
 #[repr(transparent)]
 pub struct IAnchorRequestedEventArgs(::windows_core::IUnknown);
@@ -135,7 +136,10 @@ unsafe impl ::windows_core::ComInterface for IAppBar3 {
 #[doc(hidden)]
 pub struct IAppBar3_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub Opening: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         handler: *mut ::core::ffi::c_void,
@@ -299,7 +303,10 @@ unsafe impl ::windows_core::ComInterface for IAppBarButton5 {
 #[doc(hidden)]
 pub struct IAppBarButton5_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -881,7 +888,10 @@ unsafe impl ::windows_core::ComInterface for IAppBarToggleButton5 {
 #[doc(hidden)]
 pub struct IAppBarToggleButton5_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -1729,8 +1739,14 @@ unsafe impl ::windows_core::ComInterface for IBorder {
 #[doc(hidden)]
 pub struct IBorder_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    BorderBrush: usize,
-    SetBorderBrush: usize,
+    pub BorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub BorderThickness: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::Thickness,
@@ -1739,8 +1755,14 @@ pub struct IBorder_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: super::Thickness,
     ) -> ::windows_core::HRESULT,
-    Background: usize,
-    SetBackground: usize,
+    pub Background: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub CornerRadius: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::CornerRadius,
@@ -1968,8 +1990,14 @@ unsafe impl ::windows_core::ComInterface for IButtonWithFlyout {
 #[doc(hidden)]
 pub struct IButtonWithFlyout_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Flyout: usize,
-    SetFlyout: usize,
+    pub Flyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -2514,39 +2542,138 @@ pub struct ICalendarView_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: CalendarViewSelectionMode,
     ) -> ::windows_core::HRESULT,
-    TemplateSettings: usize,
-    FocusBorderBrush: usize,
-    SetFocusBorderBrush: usize,
-    SelectedHoverBorderBrush: usize,
-    SetSelectedHoverBorderBrush: usize,
-    SelectedPressedBorderBrush: usize,
-    SetSelectedPressedBorderBrush: usize,
-    SelectedBorderBrush: usize,
-    SetSelectedBorderBrush: usize,
-    HoverBorderBrush: usize,
-    SetHoverBorderBrush: usize,
-    PressedBorderBrush: usize,
-    SetPressedBorderBrush: usize,
-    CalendarItemBorderBrush: usize,
-    SetCalendarItemBorderBrush: usize,
-    OutOfScopeBackground: usize,
-    SetOutOfScopeBackground: usize,
-    CalendarItemBackground: usize,
-    SetCalendarItemBackground: usize,
-    PressedForeground: usize,
-    SetPressedForeground: usize,
-    TodayForeground: usize,
-    SetTodayForeground: usize,
-    BlackoutForeground: usize,
-    SetBlackoutForeground: usize,
-    SelectedForeground: usize,
-    SetSelectedForeground: usize,
-    OutOfScopeForeground: usize,
-    SetOutOfScopeForeground: usize,
-    CalendarItemForeground: usize,
-    SetCalendarItemForeground: usize,
-    DayItemFontFamily: usize,
-    SetDayItemFontFamily: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub FocusBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFocusBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SelectedHoverBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectedHoverBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SelectedPressedBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectedPressedBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SelectedBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectedBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub HoverBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetHoverBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub PressedBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetPressedBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub CalendarItemBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetCalendarItemBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub OutOfScopeBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetOutOfScopeBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub CalendarItemBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetCalendarItemBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub PressedForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetPressedForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub TodayForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetTodayForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub BlackoutForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBlackoutForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SelectedForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectedForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub OutOfScopeForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetOutOfScopeForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub CalendarItemForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetCalendarItemForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub DayItemFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetDayItemFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub DayItemFontSize: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut f64,
@@ -2555,14 +2682,38 @@ pub struct ICalendarView_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    DayItemFontStyle: usize,
-    SetDayItemFontStyle: usize,
-    DayItemFontWeight: usize,
-    SetDayItemFontWeight: usize,
-    TodayFontWeight: usize,
-    SetTodayFontWeight: usize,
-    FirstOfMonthLabelFontFamily: usize,
-    SetFirstOfMonthLabelFontFamily: usize,
+    pub DayItemFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub SetDayItemFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub DayItemFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub SetDayItemFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub TodayFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub SetTodayFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub FirstOfMonthLabelFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFirstOfMonthLabelFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub FirstOfMonthLabelFontSize: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut f64,
@@ -2571,12 +2722,30 @@ pub struct ICalendarView_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    FirstOfMonthLabelFontStyle: usize,
-    SetFirstOfMonthLabelFontStyle: usize,
-    FirstOfMonthLabelFontWeight: usize,
-    SetFirstOfMonthLabelFontWeight: usize,
-    MonthYearItemFontFamily: usize,
-    SetMonthYearItemFontFamily: usize,
+    pub FirstOfMonthLabelFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub SetFirstOfMonthLabelFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub FirstOfMonthLabelFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub SetFirstOfMonthLabelFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub MonthYearItemFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetMonthYearItemFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub MonthYearItemFontSize: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut f64,
@@ -2585,12 +2754,30 @@ pub struct ICalendarView_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    MonthYearItemFontStyle: usize,
-    SetMonthYearItemFontStyle: usize,
-    MonthYearItemFontWeight: usize,
-    SetMonthYearItemFontWeight: usize,
-    FirstOfYearDecadeLabelFontFamily: usize,
-    SetFirstOfYearDecadeLabelFontFamily: usize,
+    pub MonthYearItemFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub SetMonthYearItemFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub MonthYearItemFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub SetMonthYearItemFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub FirstOfYearDecadeLabelFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFirstOfYearDecadeLabelFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub FirstOfYearDecadeLabelFontSize: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut f64,
@@ -2599,10 +2786,22 @@ pub struct ICalendarView_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    FirstOfYearDecadeLabelFontStyle: usize,
-    SetFirstOfYearDecadeLabelFontStyle: usize,
-    FirstOfYearDecadeLabelFontWeight: usize,
-    SetFirstOfYearDecadeLabelFontWeight: usize,
+    pub FirstOfYearDecadeLabelFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub SetFirstOfYearDecadeLabelFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub FirstOfYearDecadeLabelFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub SetFirstOfYearDecadeLabelFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
     pub HorizontalDayItemAlignment: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::HorizontalAlignment,
@@ -2699,44 +2898,158 @@ unsafe impl ::windows_core::ComInterface for ICalendarView2 {
 #[doc(hidden)]
 pub struct ICalendarView2_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    SelectedDisabledBorderBrush: usize,
-    SetSelectedDisabledBorderBrush: usize,
-    TodaySelectedInnerBorderBrush: usize,
-    SetTodaySelectedInnerBorderBrush: usize,
-    BlackoutStrikethroughBrush: usize,
-    SetBlackoutStrikethroughBrush: usize,
-    BlackoutBackground: usize,
-    SetBlackoutBackground: usize,
-    CalendarItemHoverBackground: usize,
-    SetCalendarItemHoverBackground: usize,
-    CalendarItemPressedBackground: usize,
-    SetCalendarItemPressedBackground: usize,
-    CalendarItemDisabledBackground: usize,
-    SetCalendarItemDisabledBackground: usize,
-    TodayBackground: usize,
-    SetTodayBackground: usize,
-    TodayBlackoutBackground: usize,
-    SetTodayBlackoutBackground: usize,
-    TodayHoverBackground: usize,
-    SetTodayHoverBackground: usize,
-    TodayPressedBackground: usize,
-    SetTodayPressedBackground: usize,
-    TodayDisabledBackground: usize,
-    SetTodayDisabledBackground: usize,
-    TodayBlackoutForeground: usize,
-    SetTodayBlackoutForeground: usize,
-    SelectedHoverForeground: usize,
-    SetSelectedHoverForeground: usize,
-    SelectedPressedForeground: usize,
-    SetSelectedPressedForeground: usize,
-    SelectedDisabledForeground: usize,
-    SetSelectedDisabledForeground: usize,
-    OutOfScopeHoverForeground: usize,
-    SetOutOfScopeHoverForeground: usize,
-    OutOfScopePressedForeground: usize,
-    SetOutOfScopePressedForeground: usize,
-    DisabledForeground: usize,
-    SetDisabledForeground: usize,
+    pub SelectedDisabledBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectedDisabledBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub TodaySelectedInnerBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetTodaySelectedInnerBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub BlackoutStrikethroughBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBlackoutStrikethroughBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub BlackoutBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBlackoutBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub CalendarItemHoverBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetCalendarItemHoverBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub CalendarItemPressedBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetCalendarItemPressedBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub CalendarItemDisabledBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetCalendarItemDisabledBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub TodayBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetTodayBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub TodayBlackoutBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetTodayBlackoutBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub TodayHoverBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetTodayHoverBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub TodayPressedBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetTodayPressedBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub TodayDisabledBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetTodayDisabledBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub TodayBlackoutForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetTodayBlackoutForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SelectedHoverForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectedHoverForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SelectedPressedForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectedPressedForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SelectedDisabledForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectedDisabledForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub OutOfScopeHoverForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetOutOfScopeHoverForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub OutOfScopePressedForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetOutOfScopePressedForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub DisabledForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetDisabledForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub DayItemMargin: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::Thickness,
@@ -3469,8 +3782,14 @@ pub struct ICaptureElement_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
     Source: usize,
     SetSource: usize,
-    Stretch: usize,
-    SetStretch: usize,
+    pub Stretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
+    pub SetStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -3614,8 +3933,14 @@ pub struct IChoosingItemContainerEventArgs_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    ItemContainer: usize,
-    SetItemContainer: usize,
+    pub ItemContainer: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetItemContainer: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub IsContainerPrepared: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -4131,7 +4456,10 @@ pub struct IComboBox_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub DropDownClosed: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         handler: *mut ::core::ffi::c_void,
@@ -4282,8 +4610,14 @@ unsafe impl ::windows_core::ComInterface for IComboBox5 {
 #[doc(hidden)]
 pub struct IComboBox5_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    PlaceholderForeground: usize,
-    SetPlaceholderForeground: usize,
+    pub PlaceholderForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetPlaceholderForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -4715,7 +5049,10 @@ pub struct ICommandBar2_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    CommandBarTemplateSettings: usize,
+    pub CommandBarTemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -5109,7 +5446,10 @@ unsafe impl ::windows_core::ComInterface for IContainerContentChangingEventArgs 
 #[doc(hidden)]
 pub struct IContainerContentChangingEventArgs_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    ItemContainer: usize,
+    pub ItemContainer: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub InRecycleQueue: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -5900,7 +6240,10 @@ pub struct IContentLinkChangedEventArgs_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut ContentLinkChangeKind,
     ) -> ::windows_core::HRESULT,
-    ContentLinkInfo: usize,
+    pub ContentLinkInfo: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     TextRange: usize,
 }
 #[doc(hidden)]
@@ -5957,14 +6300,38 @@ pub struct IContentPresenter_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    FontFamily: usize,
-    SetFontFamily: usize,
-    FontWeight: usize,
-    SetFontWeight: usize,
-    FontStyle: usize,
-    SetFontStyle: usize,
-    FontStretch: usize,
-    SetFontStretch: usize,
+    pub FontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub FontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub FontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub FontStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStretch,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStretch,
+    ) -> ::windows_core::HRESULT,
     pub CharacterSpacing: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut i32,
@@ -5973,8 +6340,14 @@ pub struct IContentPresenter_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: i32,
     ) -> ::windows_core::HRESULT,
-    Foreground: usize,
-    SetForeground: usize,
+    pub Foreground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -6094,8 +6467,14 @@ pub struct IContentPresenter4_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    BorderBrush: usize,
-    SetBorderBrush: usize,
+    pub BorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub BorderThickness: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::Thickness,
@@ -6120,8 +6499,14 @@ pub struct IContentPresenter4_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: super::Thickness,
     ) -> ::windows_core::HRESULT,
-    Background: usize,
-    SetBackground: usize,
+    pub Background: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub HorizontalContentAlignment: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::HorizontalAlignment,
@@ -6508,14 +6893,38 @@ pub struct IControl_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    FontFamily: usize,
-    SetFontFamily: usize,
-    FontWeight: usize,
-    SetFontWeight: usize,
-    FontStyle: usize,
-    SetFontStyle: usize,
-    FontStretch: usize,
-    SetFontStretch: usize,
+    pub FontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub FontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub FontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub FontStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStretch,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStretch,
+    ) -> ::windows_core::HRESULT,
     pub CharacterSpacing: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut i32,
@@ -6524,8 +6933,14 @@ pub struct IControl_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: i32,
     ) -> ::windows_core::HRESULT,
-    Foreground: usize,
-    SetForeground: usize,
+    pub Foreground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub IsTabStop: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -6584,8 +6999,14 @@ pub struct IControl_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: super::VerticalAlignment,
     ) -> ::windows_core::HRESULT,
-    Background: usize,
-    SetBackground: usize,
+    pub Background: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub BorderThickness: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::Thickness,
@@ -6594,8 +7015,14 @@ pub struct IControl_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: super::Thickness,
     ) -> ::windows_core::HRESULT,
-    BorderBrush: usize,
-    SetBorderBrush: usize,
+    pub BorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub FocusState: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::FocusState,
@@ -8871,12 +9298,30 @@ pub struct IFontIcon_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    FontFamily: usize,
-    SetFontFamily: usize,
-    FontWeight: usize,
-    SetFontWeight: usize,
-    FontStyle: usize,
-    SetFontStyle: usize,
+    pub FontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub FontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub FontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -8999,12 +9444,30 @@ pub struct IFontIconSource_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    FontFamily: usize,
-    SetFontFamily: usize,
-    FontWeight: usize,
-    SetFontWeight: usize,
-    FontStyle: usize,
-    SetFontStyle: usize,
+    pub FontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub FontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub FontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
     pub IsTextScaleFactorEnabled: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -9545,8 +10008,14 @@ unsafe impl ::windows_core::ComInterface for IGrid2 {
 #[doc(hidden)]
 pub struct IGrid2_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    BorderBrush: usize,
-    SetBorderBrush: usize,
+    pub BorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub BorderThickness: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::Thickness,
@@ -9949,7 +10418,10 @@ unsafe impl ::windows_core::ComInterface for IGridViewItem {
 #[doc(hidden)]
 pub struct IGridViewItem_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -10949,8 +11421,14 @@ unsafe impl ::windows_core::ComInterface for IIconElement {
 #[doc(hidden)]
 pub struct IIconElement_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Foreground: usize,
-    SetForeground: usize,
+    pub Foreground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -11018,8 +11496,14 @@ unsafe impl ::windows_core::ComInterface for IIconSource {
 #[doc(hidden)]
 pub struct IIconSource_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Foreground: usize,
-    SetForeground: usize,
+    pub Foreground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -11168,10 +11652,22 @@ unsafe impl ::windows_core::ComInterface for IImage {
 #[doc(hidden)]
 pub struct IImage_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Source: usize,
-    SetSource: usize,
-    Stretch: usize,
-    SetStretch: usize,
+    pub Source: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSource: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub Stretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
+    pub SetStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
     pub NineGrid: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::Thickness,
@@ -12265,8 +12761,14 @@ unsafe impl ::windows_core::ComInterface for IInkToolbarPenButton {
 #[doc(hidden)]
 pub struct IInkToolbarPenButton_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Palette: usize,
-    SetPalette: usize,
+    pub Palette: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetPalette: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub MinStrokeWidth: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut f64,
@@ -12283,7 +12785,10 @@ pub struct IInkToolbarPenButton_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    SelectedBrush: usize,
+    pub SelectedBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub SelectedBrushIndex: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut i32,
@@ -12947,7 +13452,11 @@ unsafe impl ::windows_core::ComInterface for IItemContainerGenerator {
 #[doc(hidden)]
 pub struct IItemContainerGenerator_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    ItemsChanged: usize,
+    pub ItemsChanged: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveItemsChanged: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::super::Foundation::EventRegistrationToken,
@@ -12961,7 +13470,12 @@ pub struct IItemContainerGenerator_Vtbl {
         panel: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    StartAt: usize,
+    pub StartAt: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        position: Primitives::GeneratorPosition,
+        direction: Primitives::GeneratorDirection,
+        allowstartatrealizeditem: bool,
+    ) -> ::windows_core::HRESULT,
     pub Stop: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
@@ -12977,10 +13491,26 @@ pub struct IItemContainerGenerator_Vtbl {
     pub RemoveAll: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    Remove: usize,
-    GeneratorPositionFromIndex: usize,
-    IndexFromGeneratorPosition: usize,
-    Recycle: usize,
+    pub Remove: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        position: Primitives::GeneratorPosition,
+        count: i32,
+    ) -> ::windows_core::HRESULT,
+    pub GeneratorPositionFromIndex: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        itemindex: i32,
+        result__: *mut Primitives::GeneratorPosition,
+    ) -> ::windows_core::HRESULT,
+    pub IndexFromGeneratorPosition: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        position: Primitives::GeneratorPosition,
+        result__: *mut i32,
+    ) -> ::windows_core::HRESULT,
+    pub Recycle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        position: Primitives::GeneratorPosition,
+        count: i32,
+    ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
 pub struct IItemContainerMapping(::windows_core::IUnknown);
@@ -13625,8 +14155,14 @@ pub struct IItemsStackPanel_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut PanelScrollingDirection,
     ) -> ::windows_core::HRESULT,
-    GroupHeaderPlacement: usize,
-    SetGroupHeaderPlacement: usize,
+    pub GroupHeaderPlacement: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Primitives::GroupHeaderPlacement,
+    ) -> ::windows_core::HRESULT,
+    pub SetGroupHeaderPlacement: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Primitives::GroupHeaderPlacement,
+    ) -> ::windows_core::HRESULT,
     pub ItemsUpdatingScrollMode: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut ItemsUpdatingScrollMode,
@@ -13815,8 +14351,14 @@ pub struct IItemsWrapGrid_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut PanelScrollingDirection,
     ) -> ::windows_core::HRESULT,
-    GroupHeaderPlacement: usize,
-    SetGroupHeaderPlacement: usize,
+    pub GroupHeaderPlacement: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Primitives::GroupHeaderPlacement,
+    ) -> ::windows_core::HRESULT,
+    pub SetGroupHeaderPlacement: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Primitives::GroupHeaderPlacement,
+    ) -> ::windows_core::HRESULT,
     pub CacheLength: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut f64,
@@ -15016,7 +15558,10 @@ unsafe impl ::windows_core::ComInterface for IListViewItem {
 #[doc(hidden)]
 pub struct IListViewItem_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -15120,8 +15665,14 @@ unsafe impl ::windows_core::ComInterface for IMediaElement {
 #[doc(hidden)]
 pub struct IMediaElement_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    PosterSource: usize,
-    SetPosterSource: usize,
+    pub PosterSource: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetPosterSource: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub Source: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
@@ -15198,8 +15749,14 @@ pub struct IMediaElement_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut f64,
     ) -> ::windows_core::HRESULT,
-    CurrentState: usize,
-    Markers: usize,
+    pub CurrentState: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::MediaElementState,
+    ) -> ::windows_core::HRESULT,
+    pub Markers: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub CanSeek: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -15261,16 +15818,40 @@ pub struct IMediaElement_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: bool,
     ) -> ::windows_core::HRESULT,
-    AudioCategory: usize,
-    SetAudioCategory: usize,
-    AudioDeviceType: usize,
-    SetAudioDeviceType: usize,
+    pub AudioCategory: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::AudioCategory,
+    ) -> ::windows_core::HRESULT,
+    pub SetAudioCategory: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::Media::AudioCategory,
+    ) -> ::windows_core::HRESULT,
+    pub AudioDeviceType: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::AudioDeviceType,
+    ) -> ::windows_core::HRESULT,
+    pub SetAudioDeviceType: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::Media::AudioDeviceType,
+    ) -> ::windows_core::HRESULT,
     ProtectionManager: usize,
     SetProtectionManager: usize,
-    Stereo3DVideoPackingMode: usize,
-    SetStereo3DVideoPackingMode: usize,
-    Stereo3DVideoRenderMode: usize,
-    SetStereo3DVideoRenderMode: usize,
+    pub Stereo3DVideoPackingMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::Stereo3DVideoPackingMode,
+    ) -> ::windows_core::HRESULT,
+    pub SetStereo3DVideoPackingMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::Media::Stereo3DVideoPackingMode,
+    ) -> ::windows_core::HRESULT,
+    pub Stereo3DVideoRenderMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::Stereo3DVideoRenderMode,
+    ) -> ::windows_core::HRESULT,
+    pub SetStereo3DVideoRenderMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::Media::Stereo3DVideoRenderMode,
+    ) -> ::windows_core::HRESULT,
     pub IsStereo3DVideo: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -15329,12 +15910,20 @@ pub struct IMediaElement_Vtbl {
         this: *mut ::core::ffi::c_void,
         token: super::super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    MarkerReached: usize,
+    pub MarkerReached: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveMarkerReached: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    RateChanged: usize,
+    pub RateChanged: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveRateChanged: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::super::Foundation::EventRegistrationToken,
@@ -15366,7 +15955,11 @@ pub struct IMediaElement_Vtbl {
     pub Pause: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    CanPlayType: usize,
+    pub CanPlayType: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        r#type: ::std::mem::MaybeUninit<::windows_core::HSTRING>,
+        result__: *mut super::Media::MediaCanPlayResponse,
+    ) -> ::windows_core::HRESULT,
     SetSource2: usize,
     pub GetAudioStreamLanguage: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
@@ -15388,7 +15981,10 @@ pub struct IMediaElement_Vtbl {
     pub RemoveAllEffects: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    ActualStereo3DVideoPackingMode: usize,
+    pub ActualStereo3DVideoPackingMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::Stereo3DVideoPackingMode,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -15418,8 +16014,14 @@ pub struct IMediaElement2_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: bool,
     ) -> ::windows_core::HRESULT,
-    Stretch: usize,
-    SetStretch: usize,
+    pub Stretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
+    pub SetStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
     pub IsFullWindow: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -15460,7 +16062,11 @@ pub struct IMediaElement3_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    PartialMediaFailureDetected: usize,
+    pub PartialMediaFailureDetected: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemovePartialMediaFailureDetected: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::super::Foundation::EventRegistrationToken,
@@ -15690,10 +16296,22 @@ pub struct IMediaPlayerElement_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: bool,
     ) -> ::windows_core::HRESULT,
-    PosterSource: usize,
-    SetPosterSource: usize,
-    Stretch: usize,
-    SetStretch: usize,
+    pub PosterSource: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetPosterSource: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub Stretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
+    pub SetStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
     pub AutoPlay: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -15811,8 +16429,14 @@ pub struct IMediaPlayerPresenter_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
     MediaPlayer: usize,
     SetMediaPlayer: usize,
-    Stretch: usize,
-    SetStretch: usize,
+    pub Stretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
+    pub SetStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
     pub IsFullWindow: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -16107,9 +16731,19 @@ pub struct IMediaTransportControls2_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: bool,
     ) -> ::windows_core::HRESULT,
-    FastPlayFallbackBehaviour: usize,
-    SetFastPlayFallbackBehaviour: usize,
-    ThumbnailRequested: usize,
+    pub FastPlayFallbackBehaviour: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::FastPlayFallbackBehaviour,
+    ) -> ::windows_core::HRESULT,
+    pub SetFastPlayFallbackBehaviour: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::Media::FastPlayFallbackBehaviour,
+    ) -> ::windows_core::HRESULT,
+    pub ThumbnailRequested: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveThumbnailRequested: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::super::Foundation::EventRegistrationToken,
@@ -16891,7 +17525,10 @@ pub struct IMenuFlyoutItem3_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: ::std::mem::MaybeUninit<::windows_core::HSTRING>,
     ) -> ::windows_core::HRESULT,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -17086,7 +17723,10 @@ unsafe impl ::windows_core::ComInterface for IMenuFlyoutPresenter2 {
 #[doc(hidden)]
 pub struct IMenuFlyoutPresenter2_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -18862,8 +19502,14 @@ pub struct IPanel_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    Background: usize,
-    SetBackground: usize,
+    pub Background: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub IsItemsHost: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -19315,8 +19961,14 @@ pub struct IPasswordBox2_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: ::std::mem::MaybeUninit<::windows_core::HSTRING>,
     ) -> ::windows_core::HRESULT,
-    SelectionHighlightColor: usize,
-    SetSelectionHighlightColor: usize,
+    pub SelectionHighlightColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionHighlightColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub PreventKeyboardDisplayOnProgrammaticFocus: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -19428,8 +20080,14 @@ pub struct IPasswordBox5_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
     ) -> ::windows_core::HRESULT,
-    SelectionFlyout: usize,
-    SetSelectionFlyout: usize,
+    pub SelectionFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub Description: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
@@ -19628,8 +20286,14 @@ unsafe impl ::windows_core::ComInterface for IPathIcon {
 #[doc(hidden)]
 pub struct IPathIcon_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Data: usize,
-    SetData: usize,
+    pub Data: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetData: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -19678,8 +20342,14 @@ unsafe impl ::windows_core::ComInterface for IPathIconSource {
 #[doc(hidden)]
 pub struct IPathIconSource_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Data: usize,
-    SetData: usize,
+    pub Data: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetData: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -19794,8 +20464,14 @@ pub struct IPersonPicture_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: ::std::mem::MaybeUninit<::windows_core::HSTRING>,
     ) -> ::windows_core::HRESULT,
-    BadgeImageSource: usize,
-    SetBadgeImageSource: usize,
+    pub BadgeImageSource: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBadgeImageSource: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub BadgeText: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut ::std::mem::MaybeUninit<::windows_core::HSTRING>,
@@ -19838,8 +20514,14 @@ pub struct IPersonPicture_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: bool,
     ) -> ::windows_core::HRESULT,
-    ProfilePicture: usize,
-    SetProfilePicture: usize,
+    pub ProfilePicture: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetProfilePicture: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -20561,7 +21243,10 @@ pub struct IProgressBar_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: bool,
     ) -> ::windows_core::HRESULT,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -20651,7 +21336,10 @@ pub struct IProgressRing_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: bool,
     ) -> ::windows_core::HRESULT,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -21094,18 +21782,54 @@ unsafe impl ::windows_core::ComInterface for IRatingItemImageInfo {
 #[doc(hidden)]
 pub struct IRatingItemImageInfo_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    DisabledImage: usize,
-    SetDisabledImage: usize,
-    Image: usize,
-    SetImage: usize,
-    PlaceholderImage: usize,
-    SetPlaceholderImage: usize,
-    PointerOverImage: usize,
-    SetPointerOverImage: usize,
-    PointerOverPlaceholderImage: usize,
-    SetPointerOverPlaceholderImage: usize,
-    UnsetImage: usize,
-    SetUnsetImage: usize,
+    pub DisabledImage: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetDisabledImage: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub Image: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetImage: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub PlaceholderImage: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetPlaceholderImage: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub PointerOverImage: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetPointerOverImage: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub PointerOverPlaceholderImage: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetPointerOverPlaceholderImage: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub UnsetImage: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetUnsetImage: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -21557,8 +22281,14 @@ unsafe impl ::windows_core::ComInterface for IRelativePanel {
 #[doc(hidden)]
 pub struct IRelativePanel_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    BorderBrush: usize,
-    SetBorderBrush: usize,
+    pub BorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub BorderThickness: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::Thickness,
@@ -21994,7 +22724,10 @@ pub struct IRichEditBox_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: bool,
     ) -> ::windows_core::HRESULT,
-    Document: usize,
+    pub Document: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     InputScope: usize,
     SetInputScope: usize,
     pub TextChanged: unsafe extern "system" fn(
@@ -22069,8 +22802,14 @@ pub struct IRichEditBox2_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: ::std::mem::MaybeUninit<::windows_core::HSTRING>,
     ) -> ::windows_core::HRESULT,
-    SelectionHighlightColor: usize,
-    SetSelectionHighlightColor: usize,
+    pub SelectionHighlightColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionHighlightColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub PreventKeyboardDisplayOnProgrammaticFocus: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -22232,8 +22971,14 @@ unsafe impl ::windows_core::ComInterface for IRichEditBox5 {
 #[doc(hidden)]
 pub struct IRichEditBox5_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    SelectionHighlightColorWhenNotFocused: usize,
-    SetSelectionHighlightColorWhenNotFocused: usize,
+    pub SelectionHighlightColorWhenNotFocused: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionHighlightColorWhenNotFocused: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub MaxLength: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut i32,
@@ -22326,10 +23071,22 @@ unsafe impl ::windows_core::ComInterface for IRichEditBox7 {
 #[doc(hidden)]
 pub struct IRichEditBox7_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    ContentLinkForegroundColor: usize,
-    SetContentLinkForegroundColor: usize,
-    ContentLinkBackgroundColor: usize,
-    SetContentLinkBackgroundColor: usize,
+    pub ContentLinkForegroundColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetContentLinkForegroundColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub ContentLinkBackgroundColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetContentLinkBackgroundColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     ContentLinkProviders: usize,
     SetContentLinkProviders: usize,
     pub HandwritingView: unsafe extern "system" fn(
@@ -22383,10 +23140,22 @@ unsafe impl ::windows_core::ComInterface for IRichEditBox8 {
 #[doc(hidden)]
 pub struct IRichEditBox8_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    TextDocument: usize,
-    SelectionFlyout: usize,
-    SetSelectionFlyout: usize,
-    ProofingMenuFlyout: usize,
+    pub TextDocument: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SelectionFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub ProofingMenuFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub Description: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
@@ -22827,16 +23596,46 @@ pub struct IRichTextBlock_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    FontFamily: usize,
-    SetFontFamily: usize,
-    FontWeight: usize,
-    SetFontWeight: usize,
-    FontStyle: usize,
-    SetFontStyle: usize,
-    FontStretch: usize,
-    SetFontStretch: usize,
-    Foreground: usize,
-    SetForeground: usize,
+    pub FontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub FontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub FontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub FontStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStretch,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStretch,
+    ) -> ::windows_core::HRESULT,
+    pub Foreground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub TextWrapping: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::TextWrapping,
@@ -22999,8 +23798,14 @@ pub struct IRichTextBlock2_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: super::TextLineBounds,
     ) -> ::windows_core::HRESULT,
-    SelectionHighlightColor: usize,
-    SetSelectionHighlightColor: usize,
+    pub SelectionHighlightColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionHighlightColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub OpticalMarginAlignment: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::OpticalMarginAlignment,
@@ -23075,8 +23880,14 @@ unsafe impl ::windows_core::ComInterface for IRichTextBlock4 {
 #[doc(hidden)]
 pub struct IRichTextBlock4_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    TextDecorations: usize,
-    SetTextDecorations: usize,
+    pub TextDecorations: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::TextDecorations,
+    ) -> ::windows_core::HRESULT,
+    pub SetTextDecorations: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::TextDecorations,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -23141,8 +23952,14 @@ unsafe impl ::windows_core::ComInterface for IRichTextBlock6 {
 #[doc(hidden)]
 pub struct IRichTextBlock6_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    SelectionFlyout: usize,
-    SetSelectionFlyout: usize,
+    pub SelectionFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub CopySelectionToClipboard: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
@@ -24027,10 +24844,22 @@ pub struct IScrollViewer_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: ZoomMode,
     ) -> ::windows_core::HRESULT,
-    HorizontalSnapPointsAlignment: usize,
-    SetHorizontalSnapPointsAlignment: usize,
-    VerticalSnapPointsAlignment: usize,
-    SetVerticalSnapPointsAlignment: usize,
+    pub HorizontalSnapPointsAlignment: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Primitives::SnapPointsAlignment,
+    ) -> ::windows_core::HRESULT,
+    pub SetHorizontalSnapPointsAlignment: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Primitives::SnapPointsAlignment,
+    ) -> ::windows_core::HRESULT,
+    pub VerticalSnapPointsAlignment: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Primitives::SnapPointsAlignment,
+    ) -> ::windows_core::HRESULT,
+    pub SetVerticalSnapPointsAlignment: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Primitives::SnapPointsAlignment,
+    ) -> ::windows_core::HRESULT,
     pub HorizontalSnapPointsType: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut SnapPointsType,
@@ -25525,13 +26354,34 @@ pub struct ISettingsFlyout_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: ::std::mem::MaybeUninit<::windows_core::HSTRING>,
     ) -> ::windows_core::HRESULT,
-    HeaderBackground: usize,
-    SetHeaderBackground: usize,
-    HeaderForeground: usize,
-    SetHeaderForeground: usize,
-    IconSource: usize,
-    SetIconSource: usize,
-    TemplateSettings: usize,
+    pub HeaderBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetHeaderBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub HeaderForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetHeaderForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub IconSource: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetIconSource: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub BackClick: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         handler: *mut ::core::ffi::c_void,
@@ -25651,8 +26501,14 @@ pub struct ISlider_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    SnapsTo: usize,
-    SetSnapsTo: usize,
+    pub SnapsTo: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Primitives::SliderSnapsTo,
+    ) -> ::windows_core::HRESULT,
+    pub SetSnapsTo: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Primitives::SliderSnapsTo,
+    ) -> ::windows_core::HRESULT,
     pub TickFrequency: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut f64,
@@ -25661,8 +26517,14 @@ pub struct ISlider_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    TickPlacement: usize,
-    SetTickPlacement: usize,
+    pub TickPlacement: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Primitives::TickPlacement,
+    ) -> ::windows_core::HRESULT,
+    pub SetTickPlacement: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Primitives::TickPlacement,
+    ) -> ::windows_core::HRESULT,
     pub Orientation: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut Orientation,
@@ -25860,8 +26722,14 @@ unsafe impl ::windows_core::ComInterface for ISplitButton {
 #[doc(hidden)]
 pub struct ISplitButton_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Flyout: usize,
-    SetFlyout: usize,
+    pub Flyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     Command: usize,
     SetCommand: usize,
     pub CommandParameter: unsafe extern "system" fn(
@@ -26088,9 +26956,18 @@ pub struct ISplitView_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: SplitViewDisplayMode,
     ) -> ::windows_core::HRESULT,
-    TemplateSettings: usize,
-    PaneBackground: usize,
-    SetPaneBackground: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub PaneBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetPaneBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub PaneClosing: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         handler: *mut ::core::ffi::c_void,
@@ -26373,8 +27250,14 @@ unsafe impl ::windows_core::ComInterface for IStackPanel2 {
 #[doc(hidden)]
 pub struct IStackPanel2_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    BorderBrush: usize,
-    SetBorderBrush: usize,
+    pub BorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBorderBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub BorderThickness: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::Thickness,
@@ -27003,10 +27886,22 @@ pub struct ISwipeItem_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    Background: usize,
-    SetBackground: usize,
-    Foreground: usize,
-    SetForeground: usize,
+    pub Background: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetBackground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub Foreground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     Command: usize,
     SetCommand: usize,
     pub CommandParameter: unsafe extern "system" fn(
@@ -27406,14 +28301,38 @@ pub struct ITextBlock_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    FontFamily: usize,
-    SetFontFamily: usize,
-    FontWeight: usize,
-    SetFontWeight: usize,
-    FontStyle: usize,
-    SetFontStyle: usize,
-    FontStretch: usize,
-    SetFontStretch: usize,
+    pub FontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontFamily: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub FontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontWeight: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::HRESULT,
+    pub FontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontStyle: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::HRESULT,
+    pub FontStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::FontStretch,
+    ) -> ::windows_core::HRESULT,
+    pub SetFontStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::FontStretch,
+    ) -> ::windows_core::HRESULT,
     pub CharacterSpacing: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut i32,
@@ -27422,8 +28341,14 @@ pub struct ITextBlock_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: i32,
     ) -> ::windows_core::HRESULT,
-    Foreground: usize,
-    SetForeground: usize,
+    pub Foreground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub TextWrapping: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::TextWrapping,
@@ -27549,8 +28474,14 @@ unsafe impl ::windows_core::ComInterface for ITextBlock2 {
 #[doc(hidden)]
 pub struct ITextBlock2_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    SelectionHighlightColor: usize,
-    SetSelectionHighlightColor: usize,
+    pub SelectionHighlightColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionHighlightColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub MaxLines: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut i32,
@@ -27663,8 +28594,14 @@ unsafe impl ::windows_core::ComInterface for ITextBlock5 {
 #[doc(hidden)]
 pub struct ITextBlock5_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    TextDecorations: usize,
-    SetTextDecorations: usize,
+    pub TextDecorations: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Text::TextDecorations,
+    ) -> ::windows_core::HRESULT,
+    pub SetTextDecorations: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Text::TextDecorations,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -27729,8 +28666,14 @@ unsafe impl ::windows_core::ComInterface for ITextBlock7 {
 #[doc(hidden)]
 pub struct ITextBlock7_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    SelectionFlyout: usize,
-    SetSelectionFlyout: usize,
+    pub SelectionFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub CopySelectionToClipboard: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
@@ -28165,8 +29108,14 @@ pub struct ITextBox2_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: ::std::mem::MaybeUninit<::windows_core::HSTRING>,
     ) -> ::windows_core::HRESULT,
-    SelectionHighlightColor: usize,
-    SetSelectionHighlightColor: usize,
+    pub SelectionHighlightColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionHighlightColor: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub PreventKeyboardDisplayOnProgrammaticFocus: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -28320,8 +29269,14 @@ unsafe impl ::windows_core::ComInterface for ITextBox5 {
 #[doc(hidden)]
 pub struct ITextBox5_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    SelectionHighlightColorWhenNotFocused: usize,
-    SetSelectionHighlightColorWhenNotFocused: usize,
+    pub SelectionHighlightColorWhenNotFocused: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionHighlightColorWhenNotFocused: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -28359,8 +29314,14 @@ pub struct ITextBox6_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: CharacterCasing,
     ) -> ::windows_core::HRESULT,
-    PlaceholderForeground: usize,
-    SetPlaceholderForeground: usize,
+    pub PlaceholderForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetPlaceholderForeground: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub CopyingToClipboard: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         handler: *mut ::core::ffi::c_void,
@@ -28458,9 +29419,18 @@ pub struct ITextBox8_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
     ) -> ::windows_core::HRESULT,
-    SelectionFlyout: usize,
-    SetSelectionFlyout: usize,
-    ProofingMenuFlyout: usize,
+    pub SelectionFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetSelectionFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub ProofingMenuFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub Description: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
@@ -29948,7 +30918,10 @@ pub struct IToggleSwitch_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub Toggled: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         handler: *mut ::core::ffi::c_void,
@@ -30083,8 +31056,14 @@ pub struct IToolTip_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: bool,
     ) -> ::windows_core::HRESULT,
-    Placement: usize,
-    SetPlacement: usize,
+    pub Placement: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Primitives::PlacementMode,
+    ) -> ::windows_core::HRESULT,
+    pub SetPlacement: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Primitives::PlacementMode,
+    ) -> ::windows_core::HRESULT,
     pub PlacementTarget: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
@@ -30101,7 +31080,10 @@ pub struct IToolTip_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    TemplateSettings: usize,
+    pub TemplateSettings: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub Closed: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         handler: *mut ::core::ffi::c_void,
@@ -30222,8 +31204,16 @@ pub struct IToolTipServiceStatics_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    GetPlacement: usize,
-    SetPlacement: usize,
+    pub GetPlacement: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        element: *mut ::core::ffi::c_void,
+        result__: *mut Primitives::PlacementMode,
+    ) -> ::windows_core::HRESULT,
+    pub SetPlacement: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        element: *mut ::core::ffi::c_void,
+        value: Primitives::PlacementMode,
+    ) -> ::windows_core::HRESULT,
     pub PlacementTargetProperty: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
@@ -30726,8 +31716,14 @@ pub struct ITreeViewItem_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    GlyphBrush: usize,
-    SetGlyphBrush: usize,
+    pub GlyphBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetGlyphBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub ExpandedGlyph: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut ::std::mem::MaybeUninit<::windows_core::HSTRING>,
@@ -31763,8 +32759,14 @@ pub struct IViewbox_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    Stretch: usize,
-    SetStretch: usize,
+    pub Stretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
+    pub SetStretch: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::Media::Stretch,
+    ) -> ::windows_core::HRESULT,
     pub StretchDirection: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut StretchDirection,
@@ -31869,7 +32871,11 @@ unsafe impl ::windows_core::ComInterface for IVirtualizingPanelOverrides {
 #[doc(hidden)]
 pub struct IVirtualizingPanelOverrides_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    OnItemsChanged: usize,
+    pub OnItemsChanged: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        sender: *mut ::core::ffi::c_void,
+        args: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub OnClearChildren: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
@@ -33453,6 +34459,7 @@ impl ::windows_core::RuntimeName for AppBarButton {
 impl ::windows_core::CanTryInto<ICommandBarElement> for AppBarButton {}
 impl ::windows_core::CanTryInto<ICommandBarElement2> for AppBarButton {}
 impl ::windows_core::CanTryInto<Button> for AppBarButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for AppBarButton {}
 impl ::windows_core::CanTryInto<ContentControl> for AppBarButton {}
 impl ::windows_core::CanTryInto<Control> for AppBarButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for AppBarButton {}
@@ -33587,6 +34594,8 @@ impl ::windows_core::RuntimeName for AppBarToggleButton {
 );
 impl ::windows_core::CanTryInto<ICommandBarElement> for AppBarToggleButton {}
 impl ::windows_core::CanTryInto<ICommandBarElement2> for AppBarToggleButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton> for AppBarToggleButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for AppBarToggleButton {}
 impl ::windows_core::CanTryInto<ContentControl> for AppBarToggleButton {}
 impl ::windows_core::CanTryInto<Control> for AppBarToggleButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for AppBarToggleButton {}
@@ -33958,6 +34967,7 @@ impl ::windows_core::RuntimeName for Button {
 ::windows_core::imp::interface_hierarchy!(
     Button, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for Button {}
 impl ::windows_core::CanTryInto<ContentControl> for Button {}
 impl ::windows_core::CanTryInto<Control> for Button {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for Button {}
@@ -34368,6 +35378,8 @@ impl ::windows_core::RuntimeName for CheckBox {
 ::windows_core::imp::interface_hierarchy!(
     CheckBox, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::ToggleButton> for CheckBox {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for CheckBox {}
 impl ::windows_core::CanTryInto<ContentControl> for CheckBox {}
 impl ::windows_core::CanTryInto<Control> for CheckBox {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for CheckBox {}
@@ -34576,7 +35588,264 @@ unsafe impl ::core::marker::Send for ColorPicker {}
 unsafe impl ::core::marker::Sync for ColorPicker {}
 #[repr(transparent)]
 pub struct ColumnDefinition(::windows_core::IUnknown);
-impl ColumnDefinition {}
+impl ColumnDefinition {
+    pub fn new() -> ::windows_core::Result<Self> {
+        Self::IActivationFactory(|f| f.ActivateInstance::<Self>())
+    }
+    fn IActivationFactory<
+        R,
+        F: FnOnce(&::windows_core::imp::IGenericFactory) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            ColumnDefinition,
+            ::windows_core::imp::IGenericFactory,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    pub fn Width(&self) -> ::windows_core::Result<super::GridLength> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Width)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetWidth(&self, value: super::GridLength) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetWidth)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn MaxWidth(&self) -> ::windows_core::Result<f64> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .MaxWidth)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetMaxWidth(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetMaxWidth)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn MinWidth(&self) -> ::windows_core::Result<f64> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .MinWidth)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetMinWidth(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetMinWidth)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn ActualWidth(&self) -> ::windows_core::Result<f64> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ActualWidth)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn WidthProperty() -> ::windows_core::Result<super::DependencyProperty> {
+        Self::IColumnDefinitionStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .WidthProperty)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        })
+    }
+    pub fn MaxWidthProperty() -> ::windows_core::Result<super::DependencyProperty> {
+        Self::IColumnDefinitionStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .MaxWidthProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn MinWidthProperty() -> ::windows_core::Result<super::DependencyProperty> {
+        Self::IColumnDefinitionStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .MinWidthProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn GetValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetValue<P0, P1>(&self, dp: P0, value: P1) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+        P1: ::windows_core::IntoParam<::windows_core::IInspectable>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ClearValue<P0>(&self, dp: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ClearValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ReadLocalValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ReadLocalValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn GetAnimationBaseValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetAnimationBaseValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn RegisterPropertyChangedCallback<P0, P1>(
+        &self,
+        dp: P0,
+        callback: P1,
+    ) -> ::windows_core::Result<i64>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+        P1: ::windows_core::IntoParam<super::DependencyPropertyChangedCallback>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject2,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RegisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    callback.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn UnregisterPropertyChangedCallback<P0>(
+        &self,
+        dp: P0,
+        token: i64,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject2,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .UnregisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    token,
+                )
+                .ok()
+        }
+    }
+    #[doc(hidden)]
+    pub fn IColumnDefinitionStatics<
+        R,
+        F: FnOnce(&IColumnDefinitionStatics) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            ColumnDefinition,
+            IColumnDefinitionStatics,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::core::cmp::PartialEq for ColumnDefinition {
     fn eq(&self, other: &Self) -> bool {
         self.0 == other.0
@@ -34615,7 +35884,37 @@ unsafe impl ::core::marker::Send for ColumnDefinition {}
 unsafe impl ::core::marker::Sync for ColumnDefinition {}
 #[repr(transparent)]
 pub struct ColumnDefinitionCollection(::windows_core::IUnknown);
-impl ColumnDefinitionCollection {}
+impl ColumnDefinitionCollection {
+    pub fn First(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::super::Foundation::Collections::IIterator<ColumnDefinition>,
+    > {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::super::Foundation::Collections::IIterable<ColumnDefinition>,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .First)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn Append<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<ColumnDefinition>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Append)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+}
 impl ::core::cmp::PartialEq for ColumnDefinitionCollection {
     fn eq(&self, other: &Self) -> bool {
         self.0 == other.0
@@ -34718,6 +36017,7 @@ impl ::windows_core::RuntimeName for ComboBox {
     ComboBox, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<IItemContainerMapping> for ComboBox {}
+impl ::windows_core::CanTryInto<Primitives::Selector> for ComboBox {}
 impl ::windows_core::CanTryInto<ItemsControl> for ComboBox {}
 impl ::windows_core::CanTryInto<Control> for ComboBox {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for ComboBox {}
@@ -34761,6 +36061,7 @@ impl ::windows_core::RuntimeName for ComboBoxItem {
 ::windows_core::imp::interface_hierarchy!(
     ComboBoxItem, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::SelectorItem> for ComboBoxItem {}
 impl ::windows_core::CanTryInto<ContentControl> for ComboBoxItem {}
 impl ::windows_core::CanTryInto<Control> for ComboBoxItem {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for ComboBoxItem {}
@@ -34887,6 +36188,7 @@ impl ::windows_core::RuntimeName for CommandBarFlyout {
 ::windows_core::imp::interface_hierarchy!(
     CommandBarFlyout, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::FlyoutBase> for CommandBarFlyout {}
 impl ::windows_core::CanTryInto<super::DependencyObject> for CommandBarFlyout {}
 unsafe impl ::core::marker::Send for CommandBarFlyout {}
 unsafe impl ::core::marker::Sync for CommandBarFlyout {}
@@ -35645,6 +36947,8 @@ impl ::windows_core::RuntimeName for DatePickerFlyout {
 ::windows_core::imp::interface_hierarchy!(
     DatePickerFlyout, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::PickerFlyoutBase> for DatePickerFlyout {}
+impl ::windows_core::CanTryInto<Primitives::FlyoutBase> for DatePickerFlyout {}
 impl ::windows_core::CanTryInto<super::DependencyObject> for DatePickerFlyout {}
 unsafe impl ::core::marker::Send for DatePickerFlyout {}
 unsafe impl ::core::marker::Sync for DatePickerFlyout {}
@@ -35920,6 +37224,7 @@ impl ::windows_core::RuntimeName for DropDownButton {
     DropDownButton, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<Button> for DropDownButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for DropDownButton {}
 impl ::windows_core::CanTryInto<ContentControl> for DropDownButton {}
 impl ::windows_core::CanTryInto<Control> for DropDownButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for DropDownButton {}
@@ -36043,6 +37348,7 @@ impl ::windows_core::RuntimeName for FlipView {
     FlipView, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<IItemContainerMapping> for FlipView {}
+impl ::windows_core::CanTryInto<Primitives::Selector> for FlipView {}
 impl ::windows_core::CanTryInto<ItemsControl> for FlipView {}
 impl ::windows_core::CanTryInto<Control> for FlipView {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for FlipView {}
@@ -36086,6 +37392,7 @@ impl ::windows_core::RuntimeName for FlipViewItem {
 ::windows_core::imp::interface_hierarchy!(
     FlipViewItem, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::SelectorItem> for FlipViewItem {}
 impl ::windows_core::CanTryInto<ContentControl> for FlipViewItem {}
 impl ::windows_core::CanTryInto<Control> for FlipViewItem {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for FlipViewItem {}
@@ -36129,6 +37436,7 @@ impl ::windows_core::RuntimeName for Flyout {
 ::windows_core::imp::interface_hierarchy!(
     Flyout, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::FlyoutBase> for Flyout {}
 impl ::windows_core::CanTryInto<super::DependencyObject> for Flyout {}
 unsafe impl ::core::marker::Send for Flyout {}
 unsafe impl ::core::marker::Sync for Flyout {}
@@ -36435,6 +37743,69 @@ impl FontIcon {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetFontSize)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn FontFamily(&self) -> ::windows_core::Result<super::Media::FontFamily> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontFamily)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontFamily<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::FontFamily>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontFamily)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn FontWeight(&self) -> ::windows_core::Result<super::super::Text::FontWeight> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontWeight)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontWeight(
+        &self,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontWeight)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn FontStyle(&self) -> ::windows_core::Result<super::super::Text::FontStyle> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontStyle)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontStyle(
+        &self,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontStyle)(::windows_core::Interface::as_raw(this), value)
                 .ok()
         }
     }
@@ -37390,6 +38761,73 @@ impl FontIcon {
                 .ok()
         }
     }
+    pub fn FocusVisualSecondaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualSecondaryBrush<P0>(
+        &self,
+        value: P0,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn FocusVisualPrimaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualPrimaryBrush<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn AllowFocusWhenDisabled(&self) -> ::windows_core::Result<bool> {
         let this = &::windows_core::ComInterface::cast::<
             super::IFrameworkElement4,
@@ -37599,6 +39037,29 @@ impl FontIcon {
                 .ok()
         }
     }
+    pub fn Foreground(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<IIconElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Foreground)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetForeground<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IIconElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetForeground)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn DesiredSize(
         &self,
     ) -> ::windows_core::Result<super::super::super::Foundation::Size> {
@@ -37641,6 +39102,75 @@ impl FontIcon {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetOpacity)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Clip(&self) -> ::windows_core::Result<super::Media::RectangleGeometry> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Clip)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetClip<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::Media::RectangleGeometry>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetClip)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn RenderTransform(&self) -> ::windows_core::Result<super::Media::Transform> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RenderTransform)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetRenderTransform<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Transform>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetRenderTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn Projection(&self) -> ::windows_core::Result<super::Media::Projection> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Projection)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetProjection<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Projection>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetProjection)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -37737,6 +39267,29 @@ impl FontIcon {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetUseLayoutRounding)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn CacheMode(&self) -> ::windows_core::Result<super::Media::CacheMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CacheMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCacheMode<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::CacheMode>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCacheMode)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -38296,6 +39849,25 @@ impl FontIcon {
                 .ok()
         }
     }
+    pub fn TransformToVisual<P0>(
+        &self,
+        visual: P0,
+    ) -> ::windows_core::Result<super::Media::GeneralTransform>
+    where
+        P0: ::windows_core::TryIntoParam<super::UIElement>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TransformToVisual)(
+                    ::windows_core::Interface::as_raw(this),
+                    visual.try_into_param()?.abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
     pub fn InvalidateMeasure(&self) -> ::windows_core::Result<()> {
         let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
         unsafe {
@@ -38350,6 +39922,51 @@ impl FontIcon {
             (::windows_core::Interface::vtable(this)
                 .UIContext)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
+        }
+    }
+    pub fn Shadow(&self) -> ::windows_core::Result<super::Media::Shadow> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Shadow)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetShadow<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Shadow>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetShadow)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn CompositeMode(
+        &self,
+    ) -> ::windows_core::Result<super::Media::ElementCompositeMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CompositeMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCompositeMode(
+        &self,
+        value: super::Media::ElementCompositeMode,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCompositeMode)(::windows_core::Interface::as_raw(this), value)
+                .ok()
         }
     }
     pub fn CancelDirectManipulations(&self) -> ::windows_core::Result<bool> {
@@ -38448,6 +40065,29 @@ impl FontIcon {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .RemoveDropCompleted)(::windows_core::Interface::as_raw(this), token)
+                .ok()
+        }
+    }
+    pub fn ContextFlyout(&self) -> ::windows_core::Result<Primitives::FlyoutBase> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ContextFlyout)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetContextFlyout<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Primitives::FlyoutBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetContextFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -38631,6 +40271,19 @@ impl FontIcon {
             (::windows_core::Interface::vtable(this)
                 .RemoveAccessKeyInvoked)(::windows_core::Interface::as_raw(this), token)
                 .ok()
+        }
+    }
+    pub fn Lights(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::super::Foundation::Collections::IVector<super::Media::XamlLight>,
+    > {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Lights)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
         }
     }
     pub fn KeyTipHorizontalOffset(&self) -> ::windows_core::Result<f64> {
@@ -40254,6 +41907,73 @@ impl Grid {
                 .ok()
         }
     }
+    pub fn FocusVisualSecondaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualSecondaryBrush<P0>(
+        &self,
+        value: P0,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn FocusVisualPrimaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualPrimaryBrush<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn AllowFocusWhenDisabled(&self) -> ::windows_core::Result<bool> {
         let this = &::windows_core::ComInterface::cast::<
             super::IFrameworkElement4,
@@ -40484,6 +42204,29 @@ impl Grid {
                     &mut result__,
                 )
                 .from_abi(result__)
+        }
+    }
+    pub fn BorderBrush(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<IGrid2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .BorderBrush)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetBorderBrush<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IGrid2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetBorderBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
         }
     }
     pub fn BorderThickness(&self) -> ::windows_core::Result<super::Thickness> {
@@ -40838,6 +42581,29 @@ impl Grid {
                 .from_abi(result__)
         }
     }
+    pub fn Background(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<IPanel>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Background)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetBackground<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IPanel>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetBackground)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn IsItemsHost(&self) -> ::windows_core::Result<bool> {
         let this = &::windows_core::ComInterface::cast::<IPanel>(self)?;
         unsafe {
@@ -40917,6 +42683,75 @@ impl Grid {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetOpacity)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Clip(&self) -> ::windows_core::Result<super::Media::RectangleGeometry> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Clip)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetClip<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::Media::RectangleGeometry>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetClip)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn RenderTransform(&self) -> ::windows_core::Result<super::Media::Transform> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RenderTransform)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetRenderTransform<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Transform>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetRenderTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn Projection(&self) -> ::windows_core::Result<super::Media::Projection> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Projection)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetProjection<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Projection>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetProjection)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -41013,6 +42848,29 @@ impl Grid {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetUseLayoutRounding)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn CacheMode(&self) -> ::windows_core::Result<super::Media::CacheMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CacheMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCacheMode<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::CacheMode>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCacheMode)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -41572,6 +43430,25 @@ impl Grid {
                 .ok()
         }
     }
+    pub fn TransformToVisual<P0>(
+        &self,
+        visual: P0,
+    ) -> ::windows_core::Result<super::Media::GeneralTransform>
+    where
+        P0: ::windows_core::TryIntoParam<super::UIElement>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TransformToVisual)(
+                    ::windows_core::Interface::as_raw(this),
+                    visual.try_into_param()?.abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
     pub fn InvalidateMeasure(&self) -> ::windows_core::Result<()> {
         let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
         unsafe {
@@ -41626,6 +43503,51 @@ impl Grid {
             (::windows_core::Interface::vtable(this)
                 .UIContext)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
+        }
+    }
+    pub fn Shadow(&self) -> ::windows_core::Result<super::Media::Shadow> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Shadow)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetShadow<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Shadow>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetShadow)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn CompositeMode(
+        &self,
+    ) -> ::windows_core::Result<super::Media::ElementCompositeMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CompositeMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCompositeMode(
+        &self,
+        value: super::Media::ElementCompositeMode,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCompositeMode)(::windows_core::Interface::as_raw(this), value)
+                .ok()
         }
     }
     pub fn CancelDirectManipulations(&self) -> ::windows_core::Result<bool> {
@@ -41724,6 +43646,29 @@ impl Grid {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .RemoveDropCompleted)(::windows_core::Interface::as_raw(this), token)
+                .ok()
+        }
+    }
+    pub fn ContextFlyout(&self) -> ::windows_core::Result<Primitives::FlyoutBase> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ContextFlyout)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetContextFlyout<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Primitives::FlyoutBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetContextFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -41907,6 +43852,19 @@ impl Grid {
             (::windows_core::Interface::vtable(this)
                 .RemoveAccessKeyInvoked)(::windows_core::Interface::as_raw(this), token)
                 .ok()
+        }
+    }
+    pub fn Lights(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::super::Foundation::Collections::IVector<super::Media::XamlLight>,
+    > {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Lights)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
         }
     }
     pub fn KeyTipHorizontalOffset(&self) -> ::windows_core::Result<f64> {
@@ -42518,6 +44476,7 @@ impl ::windows_core::RuntimeName for GridView {
 impl ::windows_core::CanTryInto<IItemContainerMapping> for GridView {}
 impl ::windows_core::CanTryInto<ISemanticZoomInformation> for GridView {}
 impl ::windows_core::CanTryInto<ListViewBase> for GridView {}
+impl ::windows_core::CanTryInto<Primitives::Selector> for GridView {}
 impl ::windows_core::CanTryInto<ItemsControl> for GridView {}
 impl ::windows_core::CanTryInto<Control> for GridView {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for GridView {}
@@ -42605,6 +44564,7 @@ impl ::windows_core::RuntimeName for GridViewItem {
 ::windows_core::imp::interface_hierarchy!(
     GridViewItem, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::SelectorItem> for GridViewItem {}
 impl ::windows_core::CanTryInto<ContentControl> for GridViewItem {}
 impl ::windows_core::CanTryInto<Control> for GridViewItem {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for GridViewItem {}
@@ -43157,6 +45117,7 @@ impl ::windows_core::RuntimeName for HyperlinkButton {
 ::windows_core::imp::interface_hierarchy!(
     HyperlinkButton, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for HyperlinkButton {}
 impl ::windows_core::CanTryInto<ContentControl> for HyperlinkButton {}
 impl ::windows_core::CanTryInto<Control> for HyperlinkButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for HyperlinkButton {}
@@ -43449,6 +45410,10 @@ impl ::windows_core::RuntimeName for InkToolbarBallpointPenButton {
 impl ::windows_core::CanTryInto<InkToolbarPenButton> for InkToolbarBallpointPenButton {}
 impl ::windows_core::CanTryInto<InkToolbarToolButton> for InkToolbarBallpointPenButton {}
 impl ::windows_core::CanTryInto<RadioButton> for InkToolbarBallpointPenButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton>
+for InkToolbarBallpointPenButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase>
+for InkToolbarBallpointPenButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarBallpointPenButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarBallpointPenButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement>
@@ -43536,6 +45501,8 @@ impl ::windows_core::RuntimeName for InkToolbarCustomPenButton {
 impl ::windows_core::CanTryInto<InkToolbarPenButton> for InkToolbarCustomPenButton {}
 impl ::windows_core::CanTryInto<InkToolbarToolButton> for InkToolbarCustomPenButton {}
 impl ::windows_core::CanTryInto<RadioButton> for InkToolbarCustomPenButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton> for InkToolbarCustomPenButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for InkToolbarCustomPenButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarCustomPenButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarCustomPenButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for InkToolbarCustomPenButton {}
@@ -43582,6 +45549,10 @@ impl ::windows_core::RuntimeName for InkToolbarCustomToggleButton {
 impl ::windows_core::CanTryInto<InkToolbarToggleButton>
 for InkToolbarCustomToggleButton {}
 impl ::windows_core::CanTryInto<CheckBox> for InkToolbarCustomToggleButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton>
+for InkToolbarCustomToggleButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase>
+for InkToolbarCustomToggleButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarCustomToggleButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarCustomToggleButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement>
@@ -43629,6 +45600,9 @@ impl ::windows_core::RuntimeName for InkToolbarCustomToolButton {
 );
 impl ::windows_core::CanTryInto<InkToolbarToolButton> for InkToolbarCustomToolButton {}
 impl ::windows_core::CanTryInto<RadioButton> for InkToolbarCustomToolButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton>
+for InkToolbarCustomToolButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for InkToolbarCustomToolButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarCustomToolButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarCustomToolButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for InkToolbarCustomToolButton {}
@@ -43674,6 +45648,8 @@ impl ::windows_core::RuntimeName for InkToolbarEraserButton {
 );
 impl ::windows_core::CanTryInto<InkToolbarToolButton> for InkToolbarEraserButton {}
 impl ::windows_core::CanTryInto<RadioButton> for InkToolbarEraserButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton> for InkToolbarEraserButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for InkToolbarEraserButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarEraserButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarEraserButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for InkToolbarEraserButton {}
@@ -43717,6 +45693,7 @@ impl ::windows_core::RuntimeName for InkToolbarFlyoutItem {
 ::windows_core::imp::interface_hierarchy!(
     InkToolbarFlyoutItem, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for InkToolbarFlyoutItem {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarFlyoutItem {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarFlyoutItem {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for InkToolbarFlyoutItem {}
@@ -43763,6 +45740,9 @@ impl ::windows_core::RuntimeName for InkToolbarHighlighterButton {
 impl ::windows_core::CanTryInto<InkToolbarPenButton> for InkToolbarHighlighterButton {}
 impl ::windows_core::CanTryInto<InkToolbarToolButton> for InkToolbarHighlighterButton {}
 impl ::windows_core::CanTryInto<RadioButton> for InkToolbarHighlighterButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton>
+for InkToolbarHighlighterButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for InkToolbarHighlighterButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarHighlighterButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarHighlighterButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement>
@@ -43851,6 +45831,8 @@ impl ::windows_core::RuntimeName for InkToolbarMenuButton {
 ::windows_core::imp::interface_hierarchy!(
     InkToolbarMenuButton, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::ToggleButton> for InkToolbarMenuButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for InkToolbarMenuButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarMenuButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarMenuButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for InkToolbarMenuButton {}
@@ -43896,6 +45878,8 @@ impl ::windows_core::RuntimeName for InkToolbarPenButton {
 );
 impl ::windows_core::CanTryInto<InkToolbarToolButton> for InkToolbarPenButton {}
 impl ::windows_core::CanTryInto<RadioButton> for InkToolbarPenButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton> for InkToolbarPenButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for InkToolbarPenButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarPenButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarPenButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for InkToolbarPenButton {}
@@ -43987,6 +45971,8 @@ impl ::windows_core::RuntimeName for InkToolbarPencilButton {
 impl ::windows_core::CanTryInto<InkToolbarPenButton> for InkToolbarPencilButton {}
 impl ::windows_core::CanTryInto<InkToolbarToolButton> for InkToolbarPencilButton {}
 impl ::windows_core::CanTryInto<RadioButton> for InkToolbarPencilButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton> for InkToolbarPencilButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for InkToolbarPencilButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarPencilButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarPencilButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for InkToolbarPencilButton {}
@@ -44031,6 +46017,8 @@ impl ::windows_core::RuntimeName for InkToolbarStencilButton {
     InkToolbarStencilButton, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<InkToolbarMenuButton> for InkToolbarStencilButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton> for InkToolbarStencilButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for InkToolbarStencilButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarStencilButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarStencilButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for InkToolbarStencilButton {}
@@ -44075,6 +46063,8 @@ impl ::windows_core::RuntimeName for InkToolbarToggleButton {
     InkToolbarToggleButton, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<CheckBox> for InkToolbarToggleButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton> for InkToolbarToggleButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for InkToolbarToggleButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarToggleButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarToggleButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for InkToolbarToggleButton {}
@@ -44119,6 +46109,8 @@ impl ::windows_core::RuntimeName for InkToolbarToolButton {
     InkToolbarToolButton, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<RadioButton> for InkToolbarToolButton {}
+impl ::windows_core::CanTryInto<Primitives::ToggleButton> for InkToolbarToolButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for InkToolbarToolButton {}
 impl ::windows_core::CanTryInto<ContentControl> for InkToolbarToolButton {}
 impl ::windows_core::CanTryInto<Control> for InkToolbarToolButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for InkToolbarToolButton {}
@@ -44472,6 +46464,7 @@ impl ::windows_core::RuntimeName for ItemsPresenter {
 ::windows_core::imp::interface_hierarchy!(
     ItemsPresenter, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::IScrollSnapPointsInfo> for ItemsPresenter {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for ItemsPresenter {}
 impl ::windows_core::CanTryInto<super::UIElement> for ItemsPresenter {}
 impl ::windows_core::CanTryInto<super::DependencyObject> for ItemsPresenter {}
@@ -44598,6 +46591,7 @@ impl ::windows_core::RuntimeName for ListBox {
     ListBox, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<IItemContainerMapping> for ListBox {}
+impl ::windows_core::CanTryInto<Primitives::Selector> for ListBox {}
 impl ::windows_core::CanTryInto<ItemsControl> for ListBox {}
 impl ::windows_core::CanTryInto<Control> for ListBox {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for ListBox {}
@@ -44641,6 +46635,7 @@ impl ::windows_core::RuntimeName for ListBoxItem {
 ::windows_core::imp::interface_hierarchy!(
     ListBoxItem, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::SelectorItem> for ListBoxItem {}
 impl ::windows_core::CanTryInto<ContentControl> for ListBoxItem {}
 impl ::windows_core::CanTryInto<Control> for ListBoxItem {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for ListBoxItem {}
@@ -44684,6 +46679,8 @@ impl ::windows_core::RuntimeName for ListPickerFlyout {
 ::windows_core::imp::interface_hierarchy!(
     ListPickerFlyout, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::PickerFlyoutBase> for ListPickerFlyout {}
+impl ::windows_core::CanTryInto<Primitives::FlyoutBase> for ListPickerFlyout {}
 impl ::windows_core::CanTryInto<super::DependencyObject> for ListPickerFlyout {}
 unsafe impl ::core::marker::Send for ListPickerFlyout {}
 unsafe impl ::core::marker::Sync for ListPickerFlyout {}
@@ -44768,6 +46765,7 @@ impl ::windows_core::RuntimeName for ListView {
 impl ::windows_core::CanTryInto<IItemContainerMapping> for ListView {}
 impl ::windows_core::CanTryInto<ISemanticZoomInformation> for ListView {}
 impl ::windows_core::CanTryInto<ListViewBase> for ListView {}
+impl ::windows_core::CanTryInto<Primitives::Selector> for ListView {}
 impl ::windows_core::CanTryInto<ItemsControl> for ListView {}
 impl ::windows_core::CanTryInto<Control> for ListView {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for ListView {}
@@ -44813,6 +46811,7 @@ impl ::windows_core::RuntimeName for ListViewBase {
 );
 impl ::windows_core::CanTryInto<IItemContainerMapping> for ListViewBase {}
 impl ::windows_core::CanTryInto<ISemanticZoomInformation> for ListViewBase {}
+impl ::windows_core::CanTryInto<Primitives::Selector> for ListViewBase {}
 impl ::windows_core::CanTryInto<ItemsControl> for ListViewBase {}
 impl ::windows_core::CanTryInto<Control> for ListViewBase {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for ListViewBase {}
@@ -44943,6 +46942,7 @@ impl ::windows_core::RuntimeName for ListViewItem {
 ::windows_core::imp::interface_hierarchy!(
     ListViewItem, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::SelectorItem> for ListViewItem {}
 impl ::windows_core::CanTryInto<ContentControl> for ListViewItem {}
 impl ::windows_core::CanTryInto<Control> for ListViewItem {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for ListViewItem {}
@@ -45313,6 +47313,7 @@ impl ::windows_core::RuntimeName for MenuBarItemFlyout {
     MenuBarItemFlyout, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<MenuFlyout> for MenuBarItemFlyout {}
+impl ::windows_core::CanTryInto<Primitives::FlyoutBase> for MenuBarItemFlyout {}
 impl ::windows_core::CanTryInto<super::DependencyObject> for MenuBarItemFlyout {}
 unsafe impl ::core::marker::Send for MenuBarItemFlyout {}
 unsafe impl ::core::marker::Sync for MenuBarItemFlyout {}
@@ -45352,6 +47353,7 @@ impl ::windows_core::RuntimeName for MenuFlyout {
 ::windows_core::imp::interface_hierarchy!(
     MenuFlyout, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::FlyoutBase> for MenuFlyout {}
 impl ::windows_core::CanTryInto<super::DependencyObject> for MenuFlyout {}
 unsafe impl ::core::marker::Send for MenuFlyout {}
 unsafe impl ::core::marker::Sync for MenuFlyout {}
@@ -45731,6 +47733,7 @@ impl ::windows_core::RuntimeName for NavigationViewItem {
 );
 impl ::windows_core::CanTryInto<NavigationViewItemBase> for NavigationViewItem {}
 impl ::windows_core::CanTryInto<ListViewItem> for NavigationViewItem {}
+impl ::windows_core::CanTryInto<Primitives::SelectorItem> for NavigationViewItem {}
 impl ::windows_core::CanTryInto<ContentControl> for NavigationViewItem {}
 impl ::windows_core::CanTryInto<Control> for NavigationViewItem {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for NavigationViewItem {}
@@ -45775,6 +47778,7 @@ impl ::windows_core::RuntimeName for NavigationViewItemBase {
     NavigationViewItemBase, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<ListViewItem> for NavigationViewItemBase {}
+impl ::windows_core::CanTryInto<Primitives::SelectorItem> for NavigationViewItemBase {}
 impl ::windows_core::CanTryInto<ContentControl> for NavigationViewItemBase {}
 impl ::windows_core::CanTryInto<Control> for NavigationViewItemBase {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for NavigationViewItemBase {}
@@ -45820,6 +47824,7 @@ impl ::windows_core::RuntimeName for NavigationViewItemHeader {
 );
 impl ::windows_core::CanTryInto<NavigationViewItemBase> for NavigationViewItemHeader {}
 impl ::windows_core::CanTryInto<ListViewItem> for NavigationViewItemHeader {}
+impl ::windows_core::CanTryInto<Primitives::SelectorItem> for NavigationViewItemHeader {}
 impl ::windows_core::CanTryInto<ContentControl> for NavigationViewItemHeader {}
 impl ::windows_core::CanTryInto<Control> for NavigationViewItemHeader {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for NavigationViewItemHeader {}
@@ -45904,6 +47909,8 @@ impl ::windows_core::RuntimeName for NavigationViewItemSeparator {
 );
 impl ::windows_core::CanTryInto<NavigationViewItemBase> for NavigationViewItemSeparator {}
 impl ::windows_core::CanTryInto<ListViewItem> for NavigationViewItemSeparator {}
+impl ::windows_core::CanTryInto<Primitives::SelectorItem>
+for NavigationViewItemSeparator {}
 impl ::windows_core::CanTryInto<ContentControl> for NavigationViewItemSeparator {}
 impl ::windows_core::CanTryInto<Control> for NavigationViewItemSeparator {}
 impl ::windows_core::CanTryInto<super::FrameworkElement>
@@ -45953,6 +47960,7 @@ impl ::windows_core::CanTryInto<IItemContainerMapping> for NavigationViewList {}
 impl ::windows_core::CanTryInto<ISemanticZoomInformation> for NavigationViewList {}
 impl ::windows_core::CanTryInto<ListView> for NavigationViewList {}
 impl ::windows_core::CanTryInto<ListViewBase> for NavigationViewList {}
+impl ::windows_core::CanTryInto<Primitives::Selector> for NavigationViewList {}
 impl ::windows_core::CanTryInto<ItemsControl> for NavigationViewList {}
 impl ::windows_core::CanTryInto<Control> for NavigationViewList {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for NavigationViewList {}
@@ -46522,6 +48530,8 @@ impl ::windows_core::RuntimeName for PickerFlyout {
 ::windows_core::imp::interface_hierarchy!(
     PickerFlyout, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::PickerFlyoutBase> for PickerFlyout {}
+impl ::windows_core::CanTryInto<Primitives::FlyoutBase> for PickerFlyout {}
 impl ::windows_core::CanTryInto<super::DependencyObject> for PickerFlyout {}
 unsafe impl ::core::marker::Send for PickerFlyout {}
 unsafe impl ::core::marker::Sync for PickerFlyout {}
@@ -46729,6 +48739,7 @@ impl ::windows_core::RuntimeName for ProgressBar {
 ::windows_core::imp::interface_hierarchy!(
     ProgressBar, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::RangeBase> for ProgressBar {}
 impl ::windows_core::CanTryInto<Control> for ProgressBar {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for ProgressBar {}
 impl ::windows_core::CanTryInto<super::UIElement> for ProgressBar {}
@@ -46813,6 +48824,8 @@ impl ::windows_core::RuntimeName for RadioButton {
 ::windows_core::imp::interface_hierarchy!(
     RadioButton, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::ToggleButton> for RadioButton {}
+impl ::windows_core::CanTryInto<Primitives::ButtonBase> for RadioButton {}
 impl ::windows_core::CanTryInto<ContentControl> for RadioButton {}
 impl ::windows_core::CanTryInto<Control> for RadioButton {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for RadioButton {}
@@ -48192,6 +50205,91 @@ impl Slider {
                 .ok()
         }
     }
+    pub fn FontFamily(&self) -> ::windows_core::Result<super::Media::FontFamily> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontFamily)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontFamily<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::FontFamily>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontFamily)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn FontWeight(&self) -> ::windows_core::Result<super::super::Text::FontWeight> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontWeight)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontWeight(
+        &self,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontWeight)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn FontStyle(&self) -> ::windows_core::Result<super::super::Text::FontStyle> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontStyle)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontStyle(
+        &self,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontStyle)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn FontStretch(
+        &self,
+    ) -> ::windows_core::Result<super::super::Text::FontStretch> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontStretch)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontStretch(
+        &self,
+        value: super::super::Text::FontStretch,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontStretch)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
     pub fn CharacterSpacing(&self) -> ::windows_core::Result<i32> {
         let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
         unsafe {
@@ -48209,6 +50307,29 @@ impl Slider {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetCharacterSpacing)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Foreground(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Foreground)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetForeground<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetForeground)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -48359,6 +50480,29 @@ impl Slider {
                 .ok()
         }
     }
+    pub fn Background(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Background)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetBackground<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetBackground)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn BorderThickness(&self) -> ::windows_core::Result<super::Thickness> {
         let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
         unsafe {
@@ -48376,6 +50520,29 @@ impl Slider {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetBorderThickness)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn BorderBrush(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .BorderBrush)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetBorderBrush<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetBorderBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -49901,6 +52068,73 @@ impl Slider {
                 .ok()
         }
     }
+    pub fn FocusVisualSecondaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualSecondaryBrush<P0>(
+        &self,
+        value: P0,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn FocusVisualPrimaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualPrimaryBrush<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn AllowFocusWhenDisabled(&self) -> ::windows_core::Result<bool> {
         let this = &::windows_core::ComInterface::cast::<
             super::IFrameworkElement4,
@@ -50110,6 +52344,175 @@ impl Slider {
                 .ok()
         }
     }
+    pub fn Minimum(&self) -> ::windows_core::Result<f64> {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Minimum)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetMinimum(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetMinimum)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Maximum(&self) -> ::windows_core::Result<f64> {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Maximum)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetMaximum(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetMaximum)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn SmallChange(&self) -> ::windows_core::Result<f64> {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .SmallChange)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetSmallChange(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetSmallChange)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn LargeChange(&self) -> ::windows_core::Result<f64> {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .LargeChange)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetLargeChange(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetLargeChange)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Value(&self) -> ::windows_core::Result<f64> {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Value)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetValue2(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetValue)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn ValueChanged<P0>(
+        &self,
+        handler: P0,
+    ) -> ::windows_core::Result<super::super::super::Foundation::EventRegistrationToken>
+    where
+        P0: ::windows_core::IntoParam<Primitives::RangeBaseValueChangedEventHandler>,
+    {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ValueChanged)(
+                    ::windows_core::Interface::as_raw(this),
+                    handler.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn RemoveValueChanged(
+        &self,
+        token: super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<Primitives::IRangeBase>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .RemoveValueChanged)(::windows_core::Interface::as_raw(this), token)
+                .ok()
+        }
+    }
+    pub fn OnMinimumChanged(
+        &self,
+        oldminimum: f64,
+        newminimum: f64,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            Primitives::IRangeBaseOverrides,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .OnMinimumChanged)(
+                    ::windows_core::Interface::as_raw(this),
+                    oldminimum,
+                    newminimum,
+                )
+                .ok()
+        }
+    }
+    pub fn OnMaximumChanged(
+        &self,
+        oldmaximum: f64,
+        newmaximum: f64,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            Primitives::IRangeBaseOverrides,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .OnMaximumChanged)(
+                    ::windows_core::Interface::as_raw(this),
+                    oldmaximum,
+                    newmaximum,
+                )
+                .ok()
+        }
+    }
+    pub fn OnValueChanged(
+        &self,
+        oldvalue: f64,
+        newvalue: f64,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            Primitives::IRangeBaseOverrides,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .OnValueChanged)(
+                    ::windows_core::Interface::as_raw(this),
+                    oldvalue,
+                    newvalue,
+                )
+                .ok()
+        }
+    }
     pub fn IntermediateValue(&self) -> ::windows_core::Result<f64> {
         let this = self;
         unsafe {
@@ -50147,6 +52550,26 @@ impl Slider {
                 .ok()
         }
     }
+    pub fn SnapsTo(&self) -> ::windows_core::Result<Primitives::SliderSnapsTo> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .SnapsTo)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetSnapsTo(
+        &self,
+        value: Primitives::SliderSnapsTo,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetSnapsTo)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
     pub fn TickFrequency(&self) -> ::windows_core::Result<f64> {
         let this = self;
         unsafe {
@@ -50161,6 +52584,26 @@ impl Slider {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetTickFrequency)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn TickPlacement(&self) -> ::windows_core::Result<Primitives::TickPlacement> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TickPlacement)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetTickPlacement(
+        &self,
+        value: Primitives::TickPlacement,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetTickPlacement)(::windows_core::Interface::as_raw(this), value)
                 .ok()
         }
     }
@@ -50440,6 +52883,75 @@ impl Slider {
                 .ok()
         }
     }
+    pub fn Clip(&self) -> ::windows_core::Result<super::Media::RectangleGeometry> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Clip)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetClip<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::Media::RectangleGeometry>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetClip)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn RenderTransform(&self) -> ::windows_core::Result<super::Media::Transform> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RenderTransform)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetRenderTransform<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Transform>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetRenderTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn Projection(&self) -> ::windows_core::Result<super::Media::Projection> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Projection)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetProjection<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Projection>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetProjection)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn RenderTransformOrigin(
         &self,
     ) -> ::windows_core::Result<super::super::super::Foundation::Point> {
@@ -50533,6 +53045,29 @@ impl Slider {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetUseLayoutRounding)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn CacheMode(&self) -> ::windows_core::Result<super::Media::CacheMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CacheMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCacheMode<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::CacheMode>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCacheMode)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -51092,6 +53627,25 @@ impl Slider {
                 .ok()
         }
     }
+    pub fn TransformToVisual<P0>(
+        &self,
+        visual: P0,
+    ) -> ::windows_core::Result<super::Media::GeneralTransform>
+    where
+        P0: ::windows_core::TryIntoParam<super::UIElement>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TransformToVisual)(
+                    ::windows_core::Interface::as_raw(this),
+                    visual.try_into_param()?.abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
     pub fn InvalidateMeasure(&self) -> ::windows_core::Result<()> {
         let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
         unsafe {
@@ -51146,6 +53700,51 @@ impl Slider {
             (::windows_core::Interface::vtable(this)
                 .UIContext)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
+        }
+    }
+    pub fn Shadow(&self) -> ::windows_core::Result<super::Media::Shadow> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Shadow)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetShadow<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Shadow>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetShadow)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn CompositeMode(
+        &self,
+    ) -> ::windows_core::Result<super::Media::ElementCompositeMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CompositeMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCompositeMode(
+        &self,
+        value: super::Media::ElementCompositeMode,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCompositeMode)(::windows_core::Interface::as_raw(this), value)
+                .ok()
         }
     }
     pub fn CancelDirectManipulations(&self) -> ::windows_core::Result<bool> {
@@ -51244,6 +53843,29 @@ impl Slider {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .RemoveDropCompleted)(::windows_core::Interface::as_raw(this), token)
+                .ok()
+        }
+    }
+    pub fn ContextFlyout(&self) -> ::windows_core::Result<Primitives::FlyoutBase> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ContextFlyout)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetContextFlyout<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Primitives::FlyoutBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetContextFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -51427,6 +54049,19 @@ impl Slider {
             (::windows_core::Interface::vtable(this)
                 .RemoveAccessKeyInvoked)(::windows_core::Interface::as_raw(this), token)
                 .ok()
+        }
+    }
+    pub fn Lights(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::super::Foundation::Collections::IVector<super::Media::XamlLight>,
+    > {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Lights)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
         }
     }
     pub fn KeyTipHorizontalOffset(&self) -> ::windows_core::Result<f64> {
@@ -51979,6 +54614,7 @@ impl ::windows_core::RuntimeName for Slider {
 ::windows_core::imp::interface_hierarchy!(
     Slider, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::RangeBase> for Slider {}
 impl ::windows_core::CanTryInto<Control> for Slider {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for Slider {}
 impl ::windows_core::CanTryInto<super::UIElement> for Slider {}
@@ -53155,6 +55791,73 @@ impl StackPanel {
                 .ok()
         }
     }
+    pub fn FocusVisualSecondaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualSecondaryBrush<P0>(
+        &self,
+        value: P0,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn FocusVisualPrimaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualPrimaryBrush<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn AllowFocusWhenDisabled(&self) -> ::windows_core::Result<bool> {
         let this = &::windows_core::ComInterface::cast::<
             super::IFrameworkElement4,
@@ -53391,6 +56094,29 @@ impl StackPanel {
                 .from_abi(result__)
         }
     }
+    pub fn Background(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<IPanel>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Background)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetBackground<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IPanel>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetBackground)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn IsItemsHost(&self) -> ::windows_core::Result<bool> {
         let this = &::windows_core::ComInterface::cast::<IPanel>(self)?;
         unsafe {
@@ -53426,6 +56152,156 @@ impl StackPanel {
                     value.try_into_param()?.abi(),
                 )
                 .ok()
+        }
+    }
+    pub fn AreHorizontalSnapPointsRegular(&self) -> ::windows_core::Result<bool> {
+        let this = &::windows_core::ComInterface::cast::<
+            Primitives::IScrollSnapPointsInfo,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .AreHorizontalSnapPointsRegular)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn AreVerticalSnapPointsRegular(&self) -> ::windows_core::Result<bool> {
+        let this = &::windows_core::ComInterface::cast::<
+            Primitives::IScrollSnapPointsInfo,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .AreVerticalSnapPointsRegular)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn HorizontalSnapPointsChanged<P0>(
+        &self,
+        handler: P0,
+    ) -> ::windows_core::Result<super::super::super::Foundation::EventRegistrationToken>
+    where
+        P0: ::windows_core::IntoParam<
+            super::super::super::Foundation::EventHandler<::windows_core::IInspectable>,
+        >,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            Primitives::IScrollSnapPointsInfo,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .HorizontalSnapPointsChanged)(
+                    ::windows_core::Interface::as_raw(this),
+                    handler.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn RemoveHorizontalSnapPointsChanged(
+        &self,
+        token: super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            Primitives::IScrollSnapPointsInfo,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .RemoveHorizontalSnapPointsChanged)(
+                    ::windows_core::Interface::as_raw(this),
+                    token,
+                )
+                .ok()
+        }
+    }
+    pub fn VerticalSnapPointsChanged<P0>(
+        &self,
+        handler: P0,
+    ) -> ::windows_core::Result<super::super::super::Foundation::EventRegistrationToken>
+    where
+        P0: ::windows_core::IntoParam<
+            super::super::super::Foundation::EventHandler<::windows_core::IInspectable>,
+        >,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            Primitives::IScrollSnapPointsInfo,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .VerticalSnapPointsChanged)(
+                    ::windows_core::Interface::as_raw(this),
+                    handler.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn RemoveVerticalSnapPointsChanged(
+        &self,
+        token: super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            Primitives::IScrollSnapPointsInfo,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .RemoveVerticalSnapPointsChanged)(
+                    ::windows_core::Interface::as_raw(this),
+                    token,
+                )
+                .ok()
+        }
+    }
+    pub fn GetIrregularSnapPoints(
+        &self,
+        orientation: Orientation,
+        alignment: Primitives::SnapPointsAlignment,
+    ) -> ::windows_core::Result<
+        super::super::super::Foundation::Collections::IVectorView<f32>,
+    > {
+        let this = &::windows_core::ComInterface::cast::<
+            Primitives::IScrollSnapPointsInfo,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetIrregularSnapPoints)(
+                    ::windows_core::Interface::as_raw(this),
+                    orientation,
+                    alignment,
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn GetRegularSnapPoints(
+        &self,
+        orientation: Orientation,
+        alignment: Primitives::SnapPointsAlignment,
+        offset: &mut f32,
+    ) -> ::windows_core::Result<f32> {
+        let this = &::windows_core::ComInterface::cast::<
+            Primitives::IScrollSnapPointsInfo,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetRegularSnapPoints)(
+                    ::windows_core::Interface::as_raw(this),
+                    orientation,
+                    alignment,
+                    offset,
+                    &mut result__,
+                )
+                .from_abi(result__)
         }
     }
     pub fn AreScrollSnapPointsRegular(&self) -> ::windows_core::Result<bool> {
@@ -53468,6 +56344,29 @@ impl StackPanel {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetOrientation)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn BorderBrush(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<IStackPanel2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .BorderBrush)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetBorderBrush<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IStackPanel2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetBorderBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -53701,6 +56600,75 @@ impl StackPanel {
                 .ok()
         }
     }
+    pub fn Clip(&self) -> ::windows_core::Result<super::Media::RectangleGeometry> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Clip)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetClip<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::Media::RectangleGeometry>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetClip)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn RenderTransform(&self) -> ::windows_core::Result<super::Media::Transform> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RenderTransform)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetRenderTransform<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Transform>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetRenderTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn Projection(&self) -> ::windows_core::Result<super::Media::Projection> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Projection)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetProjection<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Projection>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetProjection)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn RenderTransformOrigin(
         &self,
     ) -> ::windows_core::Result<super::super::super::Foundation::Point> {
@@ -53794,6 +56762,29 @@ impl StackPanel {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetUseLayoutRounding)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn CacheMode(&self) -> ::windows_core::Result<super::Media::CacheMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CacheMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCacheMode<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::CacheMode>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCacheMode)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -54353,6 +57344,25 @@ impl StackPanel {
                 .ok()
         }
     }
+    pub fn TransformToVisual<P0>(
+        &self,
+        visual: P0,
+    ) -> ::windows_core::Result<super::Media::GeneralTransform>
+    where
+        P0: ::windows_core::TryIntoParam<super::UIElement>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TransformToVisual)(
+                    ::windows_core::Interface::as_raw(this),
+                    visual.try_into_param()?.abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
     pub fn InvalidateMeasure(&self) -> ::windows_core::Result<()> {
         let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
         unsafe {
@@ -54407,6 +57417,51 @@ impl StackPanel {
             (::windows_core::Interface::vtable(this)
                 .UIContext)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
+        }
+    }
+    pub fn Shadow(&self) -> ::windows_core::Result<super::Media::Shadow> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Shadow)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetShadow<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Shadow>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetShadow)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn CompositeMode(
+        &self,
+    ) -> ::windows_core::Result<super::Media::ElementCompositeMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CompositeMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCompositeMode(
+        &self,
+        value: super::Media::ElementCompositeMode,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCompositeMode)(::windows_core::Interface::as_raw(this), value)
+                .ok()
         }
     }
     pub fn CancelDirectManipulations(&self) -> ::windows_core::Result<bool> {
@@ -54505,6 +57560,29 @@ impl StackPanel {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .RemoveDropCompleted)(::windows_core::Interface::as_raw(this), token)
+                .ok()
+        }
+    }
+    pub fn ContextFlyout(&self) -> ::windows_core::Result<Primitives::FlyoutBase> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ContextFlyout)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetContextFlyout<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Primitives::FlyoutBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetContextFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -54688,6 +57766,19 @@ impl StackPanel {
             (::windows_core::Interface::vtable(this)
                 .RemoveAccessKeyInvoked)(::windows_core::Interface::as_raw(this), token)
                 .ok()
+        }
+    }
+    pub fn Lights(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::super::Foundation::Collections::IVector<super::Media::XamlLight>,
+    > {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Lights)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
         }
     }
     pub fn KeyTipHorizontalOffset(&self) -> ::windows_core::Result<f64> {
@@ -55275,6 +58366,7 @@ impl ::windows_core::RuntimeName for StackPanel {
     StackPanel, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<IInsertionPanel> for StackPanel {}
+impl ::windows_core::CanTryInto<Primitives::IScrollSnapPointsInfo> for StackPanel {}
 impl ::windows_core::CanTryInto<Panel> for StackPanel {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for StackPanel {}
 impl ::windows_core::CanTryInto<super::UIElement> for StackPanel {}
@@ -56655,6 +59747,73 @@ impl TextBlock {
                 .ok()
         }
     }
+    pub fn FocusVisualSecondaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualSecondaryBrush<P0>(
+        &self,
+        value: P0,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn FocusVisualPrimaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualPrimaryBrush<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn AllowFocusWhenDisabled(&self) -> ::windows_core::Result<bool> {
         let this = &::windows_core::ComInterface::cast::<
             super::IFrameworkElement4,
@@ -56881,6 +60040,91 @@ impl TextBlock {
                 .ok()
         }
     }
+    pub fn FontFamily(&self) -> ::windows_core::Result<super::Media::FontFamily> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontFamily)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontFamily<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::FontFamily>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontFamily)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn FontWeight(&self) -> ::windows_core::Result<super::super::Text::FontWeight> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontWeight)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontWeight(
+        &self,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontWeight)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn FontStyle(&self) -> ::windows_core::Result<super::super::Text::FontStyle> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontStyle)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontStyle(
+        &self,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontStyle)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn FontStretch(
+        &self,
+    ) -> ::windows_core::Result<super::super::Text::FontStretch> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontStretch)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontStretch(
+        &self,
+        value: super::super::Text::FontStretch,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontStretch)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
     pub fn CharacterSpacing(&self) -> ::windows_core::Result<i32> {
         let this = self;
         unsafe {
@@ -56898,6 +60142,29 @@ impl TextBlock {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetCharacterSpacing)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Foreground(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Foreground)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetForeground<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetForeground)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -57164,6 +60431,34 @@ impl TextBlock {
                 .from_abi(result__)
         }
     }
+    pub fn SelectionHighlightColor(
+        &self,
+    ) -> ::windows_core::Result<super::Media::SolidColorBrush> {
+        let this = &::windows_core::ComInterface::cast::<ITextBlock2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .SelectionHighlightColor)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetSelectionHighlightColor<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::Media::SolidColorBrush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<ITextBlock2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetSelectionHighlightColor)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
     pub fn MaxLines(&self) -> ::windows_core::Result<i32> {
         let this = &::windows_core::ComInterface::cast::<ITextBlock2>(self)?;
         unsafe {
@@ -57298,6 +60593,28 @@ impl TextBlock {
                 .ok()
         }
     }
+    pub fn TextDecorations(
+        &self,
+    ) -> ::windows_core::Result<super::super::Text::TextDecorations> {
+        let this = &::windows_core::ComInterface::cast::<ITextBlock5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TextDecorations)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetTextDecorations(
+        &self,
+        value: super::super::Text::TextDecorations,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<ITextBlock5>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetTextDecorations)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
     pub fn IsTextTrimmed(&self) -> ::windows_core::Result<bool> {
         let this = &::windows_core::ComInterface::cast::<ITextBlock6>(self)?;
         unsafe {
@@ -57369,6 +60686,29 @@ impl TextBlock {
                 .RemoveIsTextTrimmedChanged)(
                     ::windows_core::Interface::as_raw(this),
                     token,
+                )
+                .ok()
+        }
+    }
+    pub fn SelectionFlyout(&self) -> ::windows_core::Result<Primitives::FlyoutBase> {
+        let this = &::windows_core::ComInterface::cast::<ITextBlock7>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .SelectionFlyout)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetSelectionFlyout<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Primitives::FlyoutBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<ITextBlock7>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetSelectionFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
                 )
                 .ok()
         }
@@ -57741,6 +61081,75 @@ impl TextBlock {
                 .ok()
         }
     }
+    pub fn Clip(&self) -> ::windows_core::Result<super::Media::RectangleGeometry> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Clip)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetClip<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::Media::RectangleGeometry>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetClip)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn RenderTransform(&self) -> ::windows_core::Result<super::Media::Transform> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RenderTransform)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetRenderTransform<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Transform>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetRenderTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn Projection(&self) -> ::windows_core::Result<super::Media::Projection> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Projection)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetProjection<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Projection>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetProjection)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn RenderTransformOrigin(
         &self,
     ) -> ::windows_core::Result<super::super::super::Foundation::Point> {
@@ -57834,6 +61243,29 @@ impl TextBlock {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetUseLayoutRounding)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn CacheMode(&self) -> ::windows_core::Result<super::Media::CacheMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CacheMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCacheMode<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::CacheMode>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCacheMode)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -58393,6 +61825,25 @@ impl TextBlock {
                 .ok()
         }
     }
+    pub fn TransformToVisual<P0>(
+        &self,
+        visual: P0,
+    ) -> ::windows_core::Result<super::Media::GeneralTransform>
+    where
+        P0: ::windows_core::TryIntoParam<super::UIElement>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TransformToVisual)(
+                    ::windows_core::Interface::as_raw(this),
+                    visual.try_into_param()?.abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
     pub fn InvalidateMeasure(&self) -> ::windows_core::Result<()> {
         let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
         unsafe {
@@ -58447,6 +61898,51 @@ impl TextBlock {
             (::windows_core::Interface::vtable(this)
                 .UIContext)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
+        }
+    }
+    pub fn Shadow(&self) -> ::windows_core::Result<super::Media::Shadow> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Shadow)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetShadow<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Shadow>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetShadow)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn CompositeMode(
+        &self,
+    ) -> ::windows_core::Result<super::Media::ElementCompositeMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CompositeMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCompositeMode(
+        &self,
+        value: super::Media::ElementCompositeMode,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCompositeMode)(::windows_core::Interface::as_raw(this), value)
+                .ok()
         }
     }
     pub fn CancelDirectManipulations(&self) -> ::windows_core::Result<bool> {
@@ -58545,6 +62041,29 @@ impl TextBlock {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .RemoveDropCompleted)(::windows_core::Interface::as_raw(this), token)
+                .ok()
+        }
+    }
+    pub fn ContextFlyout(&self) -> ::windows_core::Result<Primitives::FlyoutBase> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ContextFlyout)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetContextFlyout<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Primitives::FlyoutBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetContextFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -58728,6 +62247,19 @@ impl TextBlock {
             (::windows_core::Interface::vtable(this)
                 .RemoveAccessKeyInvoked)(::windows_core::Interface::as_raw(this), token)
                 .ok()
+        }
+    }
+    pub fn Lights(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::super::Foundation::Collections::IVector<super::Media::XamlLight>,
+    > {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Lights)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
         }
     }
     pub fn KeyTipHorizontalOffset(&self) -> ::windows_core::Result<f64> {
@@ -59333,6 +62865,91 @@ impl TextBox {
                 .ok()
         }
     }
+    pub fn FontFamily(&self) -> ::windows_core::Result<super::Media::FontFamily> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontFamily)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontFamily<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::FontFamily>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontFamily)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn FontWeight(&self) -> ::windows_core::Result<super::super::Text::FontWeight> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontWeight)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontWeight(
+        &self,
+        value: super::super::Text::FontWeight,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontWeight)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn FontStyle(&self) -> ::windows_core::Result<super::super::Text::FontStyle> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontStyle)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontStyle(
+        &self,
+        value: super::super::Text::FontStyle,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontStyle)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn FontStretch(
+        &self,
+    ) -> ::windows_core::Result<super::super::Text::FontStretch> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FontStretch)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFontStretch(
+        &self,
+        value: super::super::Text::FontStretch,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFontStretch)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
     pub fn CharacterSpacing(&self) -> ::windows_core::Result<i32> {
         let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
         unsafe {
@@ -59350,6 +62967,29 @@ impl TextBox {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetCharacterSpacing)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Foreground(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Foreground)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetForeground<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetForeground)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -59500,6 +63140,29 @@ impl TextBox {
                 .ok()
         }
     }
+    pub fn Background(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Background)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetBackground<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetBackground)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn BorderThickness(&self) -> ::windows_core::Result<super::Thickness> {
         let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
         unsafe {
@@ -59517,6 +63180,29 @@ impl TextBox {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetBorderThickness)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn BorderBrush(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .BorderBrush)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetBorderBrush<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IControl>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetBorderBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -61042,6 +64728,73 @@ impl TextBox {
                 .ok()
         }
     }
+    pub fn FocusVisualSecondaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualSecondaryBrush<P0>(
+        &self,
+        value: P0,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualSecondaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn FocusVisualPrimaryBrush(
+        &self,
+    ) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFocusVisualPrimaryBrush<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IFrameworkElement4,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFocusVisualPrimaryBrush)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn AllowFocusWhenDisabled(&self) -> ::windows_core::Result<bool> {
         let this = &::windows_core::ComInterface::cast::<
             super::IFrameworkElement4,
@@ -61661,6 +65414,34 @@ impl TextBox {
                 .ok()
         }
     }
+    pub fn SelectionHighlightColor(
+        &self,
+    ) -> ::windows_core::Result<super::Media::SolidColorBrush> {
+        let this = &::windows_core::ComInterface::cast::<ITextBox2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .SelectionHighlightColor)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetSelectionHighlightColor<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::Media::SolidColorBrush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<ITextBox2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetSelectionHighlightColor)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
     pub fn PreventKeyboardDisplayOnProgrammaticFocus(
         &self,
     ) -> ::windows_core::Result<bool> {
@@ -61997,6 +65778,37 @@ impl TextBox {
                 .from_abi(result__)
         }
     }
+    pub fn SelectionHighlightColorWhenNotFocused(
+        &self,
+    ) -> ::windows_core::Result<super::Media::SolidColorBrush> {
+        let this = &::windows_core::ComInterface::cast::<ITextBox5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .SelectionHighlightColorWhenNotFocused)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetSelectionHighlightColorWhenNotFocused<P0>(
+        &self,
+        value: P0,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::Media::SolidColorBrush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<ITextBox5>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetSelectionHighlightColorWhenNotFocused)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
     pub fn HorizontalTextAlignment(
         &self,
     ) -> ::windows_core::Result<super::TextAlignment> {
@@ -62042,6 +65854,32 @@ impl TextBox {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetCharacterCasing)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn PlaceholderForeground(&self) -> ::windows_core::Result<super::Media::Brush> {
+        let this = &::windows_core::ComInterface::cast::<ITextBox6>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .PlaceholderForeground)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetPlaceholderForeground<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Brush>,
+    {
+        let this = &::windows_core::ComInterface::cast::<ITextBox6>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetPlaceholderForeground)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -62235,6 +66073,41 @@ impl TextBox {
             let mut result__ = ::std::mem::zeroed();
             (::windows_core::Interface::vtable(this)
                 .CanRedo)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SelectionFlyout(&self) -> ::windows_core::Result<Primitives::FlyoutBase> {
+        let this = &::windows_core::ComInterface::cast::<ITextBox8>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .SelectionFlyout)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetSelectionFlyout<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Primitives::FlyoutBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<ITextBox8>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetSelectionFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ProofingMenuFlyout(&self) -> ::windows_core::Result<Primitives::FlyoutBase> {
+        let this = &::windows_core::ComInterface::cast::<ITextBox8>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ProofingMenuFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
                 .from_abi(result__)
         }
     }
@@ -62732,6 +66605,75 @@ impl TextBox {
                 .ok()
         }
     }
+    pub fn Clip(&self) -> ::windows_core::Result<super::Media::RectangleGeometry> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Clip)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetClip<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::Media::RectangleGeometry>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetClip)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn RenderTransform(&self) -> ::windows_core::Result<super::Media::Transform> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RenderTransform)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetRenderTransform<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Transform>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetRenderTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn Projection(&self) -> ::windows_core::Result<super::Media::Projection> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Projection)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetProjection<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Projection>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetProjection)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
     pub fn RenderTransformOrigin(
         &self,
     ) -> ::windows_core::Result<super::super::super::Foundation::Point> {
@@ -62825,6 +66767,29 @@ impl TextBox {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .SetUseLayoutRounding)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn CacheMode(&self) -> ::windows_core::Result<super::Media::CacheMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CacheMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCacheMode<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::CacheMode>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCacheMode)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -63384,6 +67349,25 @@ impl TextBox {
                 .ok()
         }
     }
+    pub fn TransformToVisual<P0>(
+        &self,
+        visual: P0,
+    ) -> ::windows_core::Result<super::Media::GeneralTransform>
+    where
+        P0: ::windows_core::TryIntoParam<super::UIElement>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TransformToVisual)(
+                    ::windows_core::Interface::as_raw(this),
+                    visual.try_into_param()?.abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
     pub fn InvalidateMeasure(&self) -> ::windows_core::Result<()> {
         let this = &::windows_core::ComInterface::cast::<super::IUIElement>(self)?;
         unsafe {
@@ -63438,6 +67422,51 @@ impl TextBox {
             (::windows_core::Interface::vtable(this)
                 .UIContext)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
+        }
+    }
+    pub fn Shadow(&self) -> ::windows_core::Result<super::Media::Shadow> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Shadow)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetShadow<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::Media::Shadow>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement10>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetShadow)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn CompositeMode(
+        &self,
+    ) -> ::windows_core::Result<super::Media::ElementCompositeMode> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CompositeMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetCompositeMode(
+        &self,
+        value: super::Media::ElementCompositeMode,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetCompositeMode)(::windows_core::Interface::as_raw(this), value)
+                .ok()
         }
     }
     pub fn CancelDirectManipulations(&self) -> ::windows_core::Result<bool> {
@@ -63536,6 +67565,29 @@ impl TextBox {
         unsafe {
             (::windows_core::Interface::vtable(this)
                 .RemoveDropCompleted)(::windows_core::Interface::as_raw(this), token)
+                .ok()
+        }
+    }
+    pub fn ContextFlyout(&self) -> ::windows_core::Result<Primitives::FlyoutBase> {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ContextFlyout)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetContextFlyout<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Primitives::FlyoutBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement4>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetContextFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
                 .ok()
         }
     }
@@ -63719,6 +67771,19 @@ impl TextBox {
             (::windows_core::Interface::vtable(this)
                 .RemoveAccessKeyInvoked)(::windows_core::Interface::as_raw(this), token)
                 .ok()
+        }
+    }
+    pub fn Lights(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::super::Foundation::Collections::IVector<super::Media::XamlLight>,
+    > {
+        let this = &::windows_core::ComInterface::cast::<super::IUIElement5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Lights)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
         }
     }
     pub fn KeyTipHorizontalOffset(&self) -> ::windows_core::Result<f64> {
@@ -64510,6 +68575,7 @@ impl ::windows_core::RuntimeName for TextCommandBarFlyout {
     TextCommandBarFlyout, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<CommandBarFlyout> for TextCommandBarFlyout {}
+impl ::windows_core::CanTryInto<Primitives::FlyoutBase> for TextCommandBarFlyout {}
 impl ::windows_core::CanTryInto<super::DependencyObject> for TextCommandBarFlyout {}
 unsafe impl ::core::marker::Send for TextCommandBarFlyout {}
 unsafe impl ::core::marker::Sync for TextCommandBarFlyout {}
@@ -64862,6 +68928,8 @@ impl ::windows_core::RuntimeName for TimePickerFlyout {
 ::windows_core::imp::interface_hierarchy!(
     TimePickerFlyout, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<Primitives::PickerFlyoutBase> for TimePickerFlyout {}
+impl ::windows_core::CanTryInto<Primitives::FlyoutBase> for TimePickerFlyout {}
 impl ::windows_core::CanTryInto<super::DependencyObject> for TimePickerFlyout {}
 unsafe impl ::core::marker::Send for TimePickerFlyout {}
 unsafe impl ::core::marker::Sync for TimePickerFlyout {}
@@ -65511,6 +69579,7 @@ impl ::windows_core::RuntimeName for TreeViewItem {
     TreeViewItem, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<ListViewItem> for TreeViewItem {}
+impl ::windows_core::CanTryInto<Primitives::SelectorItem> for TreeViewItem {}
 impl ::windows_core::CanTryInto<ContentControl> for TreeViewItem {}
 impl ::windows_core::CanTryInto<Control> for TreeViewItem {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for TreeViewItem {}
@@ -65636,6 +69705,7 @@ impl ::windows_core::CanTryInto<IItemContainerMapping> for TreeViewList {}
 impl ::windows_core::CanTryInto<ISemanticZoomInformation> for TreeViewList {}
 impl ::windows_core::CanTryInto<ListView> for TreeViewList {}
 impl ::windows_core::CanTryInto<ListViewBase> for TreeViewList {}
+impl ::windows_core::CanTryInto<Primitives::Selector> for TreeViewList {}
 impl ::windows_core::CanTryInto<ItemsControl> for TreeViewList {}
 impl ::windows_core::CanTryInto<Control> for TreeViewList {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for TreeViewList {}
@@ -66026,6 +70096,10 @@ impl ::windows_core::RuntimeName for VirtualizingStackPanel {
     VirtualizingStackPanel, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<IInsertionPanel> for VirtualizingStackPanel {}
+impl ::windows_core::CanTryInto<Primitives::IScrollSnapPointsInfo>
+for VirtualizingStackPanel {}
+impl ::windows_core::CanTryInto<Primitives::OrientedVirtualizingPanel>
+for VirtualizingStackPanel {}
 impl ::windows_core::CanTryInto<VirtualizingPanel> for VirtualizingStackPanel {}
 impl ::windows_core::CanTryInto<Panel> for VirtualizingStackPanel {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for VirtualizingStackPanel {}
@@ -66110,6 +70184,8 @@ impl ::windows_core::RuntimeName for WebViewBrush {
 ::windows_core::imp::interface_hierarchy!(
     WebViewBrush, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
+impl ::windows_core::CanTryInto<super::Media::TileBrush> for WebViewBrush {}
+impl ::windows_core::CanTryInto<super::Media::Brush> for WebViewBrush {}
 impl ::windows_core::CanTryInto<super::DependencyObject> for WebViewBrush {}
 unsafe impl ::core::marker::Send for WebViewBrush {}
 unsafe impl ::core::marker::Sync for WebViewBrush {}
@@ -66742,6 +70818,8 @@ impl ::windows_core::RuntimeName for WrapGrid {
     WrapGrid, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
 impl ::windows_core::CanTryInto<IInsertionPanel> for WrapGrid {}
+impl ::windows_core::CanTryInto<Primitives::IScrollSnapPointsInfo> for WrapGrid {}
+impl ::windows_core::CanTryInto<Primitives::OrientedVirtualizingPanel> for WrapGrid {}
 impl ::windows_core::CanTryInto<VirtualizingPanel> for WrapGrid {}
 impl ::windows_core::CanTryInto<Panel> for WrapGrid {}
 impl ::windows_core::CanTryInto<super::FrameworkElement> for WrapGrid {}

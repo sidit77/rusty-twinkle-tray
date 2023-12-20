@@ -7,8 +7,11 @@ classes = [
 
 features = [
     "Foundation",
+    "UI_Text",
     "UI_Xaml_Controls",
+    "UI_Xaml_Controls_Primitives",
     "UI_Xaml_Hosting",
+    "UI_Xaml_Media",
     "Win32_System_WinRT_Xaml",
     "Win32_Foundation",
     "Foundation_Collections"
@@ -18,7 +21,8 @@ reexports = [
     "Win32_Foundation",
     "Foundation",
     "Foundation_Collections",
-    "UI"
+    "UI",
+    "UI_Text"
 ]
 
 constructors = [
@@ -36,11 +40,16 @@ DesktopWindowXamlSource = ["SetContent"]
 IDesktopWindowXamlSourceNative = ["AttachToWindow", "WindowHandle"]
 
 UIElementCollection = ["First", "Append"]
+ColumnDefinitionCollection = ["First", "Append"]
 ColorPaletteResources = ["First"]
 ResourceDictionary = ["First"]
 
+RangeBaseValueChangedEventHandler = true
+RangeBaseValueChangedEventArgs = true
+
 StackPanel = true
 Grid = true
+ColumnDefinition = true
 FontIcon = true
 TextBlock = true
 TextBox = true

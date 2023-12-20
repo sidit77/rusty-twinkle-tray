@@ -1,5 +1,6 @@
 pub mod Controls;
 pub mod Hosting;
+pub mod Media;
 #[doc(hidden)]
 #[repr(transparent)]
 pub struct IAdaptiveTrigger(::windows_core::IUnknown);
@@ -372,7 +373,12 @@ pub struct IApplicationStatics_Vtbl {
         component: *mut ::core::ffi::c_void,
         resourcelocator: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    LoadComponentWithResourceLocation: usize,
+    pub LoadComponentWithResourceLocation: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        component: *mut ::core::ffi::c_void,
+        resourcelocator: *mut ::core::ffi::c_void,
+        componentresourcelocation: Controls::Primitives::ComponentResourceLocation,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -2698,10 +2704,22 @@ pub struct IFrameworkElement4_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: Thickness,
     ) -> ::windows_core::HRESULT,
-    FocusVisualSecondaryBrush: usize,
-    SetFocusVisualSecondaryBrush: usize,
-    FocusVisualPrimaryBrush: usize,
-    SetFocusVisualPrimaryBrush: usize,
+    pub FocusVisualSecondaryBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFocusVisualSecondaryBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub FocusVisualPrimaryBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetFocusVisualPrimaryBrush: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub AllowFocusWhenDisabled: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -4507,12 +4525,30 @@ pub struct IUIElement_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    Clip: usize,
-    SetClip: usize,
-    RenderTransform: usize,
-    SetRenderTransform: usize,
-    Projection: usize,
-    SetProjection: usize,
+    pub Clip: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetClip: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub RenderTransform: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetRenderTransform: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub Projection: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetProjection: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub RenderTransformOrigin: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::super::Foundation::Point,
@@ -4551,8 +4587,14 @@ pub struct IUIElement_Vtbl {
     ) -> ::windows_core::HRESULT,
     Transitions: usize,
     SetTransitions: usize,
-    CacheMode: usize,
-    SetCacheMode: usize,
+    pub CacheMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetCacheMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub IsTapEnabled: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -4761,7 +4803,11 @@ pub struct IUIElement_Vtbl {
         routedevent: *mut ::core::ffi::c_void,
         handler: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    TransformToVisual: usize,
+    pub TransformToVisual: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        visual: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub InvalidateMeasure: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
@@ -4806,8 +4852,14 @@ pub struct IUIElement10_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    Shadow: usize,
-    SetShadow: usize,
+    pub Shadow: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetShadow: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -4829,8 +4881,14 @@ unsafe impl ::windows_core::ComInterface for IUIElement2 {
 #[doc(hidden)]
 pub struct IUIElement2_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    CompositeMode: usize,
-    SetCompositeMode: usize,
+    pub CompositeMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Media::ElementCompositeMode,
+    ) -> ::windows_core::HRESULT,
+    pub SetCompositeMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Media::ElementCompositeMode,
+    ) -> ::windows_core::HRESULT,
     pub CancelDirectManipulations: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -4906,8 +4964,14 @@ unsafe impl ::windows_core::ComInterface for IUIElement4 {
 #[doc(hidden)]
 pub struct IUIElement4_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    ContextFlyout: usize,
-    SetContextFlyout: usize,
+    pub ContextFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetContextFlyout: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub ExitDisplayModeOnAccessKeyInvoked: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -4990,7 +5054,10 @@ unsafe impl ::windows_core::ComInterface for IUIElement5 {
 #[doc(hidden)]
 pub struct IUIElement5_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Lights: usize,
+    pub Lights: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     KeyTipPlacementMode: usize,
     SetKeyTipPlacementMode: usize,
     pub KeyTipHorizontalOffset: unsafe extern "system" fn(

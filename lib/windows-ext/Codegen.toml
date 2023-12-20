@@ -34,7 +34,8 @@ constructors = [
     "Grid",
     "FontIcon",
     "TextBox",
-    "Slider"
+    "Slider",
+    "AcrylicBrush"
 ]
 
 [white_list]
@@ -52,6 +53,8 @@ RangeBaseValueChangedEventArgs = true
 
 PointerEventHandler = true
 PointerRoutedEventArgs = true
+
+AcrylicBrush = true
 
 StackPanel = true
 Grid = true

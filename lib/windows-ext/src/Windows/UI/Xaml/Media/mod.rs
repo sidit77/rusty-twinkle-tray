@@ -4298,7 +4298,519 @@ pub struct IXamlLightStatics_Vtbl {
 }
 #[repr(transparent)]
 pub struct AcrylicBrush(::windows_core::IUnknown);
-impl AcrylicBrush {}
+impl AcrylicBrush {
+    pub fn BackgroundSource(&self) -> ::windows_core::Result<AcrylicBackgroundSource> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .BackgroundSource)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetBackgroundSource(
+        &self,
+        value: AcrylicBackgroundSource,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetBackgroundSource)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn TintColor(&self) -> ::windows_core::Result<super::super::Color> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TintColor)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetTintColor(
+        &self,
+        value: super::super::Color,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetTintColor)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn TintOpacity(&self) -> ::windows_core::Result<f64> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TintOpacity)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetTintOpacity(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetTintOpacity)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn TintTransitionDuration(
+        &self,
+    ) -> ::windows_core::Result<super::super::super::Foundation::TimeSpan> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TintTransitionDuration)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetTintTransitionDuration(
+        &self,
+        value: super::super::super::Foundation::TimeSpan,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetTintTransitionDuration)(
+                    ::windows_core::Interface::as_raw(this),
+                    value,
+                )
+                .ok()
+        }
+    }
+    pub fn AlwaysUseFallback(&self) -> ::windows_core::Result<bool> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .AlwaysUseFallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetAlwaysUseFallback(&self, value: bool) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetAlwaysUseFallback)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn TintLuminosityOpacity(
+        &self,
+    ) -> ::windows_core::Result<super::super::super::Foundation::IReference<f64>> {
+        let this = &::windows_core::ComInterface::cast::<IAcrylicBrush2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TintLuminosityOpacity)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetTintLuminosityOpacity<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<
+            super::super::super::Foundation::IReference<f64>,
+        >,
+    {
+        let this = &::windows_core::ComInterface::cast::<IAcrylicBrush2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetTintLuminosityOpacity)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn BackgroundSourceProperty() -> ::windows_core::Result<
+        super::DependencyProperty,
+    > {
+        Self::IAcrylicBrushStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .BackgroundSourceProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn TintColorProperty() -> ::windows_core::Result<super::DependencyProperty> {
+        Self::IAcrylicBrushStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TintColorProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn TintOpacityProperty() -> ::windows_core::Result<super::DependencyProperty> {
+        Self::IAcrylicBrushStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TintOpacityProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn TintTransitionDurationProperty() -> ::windows_core::Result<
+        super::DependencyProperty,
+    > {
+        Self::IAcrylicBrushStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TintTransitionDurationProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn AlwaysUseFallbackProperty() -> ::windows_core::Result<
+        super::DependencyProperty,
+    > {
+        Self::IAcrylicBrushStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .AlwaysUseFallbackProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn TintLuminosityOpacityProperty() -> ::windows_core::Result<
+        super::DependencyProperty,
+    > {
+        Self::IAcrylicBrushStatics2(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TintLuminosityOpacityProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn Opacity(&self) -> ::windows_core::Result<f64> {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Opacity)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetOpacity(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetOpacity)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Transform(&self) -> ::windows_core::Result<Transform> {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Transform)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetTransform<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Transform>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn RelativeTransform(&self) -> ::windows_core::Result<Transform> {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RelativeTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetRelativeTransform<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Transform>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetRelativeTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn GetValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetValue<P0, P1>(&self, dp: P0, value: P1) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+        P1: ::windows_core::IntoParam<::windows_core::IInspectable>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ClearValue<P0>(&self, dp: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ClearValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ReadLocalValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ReadLocalValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn GetAnimationBaseValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetAnimationBaseValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn RegisterPropertyChangedCallback<P0, P1>(
+        &self,
+        dp: P0,
+        callback: P1,
+    ) -> ::windows_core::Result<i64>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+        P1: ::windows_core::IntoParam<super::DependencyPropertyChangedCallback>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject2,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RegisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    callback.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn UnregisterPropertyChangedCallback<P0>(
+        &self,
+        dp: P0,
+        token: i64,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject2,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .UnregisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    token,
+                )
+                .ok()
+        }
+    }
+    pub fn FallbackColor(&self) -> ::windows_core::Result<super::super::Color> {
+        let this = &::windows_core::ComInterface::cast::<
+            IXamlCompositionBrushBase,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .FallbackColor)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetFallbackColor(
+        &self,
+        value: super::super::Color,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            IXamlCompositionBrushBase,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetFallbackColor)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn OnConnected(&self) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            IXamlCompositionBrushBaseOverrides,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .OnConnected)(::windows_core::Interface::as_raw(this))
+                .ok()
+        }
+    }
+    pub fn OnDisconnected(&self) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            IXamlCompositionBrushBaseOverrides,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .OnDisconnected)(::windows_core::Interface::as_raw(this))
+                .ok()
+        }
+    }
+    #[doc(hidden)]
+    pub fn IAcrylicBrushStatics<
+        R,
+        F: FnOnce(&IAcrylicBrushStatics) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            AcrylicBrush,
+            IAcrylicBrushStatics,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    #[doc(hidden)]
+    pub fn IAcrylicBrushStatics2<
+        R,
+        F: FnOnce(&IAcrylicBrushStatics2) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            AcrylicBrush,
+            IAcrylicBrushStatics2,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    pub fn new() -> ::windows_core::Result<AcrylicBrush> {
+        Self::IAcrylicBrushFactory(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateInstance)(
+                    ::windows_core::Interface::as_raw(this),
+                    ::core::ptr::null_mut(),
+                    &mut ::core::option::Option::<::windows::core::IInspectable>::None
+                        as *mut _ as _,
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn IAcrylicBrushFactory<
+        R,
+        F: FnOnce(&IAcrylicBrushFactory) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            AcrylicBrush,
+            IAcrylicBrushFactory,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::core::cmp::PartialEq for AcrylicBrush {
     fn eq(&self, other: &Self) -> bool {
         self.0 == other.0

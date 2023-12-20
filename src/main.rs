@@ -2,17 +2,20 @@ use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use std::sync::Once;
 use windows::core::{PCWSTR, w, Result, ComInterface, HSTRING, Error, HRESULT};
 use windows::Foundation::TypedEventHandler;
+use windows::UI::Color;
 use windows::UI::Text::FontWeight;
 use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, NO_ERROR, RECT, WPARAM};
 use windows::Win32::Graphics::Gdi::UpdateWindow;
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUninitialize};
-use windows::Win32::UI::WindowsAndMessaging::{CreateWindowExW, CW_USEDEFAULT, DefWindowProcW, DispatchMessageW, GetClientRect, GetMessageW, GetWindowLongPtrW, GWLP_USERDATA, IDC_ARROW, LoadCursorW, MSG, PostQuitMessage, RegisterClassW, SetWindowLongPtrW, SetWindowPos, ShowWindow, SW_SHOW, SWP_SHOWWINDOW, TranslateMessage, WHEEL_DELTA, WINDOW_EX_STYLE, WM_DESTROY, WM_NCCREATE, WM_NCDESTROY, WM_SIZE, WM_SIZING, WNDCLASSW, WS_OVERLAPPEDWINDOW, WS_VISIBLE};
+use windows::Win32::UI::Input::KeyboardAndMouse::{SetActiveWindow, SetFocus};
+use windows::Win32::UI::WindowsAndMessaging::{CreateWindowExW, CW_USEDEFAULT, DefWindowProcW, DispatchMessageW, GetClientRect, GetMessageW, GetWindowLongPtrW, GWLP_USERDATA, IDC_ARROW, LoadCursorW, MSG, PEEK_MESSAGE_REMOVE_TYPE, PeekMessageW, PM_REMOVE, PostQuitMessage, RegisterClassW, SetWindowLongPtrW, SetWindowPos, ShowWindow, SW_MINIMIZE, SW_RESTORE, SW_SHOW, SW_SHOWMINIMIZED, SW_SHOWMINNOACTIVE, SW_SHOWNOACTIVATE, SWP_NOACTIVATE, SWP_SHOWWINDOW, TranslateMessage, WHEEL_DELTA, WINDOW_EX_STYLE, WM_DESTROY, WM_NCCREATE, WM_NCDESTROY, WM_SIZE, WM_SIZING, WNDCLASSW, WS_EX_NOREDIRECTIONBITMAP, WS_OVERLAPPEDWINDOW, WS_VISIBLE};
 use windows_ext::UI::Xaml::Controls::{ColumnDefinition, FontIcon, Grid, Orientation, Slider, StackPanel, TextBlock, TextBox};
 use windows_ext::UI::Xaml::Hosting::{DesktopWindowXamlSource, WindowsXamlManager};
 use windows_ext::UI::Xaml::{GridLength, GridUnitType, TextAlignment, Thickness, VerticalAlignment};
 use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
+use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, Brush};
 
 static REGISTER_WINDOW_CLASS: Once = Once::new();
 const WINDOW_CLASS_NAME: PCWSTR = w!("modern-gui.Window");
@@ -35,7 +38,7 @@ fn main() -> Result<()> {
 
     let hwnd = unsafe {
         CreateWindowExW(
-            WINDOW_EX_STYLE::default(),
+            WS_EX_NOREDIRECTIONBITMAP,
             WINDOW_CLASS_NAME,
             w!("XAML Test"),
             WS_OVERLAPPEDWINDOW | WS_VISIBLE,
@@ -56,6 +59,16 @@ fn main() -> Result<()> {
     };
 
     let mut message = MSG::default();
+
+    unsafe {
+        while PeekMessageW(&mut message, None, 0, 0, PM_REMOVE).into() {
+            TranslateMessage(&message);
+            DispatchMessageW(&message);
+        }
+        ShowWindow(hwnd, SW_MINIMIZE);
+        ShowWindow(hwnd, SW_RESTORE);
+    }
+
     unsafe {
         while GetMessageW(&mut message, None, 0, 0).into() {
             TranslateMessage(&message);
@@ -123,6 +136,15 @@ impl Window {
 
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
         let stack_panel = StackPanel::new()?;
+        stack_panel.SetBackground(&{
+            let brush = AcrylicBrush::new()?;
+            let color = Color { R: 70, G: 70, B: 70, A: 255 };
+            brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
+            brush.SetFallbackColor(color)?;
+            brush.SetTintColor(color)?;
+            brush.SetTintOpacity(0.7)?;
+            brush
+        })?;
         stack_panel.SetSpacing(8.0)?;
         stack_panel.SetPadding(Thickness {
             Left: 8.0,

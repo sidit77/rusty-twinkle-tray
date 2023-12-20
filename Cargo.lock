@@ -112,15 +112,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "modern-win-gui"
-version = "0.1.0"
-dependencies = [
- "embed-manifest",
- "windows",
- "windows-ext",
-]
-
-[[package]]
 name = "prettyplease"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -166,6 +157,15 @@ checksum = "5ce3fb6ad83f861aac485e76e1985cd109d9a3713802152be56c3b1f0e0658ed"
 dependencies = [
  "crossbeam-deque",
  "crossbeam-utils",
+]
+
+[[package]]
+name = "rusty-twinkle-tray"
+version = "0.1.0"
+dependencies = [
+ "embed-manifest",
+ "windows",
+ "windows-ext",
 ]
 
 [[package]]

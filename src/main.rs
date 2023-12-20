@@ -1,3 +1,5 @@
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use std::sync::Once;
 use windows::core::{PCWSTR, w, Result, ComInterface, HSTRING, Error};

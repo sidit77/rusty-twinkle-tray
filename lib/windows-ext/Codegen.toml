@@ -8,10 +8,12 @@ classes = [
 features = [
     "Foundation",
     "UI_Text",
+    "UI_Input",
     "UI_Xaml_Controls",
     "UI_Xaml_Controls_Primitives",
     "UI_Xaml_Hosting",
     "UI_Xaml_Media",
+    "UI_Xaml_Input",
     "Win32_System_WinRT_Xaml",
     "Win32_Foundation",
     "Foundation_Collections"
@@ -22,7 +24,8 @@ reexports = [
     "Foundation",
     "Foundation_Collections",
     "UI",
-    "UI_Text"
+    "UI_Text",
+    "UI_Input"
 ]
 
 constructors = [
@@ -46,6 +49,9 @@ ResourceDictionary = ["First"]
 
 RangeBaseValueChangedEventHandler = true
 RangeBaseValueChangedEventArgs = true
+
+PointerEventHandler = true
+PointerRoutedEventArgs = true
 
 StackPanel = true
 Grid = true

@@ -1,16 +1,18 @@
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use std::sync::Once;
-use windows::core::{PCWSTR, w, Result, ComInterface, HSTRING};
+use windows::core::{PCWSTR, w, Result, ComInterface, HSTRING, Error, HRESULT};
+use windows::Foundation::TypedEventHandler;
 use windows::UI::Text::FontWeight;
-use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, RECT, WPARAM};
+use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, NO_ERROR, RECT, WPARAM};
 use windows::Win32::Graphics::Gdi::UpdateWindow;
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUninitialize};
-use windows::Win32::UI::WindowsAndMessaging::{CreateWindowExW, CW_USEDEFAULT, DefWindowProcW, DispatchMessageW, GetClientRect, GetMessageW, GetWindowLongPtrW, GWLP_USERDATA, IDC_ARROW, LoadCursorW, MSG, PostQuitMessage, RegisterClassW, SetWindowLongPtrW, SetWindowPos, ShowWindow, SW_SHOW, SWP_SHOWWINDOW, TranslateMessage, WINDOW_EX_STYLE, WM_DESTROY, WM_NCCREATE, WM_NCDESTROY, WM_SIZE, WM_SIZING, WNDCLASSW, WS_OVERLAPPEDWINDOW, WS_VISIBLE};
+use windows::Win32::UI::WindowsAndMessaging::{CreateWindowExW, CW_USEDEFAULT, DefWindowProcW, DispatchMessageW, GetClientRect, GetMessageW, GetWindowLongPtrW, GWLP_USERDATA, IDC_ARROW, LoadCursorW, MSG, PostQuitMessage, RegisterClassW, SetWindowLongPtrW, SetWindowPos, ShowWindow, SW_SHOW, SWP_SHOWWINDOW, TranslateMessage, WHEEL_DELTA, WINDOW_EX_STYLE, WM_DESTROY, WM_NCCREATE, WM_NCDESTROY, WM_SIZE, WM_SIZING, WNDCLASSW, WS_OVERLAPPEDWINDOW, WS_VISIBLE};
 use windows_ext::UI::Xaml::Controls::{ColumnDefinition, FontIcon, Grid, Orientation, Slider, StackPanel, TextBlock, TextBox};
 use windows_ext::UI::Xaml::Hosting::{DesktopWindowXamlSource, WindowsXamlManager};
 use windows_ext::UI::Xaml::{GridLength, GridUnitType, TextAlignment, Thickness, VerticalAlignment};
 use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
+use windows_ext::UI::Xaml::Input::PointerEventHandler;
 
 static REGISTER_WINDOW_CLASS: Once = Once::new();
 const WINDOW_CLASS_NAME: PCWSTR = w!("modern-gui.Window");
@@ -173,6 +175,12 @@ impl Window {
                     })?;
                     def
                 })?;
+                let slider = {
+                    let slider = Slider::new()?;
+                    slider.SetVerticalAlignment(VerticalAlignment::Center)?;
+                    Grid::SetColumn(&slider, 0)?;
+                    slider
+                };
                 let text_box = {
                     let text_box = TextBox::new()?;
                     text_box.SetTextAlignment(TextAlignment::Center)?;
@@ -181,21 +189,38 @@ impl Window {
                     text_box.SetFontWeight(FontWeight { Weight: 500 })?;
                     text_box.SetHeight(29.0)?;
                     text_box.SetPadding(Thickness::default())?;
-                    text_box.SetText(&HSTRING::from("0"))?;
+                    text_box.SetText(&HSTRING::from(&format!("{}", slider.Value()?)))?;
                     Grid::SetColumn(&text_box, 1)?;
                     text_box
-                };
-                let slider = {
-                    let slider = Slider::new()?;
-                    slider.SetVerticalAlignment(VerticalAlignment::Center)?;
-                    Grid::SetColumn(&slider, 0)?;
-                    slider
                 };
                 slider.ValueChanged(&RangeBaseValueChangedEventHandler::new({
                     let text_box = text_box.clone();
                     move |_, event| {
-                        if let Some(event) = event {
-                            text_box.SetText(&HSTRING::from(format!("{}", event.NewValue()?.round())))?;
+                        text_box.SetText(&HSTRING::from(format!("{}", event.some()?.NewValue()?)))?;
+                        Ok(())
+                    }
+                }))?;
+                slider.PointerWheelChanged(&PointerEventHandler::new(move |sender, args| {
+                    let args = args.some()?;
+                    args.SetHandled(true)?;
+                    let delta = args.GetCurrentPoint(None)?
+                        .Properties()?
+                        .MouseWheelDelta()? / WHEEL_DELTA as i32;
+
+                    let slider = sender.some()?.cast::<Slider>()?;
+                    slider.SetValue2(slider.Value()? + delta as f64)?;
+                    Ok(())
+                }))?;
+                text_box.TextChanging(&TypedEventHandler::new({
+                    let slider = slider.clone();
+                    move |sender: &Option<TextBox>, _| {
+                        let sender = sender.as_ref().some()?;
+                        let text = sender.Text()?.to_string_lossy();
+                        if let Some(value) = text.parse::<u32>().ok() {
+                            slider.SetValue2(value as f64)?;
+                        }
+                        if !text.is_empty() {
+                            sender.SetText(&HSTRING::from(&format!("{}", slider.Value()?)))?;
                         }
                         Ok(())
                     }
@@ -230,5 +255,15 @@ impl Window {
                              SWP_SHOWWINDOW).unwrap();
             }
         }
+    }
+}
+
+pub trait OptionExt<T> {
+    fn some(self) -> Result<T>;
+}
+
+impl<T> OptionExt<T> for Option<T> {
+    fn some(self) -> Result<T> {
+        self.ok_or(Error::from(NO_ERROR))
     }
 }

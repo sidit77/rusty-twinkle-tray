@@ -166,8 +166,14 @@ pub struct IButtonBase_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
     ) -> ::windows_core::HRESULT,
-    Command: usize,
-    SetCommand: usize,
+    pub Command: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub SetCommand: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub CommandParameter: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
@@ -1480,7 +1486,10 @@ unsafe impl ::windows_core::ComInterface for IFlyoutBase4 {
 #[doc(hidden)]
 pub struct IFlyoutBase4_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    TryInvokeKeyboardAccelerator: usize,
+    pub TryInvokeKeyboardAccelerator: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        args: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -1674,7 +1683,10 @@ unsafe impl ::windows_core::ComInterface for IFlyoutBaseOverrides4 {
 #[doc(hidden)]
 pub struct IFlyoutBaseOverrides4_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    OnProcessKeyboardAccelerators: usize,
+    pub OnProcessKeyboardAccelerators: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        args: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]

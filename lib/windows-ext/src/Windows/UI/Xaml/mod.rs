@@ -1,5 +1,6 @@
 pub mod Controls;
 pub mod Hosting;
+pub mod Input;
 pub mod Media;
 #[doc(hidden)]
 #[repr(transparent)]
@@ -4627,15 +4628,32 @@ pub struct IUIElement_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: bool,
     ) -> ::windows_core::HRESULT,
-    ManipulationMode: usize,
-    SetManipulationMode: usize,
-    PointerCaptures: usize,
-    KeyUp: usize,
+    pub ManipulationMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Input::ManipulationModes,
+    ) -> ::windows_core::HRESULT,
+    pub SetManipulationMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Input::ManipulationModes,
+    ) -> ::windows_core::HRESULT,
+    pub PointerCaptures: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub KeyUp: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveKeyUp: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    KeyDown: usize,
+    pub KeyDown: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveKeyDown: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
@@ -4694,87 +4712,155 @@ pub struct IUIElement_Vtbl {
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    PointerPressed: usize,
+    pub PointerPressed: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemovePointerPressed: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    PointerMoved: usize,
+    pub PointerMoved: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemovePointerMoved: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    PointerReleased: usize,
+    pub PointerReleased: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemovePointerReleased: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    PointerEntered: usize,
+    pub PointerEntered: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemovePointerEntered: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    PointerExited: usize,
+    pub PointerExited: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemovePointerExited: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    PointerCaptureLost: usize,
+    pub PointerCaptureLost: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemovePointerCaptureLost: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    PointerCanceled: usize,
+    pub PointerCanceled: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemovePointerCanceled: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    PointerWheelChanged: usize,
+    pub PointerWheelChanged: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemovePointerWheelChanged: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    Tapped: usize,
+    pub Tapped: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveTapped: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    DoubleTapped: usize,
+    pub DoubleTapped: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveDoubleTapped: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    Holding: usize,
+    pub Holding: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveHolding: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    RightTapped: usize,
+    pub RightTapped: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveRightTapped: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    ManipulationStarting: usize,
+    pub ManipulationStarting: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveManipulationStarting: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    ManipulationInertiaStarting: usize,
+    pub ManipulationInertiaStarting: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveManipulationInertiaStarting: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    ManipulationStarted: usize,
+    pub ManipulationStarted: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveManipulationStarted: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    ManipulationDelta: usize,
+    pub ManipulationDelta: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveManipulationDelta: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    ManipulationCompleted: usize,
+    pub ManipulationCompleted: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveManipulationCompleted: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
@@ -4787,8 +4873,15 @@ pub struct IUIElement_Vtbl {
         this: *mut ::core::ffi::c_void,
         finalrect: super::super::Foundation::Rect,
     ) -> ::windows_core::HRESULT,
-    CapturePointer: usize,
-    ReleasePointerCapture: usize,
+    pub CapturePointer: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+        result__: *mut bool,
+    ) -> ::windows_core::HRESULT,
+    pub ReleasePointerCapture: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub ReleasePointerCaptures: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
@@ -5004,7 +5097,11 @@ pub struct IUIElement4_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: ::std::mem::MaybeUninit<::windows_core::HSTRING>,
     ) -> ::windows_core::HRESULT,
-    ContextRequested: usize,
+    pub ContextRequested: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveContextRequested: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
@@ -5018,17 +5115,29 @@ pub struct IUIElement4_Vtbl {
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    AccessKeyDisplayRequested: usize,
+    pub AccessKeyDisplayRequested: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveAccessKeyDisplayRequested: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    AccessKeyDisplayDismissed: usize,
+    pub AccessKeyDisplayDismissed: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveAccessKeyDisplayDismissed: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    AccessKeyInvoked: usize,
+    pub AccessKeyInvoked: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveAccessKeyInvoked: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
@@ -5058,8 +5167,14 @@ pub struct IUIElement5_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    KeyTipPlacementMode: usize,
-    SetKeyTipPlacementMode: usize,
+    pub KeyTipPlacementMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Input::KeyTipPlacementMode,
+    ) -> ::windows_core::HRESULT,
+    pub SetKeyTipPlacementMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Input::KeyTipPlacementMode,
+    ) -> ::windows_core::HRESULT,
     pub KeyTipHorizontalOffset: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut f64,
@@ -5076,16 +5191,46 @@ pub struct IUIElement5_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: f64,
     ) -> ::windows_core::HRESULT,
-    XYFocusKeyboardNavigation: usize,
-    SetXYFocusKeyboardNavigation: usize,
-    XYFocusUpNavigationStrategy: usize,
-    SetXYFocusUpNavigationStrategy: usize,
-    XYFocusDownNavigationStrategy: usize,
-    SetXYFocusDownNavigationStrategy: usize,
-    XYFocusLeftNavigationStrategy: usize,
-    SetXYFocusLeftNavigationStrategy: usize,
-    XYFocusRightNavigationStrategy: usize,
-    SetXYFocusRightNavigationStrategy: usize,
+    pub XYFocusKeyboardNavigation: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Input::XYFocusKeyboardNavigationMode,
+    ) -> ::windows_core::HRESULT,
+    pub SetXYFocusKeyboardNavigation: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Input::XYFocusKeyboardNavigationMode,
+    ) -> ::windows_core::HRESULT,
+    pub XYFocusUpNavigationStrategy: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Input::XYFocusNavigationStrategy,
+    ) -> ::windows_core::HRESULT,
+    pub SetXYFocusUpNavigationStrategy: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Input::XYFocusNavigationStrategy,
+    ) -> ::windows_core::HRESULT,
+    pub XYFocusDownNavigationStrategy: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Input::XYFocusNavigationStrategy,
+    ) -> ::windows_core::HRESULT,
+    pub SetXYFocusDownNavigationStrategy: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Input::XYFocusNavigationStrategy,
+    ) -> ::windows_core::HRESULT,
+    pub XYFocusLeftNavigationStrategy: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Input::XYFocusNavigationStrategy,
+    ) -> ::windows_core::HRESULT,
+    pub SetXYFocusLeftNavigationStrategy: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Input::XYFocusNavigationStrategy,
+    ) -> ::windows_core::HRESULT,
+    pub XYFocusRightNavigationStrategy: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Input::XYFocusNavigationStrategy,
+    ) -> ::windows_core::HRESULT,
+    pub SetXYFocusRightNavigationStrategy: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Input::XYFocusNavigationStrategy,
+    ) -> ::windows_core::HRESULT,
     pub HighContrastAdjustment: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut ElementHighContrastAdjustment,
@@ -5094,19 +5239,37 @@ pub struct IUIElement5_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: ElementHighContrastAdjustment,
     ) -> ::windows_core::HRESULT,
-    TabFocusNavigation: usize,
-    SetTabFocusNavigation: usize,
-    GettingFocus: usize,
+    pub TabFocusNavigation: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Input::KeyboardNavigationMode,
+    ) -> ::windows_core::HRESULT,
+    pub SetTabFocusNavigation: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Input::KeyboardNavigationMode,
+    ) -> ::windows_core::HRESULT,
+    pub GettingFocus: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveGettingFocus: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    LosingFocus: usize,
+    pub LosingFocus: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveLosingFocus: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    NoFocusCandidateFound: usize,
+    pub NoFocusCandidateFound: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveNoFocusCandidateFound: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
@@ -5139,28 +5302,50 @@ unsafe impl ::windows_core::ComInterface for IUIElement7 {
 #[doc(hidden)]
 pub struct IUIElement7_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    KeyboardAccelerators: usize,
-    CharacterReceived: usize,
+    pub KeyboardAccelerators: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub CharacterReceived: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveCharacterReceived: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    ProcessKeyboardAccelerators: usize,
+    pub ProcessKeyboardAccelerators: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveProcessKeyboardAccelerators: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    PreviewKeyDown: usize,
+    pub PreviewKeyDown: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemovePreviewKeyDown: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    PreviewKeyUp: usize,
+    pub PreviewKeyUp: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemovePreviewKeyUp: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    TryInvokeKeyboardAccelerator: usize,
+    pub TryInvokeKeyboardAccelerator: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        args: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -5198,8 +5383,14 @@ pub struct IUIElement8_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    KeyboardAcceleratorPlacementMode: usize,
-    SetKeyboardAcceleratorPlacementMode: usize,
+    pub KeyboardAcceleratorPlacementMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut Input::KeyboardAcceleratorPlacementMode,
+    ) -> ::windows_core::HRESULT,
+    pub SetKeyboardAcceleratorPlacementMode: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: Input::KeyboardAcceleratorPlacementMode,
+    ) -> ::windows_core::HRESULT,
     pub BringIntoViewRequested: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         handler: *mut ::core::ffi::c_void,
@@ -5367,7 +5558,10 @@ pub struct IUIElementOverrides7_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    OnProcessKeyboardAccelerators: usize,
+    pub OnProcessKeyboardAccelerators: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        args: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -5389,7 +5583,10 @@ unsafe impl ::windows_core::ComInterface for IUIElementOverrides8 {
 #[doc(hidden)]
 pub struct IUIElementOverrides8_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    OnKeyboardAcceleratorInvoked: usize,
+    pub OnKeyboardAcceleratorInvoked: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        args: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
     pub OnBringIntoViewRequested: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         e: *mut ::core::ffi::c_void,
@@ -5676,7 +5873,11 @@ pub struct IUIElementStatics3_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    TryStartDirectManipulation: usize,
+    pub TryStartDirectManipulation: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: *mut ::core::ffi::c_void,
+        result__: *mut bool,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]

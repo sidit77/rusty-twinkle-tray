@@ -11,5 +11,6 @@ windows = {version = "0.51", features = [
     "Foundation",
     "Foundation_Collections",
     "UI",
-    "UI_Text"
+    "UI_Text",
+    "UI_Input"
 ]}

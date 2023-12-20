@@ -55,6 +55,7 @@ PointerEventHandler = true
 PointerRoutedEventArgs = true
 
 AcrylicBrush = true
+SolidColorBrush = true
 
 StackPanel = true
 Grid = true

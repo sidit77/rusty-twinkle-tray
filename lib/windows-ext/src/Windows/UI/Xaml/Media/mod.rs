@@ -7155,7 +7155,290 @@ unsafe impl ::core::marker::Send for SkewTransform {}
 unsafe impl ::core::marker::Sync for SkewTransform {}
 #[repr(transparent)]
 pub struct SolidColorBrush(::windows_core::IUnknown);
-impl SolidColorBrush {}
+impl SolidColorBrush {
+    pub fn new() -> ::windows_core::Result<Self> {
+        Self::IActivationFactory(|f| f.ActivateInstance::<Self>())
+    }
+    fn IActivationFactory<
+        R,
+        F: FnOnce(&::windows_core::imp::IGenericFactory) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            SolidColorBrush,
+            ::windows_core::imp::IGenericFactory,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    pub fn Opacity(&self) -> ::windows_core::Result<f64> {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Opacity)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetOpacity(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetOpacity)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Transform(&self) -> ::windows_core::Result<Transform> {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Transform)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetTransform<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Transform>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn RelativeTransform(&self) -> ::windows_core::Result<Transform> {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RelativeTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetRelativeTransform<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<Transform>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IBrush>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetRelativeTransform)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn GetValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetValue<P0, P1>(&self, dp: P0, value: P1) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+        P1: ::windows_core::IntoParam<::windows_core::IInspectable>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ClearValue<P0>(&self, dp: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ClearValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ReadLocalValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ReadLocalValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn GetAnimationBaseValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetAnimationBaseValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn RegisterPropertyChangedCallback<P0, P1>(
+        &self,
+        dp: P0,
+        callback: P1,
+    ) -> ::windows_core::Result<i64>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+        P1: ::windows_core::IntoParam<super::DependencyPropertyChangedCallback>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject2,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RegisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    callback.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn UnregisterPropertyChangedCallback<P0>(
+        &self,
+        dp: P0,
+        token: i64,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject2,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .UnregisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    token,
+                )
+                .ok()
+        }
+    }
+    pub fn Color(&self) -> ::windows_core::Result<super::super::Color> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Color)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetColor(&self, value: super::super::Color) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetColor)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn CreateInstanceWithColor(
+        color: super::super::Color,
+    ) -> ::windows_core::Result<SolidColorBrush> {
+        Self::ISolidColorBrushFactory(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateInstanceWithColor)(
+                    ::windows_core::Interface::as_raw(this),
+                    color,
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn ColorProperty() -> ::windows_core::Result<super::DependencyProperty> {
+        Self::ISolidColorBrushStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ColorProperty)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn ISolidColorBrushFactory<
+        R,
+        F: FnOnce(&ISolidColorBrushFactory) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            SolidColorBrush,
+            ISolidColorBrushFactory,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    #[doc(hidden)]
+    pub fn ISolidColorBrushStatics<
+        R,
+        F: FnOnce(&ISolidColorBrushStatics) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            SolidColorBrush,
+            ISolidColorBrushStatics,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::core::cmp::PartialEq for SolidColorBrush {
     fn eq(&self, other: &Self) -> bool {
         self.0 == other.0

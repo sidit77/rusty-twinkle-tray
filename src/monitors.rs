@@ -1,13 +1,16 @@
-use std::ffi::OsString;
-use std::fmt::{Debug, Display, Formatter, Write};
-use std::os::windows::ffi::OsStringExt;
+use std::fmt::Debug;
 use std::path::PathBuf;
+use bitflags::bitflags;
+use windows::core::imp::GetLastError;
+use windows::Win32::Devices::Display::*;
+use windows::Win32::Foundation::{BOOL, ERROR_SUCCESS, HANDLE, WIN32_ERROR};
 use windows::Win32::Graphics::Gdi::HMONITOR;
 use crate::error::OptionExt;
 use crate::monitors::gdi::find_all_gdi_monitors;
 use crate::monitors::paths::{find_all_paths, get_gdi_name, get_name_and_path};
 
-use crate::Result;
+use crate::{Result, win_assert};
+use crate::utils::WStr;
 
 #[derive(Debug, Clone)]
 pub struct Monitor {
@@ -44,59 +47,79 @@ impl Monitor {
         &self.name
     }
 
-
-
-}
-
-#[derive(Copy, Clone, PartialEq, Eq)]
-struct WStr<const N: usize>([u16; N]);
-
-impl<const N: usize> From<[u16; N]> for WStr<N> {
-    fn from(value: [u16; N]) -> Self {
-        Self(value)
+    pub fn open(&self) -> Result<MonitorConnection> {
+        MonitorConnection::open(self.hmonitor)
     }
+
 }
 
-impl<const N: usize> Display for WStr<N> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        for c in char::decode_utf16(self.as_slice().iter().copied()) {
-            f.write_char(c.unwrap_or(std::char::REPLACEMENT_CHARACTER))?
+
+pub struct MonitorConnection {
+    handle: HANDLE
+}
+
+impl MonitorConnection {
+
+    fn open(monitor: HMONITOR) -> Result<Self> {
+        win_assert!({
+            let mut n = 0;
+            unsafe { GetNumberOfPhysicalMonitorsFromHMONITOR(monitor, &mut n)?; };
+            n == 1
+        });
+        let mut physical_monitor = PHYSICAL_MONITOR::default();
+        unsafe { GetPhysicalMonitorsFromHMONITOR(monitor, std::slice::from_mut(&mut physical_monitor))? };
+
+        Ok(Self { handle: physical_monitor.hPhysicalMonitor })
+    }
+
+    pub fn get_capabilities(&self) -> Result<MonitorCapabilities> {
+        let mut caps = 0;
+        let mut temps = 0;
+        dbg!(unsafe {  GetMonitorCapabilities(self.handle, &mut caps, &mut temps)});
+        dbg!(unsafe { GetLastError()});
+        Ok(MonitorCapabilities::from_bits_truncate(dbg!(caps)))
+    }
+
+    pub fn get_brightness(&self) -> Result<u32> {
+        let mut min = 0;
+        let mut cur = 0;
+        let mut max = 0;
+        dbg!(unsafe { GetMonitorBrightness(self.handle, &mut min, &mut cur, &mut max) });
+        Ok(cur)
+    }
+
+}
+
+impl Drop for MonitorConnection {
+    fn drop(&mut self) {
+
+        unsafe {
+            DestroyPhysicalMonitor(self.handle)
+                .unwrap_or_else(|err| log::warn!("Failed to release physical monitor: {err}"))
         }
-        Ok(())
     }
 }
 
-impl<const N: usize> Debug for WStr<N> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "\"{}\"", self)
+bitflags! {
+
+    #[derive(Debug, Copy, Clone)]
+    pub struct MonitorCapabilities: u32 {
+        const BRIGHTNESS = MC_CAPS_BRIGHTNESS;
+        const COLOR_TEMPERATURE = MC_CAPS_COLOR_TEMPERATURE;
+        const CONTRAST = MC_CAPS_CONTRAST;
+        const DEGAUSS = MC_CAPS_DEGAUSS;
+        const DISPLAY_AREA_POSITION = MC_CAPS_DISPLAY_AREA_POSITION;
+        const DISPLAY_AREA_SIZE = MC_CAPS_DISPLAY_AREA_SIZE;
+        const MONITOR_TECHNOLOGY_TYPE = MC_CAPS_MONITOR_TECHNOLOGY_TYPE;
+        const RED_GREEN_BLUE_DRIVE = MC_CAPS_RED_GREEN_BLUE_DRIVE;
+        const RED_GREEN_BLUE_GAIN = MC_CAPS_RED_GREEN_BLUE_GAIN;
+        const RESTORE_FACTORY_COLOR_DEFAULTS = MC_CAPS_RESTORE_FACTORY_COLOR_DEFAULTS;
+        const RESTORE_FACTORY_DEFAULTS = MC_CAPS_RESTORE_FACTORY_DEFAULTS;
+        const RESTORE_FACTORY_DEFAULTS_ENABLES_MONITOR_SETTINGS = MC_RESTORE_FACTORY_DEFAULTS_ENABLES_MONITOR_SETTINGS;
     }
 }
 
-impl<const N: usize> From<WStr<N>> for OsString {
-    fn from(value: WStr<N>) -> Self {
-        OsString::from_wide(value.as_slice())
-    }
-}
 
-impl<const N: usize> From<WStr<N>> for PathBuf {
-    fn from(value: WStr<N>) -> Self {
-        PathBuf::from(OsString::from(value))
-    }
-}
-
-impl<const N: usize> WStr<N> {
-    pub fn as_slice(&self) -> &[u16] {
-        let end = self.0
-            .iter()
-            .position(|c| *c == 0)
-            .unwrap_or(self.0.len());
-        &self.0[..end]
-    }
-
-    pub fn to_string_lossy(&self) -> String {
-        String::from_utf16_lossy(self.as_slice())
-    }
-}
 
 type GdiName = WStr<32>;
 mod paths {

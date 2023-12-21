@@ -2,6 +2,7 @@
 
 mod monitors;
 mod error;
+mod utils;
 
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use std::sync::{Once};

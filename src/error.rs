@@ -104,3 +104,12 @@ impl<T> OptionExt<T> for Option<T> {
         self.ok_or(Error::from(NO_ERROR))
     }
 }
+
+#[macro_export]
+macro_rules! win_assert {
+    ($cond:expr) => {
+        if !($cond) {
+            return Err(windows::core::Error::from(windows::Win32::Foundation::ERROR_ASSERTION_FAILURE).into());
+        }
+    };
+}

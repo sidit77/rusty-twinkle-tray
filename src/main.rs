@@ -28,8 +28,6 @@ const WINDOW_CLASS_NAME: PCWSTR = w!("modern-gui.Window");
 
 
 fn main() -> Result<()> {
-    println!("{:#?}", Monitor::find_all()?);
-
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 

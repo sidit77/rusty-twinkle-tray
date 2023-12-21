@@ -221,3 +221,21 @@ mod gdi {
     }
 
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::error::Result;
+    use super::*;
+
+    #[test]
+    fn caps() -> Result<()> {
+        for monitor in Monitor::find_all()? {
+            println!("{}", monitor.name());
+            let conn = monitor.open()?;
+            println!("\tbrightness: {:?}", conn.get_brightness()?);
+            println!("\tcaps: {:?}", conn.get_capabilities()?);
+        }
+        Ok(())
+    }
+
+}

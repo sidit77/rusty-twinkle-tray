@@ -2,6 +2,7 @@ use std::backtrace::{Backtrace, BacktraceStatus};
 use std::fmt::{Debug, Display, Formatter};
 use std::panic::Location;
 use windows::core::Error;
+use windows::Win32::Foundation::NO_ERROR;
 
 pub type Result<T> = std::result::Result<T, TracedError>;
 
@@ -91,5 +92,15 @@ struct FromDisplay<T>(pub T);
 impl<T: Display> Debug for FromDisplay<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         Display::fmt(&self.0, f)
+    }
+}
+
+pub trait OptionExt<T> {
+    fn some(self) -> windows::core::Result<T>;
+}
+
+impl<T> OptionExt<T> for Option<T> {
+    fn some(self) -> windows::core::Result<T> {
+        self.ok_or(Error::from(NO_ERROR))
     }
 }

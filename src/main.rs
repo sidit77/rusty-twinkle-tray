@@ -1,12 +1,19 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod monitors;
+mod error;
+
+use std::mem::{size_of, transmute};
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
-use std::sync::Once;
+use std::sync::{Once, OnceLock};
 use windows::core::{PCWSTR, w, Result, ComInterface, HSTRING, Error};
+use windows::Devices::Display::DisplayMonitor;
+use windows::Devices::Enumeration::DeviceInformation;
 use windows::UI::Color;
 use windows::UI::Text::FontWeight;
-use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, NO_ERROR, RECT, WPARAM};
-use windows::Win32::Graphics::Gdi::UpdateWindow;
+use windows::Win32::Devices::Display::{DestroyPhysicalMonitors, DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME, DISPLAYCONFIG_DEVICE_INFO_HEADER, DISPLAYCONFIG_MODE_INFO, DISPLAYCONFIG_PATH_INFO, DISPLAYCONFIG_SOURCE_DEVICE_NAME, DisplayConfigGetDeviceInfo, GetDisplayConfigBufferSizes, GetMonitorBrightness, GetNumberOfPhysicalMonitorsFromHMONITOR, GetPhysicalMonitorsFromHMONITOR, PHYSICAL_MONITOR, QDC_ONLY_ACTIVE_PATHS, QueryDisplayConfig};
+use windows::Win32::Foundation::{BOOL, HWND, LPARAM, LRESULT, LUID, NO_ERROR, RECT, TRUE, WPARAM};
+use windows::Win32::Graphics::Gdi::{EnumDisplayMonitors, GetMonitorInfoW, HDC, HMONITOR, MONITOR_DEFAULTTOPRIMARY, MonitorFromWindow, MONITORINFO, MONITORINFOEXW, UpdateWindow};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUninitialize};
 use windows::Win32::UI::WindowsAndMessaging::*;
@@ -20,9 +27,119 @@ use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 static REGISTER_WINDOW_CLASS: Once = Once::new();
 const WINDOW_CLASS_NAME: PCWSTR = w!("modern-gui.Window");
 
+pub fn get_gdi_name(display: &DisplayMonitor) -> [u16; 32] {
+    static PATHS: OnceLock<Vec<DISPLAYCONFIG_PATH_INFO>> = OnceLock::new();
+    let paths = PATHS.get_or_init(|| unsafe {
+        let mut path_count = 0;
+        let mut mode_count = 0;
+        GetDisplayConfigBufferSizes(QDC_ONLY_ACTIVE_PATHS, &mut path_count, &mut mode_count).unwrap();
+
+        let mut paths = vec![DISPLAYCONFIG_PATH_INFO::default(); path_count as usize];
+        let mut modes = vec![DISPLAYCONFIG_MODE_INFO::default(); mode_count as usize];
+
+        QueryDisplayConfig(QDC_ONLY_ACTIVE_PATHS, &mut path_count, paths.as_mut_ptr(), &mut mode_count, modes.as_mut_ptr(), None).unwrap();
+
+        paths
+    });
+
+    let adapter: LUID = unsafe { transmute(display.DisplayAdapterId().unwrap()) };
+    let target_id = display.DisplayAdapterTargetId().unwrap();
+
+    let info = paths
+        .iter()
+        .find(|info| info.targetInfo.adapterId == adapter && info.targetInfo.id == target_id)
+        .copied()
+        .unwrap()
+        .sourceInfo;
+
+    let mut source_name = DISPLAYCONFIG_SOURCE_DEVICE_NAME {
+        header: DISPLAYCONFIG_DEVICE_INFO_HEADER {
+            r#type: DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME,
+            size: size_of::<DISPLAYCONFIG_SOURCE_DEVICE_NAME>() as u32,
+            adapterId: info.adapterId,
+            id: info.id,
+        },
+        ..Default::default()
+    };
+    unsafe { DisplayConfigGetDeviceInfo(&mut source_name.header); }
+    source_name.viewGdiDeviceName
+}
+
+pub fn hmonitor_from_gdi_name(name: [u16; 32]) -> HMONITOR {
+    static MAPPING: OnceLock<Vec<([u16; 32], HMONITOR)>> = OnceLock::new();
+    let mapping = MAPPING.get_or_init(|| unsafe {
+        let mut result = Box::into_raw(Box::new(Vec::new()));
+        unsafe extern "system" fn enum_func(hm: HMONITOR, _: HDC, _: *mut RECT, result: LPARAM) -> BOOL {
+            let mut mi = MONITORINFOEXW {
+                monitorInfo: MONITORINFO {
+                    cbSize: size_of::<MONITORINFOEXW>() as u32,
+                    ..Default::default()
+                },
+                ..Default::default()
+            };
+            GetMonitorInfoW(hm, &mut mi as *mut _ as _).unwrap();
+            let result = &mut *(result.0 as *mut Vec<([u16; 32], HMONITOR)>);
+            result.push((mi.szDevice, hm));
+            TRUE
+        }
+        EnumDisplayMonitors(None, None, Some(enum_func), LPARAM(result as _)).unwrap();
+        *Box::from_raw(result)
+    });
+
+    mapping
+        .iter()
+        .find(|(gdi, _)| gdi == &name)
+        .unwrap()
+        .1
+}
+
 fn main() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
+
+    pollster::block_on(async {
+        let selector = DisplayMonitor::GetDeviceSelector()?;
+        let displays = DeviceInformation::FindAllAsyncAqsFilter(&selector)?.await?;
+
+        for device in displays {
+            let display = DisplayMonitor::FromInterfaceIdAsync(&device.Id()?)?.await?;
+            println!("{:?} {}", display.DisplayName()?, display.DisplayAdapterTargetId()?);
+
+            let gdi_name = get_gdi_name(&display);
+            let hm = hmonitor_from_gdi_name(gdi_name);
+
+            unsafe {
+                let mut n = 0;
+                GetNumberOfPhysicalMonitorsFromHMONITOR(hm, &mut n)?;
+                let mut monitors = vec![PHYSICAL_MONITOR::default(); n as usize];
+                GetPhysicalMonitorsFromHMONITOR(hm, &mut monitors)?;
+
+
+                for monitor in &monitors {
+                    let (min, max, cur) = unsafe {
+                        let mut min = 0;
+                        let mut max = 0;
+                        let mut cur = 0;
+                        let res = GetMonitorBrightness(monitor.hPhysicalMonitor, &mut min, &mut cur, &mut max);
+                        BOOL(res).ok()?;
+                        (min, max, cur)
+                    };
+
+                    println!("{} - {} - {}", min, cur, max);
+                }
+
+
+                DestroyPhysicalMonitors(&monitors)?;
+            }
+
+        }
+
+        Ok::<(), Error>(())
+    })?;
+
+
+    return Ok(());
+
 
     let instance = unsafe { GetModuleHandleW(None)? };
     REGISTER_WINDOW_CLASS.call_once(|| {

@@ -21,7 +21,6 @@ use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandl
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 use crate::error::{OptionExt, Result};
-use crate::monitors::Monitor;
 
 static REGISTER_WINDOW_CLASS: Once = Once::new();
 const WINDOW_CLASS_NAME: PCWSTR = w!("modern-gui.Window");

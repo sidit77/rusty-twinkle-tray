@@ -1,9 +1,8 @@
 use std::fmt::Debug;
+use std::ops::RangeInclusive;
 use std::path::PathBuf;
-use bitflags::bitflags;
-use windows::core::imp::GetLastError;
 use windows::Win32::Devices::Display::*;
-use windows::Win32::Foundation::{BOOL, ERROR_SUCCESS, HANDLE, WIN32_ERROR};
+use windows::Win32::Foundation::{BOOL, HANDLE};
 use windows::Win32::Graphics::Gdi::HMONITOR;
 use crate::error::OptionExt;
 use crate::monitors::gdi::find_all_gdi_monitors;
@@ -72,6 +71,8 @@ impl MonitorConnection {
         Ok(Self { handle: physical_monitor.hPhysicalMonitor })
     }
 
+    /*
+    Seems to be broken
     pub fn get_capabilities(&self) -> Result<MonitorCapabilities> {
         let mut caps = 0;
         let mut temps = 0;
@@ -79,13 +80,38 @@ impl MonitorConnection {
         dbg!(unsafe { GetLastError()});
         Ok(MonitorCapabilities::from_bits_truncate(dbg!(caps)))
     }
+     */
 
-    pub fn get_brightness(&self) -> Result<u32> {
+    pub fn get_brightness(&self) -> Result<(u32, RangeInclusive<u32>)> {
         let mut min = 0;
         let mut cur = 0;
         let mut max = 0;
-        dbg!(unsafe { GetMonitorBrightness(self.handle, &mut min, &mut cur, &mut max) });
-        Ok(cur)
+        unsafe { BOOL(GetMonitorBrightness(self.handle, &mut min, &mut cur, &mut max)).ok()? };
+        Ok((cur, min..=max))
+    }
+
+    pub fn set_brightness(&self, new: u32) -> Result<()> {
+        unsafe { BOOL(SetMonitorBrightness(self.handle, new)).ok()? };
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::error::Result;
+    use super::*;
+
+    #[test]
+    fn caps() -> Result<()> {
+        for monitor in Monitor::find_all()? {
+            println!("{}", monitor.name());
+            let conn = monitor.open()?;
+            let (current, range) = conn.get_brightness()?;
+            println!("\tbrightness: {} / {}-{}", current, range.start(), range.end());
+            conn.set_brightness(*range.start())?;
+            //println!("\tcaps: {:?}", conn.get_capabilities()?);
+        }
+        Ok(())
     }
 
 }
@@ -100,6 +126,7 @@ impl Drop for MonitorConnection {
     }
 }
 
+/*
 bitflags! {
 
     #[derive(Debug, Copy, Clone)]
@@ -118,7 +145,7 @@ bitflags! {
         const RESTORE_FACTORY_DEFAULTS_ENABLES_MONITOR_SETTINGS = MC_RESTORE_FACTORY_DEFAULTS_ENABLES_MONITOR_SETTINGS;
     }
 }
-
+ */
 
 
 type GdiName = WStr<32>;
@@ -222,20 +249,3 @@ mod gdi {
 
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::error::Result;
-    use super::*;
-
-    #[test]
-    fn caps() -> Result<()> {
-        for monitor in Monitor::find_all()? {
-            println!("{}", monitor.name());
-            let conn = monitor.open()?;
-            println!("\tbrightness: {:?}", conn.get_brightness()?);
-            println!("\tcaps: {:?}", conn.get_capabilities()?);
-        }
-        Ok(())
-    }
-
-}

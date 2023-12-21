@@ -6,7 +6,7 @@ mod error;
 use std::mem::{size_of, transmute};
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use std::sync::{Once, OnceLock};
-use windows::core::{PCWSTR, w, Result, ComInterface, HSTRING, Error};
+use windows::core::{PCWSTR, w, ComInterface, HSTRING, Error};
 use windows::Devices::Display::DisplayMonitor;
 use windows::Devices::Enumeration::DeviceInformation;
 use windows::UI::Color;
@@ -23,6 +23,7 @@ use windows_ext::UI::Xaml::{ElementTheme, GridLength, GridUnitType, TextAlignmen
 use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
+use crate::error::{Result, Trace, TracedError};
 
 static REGISTER_WINDOW_CLASS: Once = Once::new();
 const WINDOW_CLASS_NAME: PCWSTR = w!("modern-gui.Window");
@@ -399,11 +400,11 @@ impl Window {
 }
 
 pub trait OptionExt<T> {
-    fn some(self) -> Result<T>;
+    fn some(self) -> windows::core::Result<T>;
 }
 
 impl<T> OptionExt<T> for Option<T> {
-    fn some(self) -> Result<T> {
-        self.ok_or(Error::from(NO_ERROR))
+    fn some(self) -> windows::core::Result<T> {
+        self.ok_or(windows::core::Error::from(NO_ERROR))
     }
 }

@@ -3,9 +3,11 @@
 mod monitors;
 mod error;
 mod utils;
+mod logger;
 
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use std::sync::{Once};
+use log::LevelFilter;
 use windows::core::{PCWSTR, w, ComInterface, HSTRING};
 use windows::UI::Color;
 use windows::UI::Text::FontWeight;
@@ -25,8 +27,9 @@ use crate::error::{OptionExt, Result};
 static REGISTER_WINDOW_CLASS: Once = Once::new();
 const WINDOW_CLASS_NAME: PCWSTR = w!("modern-gui.Window");
 
-
 fn main() -> Result<()> {
+    logger::init(LevelFilter::Trace, LevelFilter::Warn);
+
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 

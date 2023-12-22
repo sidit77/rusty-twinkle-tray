@@ -1,7 +1,12 @@
+pub mod logger;
+pub mod error;
+pub mod panic;
+
 use std::ffi::OsString;
 use std::fmt::{Debug, Display, Formatter, Write};
 use std::os::windows::ffi::OsStringExt;
 use std::path::PathBuf;
+use windows::core::PCWSTR;
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub struct WStr<const N: usize>([u16; N]);
@@ -51,4 +56,33 @@ impl<const N: usize> WStr<N> {
     pub fn to_string_lossy(&self) -> String {
         String::from_utf16_lossy(self.as_slice())
     }
+}
+
+#[derive(Default)]
+pub struct U16TextBuffer {
+    inner: Vec<u16>
+}
+
+impl U16TextBuffer {
+    pub fn clear(&mut self) {
+        self.inner.clear();
+    }
+
+    pub fn finish(&mut self) -> PCWSTR {
+        self.inner.push(0);
+        PCWSTR(self.inner.as_ptr())
+    }
+
+    pub fn write<S: AsRef<str>>(&mut self, text: S) {
+        self.inner.extend(text.as_ref().encode_utf16());
+    }
+
+}
+
+impl Write for U16TextBuffer {
+    fn write_str(&mut self, s: &str) -> std::fmt::Result {
+        self.write(s);
+        Ok(())
+    }
+
 }

@@ -1,18 +1,17 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod monitors;
-mod error;
 mod utils;
-mod logger;
+mod window;
 
+use std::process::ExitCode;
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
-use std::sync::{Once};
+use std::sync::Once;
 use log::LevelFilter;
 use windows::core::{PCWSTR, w, ComInterface, HSTRING};
 use windows::UI::Color;
 use windows::UI::Text::FontWeight;
-use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, RECT, WPARAM};
-use windows::Win32::Graphics::Gdi::UpdateWindow;
+use windows::Win32::Foundation::{HWND, RECT};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUninitialize};
 use windows::Win32::UI::WindowsAndMessaging::*;
@@ -22,64 +21,41 @@ use windows_ext::UI::Xaml::{ElementTheme, GridLength, GridUnitType, TextAlignmen
 use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
-use crate::error::{OptionExt, Result};
+use crate::utils::error::{OptionExt, Result};
+use crate::utils::{logger, panic};
+use crate::window::{check_for_failure, Event, Window, WindowClass};
 
 static REGISTER_WINDOW_CLASS: Once = Once::new();
-const WINDOW_CLASS_NAME: PCWSTR = w!("modern-gui.Window");
+const WM_PANIC: u32 = WM_USER + 1;
 
-fn main() -> Result<()> {
-    logger::init(LevelFilter::Trace, LevelFilter::Warn);
 
+fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
     let instance = unsafe { GetModuleHandleW(None)? };
     REGISTER_WINDOW_CLASS.call_once(|| {
-        let class = WNDCLASSW {
-            hCursor: unsafe { LoadCursorW(None, IDC_ARROW).ok().unwrap() },
-            hInstance: instance.into(),
-            lpszClassName: WINDOW_CLASS_NAME,
-            lpfnWndProc: Some(wnd_proc),
-            ..Default::default()
-        };
-        assert_ne!(unsafe { RegisterClassW(&class) }, 0);
+        XamlWindow::register(instance)
+            .expect("Failed to register window class")
     });
 
-    let hwnd = unsafe {
-        CreateWindowExW(
-            WS_EX_NOREDIRECTIONBITMAP,
-            WINDOW_CLASS_NAME,
-            w!("XAML Test"),
-            WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-            CW_USEDEFAULT, CW_USEDEFAULT, 400, 400,
-            None,
-            None,
-            instance,
-            None
-        )
-    };
-
-
-
-
-    unsafe {
-        ShowWindow(hwnd, SW_SHOW);
-        UpdateWindow(hwnd);
-    };
+    let window = Window::new::<XamlWindow>(instance)?;
 
     let mut message = MSG::default();
 
     unsafe {
         while PeekMessageW(&mut message, None, 0, 0, PM_REMOVE).into() {
+            check_for_failure(&message)?;
             TranslateMessage(&message);
             DispatchMessageW(&message);
         }
-        ShowWindow(hwnd, SW_MINIMIZE);
-        ShowWindow(hwnd, SW_RESTORE);
+        ShowWindow(window.hwnd(), SW_MINIMIZE);
+        ShowWindow(window.hwnd(), SW_RESTORE);
     }
 
     unsafe {
         while GetMessageW(&mut message, None, 0, 0).into() {
+            check_for_failure(&message)?;
             TranslateMessage(&message);
             DispatchMessageW(&message);
         }
@@ -89,60 +65,20 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
-enum Event {
-    Destroy,
-    Resize
-}
-
-impl Event {
-    fn from_msg(message: u32) -> Option<Self> {
-        match message {
-            WM_DESTROY => Some(Self::Destroy),
-            WM_SIZE | WM_SIZING => Some(Self::Resize),
-            _ => None
-        }
-    }
-}
-
-unsafe extern "system" fn wnd_proc(hwnd: HWND, message: u32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
-    match message {
-        WM_NCCREATE => {
-            let window = Window::new(hwnd).expect("Failed to create window");
-            SetWindowLongPtrW(hwnd, GWLP_USERDATA, Box::into_raw(Box::new(window)) as _);
-        },
-        WM_NCDESTROY => {
-            let this = SetWindowLongPtrW(hwnd, GWLP_USERDATA, 0) as *mut Window;
-            if !this.is_null() {
-                let _window = Box::from_raw(this);
-            }
-        },
-        _ => {
-            let this = GetWindowLongPtrW(hwnd, GWLP_USERDATA) as *mut Window;
-            if let Some(this) = this.as_mut() {
-                if let Some(event) = Event::from_msg(message) {
-                    this.on_event(event);
-                    return LRESULT::default();
-                }
-            }
-        }
-    }
-    DefWindowProcW(hwnd, message, wparam, lparam)
-}
-
-struct Window {
+struct XamlWindow {
     parent_hwnd: HWND,
     child_hwnd: HWND,
     _desktop_source: DesktopWindowXamlSource
 }
 
-impl Window {
-    fn new(parent: HWND) -> Result<Self> {
+impl WindowClass for XamlWindow {
+    const NAME: PCWSTR = w!("rusty-twinkle-tray.window");
+
+    fn initialize(parent: HWND) -> Result<Self> {
         let desktop_source = DesktopWindowXamlSource::new()?;
         let interop = desktop_source.cast::<IDesktopWindowXamlSourceNative>()?;
         unsafe { interop.AttachToWindow(parent)?; }
         let island = unsafe { interop.WindowHandle() }?;
-
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
         let stack_panel = StackPanel::new()?;
         stack_panel.SetBackground(&{
@@ -267,7 +203,6 @@ impl Window {
 
         //button.SetContent(&IInspectable::try_from("Hello World")?)?;
         desktop_source.SetContent(&stack_panel)?;
-
         Ok(Self {
             parent_hwnd: parent,
             child_hwnd: island,
@@ -275,18 +210,33 @@ impl Window {
         })
     }
 
-    fn on_event(&mut self, event: Event) {
+    fn on_event(&mut self, event: Event) -> Result<()> {
+
         match event {
             Event::Destroy => unsafe { PostQuitMessage(0); }
             Event::Resize => unsafe {
                 let mut rect = RECT::default();
-                GetClientRect(self.parent_hwnd, &mut rect).unwrap();
+                GetClientRect(self.parent_hwnd, &mut rect)?;
                 SetWindowPos(self.child_hwnd, HWND::default(), 0, 0,
                              rect.right - rect.left,
                              rect.bottom - rect.top,
-                             SWP_SHOWWINDOW).unwrap();
+                             SWP_SHOWWINDOW)?;
             }
         }
+        Ok(())
     }
 }
 
+fn main() -> ExitCode {
+    panic::set_hook();
+    logger::init(LevelFilter::Trace, LevelFilter::Warn);
+
+    match run() {
+        Ok(()) => ExitCode::SUCCESS,
+        Err(err) => {
+            log::error!("{:?}", err);
+            panic::show_msg(format_args!("{}\n at {}", err.error().message(), err.trace()));
+            ExitCode::FAILURE
+        }
+    }
+}

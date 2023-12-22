@@ -4,12 +4,11 @@ use std::path::PathBuf;
 use windows::Win32::Devices::Display::*;
 use windows::Win32::Foundation::{BOOL, HANDLE};
 use windows::Win32::Graphics::Gdi::HMONITOR;
-use crate::error::OptionExt;
 use crate::monitors::gdi::find_all_gdi_monitors;
 use crate::monitors::paths::{find_all_paths, get_gdi_name, get_name_and_path};
-
-use crate::{Result, win_assert};
+use crate::win_assert;
 use crate::utils::WStr;
+use crate::utils::error::{OptionExt, Result};
 
 #[derive(Debug, Clone)]
 pub struct Monitor {
@@ -98,7 +97,7 @@ impl MonitorConnection {
 
 #[cfg(test)]
 mod tests {
-    use crate::error::Result;
+    use crate::utils::error::Result;
     use super::*;
 
     #[test]
@@ -154,7 +153,7 @@ mod paths {
     use std::path::PathBuf;
     use windows::Win32::Devices::Display::{DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME, DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME, DISPLAYCONFIG_DEVICE_INFO_HEADER, DISPLAYCONFIG_MODE_INFO, DISPLAYCONFIG_PATH_INFO, DISPLAYCONFIG_SOURCE_DEVICE_NAME, DISPLAYCONFIG_TARGET_DEVICE_NAME, DisplayConfigGetDeviceInfo, GetDisplayConfigBufferSizes, QDC_ONLY_ACTIVE_PATHS, QueryDisplayConfig};
     use windows::Win32::Foundation::WIN32_ERROR;
-    use crate::error::Result;
+    use crate::utils::error::Result;
     use super::{GdiName, WStr};
 
     pub fn find_all_paths() -> Result<Vec<DISPLAYCONFIG_PATH_INFO>> {
@@ -212,7 +211,7 @@ mod gdi {
     use std::mem::size_of;
     use windows::Win32::Foundation::{BOOL, LPARAM, RECT, TRUE};
     use windows::Win32::Graphics::Gdi::{EnumDisplayMonitors, GetMonitorInfoW, HDC, HMONITOR, MONITORINFO, MONITORINFOEXW};
-    use crate::error::Result;
+    use crate::utils::error::Result;
     use super::GdiName;
 
     fn find_all_hmonitors() -> Result<Vec<HMONITOR>> {

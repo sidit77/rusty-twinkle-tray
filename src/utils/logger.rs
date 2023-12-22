@@ -84,35 +84,11 @@ pub fn init(console_level: LevelFilter, debugger_level: LevelFilter) -> bool {
 mod debugger {
     use std::cell::Cell;
     use std::fmt::{Arguments, Write};
-    use windows::core::PCWSTR;
     use windows::Win32::System::Diagnostics::Debug::OutputDebugStringW;
+    use crate::utils::U16TextBuffer;
 
-    #[derive(Default)]
-    struct Buffer {
-        inner: Vec<u16>
-    }
 
-    impl Buffer {
-        pub fn clear(&mut self) {
-            self.inner.clear();
-        }
-
-        pub fn finish(&mut self) -> PCWSTR {
-            self.inner.push(0);
-            PCWSTR(self.inner.as_ptr())
-        }
-
-    }
-
-    impl Write for Buffer {
-        fn write_str(&mut self, s: &str) -> std::fmt::Result {
-            self.inner.extend(s.encode_utf16());
-            Ok(())
-        }
-
-    }
-
-    fn print_with_buffer(buffer: &mut Buffer, args: Arguments<'_>) {
+    fn print_with_buffer(buffer: &mut U16TextBuffer, args: Arguments<'_>) {
         buffer.clear();
         buffer.write_fmt(args)
             .expect("Failed to format log string");
@@ -120,12 +96,12 @@ mod debugger {
     }
 
     pub fn print(args: Arguments<'_>) {
-        thread_local! { static LOCAL_BUFFER: Cell<Option<Buffer>> = Default::default() }
+        thread_local! { static LOCAL_BUFFER: Cell<Option<U16TextBuffer>> = Default::default() }
         LOCAL_BUFFER.try_with(|tls| {
             let mut buffer = tls.take().unwrap_or_default();
             print_with_buffer(&mut buffer, args);
             tls.set(Some(buffer));
-        }).unwrap_or_else(|_| print_with_buffer(&mut Buffer::default(), args));
+        }).unwrap_or_else(|_| print_with_buffer(&mut Default::default(), args));
     }
 
 }

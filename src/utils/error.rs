@@ -51,6 +51,18 @@ pub struct TracedError {
     backtrace: Trace
 }
 
+impl TracedError {
+
+    pub fn error(&self) -> &Error {
+        &self.inner
+    }
+
+    pub fn trace(&self) -> &Trace {
+        &self.backtrace
+    }
+
+}
+
 impl Debug for TracedError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self.backtrace.is_backtrace() {
@@ -109,7 +121,7 @@ impl<T> OptionExt<T> for Option<T> {
 macro_rules! win_assert {
     ($cond:expr) => {
         if !($cond) {
-            return Err(windows::core::Error::from(windows::Win32::Foundation::ERROR_ASSERTION_FAILURE).into());
+            Err(windows::core::Error::from(windows::Win32::Foundation::ERROR_ASSERTION_FAILURE))?;
         }
     };
 }

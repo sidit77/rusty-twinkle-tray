@@ -17,7 +17,7 @@ use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUnin
 use windows::Win32::UI::WindowsAndMessaging::*;
 use windows_ext::UI::Xaml::Controls::{ColumnDefinition, FontIcon, Grid, Orientation, Slider, StackPanel, TextBlock};
 use windows_ext::UI::Xaml::Hosting::{DesktopWindowXamlSource, WindowsXamlManager};
-use windows_ext::UI::Xaml::{ElementTheme, GridLength, GridUnitType, TextAlignment, Thickness, VerticalAlignment};
+use windows_ext::UI::Xaml::{ElementTheme, GridLength, GridUnitType, HorizontalAlignment, TextAlignment, Thickness, VerticalAlignment};
 use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
@@ -179,7 +179,7 @@ impl WindowClass for XamlWindow {
                     slider.SetValue2(slider.Value()? + delta as f64)?;
                     Ok(())
                 }))?;
-                //text_box.TextChanging(&TypedEventHandler::new({
+                // text_box.TextChanging(&TypedEventHandler::new({
                 //    let slider = slider.clone();
                 //    move |sender: &Option<TextBox>, _| {
                 //        let sender = sender.as_ref().some()?;
@@ -192,11 +192,20 @@ impl WindowClass for XamlWindow {
                 //        }
                 //        Ok(())
                 //    }
-                //}))?;
+                // }))?;
                 let children = grid.Children()?;
                 children.Append(&slider)?;
                 children.Append(&text_box)?;
                 grid
+            })?;
+            // Will need to be moved to new row eventually
+            children.Append(&{
+                let icon = FontIcon::new()?;
+                icon.SetGlyph(&HSTRING::from("\u{E713}"))?; // Settings icon
+                icon.SetFontWeight(FontWeight { Weight: 500 })?;
+                icon.SetHorizontalAlignment(HorizontalAlignment::Right)?;
+                icon.SetVerticalAlignment(VerticalAlignment::Bottom)?;
+                icon
             })?;
             stack_panel
         })?;

@@ -1,12 +1,14 @@
 use std::any::Any;
 use std::panic::{catch_unwind, resume_unwind};
 use std::process::exit;
+use std::sync::Once;
 use windows::core::{PCWSTR, w};
 use windows::Win32::Foundation::{HMODULE, HWND, LPARAM, LRESULT, WPARAM};
 use windows::Win32::Graphics::Gdi::UpdateWindow;
+use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::WindowsAndMessaging::*;
 use crate::utils::error::{Result, TracedError};
-use crate::{win_assert, WM_PANIC};
+use crate::{win_assert};
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum Event {
@@ -24,7 +26,83 @@ impl Event {
     }
 }
 
+pub struct Window {
+    hwnd: HWND
+}
 
+impl Window {
+    pub fn new() -> Result<Self> {
+        let instance = unsafe { GetModuleHandleW(None)? };
+
+        static REGISTER_WINDOW_CLASS: Once = Once::new();
+        REGISTER_WINDOW_CLASS.call_once(|| {
+            WindowClass::register(instance)
+                .unwrap_or_else(|err| log::warn!("Failed to register window class: {}", err));
+        });
+
+        let hwnd = unsafe {
+            CreateWindowExW(
+                WS_EX_NOREDIRECTIONBITMAP,
+                WindowClass::NAME,
+                w!("XAML Test"),
+                WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+                CW_USEDEFAULT, CW_USEDEFAULT, 400, 400,
+                None,
+                None,
+                instance,
+                None
+            )
+        };
+
+        win_assert!(hwnd != HWND::default());
+
+        unsafe {
+            ShowWindow(hwnd, SW_SHOW);
+            UpdateWindow(hwnd);
+        }
+
+        Ok(Self {
+            hwnd,
+        })
+    }
+}
+
+impl Drop for Window {
+    fn drop(&mut self) {
+        unsafe {
+            if IsWindow(self.hwnd).as_bool() {
+                DestroyWindow(self.hwnd)
+                    .unwrap_or_else(|err| log::warn!("Failed to destroy window: {}", err));
+            }
+        }
+    }
+}
+
+struct WindowClass {
+
+}
+
+impl WindowClass {
+    const NAME: PCWSTR = w!("rusty-twinkle-tray.window");
+
+    fn register(instance: HMODULE) -> Result<()> {
+        let class = WNDCLASSW {
+            hCursor: HCURSOR::default(),
+            hInstance: instance.into(),
+            lpszClassName: Self::NAME,
+            lpfnWndProc: Some(Self::wnd_proc),
+            ..Default::default()
+        };
+        win_assert!(unsafe { RegisterClassW(&class) } != 0);
+        Ok(())
+    }
+
+    unsafe extern "system" fn wnd_proc(hwnd: HWND, message: u32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
+        DefWindowProcW(hwnd, message, wparam, lparam)
+    }
+}
+
+/*
 pub trait WindowClass: Sized {
     const NAME: PCWSTR;
 
@@ -170,3 +248,5 @@ pub fn check_for_failure(msg: &MSG) -> Result<()> {
         Ok(())
     }
 }
+
+ */

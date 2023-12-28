@@ -1,54 +1,39 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod monitors;
+//mod monitors;
 mod utils;
 mod window;
-mod tray;
+//mod tray;
 mod framwork;
 
 use std::process::ExitCode;
-use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use std::sync::Once;
 use std::time::Duration;
 use async_io::Timer;
 use log::LevelFilter;
-use windows::core::{PCWSTR, w, ComInterface, HSTRING};
-use windows::UI::Color;
-use windows::UI::Text::FontWeight;
-use windows::Win32::Foundation::{HWND, RECT};
-use windows::Win32::System::LibraryLoader::GetModuleHandleW;
-use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUninitialize};
 use windows::Win32::UI::WindowsAndMessaging::*;
-use windows_ext::UI::Xaml::Controls::{ColumnDefinition, FontIcon, Grid, Orientation, Slider, StackPanel, TextBlock};
-use windows_ext::UI::Xaml::Hosting::{DesktopWindowXamlSource, WindowsXamlManager};
-use windows_ext::UI::Xaml::{ElementTheme, GridLength, GridUnitType, TextAlignment, Thickness, VerticalAlignment};
-use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
-use windows_ext::UI::Xaml::Input::PointerEventHandler;
-use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 use crate::framwork::block_on;
-use crate::tray::tray;
-use crate::utils::error::{OptionExt, Result};
+use crate::utils::error::{Result};
 use crate::utils::{logger, panic};
-use crate::utils::panic::show_msg;
-use crate::window::{check_for_failure, Event, Window, WindowClass};
 use futures_lite::StreamExt;
-
-static REGISTER_WINDOW_CLASS: Once = Once::new();
-const WM_PANIC: u32 = WM_USER + 1;
-
-
-fn run() -> Result<()> {
-    return block_on(async {
-        println!("Starting");
-        Timer::interval(Duration::from_millis(500))
-            .take(10)
-            .enumerate()
-            .for_each(|(i, _)| println!("Tick {}", i))
-            .await;
-        Ok(())
-    });
+use windows::Win32::System::LibraryLoader::GetModuleHandleW;
+use crate::window::Window;
 
 
+async fn run() -> Result<()> {
+    println!("Starting");
+
+    let window = Window::new()?;
+
+
+    Timer::interval(Duration::from_millis(500))
+        .take(10)
+        .enumerate()
+        .for_each(|(i, _)| println!("Tick {}", i))
+        .await;
+    Ok(())
+
+/*
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
@@ -84,8 +69,10 @@ fn run() -> Result<()> {
 
     unsafe { RoUninitialize() }
     Ok(())
+ */
 }
 
+/*
 struct XamlWindow {
     parent_hwnd: HWND,
     child_hwnd: HWND,
@@ -248,11 +235,12 @@ impl WindowClass for XamlWindow {
     }
 }
 
+ */
 fn main() -> ExitCode {
     panic::set_hook();
     logger::init(LevelFilter::Trace, LevelFilter::Warn);
 
-    match run() {
+    match block_on(run()) {
         Ok(()) => ExitCode::SUCCESS,
         Err(err) => {
             log::error!("{:?}", err);

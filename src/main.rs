@@ -3,6 +3,7 @@
 //mod monitors;
 mod utils;
 
+use std::mem::size_of;
 use std::process::ExitCode;
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIcon, TrayIconBuilder, TrayResult};
 use log::LevelFilter;
@@ -13,13 +14,14 @@ use windows::Foundation::{EventHandler};
 use windows::UI::Color;
 use windows::UI::Text::FontWeight;
 use windows::Win32::Foundation::{HWND};
+use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, HMONITOR, MONITORINFO};
 use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUninitialize};
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
-use windows::Win32::UI::WindowsAndMessaging::{AnimateWindow, AW_ACTIVATE, AW_SLIDE, AW_VER_NEGATIVE, SetWindowPos, SWP_SHOWWINDOW, WHEEL_DELTA};
+use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW, WHEEL_DELTA};
 use winit::dpi::{PhysicalPosition, PhysicalSize};
 use winit::event::{Event, WindowEvent};
-use winit::event_loop::{EventLoop, EventLoopBuilder};
-use winit::platform::windows::{WindowBuilderExtWindows};
+use winit::event_loop::{DeviceEvents, EventLoop, EventLoopBuilder};
+use winit::platform::windows::{MonitorHandleExtWindows, WindowBuilderExtWindows};
 use winit::raw_window_handle::{HasWindowHandle, RawWindowHandle};
 use winit::window::{Window, WindowBuilder, WindowButtons};
 use windows_ext::UI::Xaml::Controls::{ColumnDefinition, FontIcon, Grid, Orientation, Slider, StackPanel, TextBlock};
@@ -45,6 +47,8 @@ fn run() -> Result<()> {
         .build()
         .unwrap();
 
+    event_loop.listen_device_events(DeviceEvents::Never);
+
     let _tray = TrayIconBuilder::new()
         .with_tooltip("Change Brightness")
         .with_icon(Icon::from_rgba(vec![255u8; 4 * 32 * 32], 32, 32).unwrap())
@@ -60,13 +64,14 @@ fn run() -> Result<()> {
 
     let window = WindowBuilder::new()
         .with_title("XAML Window")
-        .with_position(PhysicalPosition::new(1508, 620))
-        .with_inner_size(PhysicalSize::new(400, 400))
+        //Make the window "invisible" to hide the creation without breaking stuff
+        .with_position(PhysicalPosition::new(1000000, 0))
+        .with_inner_size(PhysicalSize::new(400, 250))
         .with_no_redirection_bitmap(true)
         .with_decorations(false)
         .with_undecorated_shadow(true)
         .with_skip_taskbar(true)
-        .with_visible(false)
+        .with_visible(true)
         .with_resizable(false)
         .with_enabled_buttons(WindowButtons::empty())
         .build(&event_loop)
@@ -84,13 +89,11 @@ fn run() -> Result<()> {
             Ok(())
         }
     }))?;
+    window.set_visible(true);
 
     event_loop.run(|event, target | {
         match event {
             Event::WindowEvent { event, ..} => match event {
-                WindowEvent::CloseRequested => {
-                    window.set_visible(false);
-                },
                 WindowEvent::Resized(new)  => {
                     gui.resize(new).unwrap();
                 },
@@ -102,8 +105,28 @@ fn run() -> Result<()> {
             Event::UserEvent(event) => match event {
                 CustomEvent::Quit => target.exit(),
                 CustomEvent::Show => {
-                    window.set_visible(true);
-                    window.focus_window();
+                    if let Some(monitor) = target.primary_monitor() {
+                        let workspace = {
+                            let mut mi = MONITORINFO {
+                                cbSize: size_of::<MONITORINFO>() as u32,
+                                ..Default::default()
+                            };
+                            unsafe { GetMonitorInfoW(HMONITOR(monitor.hmonitor()), &mut mi).ok().unwrap() };
+                            mi.rcWork
+                        };
+
+                        let gap = 14;
+                        let size = window.outer_size();
+
+                        window.set_outer_position(PhysicalPosition::new(
+                            workspace.right - gap - size.width as i32,
+                            workspace.bottom - gap - size.height as i32));
+                        window.set_visible(true);
+                        window.focus_window();
+                    } else {
+                        log::warn!("Can't find primary monitor");
+                    }
+
                 }
                 CustomEvent::FocusLost => {
                     window.set_visible(false);

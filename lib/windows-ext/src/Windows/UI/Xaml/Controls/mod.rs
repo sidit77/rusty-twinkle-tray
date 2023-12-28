@@ -36040,6 +36040,14 @@ impl ColumnDefinitionCollection {
                 .ok()
         }
     }
+    pub fn Clear(&self) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Clear)(::windows_core::Interface::as_raw(this))
+                .ok()
+        }
+    }
 }
 impl ::core::cmp::PartialEq for ColumnDefinitionCollection {
     fn eq(&self, other: &Self) -> bool {
@@ -51518,7 +51526,264 @@ unsafe impl ::core::marker::Send for RichTextBlockOverflow {}
 unsafe impl ::core::marker::Sync for RichTextBlockOverflow {}
 #[repr(transparent)]
 pub struct RowDefinition(::windows_core::IUnknown);
-impl RowDefinition {}
+impl RowDefinition {
+    pub fn new() -> ::windows_core::Result<Self> {
+        Self::IActivationFactory(|f| f.ActivateInstance::<Self>())
+    }
+    fn IActivationFactory<
+        R,
+        F: FnOnce(&::windows_core::imp::IGenericFactory) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            RowDefinition,
+            ::windows_core::imp::IGenericFactory,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    pub fn GetValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetValue<P0, P1>(&self, dp: P0, value: P1) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+        P1: ::windows_core::IntoParam<::windows_core::IInspectable>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ClearValue<P0>(&self, dp: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ClearValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ReadLocalValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ReadLocalValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn GetAnimationBaseValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetAnimationBaseValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn RegisterPropertyChangedCallback<P0, P1>(
+        &self,
+        dp: P0,
+        callback: P1,
+    ) -> ::windows_core::Result<i64>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+        P1: ::windows_core::IntoParam<super::DependencyPropertyChangedCallback>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject2,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RegisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    callback.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn UnregisterPropertyChangedCallback<P0>(
+        &self,
+        dp: P0,
+        token: i64,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject2,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .UnregisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    token,
+                )
+                .ok()
+        }
+    }
+    pub fn Height(&self) -> ::windows_core::Result<super::GridLength> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Height)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetHeight(&self, value: super::GridLength) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetHeight)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn MaxHeight(&self) -> ::windows_core::Result<f64> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .MaxHeight)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetMaxHeight(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetMaxHeight)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn MinHeight(&self) -> ::windows_core::Result<f64> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .MinHeight)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetMinHeight(&self, value: f64) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetMinHeight)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn ActualHeight(&self) -> ::windows_core::Result<f64> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ActualHeight)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn HeightProperty() -> ::windows_core::Result<super::DependencyProperty> {
+        Self::IRowDefinitionStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .HeightProperty)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        })
+    }
+    pub fn MaxHeightProperty() -> ::windows_core::Result<super::DependencyProperty> {
+        Self::IRowDefinitionStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .MaxHeightProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn MinHeightProperty() -> ::windows_core::Result<super::DependencyProperty> {
+        Self::IRowDefinitionStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .MinHeightProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn IRowDefinitionStatics<
+        R,
+        F: FnOnce(&IRowDefinitionStatics) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            RowDefinition,
+            IRowDefinitionStatics,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::core::cmp::PartialEq for RowDefinition {
     fn eq(&self, other: &Self) -> bool {
         self.0 == other.0
@@ -51557,7 +51822,45 @@ unsafe impl ::core::marker::Send for RowDefinition {}
 unsafe impl ::core::marker::Sync for RowDefinition {}
 #[repr(transparent)]
 pub struct RowDefinitionCollection(::windows_core::IUnknown);
-impl RowDefinitionCollection {}
+impl RowDefinitionCollection {
+    pub fn First(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::super::Foundation::Collections::IIterator<RowDefinition>,
+    > {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::super::Foundation::Collections::IIterable<RowDefinition>,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .First)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn Append<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<RowDefinition>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Append)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn Clear(&self) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Clear)(::windows_core::Interface::as_raw(this))
+                .ok()
+        }
+    }
+}
 impl ::core::cmp::PartialEq for RowDefinitionCollection {
     fn eq(&self, other: &Self) -> bool {
         self.0 == other.0

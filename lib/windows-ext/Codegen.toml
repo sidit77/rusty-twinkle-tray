@@ -46,7 +46,8 @@ FocusManager = true
 LosingFocusEventArgs = true
 
 UIElementCollection = ["First", "Append"]
-ColumnDefinitionCollection = ["First", "Append"]
+ColumnDefinitionCollection = ["First", "Append", "Clear"]
+RowDefinitionCollection = ["First", "Append", "Clear"]
 ColorPaletteResources = ["First"]
 ResourceDictionary = ["First"]
 
@@ -62,6 +63,7 @@ SolidColorBrush = true
 StackPanel = true
 Grid = true
 ColumnDefinition = true
+RowDefinition = true
 FontIcon = true
 TextBlock = true
 TextBox = true

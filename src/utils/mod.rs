@@ -6,8 +6,10 @@ use std::ffi::OsString;
 use std::fmt::{Debug, Display, Formatter, Write};
 use std::os::windows::ffi::OsStringExt;
 use std::path::PathBuf;
+use betrayer::{TrayEvent, TrayIcon, TrayIconBuilder, TrayResult};
 
 use windows::core::PCWSTR;
+use winit::event_loop::EventLoop;
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub struct WStr<const N: usize>([u16; N]);
@@ -81,5 +83,29 @@ impl Write for U16TextBuffer {
     fn write_str(&mut self, s: &str) -> std::fmt::Result {
         self.write(s);
         Ok(())
+    }
+}
+
+pub trait TrayIconBuilderExt<T> {
+    fn build_event_loop<E, F>(self, event_loop: &EventLoop<E>, map: F) -> TrayResult<TrayIcon<T>>
+        where
+            F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static,
+            E: Send;
+}
+
+impl<T: Clone + Send + 'static> TrayIconBuilderExt<T> for TrayIconBuilder<T> {
+    fn build_event_loop<E, F>(self, event_loop: &EventLoop<E>, map: F) -> TrayResult<TrayIcon<T>>
+        where
+            F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static,
+            E: Send
+    {
+        let proxy = event_loop.create_proxy();
+        self.build(move |event| {
+            if let Some(event) = map(event) {
+                proxy
+                    .send_event(event)
+                    .unwrap_or_else(|err| log::warn!("Failed to forward event: {}", err));
+            }
+        })
     }
 }

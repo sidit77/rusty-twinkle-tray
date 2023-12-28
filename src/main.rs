@@ -6,7 +6,7 @@ mod utils;
 use std::mem::size_of;
 use std::process::ExitCode;
 
-use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIcon, TrayIconBuilder, TrayResult};
+use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use log::LevelFilter;
 use windows::core::{ComInterface, HSTRING};
 use windows::Foundation::EventHandler;
@@ -26,13 +26,13 @@ use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 use windows_ext::UI::Xaml::{ElementTheme, GridLength, GridUnitType, HorizontalAlignment, TextAlignment, Thickness, VerticalAlignment};
 use winit::dpi::{PhysicalPosition, PhysicalSize};
 use winit::event::{Event, WindowEvent};
-use winit::event_loop::{DeviceEvents, EventLoop, EventLoopBuilder};
+use winit::event_loop::{DeviceEvents, EventLoopBuilder};
 use winit::platform::windows::{MonitorHandleExtWindows, WindowBuilderExtWindows};
 use winit::raw_window_handle::{HasWindowHandle, RawWindowHandle};
 use winit::window::{Window, WindowBuilder, WindowButtons};
 
 use crate::utils::error::{OptionExt, Result};
-use crate::utils::{logger, panic};
+use crate::utils::{logger, panic, TrayIconBuilderExt};
 
 #[derive(Debug, Copy, Clone)]
 enum CustomEvent {
@@ -363,29 +363,7 @@ impl XamlGui {
     }
 }
 
-trait TrayIconBuilderExt<T> {
-    fn build_event_loop<E, F>(self, event_loop: &EventLoop<E>, map: F) -> TrayResult<TrayIcon<T>>
-    where
-        F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static,
-        E: Send;
-}
 
-impl<T: Clone + Send + 'static> TrayIconBuilderExt<T> for TrayIconBuilder<T> {
-    fn build_event_loop<E, F>(self, event_loop: &EventLoop<E>, map: F) -> TrayResult<TrayIcon<T>>
-    where
-        F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static,
-        E: Send
-    {
-        let proxy = event_loop.create_proxy();
-        self.build(move |event| {
-            if let Some(event) = map(event) {
-                proxy
-                    .send_event(event)
-                    .unwrap_or_else(|err| log::warn!("Failed to forward event: {}", err));
-            }
-        })
-    }
-}
 
 fn main() -> ExitCode {
     panic::set_hook();

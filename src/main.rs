@@ -80,6 +80,25 @@ impl WindowClass for XamlWindow {
         unsafe { interop.AttachToWindow(parent)?; }
         let island = unsafe { interop.WindowHandle() }?;
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
+        let main_grid = Grid::new()?; // Create a new grid to hold the main stackpanel and the bottom bar
+        main_grid.SetBackground(&{
+            let brush = AcrylicBrush::new()?;
+            let color = Color { R: 70, G: 70, B: 70, A: 255 };
+            brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
+            brush.SetFallbackColor(color)?;
+            brush.SetTintColor(color)?;
+            brush.SetTintOpacity(0.7)?;
+            brush
+        })?;
+        main_grid.SetRequestedTheme(ElementTheme::Dark)?;
+        main_grid.SetRowSpacing(8.0)?;
+        main_grid.SetPadding(Thickness {
+            Left: 8.0,
+            Top: 8.0,
+            Right: 8.0,
+            Bottom: 8.0,
+        })?;
+
         let stack_panel = StackPanel::new()?;
         stack_panel.SetBackground(&{
             let brush = AcrylicBrush::new()?;
@@ -90,6 +109,7 @@ impl WindowClass for XamlWindow {
             brush.SetTintOpacity(0.7)?;
             brush
         })?;
+
         stack_panel.SetRequestedTheme(ElementTheme::Dark)?;
         stack_panel.SetSpacing(8.0)?;
         stack_panel.SetPadding(Thickness {
@@ -198,20 +218,29 @@ impl WindowClass for XamlWindow {
                 children.Append(&text_box)?;
                 grid
             })?;
-            // Will need to be moved to new row eventually
-            children.Append(&{
-                let icon = FontIcon::new()?;
-                icon.SetGlyph(&HSTRING::from("\u{E713}"))?; // Settings icon
-                icon.SetFontWeight(FontWeight { Weight: 500 })?;
-                icon.SetHorizontalAlignment(HorizontalAlignment::Right)?;
-                icon.SetVerticalAlignment(VerticalAlignment::Bottom)?;
-                icon
-            })?;
             stack_panel
         })?;
 
+        // Create a new stack panel for the bottom bar
+        let bottom_bar = StackPanel::new()?;
+        bottom_bar.SetOrientation(Orientation::Horizontal)?;
+        bottom_bar.SetVerticalAlignment(VerticalAlignment::Bottom)?;
+        bottom_bar.SetHorizontalAlignment(HorizontalAlignment::Right)?;
+        let bottom_bar_children = bottom_bar.Children()?;
+        bottom_bar_children.Append(&{
+            let icon = FontIcon::new()?;
+            icon.SetGlyph(&HSTRING::from("\u{E713}"))?; // Modern Windows 11 Settings icon
+            icon.SetFontWeight(FontWeight { Weight: 500 })?; // Add more padding from margins
+            icon
+        })?;
+
+        // Add the main stack panel and the bottom bar to the main grid
+        let main_grid_children = main_grid.Children()?;
+        main_grid_children.Append(&stack_panel)?;
+        main_grid_children.Append(&bottom_bar)?;
+
         //button.SetContent(&IInspectable::try_from("Hello World")?)?;
-        desktop_source.SetContent(&stack_panel)?;
+        desktop_source.SetContent(&main_grid)?;
         Ok(Self {
             parent_hwnd: parent,
             child_hwnd: island,

@@ -175,7 +175,7 @@ impl XamlGui {
         let bottom_bar = ui::container::Grid::new()?
             .with_padding(20.0)?
             .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
-            .with_background(&SolidColorBrush::CreateInstanceWithColor(Color { R: 60, G: 60, B: 60, A: 255})?)?
+            .with_background(&SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 70})?)?
             .with_child(&{
                 let text_block = TextBlock::new()?;
                 text_block.SetText(&HSTRING::from("Adjust Brightness"))?;

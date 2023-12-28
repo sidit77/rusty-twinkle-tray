@@ -3,10 +3,14 @@
 mod monitors;
 mod utils;
 mod window;
+mod tray;
+mod framwork;
 
 use std::process::ExitCode;
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use std::sync::Once;
+use std::time::Duration;
+use async_io::Timer;
 use log::LevelFilter;
 use windows::core::{PCWSTR, w, ComInterface, HSTRING};
 use windows::UI::Color;
@@ -21,15 +25,30 @@ use windows_ext::UI::Xaml::{ElementTheme, GridLength, GridUnitType, TextAlignmen
 use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
+use crate::framwork::block_on;
+use crate::tray::tray;
 use crate::utils::error::{OptionExt, Result};
 use crate::utils::{logger, panic};
+use crate::utils::panic::show_msg;
 use crate::window::{check_for_failure, Event, Window, WindowClass};
+use futures_lite::StreamExt;
 
 static REGISTER_WINDOW_CLASS: Once = Once::new();
 const WM_PANIC: u32 = WM_USER + 1;
 
 
 fn run() -> Result<()> {
+    return block_on(async {
+        println!("Starting");
+        Timer::interval(Duration::from_millis(500))
+            .take(10)
+            .enumerate()
+            .for_each(|(i, _)| println!("Tick {}", i))
+            .await;
+        Ok(())
+    });
+
+
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
@@ -40,6 +59,8 @@ fn run() -> Result<()> {
     });
 
     let window = Window::new::<XamlWindow>(instance)?;
+
+    tray(instance, window.hwnd())?;
 
     let mut message = MSG::default();
 

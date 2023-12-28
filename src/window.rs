@@ -32,9 +32,8 @@ pub trait WindowClass: Sized {
     fn on_event(&mut self, event: Event) -> Result<()>;
 
     fn register(instance: HMODULE) -> Result<()> {
-        let cursor = unsafe { LoadCursorW(None, IDC_ARROW)? };
         let class = WNDCLASSW {
-            hCursor: cursor,
+            hCursor: HCURSOR::default(),
             hInstance: instance.into(),
             lpszClassName: Self::NAME,
             lpfnWndProc: Some(unsafe_wnd_proc::<Self>),

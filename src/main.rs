@@ -2,22 +2,18 @@
 
 //mod monitors;
 mod utils;
-mod window;
+//mod window;
 //mod tray;
 mod framwork;
 
 use std::process::ExitCode;
-use std::sync::Once;
 use std::time::Duration;
 use async_io::Timer;
 use log::LevelFilter;
-use windows::Win32::UI::WindowsAndMessaging::*;
-use crate::framwork::block_on;
+use crate::framwork::{block_on, Event, Window};
 use crate::utils::error::{Result};
 use crate::utils::{logger, panic};
 use futures_lite::StreamExt;
-use windows::Win32::System::LibraryLoader::GetModuleHandleW;
-use crate::window::Window;
 
 
 async fn run() -> Result<()> {
@@ -25,12 +21,17 @@ async fn run() -> Result<()> {
 
     let window = Window::new()?;
 
-
-    Timer::interval(Duration::from_millis(500))
-        .take(10)
-        .enumerate()
-        .for_each(|(i, _)| println!("Tick {}", i))
+    window
+        .events()
+        .take_while(|e| *e != Event::Close)
+        .for_each(|e| println!("{:?}", e))
         .await;
+
+    //Timer::interval(Duration::from_millis(500))
+    //    .take(10)
+    //    .enumerate()
+    //    .for_each(|(i, _)| println!("Tick {}"))
+    //    .await;
     Ok(())
 
 /*

@@ -1,3 +1,6 @@
+mod buffer;
+mod window;
+
 use std::future::Future;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -10,6 +13,7 @@ use windows::Win32::System::Threading::{CREATE_EVENT_INITIAL_SET, CREATE_EVENT_M
 use windows::Win32::UI::WindowsAndMessaging::{DispatchMessageW, MSG, MsgWaitForMultipleObjects, PeekMessageW, PM_REMOVE, QS_ALLINPUT, TranslateMessage};
 use crate::utils::error::Result;
 
+pub use window::{Window, WindowOptions, Event};
 
 struct LoopWaker {
     event: HANDLE,
@@ -81,21 +85,37 @@ pub fn block_on<T, F: Future<Output=Result<T>>>(fut: F) -> Result<T> {
     let notifier = Arc::new(LoopWaker::new()?);
     let waker = Waker::from(notifier.clone());
 
+
     loop {
+        notifier.awake.store(true, Ordering::SeqCst);
+
+        while {
+            let mut cont = !pump_events();
+            if notifier.notified.swap(false, Ordering::SeqCst) {
+                println!("Schedule future");
+                let mut cx = Context::from_waker(&waker);
+                match fut.as_mut().poll(&mut cx) {
+                    Poll::Ready(result) => return result,
+                    Poll::Pending => {
+                        cont |= true;
+                    }//pump_events()
+                }
+            } else {
+                cont |= false;
+            }
+            cont
+        } {}
+
+        notifier.reset();
+        notifier.awake.store(false, Ordering::SeqCst);
+
         match wait_for(&[notifier.handle()], None)? {
             WaitResult::Handle(_) => {
-                notifier.awake.store(true, Ordering::SeqCst);
-                while notifier.notified.swap(false, Ordering::SeqCst) {
-                    let mut cx = Context::from_waker(&waker);
-                    match fut.as_mut().poll(&mut cx) {
-                        Poll::Ready(result) => return result,
-                        Poll::Pending => pump_events()
-                    }
-                }
-                notifier.reset();
-                notifier.awake.store(false, Ordering::SeqCst);
+
             }
-            WaitResult::Message => pump_events(),
+            WaitResult::Message => {
+
+            },
             WaitResult::Timeout => panic!("No timers yet! Why was this called?")
         }
     }
@@ -136,12 +156,20 @@ fn wait_for(handles: &[HANDLE], timeout: Option<Duration>) -> windows::core::Res
     }
 }
 
-fn pump_events() {
+fn pump_events() -> bool {
+    let mut limit = 10;
     let mut message = MSG::default();
     unsafe {
         while PeekMessageW(&mut message, None, 0, 0, PM_REMOVE).into() {
             TranslateMessage(&message);
             DispatchMessageW(&message);
+            println!("loop2");
+            limit -= 1;
+            if limit <= 0 {
+                println!("pausing");
+                return false;
+            }
         }
     }
+    true
 }

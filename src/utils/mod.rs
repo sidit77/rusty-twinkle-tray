@@ -1,11 +1,12 @@
-pub mod logger;
 pub mod error;
+pub mod logger;
 pub mod panic;
 
 use std::ffi::OsString;
 use std::fmt::{Debug, Display, Formatter, Write};
 use std::os::windows::ffi::OsStringExt;
 use std::path::PathBuf;
+
 use windows::core::PCWSTR;
 
 #[derive(Copy, Clone, PartialEq, Eq)]
@@ -46,10 +47,7 @@ impl<const N: usize> From<WStr<N>> for PathBuf {
 
 impl<const N: usize> WStr<N> {
     pub fn as_slice(&self) -> &[u16] {
-        let end = self.0
-            .iter()
-            .position(|c| *c == 0)
-            .unwrap_or(self.0.len());
+        let end = self.0.iter().position(|c| *c == 0).unwrap_or(self.0.len());
         &self.0[..end]
     }
 
@@ -77,7 +75,6 @@ impl U16TextBuffer {
     pub fn write<S: AsRef<str>>(&mut self, text: S) {
         self.inner.extend(text.as_ref().encode_utf16());
     }
-
 }
 
 impl Write for U16TextBuffer {
@@ -85,5 +82,4 @@ impl Write for U16TextBuffer {
         self.write(s);
         Ok(())
     }
-
 }

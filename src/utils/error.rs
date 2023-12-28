@@ -1,6 +1,7 @@
 use std::backtrace::{Backtrace, BacktraceStatus};
 use std::fmt::{Debug, Display, Formatter};
 use std::panic::Location;
+
 use windows::core::Error;
 use windows::Win32::Foundation::NO_ERROR;
 
@@ -12,7 +13,6 @@ pub enum Trace {
 }
 
 impl Trace {
-
     #[track_caller]
     pub fn capture() -> Self {
         let capture = Backtrace::capture();
@@ -25,7 +25,6 @@ impl Trace {
     pub fn is_backtrace(&self) -> bool {
         matches!(self, Self::Backtrace(_))
     }
-
 }
 
 impl Debug for Trace {
@@ -52,7 +51,6 @@ pub struct TracedError {
 }
 
 impl TracedError {
-
     pub fn error(&self) -> &Error {
         &self.inner
     }
@@ -60,7 +58,6 @@ impl TracedError {
     pub fn trace(&self) -> &Trace {
         &self.backtrace
     }
-
 }
 
 impl Debug for TracedError {
@@ -94,7 +91,7 @@ impl<T: Into<Error>> From<T> for TracedError {
     fn from(value: T) -> Self {
         Self {
             inner: value.into(),
-            backtrace: Trace::capture(),
+            backtrace: Trace::capture()
         }
     }
 }

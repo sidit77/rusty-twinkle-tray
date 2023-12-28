@@ -1,0 +1,8 @@
+trailing_comma = "Never"
+fn_params_layout = "Compressed"
+imports_granularity = "Module"
+group_imports = "StdExternalCrate"
+unstable_features = true
+max_width = 150
+version = "Two"
+chain_width=60

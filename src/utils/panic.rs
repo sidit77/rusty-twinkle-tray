@@ -2,8 +2,10 @@ use std::backtrace::{Backtrace, BacktraceStatus};
 use std::fmt::{Arguments, Write};
 //use std::panic::take_hook as take_panic_hook;
 use std::panic::set_hook as set_panic_hook;
+
 use windows::core::w;
-use windows::Win32::UI::WindowsAndMessaging::{MB_ICONERROR, MB_OK, MB_TASKMODAL, MessageBoxW};
+use windows::Win32::UI::WindowsAndMessaging::{MessageBoxW, MB_ICONERROR, MB_OK, MB_TASKMODAL};
+
 use crate::utils::U16TextBuffer;
 
 pub fn set_hook() {
@@ -35,16 +37,11 @@ pub fn show_msg(args: Arguments<'_>) {
         return;
     }
     let mut buffer = U16TextBuffer::default();
-    buffer.write_fmt(args)
-        .unwrap_or_else(|_| {
-            buffer.clear();
-            buffer.write("Failed to format message!");
-        });
-    unsafe { MessageBoxW(
-        None,
-        buffer.finish(),
-        w!("Panic"),
-        MB_OK | MB_ICONERROR | MB_TASKMODAL
-    ); }
+    buffer.write_fmt(args).unwrap_or_else(|_| {
+        buffer.clear();
+        buffer.write("Failed to format message!");
+    });
+    unsafe {
+        MessageBoxW(None, buffer.finish(), w!("Panic"), MB_OK | MB_ICONERROR | MB_TASKMODAL);
+    }
 }
-

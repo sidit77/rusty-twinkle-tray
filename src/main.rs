@@ -5,32 +5,34 @@ mod utils;
 
 use std::mem::size_of;
 use std::process::ExitCode;
+
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIcon, TrayIconBuilder, TrayResult};
 use log::LevelFilter;
-use crate::utils::error::{OptionExt, Result};
-use crate::utils::{logger, panic};
 use windows::core::{ComInterface, HSTRING};
-use windows::Foundation::{EventHandler};
-use windows::UI::Color;
-use windows::UI::Text::FontWeight;
-use windows::Win32::Foundation::{HWND};
+use windows::Foundation::EventHandler;
+use windows::Win32::Foundation::HWND;
 use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, HMONITOR, MONITORINFO};
-use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUninitialize};
+use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
 use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW, WHEEL_DELTA};
+use windows::UI::Color;
+use windows::UI::Text::FontWeight;
+use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
+use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
+use windows_ext::UI::Xaml::Controls::{ColumnDefinition, FontIcon, Grid, Orientation, Slider, StackPanel, TextBlock};
+use windows_ext::UI::Xaml::Hosting::{DesktopWindowXamlSource, WindowsXamlManager};
+use windows_ext::UI::Xaml::Input::{FocusManager, LosingFocusEventArgs, PointerEventHandler};
+use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
+use windows_ext::UI::Xaml::{ElementTheme, GridLength, GridUnitType, HorizontalAlignment, TextAlignment, Thickness, VerticalAlignment};
 use winit::dpi::{PhysicalPosition, PhysicalSize};
 use winit::event::{Event, WindowEvent};
 use winit::event_loop::{DeviceEvents, EventLoop, EventLoopBuilder};
 use winit::platform::windows::{MonitorHandleExtWindows, WindowBuilderExtWindows};
 use winit::raw_window_handle::{HasWindowHandle, RawWindowHandle};
 use winit::window::{Window, WindowBuilder, WindowButtons};
-use windows_ext::UI::Xaml::Controls::{ColumnDefinition, FontIcon, Grid, Orientation, Slider, StackPanel, TextBlock};
-use windows_ext::UI::Xaml::Hosting::{DesktopWindowXamlSource, WindowsXamlManager};
-use windows_ext::UI::Xaml::{ElementTheme, GridLength, GridUnitType, HorizontalAlignment, TextAlignment, Thickness, VerticalAlignment};
-use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
-use windows_ext::UI::Xaml::Input::{FocusManager, LosingFocusEventArgs, PointerEventHandler};
-use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
-use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
+
+use crate::utils::error::{OptionExt, Result};
+use crate::utils::{logger, panic};
 
 #[derive(Debug, Copy, Clone)]
 enum CustomEvent {
@@ -43,18 +45,14 @@ fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
-    let event_loop = EventLoopBuilder::with_user_event()
-        .build()
-        .unwrap();
+    let event_loop = EventLoopBuilder::with_user_event().build().unwrap();
 
     event_loop.listen_device_events(DeviceEvents::Never);
 
     let _tray = TrayIconBuilder::new()
         .with_tooltip("Change Brightness")
         .with_icon(Icon::from_rgba(vec![255u8; 4 * 32 * 32], 32, 32).unwrap())
-        .with_menu(Menu::new([
-            MenuItem::button("Quit", CustomEvent::Quit)
-        ]))
+        .with_menu(Menu::new([MenuItem::button("Quit", CustomEvent::Quit)]))
         .build_event_loop(&event_loop, |event| match event {
             TrayEvent::Tray(ClickType::Left) => Some(CustomEvent::Show),
             TrayEvent::Menu(e) => Some(e),
@@ -83,7 +81,8 @@ fn run() -> Result<()> {
         let proxy = event_loop.create_proxy();
         move |_e, arg: &Option<LosingFocusEventArgs>| {
             if arg.as_ref().some()?.NewFocusedElement().is_err() {
-                proxy.send_event(CustomEvent::FocusLost)
+                proxy
+                    .send_event(CustomEvent::FocusLost)
                     .unwrap_or_else(|err| log::warn!("Failed to forward event: {}", err));
             }
             Ok(())
@@ -91,14 +90,14 @@ fn run() -> Result<()> {
     }))?;
     window.set_visible(true);
 
-    event_loop.run(|event, target | {
-        match event {
-            Event::WindowEvent { event, ..} => match event {
-                WindowEvent::Resized(new)  => {
+    event_loop
+        .run(|event, target| match event {
+            Event::WindowEvent { event, .. } => match event {
+                WindowEvent::Resized(new) => {
                     gui.resize(new).unwrap();
-                },
-                WindowEvent::Focused(true) => {
-                    unsafe { SetFocus(gui.hwnd); }
+                }
+                WindowEvent::Focused(true) => unsafe {
+                    SetFocus(gui.hwnd);
                 },
                 _ => {}
             },
@@ -111,7 +110,11 @@ fn run() -> Result<()> {
                                 cbSize: size_of::<MONITORINFO>() as u32,
                                 ..Default::default()
                             };
-                            unsafe { GetMonitorInfoW(HMONITOR(monitor.hmonitor()), &mut mi).ok().unwrap() };
+                            unsafe {
+                                GetMonitorInfoW(HMONITOR(monitor.hmonitor()), &mut mi)
+                                    .ok()
+                                    .unwrap()
+                            };
                             mi.rcWork
                         };
 
@@ -120,21 +123,21 @@ fn run() -> Result<()> {
 
                         window.set_outer_position(PhysicalPosition::new(
                             workspace.right - gap - size.width as i32,
-                            workspace.bottom - gap - size.height as i32));
+                            workspace.bottom - gap - size.height as i32
+                        ));
                         window.set_visible(true);
                         window.focus_window();
                     } else {
                         log::warn!("Can't find primary monitor");
                     }
-
                 }
                 CustomEvent::FocusLost => {
                     window.set_visible(false);
                 }
-            }
+            },
             _ => {}
-        }
-    }).unwrap();
+        })
+        .unwrap();
 
     unsafe { RoUninitialize() }
     Ok(())
@@ -146,7 +149,6 @@ struct XamlGui {
 }
 
 impl XamlGui {
-
     pub fn new(parent: &Window) -> Result<Self> {
         let desktop_source = DesktopWindowXamlSource::new()?;
         let interop = desktop_source.cast::<IDesktopWindowXamlSourceNative>()?;
@@ -154,7 +156,9 @@ impl XamlGui {
             RawWindowHandle::Win32(handle) => HWND(handle.hwnd.get()),
             _ => unimplemented!()
         };
-        unsafe { interop.AttachToWindow(parent)?; }
+        unsafe {
+            interop.AttachToWindow(parent)?;
+        }
         let island = unsafe { interop.WindowHandle() }?;
 
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
@@ -174,7 +178,7 @@ impl XamlGui {
             Left: 8.0,
             Top: 8.0,
             Right: 8.0,
-            Bottom: 8.0,
+            Bottom: 8.0
         })?;
 
         let stack_panel = StackPanel::new()?;
@@ -194,7 +198,7 @@ impl XamlGui {
             Left: 8.0,
             Top: 8.0,
             Right: 8.0,
-            Bottom: 8.0,
+            Bottom: 8.0
         })?;
         let children = stack_panel.Children()?;
         children.Append(&{
@@ -229,7 +233,7 @@ impl XamlGui {
                     let def = ColumnDefinition::new()?;
                     def.SetWidth(GridLength {
                         Value: 1.0,
-                        GridUnitType: GridUnitType::Star,
+                        GridUnitType: GridUnitType::Star
                     })?;
                     def
                 })?;
@@ -237,7 +241,7 @@ impl XamlGui {
                     let def = ColumnDefinition::new()?;
                     def.SetWidth(GridLength {
                         Value: 50.0,
-                        GridUnitType: GridUnitType::Pixel,
+                        GridUnitType: GridUnitType::Pixel
                     })?;
                     def
                 })?;
@@ -269,9 +273,11 @@ impl XamlGui {
                 slider.PointerWheelChanged(&PointerEventHandler::new(move |sender, args| {
                     let args = args.some()?;
                     args.SetHandled(true)?;
-                    let delta = args.GetCurrentPoint(None)?
+                    let delta = args
+                        .GetCurrentPoint(None)?
                         .Properties()?
-                        .MouseWheelDelta()? / WHEEL_DELTA as i32;
+                        .MouseWheelDelta()?
+                        / WHEEL_DELTA as i32;
 
                     let slider = sender.some()?.cast::<Slider>()?;
                     slider.SetValue2(slider.Value()? + delta as f64)?;
@@ -324,7 +330,7 @@ impl XamlGui {
                 Left: 0.0,
                 Top: 0.0,
                 Right: 200.0, // Add right padding
-                Bottom: 0.0,
+                Bottom: 0.0
             })?;
             icon
         })?;
@@ -343,30 +349,38 @@ impl XamlGui {
 
     pub fn resize(&self, new_size: PhysicalSize<u32>) -> Result<()> {
         unsafe {
-            SetWindowPos(self.hwnd, HWND::default(), 0, 0,
-                         new_size.width as _,
-                         new_size.height as _,
-                         SWP_SHOWWINDOW)?;
+            SetWindowPos(
+                self.hwnd,
+                HWND::default(),
+                0,
+                0,
+                new_size.width as _,
+                new_size.height as _,
+                SWP_SHOWWINDOW
+            )?;
         }
         Ok(())
     }
-
 }
 
 trait TrayIconBuilderExt<T> {
     fn build_event_loop<E, F>(self, event_loop: &EventLoop<E>, map: F) -> TrayResult<TrayIcon<T>>
-        where F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static,
-              E: Send;
+    where
+        F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static,
+        E: Send;
 }
 
 impl<T: Clone + Send + 'static> TrayIconBuilderExt<T> for TrayIconBuilder<T> {
     fn build_event_loop<E, F>(self, event_loop: &EventLoop<E>, map: F) -> TrayResult<TrayIcon<T>>
-        where F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static, E: Send
+    where
+        F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static,
+        E: Send
     {
         let proxy = event_loop.create_proxy();
         self.build(move |event| {
             if let Some(event) = map(event) {
-                proxy.send_event(event)
+                proxy
+                    .send_event(event)
                     .unwrap_or_else(|err| log::warn!("Failed to forward event: {}", err));
             }
         })

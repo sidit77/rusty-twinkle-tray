@@ -5,3 +5,6 @@ check-bindings:
 
 update-bindings: && check-bindings
     cargo run --package codegen .\lib\windows-ext\
+
+format:
+    cargo +nightly fmt --package rusty-twinkle-tray

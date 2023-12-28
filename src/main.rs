@@ -225,12 +225,29 @@ impl WindowClass for XamlWindow {
         let bottom_bar = StackPanel::new()?;
         bottom_bar.SetOrientation(Orientation::Horizontal)?;
         bottom_bar.SetVerticalAlignment(VerticalAlignment::Bottom)?;
-        bottom_bar.SetHorizontalAlignment(HorizontalAlignment::Right)?;
+        bottom_bar.SetHorizontalAlignment(HorizontalAlignment::Stretch)?;
+        bottom_bar.SetSpacing(230.0)?;
         let bottom_bar_children = bottom_bar.Children()?;
+
+        bottom_bar_children.Append(&{
+            let text_block = TextBlock::new()?;
+            text_block.SetText(&HSTRING::from("Adjust Brightness"))?;
+            text_block.SetHorizontalAlignment(HorizontalAlignment::Left)?;
+            text_block.SetFontSize(15.0)?;
+            text_block
+        })?;
+
         bottom_bar_children.Append(&{
             let icon = FontIcon::new()?;
             icon.SetGlyph(&HSTRING::from("\u{E713}"))?; // Modern Windows 11 Settings icon
-            icon.SetFontWeight(FontWeight { Weight: 500 })?; // Add more padding from margins
+            icon.SetFontWeight(FontWeight { Weight: 500 })?;
+            icon.SetHorizontalAlignment(HorizontalAlignment::Right)?;
+            icon.SetMargin(Thickness {
+                Left: 0.0,
+                Top: 0.0,
+                Right: 200.0, // Add right padding
+                Bottom: 0.0,
+            })?;
             icon
         })?;
 
@@ -239,7 +256,6 @@ impl WindowClass for XamlWindow {
         main_grid_children.Append(&stack_panel)?;
         main_grid_children.Append(&bottom_bar)?;
 
-        //button.SetContent(&IInspectable::try_from("Hello World")?)?;
         desktop_source.SetContent(&main_grid)?;
         Ok(Self {
             parent_hwnd: parent,

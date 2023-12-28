@@ -42,6 +42,8 @@ constructors = [
 WindowsXamlManager = ["InitializeForCurrentThread", "IWindowsXamlManagerStatics"]
 DesktopWindowXamlSource = ["SetContent"]
 IDesktopWindowXamlSourceNative = ["AttachToWindow", "WindowHandle"]
+FocusManager = true
+LosingFocusEventArgs = true
 
 UIElementCollection = ["First", "Append"]
 ColumnDefinitionCollection = ["First", "Append"]

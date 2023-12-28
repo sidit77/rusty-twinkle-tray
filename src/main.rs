@@ -9,29 +9,32 @@ use log::LevelFilter;
 use crate::utils::error::{OptionExt, Result};
 use crate::utils::{logger, panic};
 use windows::core::{ComInterface, HSTRING};
+use windows::Foundation::{EventHandler};
 use windows::UI::Color;
 use windows::UI::Text::FontWeight;
-use windows::Win32::Foundation::HWND;
+use windows::Win32::Foundation::{HWND};
 use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUninitialize};
-use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW, WHEEL_DELTA};
-use winit::dpi::PhysicalSize;
+use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
+use windows::Win32::UI::WindowsAndMessaging::{AnimateWindow, AW_ACTIVATE, AW_SLIDE, AW_VER_NEGATIVE, SetWindowPos, SWP_SHOWWINDOW, WHEEL_DELTA};
+use winit::dpi::{PhysicalPosition, PhysicalSize};
 use winit::event::{Event, WindowEvent};
 use winit::event_loop::{EventLoop, EventLoopBuilder};
-use winit::platform::windows::WindowBuilderExtWindows;
+use winit::platform::windows::{WindowBuilderExtWindows};
 use winit::raw_window_handle::{HasWindowHandle, RawWindowHandle};
-use winit::window::{Window, WindowBuilder};
+use winit::window::{Window, WindowBuilder, WindowButtons};
 use windows_ext::UI::Xaml::Controls::{ColumnDefinition, FontIcon, Grid, Orientation, Slider, StackPanel, TextBlock};
 use windows_ext::UI::Xaml::Hosting::{DesktopWindowXamlSource, WindowsXamlManager};
 use windows_ext::UI::Xaml::{ElementTheme, GridLength, GridUnitType, TextAlignment, Thickness, VerticalAlignment};
 use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
-use windows_ext::UI::Xaml::Input::PointerEventHandler;
+use windows_ext::UI::Xaml::Input::{FocusManager, LosingFocusEventArgs, PointerEventHandler};
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 
 #[derive(Debug, Copy, Clone)]
 enum CustomEvent {
     Quit,
-    Show
+    Show,
+    FocusLost
 }
 
 fn run() -> Result<()> {
@@ -57,13 +60,30 @@ fn run() -> Result<()> {
 
     let window = WindowBuilder::new()
         .with_title("XAML Window")
+        .with_position(PhysicalPosition::new(1508, 620))
         .with_inner_size(PhysicalSize::new(400, 400))
         .with_no_redirection_bitmap(true)
+        .with_decorations(false)
+        .with_undecorated_shadow(true)
+        .with_skip_taskbar(true)
         .with_visible(false)
+        .with_resizable(false)
+        .with_enabled_buttons(WindowButtons::empty())
         .build(&event_loop)
         .unwrap();
 
     let gui = XamlGui::new(&window)?;
+
+    FocusManager::LosingFocus(&EventHandler::new({
+        let proxy = event_loop.create_proxy();
+        move |_e, arg: &Option<LosingFocusEventArgs>| {
+            if arg.as_ref().some()?.NewFocusedElement().is_err() {
+                proxy.send_event(CustomEvent::FocusLost)
+                    .unwrap_or_else(|err| log::warn!("Failed to forward event: {}", err));
+            }
+            Ok(())
+        }
+    }))?;
 
     event_loop.run(|event, target | {
         match event {
@@ -74,6 +94,9 @@ fn run() -> Result<()> {
                 WindowEvent::Resized(new)  => {
                     gui.resize(new).unwrap();
                 },
+                WindowEvent::Focused(true) => {
+                    unsafe { SetFocus(gui.hwnd); }
+                },
                 _ => {}
             },
             Event::UserEvent(event) => match event {
@@ -81,6 +104,9 @@ fn run() -> Result<()> {
                 CustomEvent::Show => {
                     window.set_visible(true);
                     window.focus_window();
+                }
+                CustomEvent::FocusLost => {
+                    window.set_visible(false);
                 }
             }
             _ => {}
@@ -107,6 +133,7 @@ impl XamlGui {
         };
         unsafe { interop.AttachToWindow(parent)?; }
         let island = unsafe { interop.WindowHandle() }?;
+
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
         let stack_panel = StackPanel::new()?;
         stack_panel.SetBackground(&{

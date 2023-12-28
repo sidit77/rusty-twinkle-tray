@@ -53,6 +53,7 @@ impl<const N: usize> WStr<N> {
         &self.0[..end]
     }
 
+    #[allow(clippy::wrong_self_convention)]
     pub fn to_string_lossy(&self) -> String {
         String::from_utf16_lossy(self.as_slice())
     }

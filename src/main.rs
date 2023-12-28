@@ -2,90 +2,109 @@
 
 //mod monitors;
 mod utils;
-//mod window;
-//mod tray;
-mod framwork;
 
 use std::process::ExitCode;
-use std::time::Duration;
-use async_io::Timer;
+use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIcon, TrayIconBuilder, TrayResult};
 use log::LevelFilter;
-use crate::framwork::{block_on, Event, Window};
-use crate::utils::error::{Result};
+use crate::utils::error::{OptionExt, Result};
 use crate::utils::{logger, panic};
-use futures_lite::StreamExt;
+use windows::core::{ComInterface, HSTRING};
+use windows::UI::Color;
+use windows::UI::Text::FontWeight;
+use windows::Win32::Foundation::HWND;
+use windows::Win32::System::WinRT::{RO_INIT_SINGLETHREADED, RoInitialize, RoUninitialize};
+use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW, WHEEL_DELTA};
+use winit::dpi::PhysicalSize;
+use winit::event::{Event, WindowEvent};
+use winit::event_loop::{EventLoop, EventLoopBuilder};
+use winit::platform::windows::WindowBuilderExtWindows;
+use winit::raw_window_handle::{HasWindowHandle, RawWindowHandle};
+use winit::window::{Window, WindowBuilder};
+use windows_ext::UI::Xaml::Controls::{ColumnDefinition, FontIcon, Grid, Orientation, Slider, StackPanel, TextBlock};
+use windows_ext::UI::Xaml::Hosting::{DesktopWindowXamlSource, WindowsXamlManager};
+use windows_ext::UI::Xaml::{ElementTheme, GridLength, GridUnitType, TextAlignment, Thickness, VerticalAlignment};
+use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
+use windows_ext::UI::Xaml::Input::PointerEventHandler;
+use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
+use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 
+#[derive(Debug, Copy, Clone)]
+enum CustomEvent {
+    Quit,
+    Show
+}
 
-async fn run() -> Result<()> {
-    println!("Starting");
-
-    let window = Window::new()?;
-
-    window
-        .events()
-        .take_while(|e| *e != Event::Close)
-        .for_each(|e| println!("{:?}", e))
-        .await;
-
-    //Timer::interval(Duration::from_millis(500))
-    //    .take(10)
-    //    .enumerate()
-    //    .for_each(|(i, _)| println!("Tick {}"))
-    //    .await;
-    Ok(())
-
-/*
+fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
-    let instance = unsafe { GetModuleHandleW(None)? };
-    REGISTER_WINDOW_CLASS.call_once(|| {
-        XamlWindow::register(instance)
-            .expect("Failed to register window class")
-    });
+    let event_loop = EventLoopBuilder::with_user_event()
+        .build()
+        .unwrap();
 
-    let window = Window::new::<XamlWindow>(instance)?;
+    let _tray = TrayIconBuilder::new()
+        .with_tooltip("Change Brightness")
+        .with_icon(Icon::from_rgba(vec![255u8; 4 * 32 * 32], 32, 32).unwrap())
+        .with_menu(Menu::new([
+            MenuItem::button("Quit", CustomEvent::Quit)
+        ]))
+        .build_event_loop(&event_loop, |event| match event {
+            TrayEvent::Tray(ClickType::Left) => Some(CustomEvent::Show),
+            TrayEvent::Menu(e) => Some(e),
+            _ => None
+        })
+        .unwrap();
 
-    tray(instance, window.hwnd())?;
+    let window = WindowBuilder::new()
+        .with_title("XAML Window")
+        .with_inner_size(PhysicalSize::new(400, 400))
+        .with_no_redirection_bitmap(true)
+        .with_visible(false)
+        .build(&event_loop)
+        .unwrap();
 
-    let mut message = MSG::default();
+    let gui = XamlGui::new(&window)?;
 
-    unsafe {
-        while PeekMessageW(&mut message, None, 0, 0, PM_REMOVE).into() {
-            check_for_failure(&message)?;
-            TranslateMessage(&message);
-            DispatchMessageW(&message);
+    event_loop.run(|event, target | {
+        match event {
+            Event::WindowEvent { event, ..} => match event {
+                WindowEvent::CloseRequested => {
+                    window.set_visible(false);
+                },
+                WindowEvent::Resized(new)  => {
+                    gui.resize(new).unwrap();
+                },
+                _ => {}
+            },
+            Event::UserEvent(event) => match event {
+                CustomEvent::Quit => target.exit(),
+                CustomEvent::Show => {
+                    window.set_visible(true);
+                    window.focus_window();
+                }
+            }
+            _ => {}
         }
-        ShowWindow(window.hwnd(), SW_MINIMIZE);
-        ShowWindow(window.hwnd(), SW_RESTORE);
-    }
-
-    unsafe {
-        while GetMessageW(&mut message, None, 0, 0).into() {
-            check_for_failure(&message)?;
-            TranslateMessage(&message);
-            DispatchMessageW(&message);
-        }
-    }
+    }).unwrap();
 
     unsafe { RoUninitialize() }
     Ok(())
- */
 }
 
-/*
-struct XamlWindow {
-    parent_hwnd: HWND,
-    child_hwnd: HWND,
+struct XamlGui {
+    hwnd: HWND,
     _desktop_source: DesktopWindowXamlSource
 }
 
-impl WindowClass for XamlWindow {
-    const NAME: PCWSTR = w!("rusty-twinkle-tray.window");
+impl XamlGui {
 
-    fn initialize(parent: HWND) -> Result<Self> {
+    pub fn new(parent: &Window) -> Result<Self> {
         let desktop_source = DesktopWindowXamlSource::new()?;
         let interop = desktop_source.cast::<IDesktopWindowXamlSourceNative>()?;
+        let parent = match parent.window_handle().unwrap().as_raw() {
+            RawWindowHandle::Win32(handle) => HWND(handle.hwnd.get()),
+            _ => unimplemented!()
+        };
         unsafe { interop.AttachToWindow(parent)?; }
         let island = unsafe { interop.WindowHandle() }?;
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
@@ -210,38 +229,51 @@ impl WindowClass for XamlWindow {
             stack_panel
         })?;
 
-        //button.SetContent(&IInspectable::try_from("Hello World")?)?;
         desktop_source.SetContent(&stack_panel)?;
+
         Ok(Self {
-            parent_hwnd: parent,
-            child_hwnd: island,
-            _desktop_source: desktop_source,
+            hwnd: island,
+            _desktop_source: desktop_source
         })
     }
 
-    fn on_event(&mut self, event: Event) -> Result<()> {
-
-        match event {
-            Event::Destroy => unsafe { PostQuitMessage(0); }
-            Event::Resize => unsafe {
-                let mut rect = RECT::default();
-                GetClientRect(self.parent_hwnd, &mut rect)?;
-                SetWindowPos(self.child_hwnd, HWND::default(), 0, 0,
-                             rect.right - rect.left,
-                             rect.bottom - rect.top,
-                             SWP_SHOWWINDOW)?;
-            }
+    pub fn resize(&self, new_size: PhysicalSize<u32>) -> Result<()> {
+        unsafe {
+            SetWindowPos(self.hwnd, HWND::default(), 0, 0,
+                         new_size.width as _,
+                         new_size.height as _,
+                         SWP_SHOWWINDOW)?;
         }
         Ok(())
     }
+
 }
 
- */
+trait TrayIconBuilderExt<T> {
+    fn build_event_loop<E, F>(self, event_loop: &EventLoop<E>, map: F) -> TrayResult<TrayIcon<T>>
+        where F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static,
+              E: Send;
+}
+
+impl<T: Clone + Send + 'static> TrayIconBuilderExt<T> for TrayIconBuilder<T> {
+    fn build_event_loop<E, F>(self, event_loop: &EventLoop<E>, map: F) -> TrayResult<TrayIcon<T>>
+        where F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static, E: Send
+    {
+        let proxy = event_loop.create_proxy();
+        self.build(move |event| {
+            if let Some(event) = map(event) {
+                proxy.send_event(event)
+                    .unwrap_or_else(|err| log::warn!("Failed to forward event: {}", err));
+            }
+        })
+    }
+}
+
 fn main() -> ExitCode {
     panic::set_hook();
     logger::init(LevelFilter::Trace, LevelFilter::Warn);
 
-    match block_on(run()) {
+    match run() {
         Ok(()) => ExitCode::SUCCESS,
         Err(err) => {
             log::error!("{:?}", err);

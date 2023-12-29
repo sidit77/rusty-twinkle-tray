@@ -1,3 +1,4 @@
+use std::path::PathBuf;
 use windows::core::{ComInterface, HSTRING};
 use windows::UI::Color;
 use windows::UI::Text::FontWeight;
@@ -20,12 +21,13 @@ use crate::utils::WindowExt;
 pub struct XamlGui {
     hwnd: HWND,
     bottom_bar: Grid,
-    monitor_controls: StackPanel,
+    monitor_panel: StackPanel,
+    monitor_controls: Vec<MonitorEntry>,
     _desktop_source: DesktopWindowXamlSource
 }
 
 impl XamlGui {
-    pub fn new(parent: &Window) -> Result<Self> {
+    pub fn new(parent: &Window, monitors: Vec<DetectedMonitor>) -> Result<Self> {
         let desktop_source = DesktopWindowXamlSource::new()?;
         let interop = desktop_source.cast::<IDesktopWindowXamlSourceNative>()?;
         unsafe {
@@ -33,12 +35,17 @@ impl XamlGui {
         }
         let island = unsafe { interop.WindowHandle() }?;
 
+        let monitor_controls = monitors
+            .into_iter()
+            .map(MonitorEntry::create)
+            .collect::<Result<Vec<_>>>()?;
+
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
 
         let stack_panel = StackPanel::vertical()?
-            .with_spacing(8.0)?
+            .with_spacing(20.0)?
             .with_padding((20.0, 14.0))?
-            .with_child(&Self::create_monitor_entry()?)?;
+            .with_children(monitor_controls.iter().map(MonitorEntry::ui))?;
 
         // Create a new stack panel for the bottom bar
 
@@ -84,13 +91,56 @@ impl XamlGui {
             hwnd: island,
             bottom_bar,
             _desktop_source: desktop_source,
-            monitor_controls: stack_panel,
+            monitor_panel: stack_panel,
+            monitor_controls,
         })
     }
 
-    fn create_monitor_entry() -> Result<StackPanel> {
+    pub fn get_required_height(&self) -> Result<u32> {
+        Ok((self.monitor_panel.get_actual_height()? + self.bottom_bar.get_actual_height()?) as u32)
+    }
+
+    pub fn resize(&self, new_size: PhysicalSize<u32>) -> Result<()> {
+        unsafe {
+            SetWindowPos(
+                self.hwnd,
+                HWND::default(),
+                0,
+                0,
+                new_size.width as _,
+                new_size.height as _,
+                SWP_SHOWWINDOW
+            )?;
+        }
+        Ok(())
+    }
+
+    pub fn focus(&self) {
+        unsafe {
+            SetFocus(self.hwnd);
+        }
+    }
+
+}
+
+pub struct DetectedMonitor {
+    pub name: String,
+    pub path: PathBuf,
+    pub current_brihtness: u32
+}
+
+struct MonitorEntry {
+    path: PathBuf,
+    ui: StackPanel,
+    slider: Slider
+}
+
+impl MonitorEntry {
+
+    pub fn create(monitor: DetectedMonitor) -> Result<Self> {
         let slider = {
             let slider = Slider::new()?;
+            slider.SetValue2(monitor.current_brihtness as f64)?;
             slider.SetVerticalAlignment(VerticalAlignment::Center)?;
             slider
         };
@@ -125,7 +175,7 @@ impl XamlGui {
             Ok(())
         }))?;
 
-        Ok(StackPanel::vertical()?
+        let ui = StackPanel::vertical()?
             .with_spacing(4.0)?
             .with_child(&StackPanel::horizontal()?
                 .with_spacing(8.0)?
@@ -138,7 +188,7 @@ impl XamlGui {
                 })?
                 .with_child(&{
                     let text_block = TextBlock::new()?;
-                    text_block.SetText(&HSTRING::from("Monitor 1"))?;
+                    text_block.SetText(&HSTRING::from(monitor.name))?;
                     text_block.SetFontSize(20.0)?;
                     text_block
                 })?)?
@@ -146,32 +196,17 @@ impl XamlGui {
                 .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
                 .with_column_spacing(8.0)?
                 .with_child(&slider, 0, 0)?
-                .with_child(&text_box, 0, 1)?)?)
+                .with_child(&text_box, 0, 1)?)?;
+
+        Ok(Self {
+            path: monitor.path,
+            ui,
+            slider,
+        })
     }
 
-    pub fn get_required_height(&self) -> Result<u32> {
-        Ok((self.monitor_controls.get_actual_height()? + self.bottom_bar.get_actual_height()?) as u32)
-    }
-
-    pub fn resize(&self, new_size: PhysicalSize<u32>) -> Result<()> {
-        unsafe {
-            SetWindowPos(
-                self.hwnd,
-                HWND::default(),
-                0,
-                0,
-                new_size.width as _,
-                new_size.height as _,
-                SWP_SHOWWINDOW
-            )?;
-        }
-        Ok(())
-    }
-
-    pub fn focus(&self) {
-        unsafe {
-            SetFocus(self.hwnd);
-        }
+    pub fn ui(&self) -> &StackPanel {
+        &self.ui
     }
 
 }

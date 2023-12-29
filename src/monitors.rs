@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 use std::ops::RangeInclusive;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use windows::Win32::Devices::Display::*;
 use windows::Win32::Foundation::{BOOL, HANDLE};
 use windows::Win32::Graphics::Gdi::HMONITOR;
@@ -43,6 +43,9 @@ impl Monitor {
 
     pub fn name(&self) -> &str {
         &self.name
+    }
+    pub fn path(&self) -> &Path {
+        &self.path
     }
 
     pub fn open(&self) -> Result<MonitorConnection> {

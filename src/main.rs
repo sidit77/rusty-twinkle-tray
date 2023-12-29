@@ -1,6 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-//mod monitors;
+mod monitors;
 mod utils;
 mod ui;
 mod interface;
@@ -18,7 +18,8 @@ use winit::event::{Event, WindowEvent};
 use winit::event_loop::{DeviceEvents, EventLoopBuilder};
 use winit::platform::windows::{WindowBuilderExtWindows};
 use winit::window::{WindowBuilder, WindowButtons};
-use crate::interface::XamlGui;
+use crate::interface::{DetectedMonitor, XamlGui};
+use crate::monitors::Monitor;
 
 use crate::utils::error::OptionExt;
 use crate::utils::{logger, MonitorHandleExt, panic};
@@ -35,6 +36,8 @@ enum CustomEvent {
 fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
+
+    let monitors = Monitor::find_all()?;
 
     let event_loop = EventLoopBuilder::with_user_event().build().unwrap();
 
@@ -66,7 +69,15 @@ fn run() -> Result<()> {
         .build(&event_loop)
         .unwrap();
 
-    let gui = XamlGui::new(&window)?;
+    let gui = XamlGui::new(&window, monitors
+        .iter()
+        .map(|m| DetectedMonitor {
+            name: m.name().to_string(),
+            path: m.path().to_path_buf(),
+            current_brihtness: 0,
+        })
+        .collect()
+    )?;
 
     FocusManager::LosingFocus(&EventHandler::new({
         let proxy = event_loop.create_proxy();

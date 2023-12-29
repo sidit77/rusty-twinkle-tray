@@ -16,6 +16,10 @@ macro_rules! new_type {
 
         impl crate::ui::NewType for $name {
             type Inner = $orig;
+
+            fn as_inner(&self) -> &Self::Inner {
+                &self.0
+            }
         }
 
         impl windows::core::RuntimeName for $name {
@@ -42,6 +46,8 @@ pub mod container;
 
 pub trait NewType {
     type Inner;
+
+    fn as_inner(&self) -> &Self::Inner;
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]

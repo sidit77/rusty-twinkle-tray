@@ -35,6 +35,10 @@ impl StackPanel {
         Ok(self)
     }
 
+    pub fn get_actual_height(&self) -> Result<f64> {
+        Ok(self.0.ActualHeight()?)
+    }
+
 }
 
 pub enum GridSize {
@@ -119,6 +123,10 @@ impl Grid {
     pub fn with_theme(self, theme: ElementTheme) -> Result<Self> {
         self.0.SetRequestedTheme(theme)?;
         Ok(self)
+    }
+
+    pub fn get_actual_height(&self) -> Result<f64> {
+        Ok(self.0.ActualHeight()?)
     }
 
 }

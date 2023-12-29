@@ -31,8 +31,8 @@ use winit::event_loop::{DeviceEvents, EventLoopBuilder};
 use winit::platform::windows::{MonitorHandleExtWindows, WindowBuilderExtWindows};
 use winit::raw_window_handle::{HasWindowHandle, RawWindowHandle};
 use winit::window::{Window, WindowBuilder, WindowButtons};
-use crate::ui::container::GridSize;
 
+use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::utils::error::{OptionExt, Result};
 use crate::utils::{logger, panic, TrayIconBuilderExt};
 
@@ -120,6 +120,10 @@ fn run() -> Result<()> {
                             mi.rcWork
                         };
 
+                        let _ = window.request_inner_size(PhysicalSize::new(
+                            window.outer_size().width,
+                            gui.get_required_height().unwrap()));
+
                         let gap = 14;
                         let size = window.outer_size();
 
@@ -127,8 +131,11 @@ fn run() -> Result<()> {
                             workspace.right - gap - size.width as i32,
                             workspace.bottom - gap - size.height as i32
                         ));
+
                         window.set_visible(true);
                         window.focus_window();
+
+
                     } else {
                         log::warn!("Can't find primary monitor");
                     }
@@ -147,6 +154,8 @@ fn run() -> Result<()> {
 
 struct XamlGui {
     hwnd: HWND,
+    bottom_bar: Grid,
+    monitor_controls: StackPanel,
     _desktop_source: DesktopWindowXamlSource
 }
 
@@ -172,7 +181,7 @@ impl XamlGui {
 
         // Create a new stack panel for the bottom bar
 
-        let bottom_bar = ui::container::Grid::new()?
+        let bottom_bar = Grid::new()?
             .with_padding(20.0)?
             .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
             .with_background(&SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 70})?)?
@@ -194,7 +203,7 @@ impl XamlGui {
                 })?, 0, 1)?;
 
         let main_grid = ui::container::Grid::new()? // Create a new grid to hold the main stackpanel and the bottom bar
-            .with_row_heights([GridSize::Fraction(1.0), GridSize::Auto])?
+            .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?
             .with_background(&{
                 let brush = AcrylicBrush::new()?;
                 let color = Color { R: 70, G: 70, B: 70, A: 255 };
@@ -207,12 +216,14 @@ impl XamlGui {
             .with_theme(ElementTheme::Dark)?
             // Add the main stack panel and the bottom bar to the main grid
             .with_child(&stack_panel, 0, 0)?
-            .with_child(&bottom_bar, 1, 0)?;
+            .with_child(&bottom_bar, 2, 0)?;
 
         desktop_source.SetContent(&main_grid)?;
         Ok(Self {
             hwnd: island,
-            _desktop_source: desktop_source
+            bottom_bar,
+            _desktop_source: desktop_source,
+            monitor_controls: stack_panel,
         })
     }
 
@@ -253,9 +264,9 @@ impl XamlGui {
             Ok(())
         }))?;
 
-        Ok(ui::container::StackPanel::vertical()?
+        Ok(StackPanel::vertical()?
             .with_spacing(4.0)?
-            .with_child(&ui::container::StackPanel::horizontal()?
+            .with_child(&StackPanel::horizontal()?
                 .with_spacing(8.0)?
                 .with_child(&{
                     let icon = FontIcon::new()?;
@@ -270,11 +281,15 @@ impl XamlGui {
                     text_block.SetFontSize(20.0)?;
                     text_block
                 })?)?
-            .with_child(&ui::container::Grid::new()?
+            .with_child(&Grid::new()?
                 .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
                 .with_column_spacing(8.0)?
                 .with_child(&slider, 0, 0)?
                 .with_child(&text_box, 0, 1)?)?)
+    }
+
+    pub fn get_required_height(&self) -> Result<u32> {
+        Ok((self.monitor_controls.get_actual_height()? + self.bottom_bar.get_actual_height()?) as u32)
     }
 
     pub fn resize(&self, new_size: PhysicalSize<u32>) -> Result<()> {

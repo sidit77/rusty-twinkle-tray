@@ -4,12 +4,19 @@ pub mod panic;
 
 use std::ffi::OsString;
 use std::fmt::{Debug, Display, Formatter, Write};
+use std::mem::size_of;
 use std::os::windows::ffi::OsStringExt;
 use std::path::PathBuf;
-use betrayer::{TrayEvent, TrayIcon, TrayIconBuilder, TrayResult};
 
 use windows::core::PCWSTR;
-use winit::event_loop::EventLoop;
+use windows::Win32::Foundation::{HWND, RECT};
+use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, HMONITOR, MONITORINFO};
+use winit::monitor::MonitorHandle;
+use winit::platform::windows::MonitorHandleExtWindows;
+use winit::raw_window_handle::{HasWindowHandle, RawWindowHandle};
+use winit::window::Window;
+
+use crate::Result;
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub struct WStr<const N: usize>([u16; N]);
@@ -86,26 +93,33 @@ impl Write for U16TextBuffer {
     }
 }
 
-pub trait TrayIconBuilderExt<T> {
-    fn build_event_loop<E, F>(self, event_loop: &EventLoop<E>, map: F) -> TrayResult<TrayIcon<T>>
-        where
-            F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static,
-            E: Send;
+pub trait WindowExt {
+    fn hwnd(&self) -> HWND;
 }
 
-impl<T: Clone + Send + 'static> TrayIconBuilderExt<T> for TrayIconBuilder<T> {
-    fn build_event_loop<E, F>(self, event_loop: &EventLoop<E>, map: F) -> TrayResult<TrayIcon<T>>
-        where
-            F: Fn(TrayEvent<T>) -> Option<E> + Send + 'static,
-            E: Send
-    {
-        let proxy = event_loop.create_proxy();
-        self.build(move |event| {
-            if let Some(event) = map(event) {
-                proxy
-                    .send_event(event)
-                    .unwrap_or_else(|err| log::warn!("Failed to forward event: {}", err));
-            }
-        })
+impl WindowExt for Window {
+    fn hwnd(&self) -> HWND {
+        let handle = self.window_handle().unwrap().as_raw();
+        match handle {
+            RawWindowHandle::Win32(handle) => HWND(handle.hwnd.get()),
+            _ => unreachable!()
+        }
+    }
+}
+
+pub trait MonitorHandleExt {
+    fn get_work_area(&self) -> Result<RECT>;
+}
+
+impl MonitorHandleExt for MonitorHandle {
+    fn get_work_area(&self) -> Result<RECT> {
+        let mut mi = MONITORINFO {
+            cbSize: size_of::<MONITORINFO>() as u32,
+            ..Default::default()
+        };
+        unsafe {
+            GetMonitorInfoW(HMONITOR(self.hmonitor()), &mut mi).ok()?
+        };
+        Ok(mi.rcWork)
     }
 }

@@ -31,7 +31,7 @@ windows = { version = "0.51", features = [
     "Win32_Devices_Display",
 ]}
 winit = "0.29"
-betrayer = { git = "https://github.com/sidit77/betrayer.git" }
+betrayer = { git = "https://github.com/sidit77/betrayer.git", features = ["winit"]}
 
 
 [build-dependencies]

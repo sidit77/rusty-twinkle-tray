@@ -43,12 +43,15 @@ macro_rules! new_type {
 }
 
 pub mod container;
+pub mod controls;
 
 pub trait NewType {
     type Inner;
 
     fn as_inner(&self) -> &Self::Inner;
 }
+
+pub use windows_ext::UI::Xaml::VerticalAlignment;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Padding {

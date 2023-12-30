@@ -7,14 +7,16 @@ use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
 use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW, WHEEL_DELTA};
 use winit::dpi::PhysicalSize;
 use winit::window::Window;
-use windows_ext::UI::Xaml::Controls::{FontIcon, Slider, TextBlock};
+use windows_ext::UI::Xaml::Controls::{FontIcon, TextBlock};
 use windows_ext::UI::Xaml::Hosting::DesktopWindowXamlSource;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
 use windows_ext::UI::Xaml::{ElementTheme, TextAlignment, Thickness, VerticalAlignment};
 use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
+use crate::cloned;
 use crate::ui::container::{Grid, GridSize, StackPanel};
+use crate::ui::controls::Slider;
 use crate::utils::error::{OptionExt, Result};
 use crate::utils::WindowExt;
 
@@ -138,42 +140,35 @@ struct MonitorEntry {
 impl MonitorEntry {
 
     pub fn create(monitor: DetectedMonitor) -> Result<Self> {
-        let slider = {
-            let slider = Slider::new()?;
-            slider.SetValue2(monitor.current_brihtness as f64)?;
-            slider.SetVerticalAlignment(VerticalAlignment::Center)?;
-            slider
-        };
         let text_box = {
             let text_box = TextBlock::new()?;
             text_box.SetVerticalAlignment(VerticalAlignment::Center)?;
             text_box.SetTextAlignment(TextAlignment::Center)?;
             text_box.SetFontSize(20.0)?;
             text_box.SetFontWeight(FontWeight { Weight: 400 })?;
-            text_box.SetPadding(Thickness { Left: 10.0, Top: 0.0, Right: 10.0, Bottom: 0.0 })?;
-            text_box.SetText(&HSTRING::from(&format!("{}", slider.Value()?)))?;
+            //text_box.SetPadding(Thickness { Left: 10.0, Top: 0.0, Right: 10.0, Bottom: 0.0 })?;
             text_box
         };
-        slider.ValueChanged(&RangeBaseValueChangedEventHandler::new({
-            let text_box = text_box.clone();
-            move |_, event| {
-                text_box.SetText(&HSTRING::from(format!("{}", event.some()?.NewValue()?)))?;
-                Ok(())
-            }
-        }))?;
-        slider.PointerWheelChanged(&PointerEventHandler::new(move |sender, args| {
-            let args = args.some()?;
-            args.SetHandled(true)?;
-            let delta = args
-                .GetCurrentPoint(None)?
-                .Properties()?
-                .MouseWheelDelta()?
-                / WHEEL_DELTA as i32;
 
-            let slider = sender.some()?.cast::<Slider>()?;
-            slider.SetValue2(slider.Value()? + delta as f64)?;
-            Ok(())
-        }))?;
+        let slider = Slider::new()?
+            .with_vertical_alignment(VerticalAlignment::Center)?
+            .with_value(monitor.current_brihtness as f64)?
+            .with_mouse_scrollable()?
+            .with_value_changed_handler(cloned!([text_box] move |args| {
+                text_box.SetText(&HSTRING::from(&format!("{}", args.NewValue()?)))?;
+                Ok(())
+            }))?;
+
+        text_box.SetText(&HSTRING::from(&format!("{}", slider.get_value()?)))?;
+
+        //slider.ValueChanged(&RangeBaseValueChangedEventHandler::new({
+        //    let text_box = text_box.clone();
+        //    move |_, event| {
+        //        text_box.SetText(&HSTRING::from(format!("{}", event.some()?.NewValue()?)))?;
+        //        Ok(())
+        //    }
+        //}))?;
+
 
         let ui = StackPanel::vertical()?
             .with_spacing(4.0)?
@@ -193,7 +188,7 @@ impl MonitorEntry {
                     text_block
                 })?)?
             .with_child(&Grid::new()?
-                .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
+                .with_column_widths([GridSize::Fraction(1.0), GridSize::Pixel(40.0)])?
                 .with_column_spacing(8.0)?
                 .with_child(&slider, 0, 0)?
                 .with_child(&text_box, 0, 1)?)?;

@@ -104,6 +104,17 @@ impl<T: Display> Debug for FromDisplay<T> {
     }
 }
 
+pub trait ResultEx<T> {
+    fn to_win_result(self) -> windows::core::Result<T>;
+}
+
+impl<T> ResultEx<T> for Result<T> {
+    fn to_win_result(self) -> windows::core::Result<T> {
+        self
+            .map_err(|err| err.inner)
+    }
+}
+
 pub trait OptionExt<T> {
     fn some(self) -> windows::core::Result<T>;
 }

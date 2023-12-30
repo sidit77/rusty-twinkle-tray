@@ -123,3 +123,14 @@ impl MonitorHandleExt for MonitorHandle {
         Ok(mi.rcWork)
     }
 }
+
+#[macro_export]
+macro_rules! cloned {
+    ([$($vars:ident),+] $e:expr) => {
+        {
+            $( let $vars = $vars.clone(); )+
+            $e
+        }
+    };
+}
+

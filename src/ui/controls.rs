@@ -105,3 +105,32 @@ impl TextBlock {
     }
 
 }
+
+new_type!(FontIcon, windows_ext::UI::Xaml::Controls::FontIcon);
+
+impl FontIcon {
+
+    pub fn new(icon: char) -> Result<Self> {
+        let mut buffer = [0u16; 2];
+        let font_icon = <Self as NewType>::Inner::new()?;
+        font_icon.SetGlyph(&HSTRING::from_wide(icon.encode_utf16(&mut buffer))?)?;
+        Ok(Self(font_icon))
+    }
+
+    //pub fn with_font_size(self, size: f64) -> Result<Self> {
+    //    self.0.SetFontSize(size)?;
+    //    Ok(self)
+    //}
+
+    pub fn with_font_weight<W: Into<FontWeight>>(self, weight: W) -> Result<Self> {
+        self.0.SetFontWeight(weight.into().into())?;
+        Ok(self)
+    }
+
+    pub fn with_vertical_alignment(self, alignment: VerticalAlignment) -> Result<Self> {
+        self.0.SetVerticalAlignment(alignment)?;
+        Ok(self)
+    }
+
+}
+

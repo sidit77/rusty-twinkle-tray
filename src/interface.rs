@@ -1,20 +1,18 @@
 use std::path::PathBuf;
-use windows::core::{ComInterface, HSTRING};
+use windows::core::ComInterface;
 use windows::UI::Color;
 use windows::Win32::Foundation::HWND;
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
 use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW};
 use winit::dpi::PhysicalSize;
 use winit::window::Window;
-use windows_ext::UI::Xaml::Controls::{FontIcon};
 use windows_ext::UI::Xaml::Hosting::DesktopWindowXamlSource;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
-use windows_ext::UI::Xaml::{ElementTheme, TextAlignment, VerticalAlignment};
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use crate::{cloned, hformat};
 use crate::ui::container::{Grid, GridSize, StackPanel};
-use crate::ui::controls::{Slider, TextBlock};
-use crate::ui::FontWeight;
+use crate::ui::controls::{Slider, TextBlock, FontIcon};
+use crate::ui::{FontWeight, ElementTheme, TextAlignment, VerticalAlignment};
 use crate::utils::error::Result;
 use crate::utils::extensions::WindowExt;
 
@@ -59,13 +57,9 @@ impl XamlGui {
                 .with_vertical_alignment(VerticalAlignment::Center)?
                 .with_padding((20.0, 0.0, 0.0, 0.0))?, 0, 0)?
             .with_child(&StackPanel::horizontal()?
-                .with_child(&{
-                    let icon = FontIcon::new()?;
-                    icon.SetGlyph(&HSTRING::from("\u{E713}"))?; // Modern Windows 11 Settings icon
-                    icon.SetFontWeight(FontWeight::Medium.into())?;
-                    icon.SetVerticalAlignment(VerticalAlignment::Center)?;
-                    icon
-                })?, 0, 1)?;
+                .with_child(&FontIcon::new('\u{E713}')? // Modern Windows 11 Settings icon
+                    .with_vertical_alignment(VerticalAlignment::Center)?
+                    .with_font_weight(FontWeight::Medium)?)?, 0, 1)?;
 
         let main_grid = Grid::new()? // Create a new grid to hold the main stackpanel and the bottom bar
             .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?
@@ -157,13 +151,8 @@ impl MonitorEntry {
             .with_spacing(4.0)?
             .with_child(&StackPanel::horizontal()?
                 .with_spacing(8.0)?
-                .with_child(&{
-                    let icon = FontIcon::new()?;
-                    //icon.SetFontFamily(&icon_font)?;
-                    icon.SetGlyph(&HSTRING::from("\u{E7f4}"))?;
-                    icon.SetFontWeight(FontWeight::Medium.into())?;
-                    icon
-                })?
+                .with_child(&FontIcon::new('\u{E7f4}')?
+                    .with_font_weight(FontWeight::Medium)?)?
                 .with_child(&TextBlock::new()?
                     .with_text(monitor.name)?
                     .with_font_size(20.0)?)?)?

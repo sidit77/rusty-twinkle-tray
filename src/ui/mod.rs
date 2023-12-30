@@ -51,7 +51,7 @@ pub trait NewType {
     fn as_inner(&self) -> &Self::Inner;
 }
 
-pub use windows_ext::UI::Xaml::{VerticalAlignment, TextAlignment};
+pub use windows_ext::UI::Xaml::{VerticalAlignment, TextAlignment, ElementTheme};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Padding {

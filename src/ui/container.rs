@@ -1,8 +1,8 @@
 use windows::core::TryIntoParam;
 use windows_ext::UI::Xaml::Controls::{ColumnDefinition, Orientation, RowDefinition};
-use windows_ext::UI::Xaml::{ElementTheme, FrameworkElement, GridUnitType, UIElement};
+use windows_ext::UI::Xaml::{FrameworkElement, GridUnitType, UIElement};
 use windows_ext::UI::Xaml::Media::Brush;
-use crate::ui::{NewType, Padding};
+use crate::ui::{NewType, Padding, ElementTheme};
 use crate::utils::error::Result;
 
 new_type!(StackPanel, windows_ext::UI::Xaml::Controls::StackPanel);

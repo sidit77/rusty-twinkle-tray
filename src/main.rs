@@ -75,7 +75,7 @@ fn run() -> Result<()> {
         .map(|m| DetectedMonitor {
             name: m.name().to_string(),
             path: m.path().to_path_buf(),
-            current_brihtness: 0,
+            current_brightness: 0,
         })
         .collect()
     )?;
@@ -147,3 +147,4 @@ fn main() -> ExitCode {
         }
     }
 }
+

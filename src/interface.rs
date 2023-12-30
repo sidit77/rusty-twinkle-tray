@@ -117,7 +117,7 @@ impl XamlGui {
 pub struct DetectedMonitor {
     pub name: String,
     pub path: PathBuf,
-    pub current_brihtness: u32
+    pub current_brightness: u32
 }
 
 struct MonitorEntry {
@@ -137,7 +137,7 @@ impl MonitorEntry {
 
         let slider = Slider::new()?
             .with_vertical_alignment(VerticalAlignment::Center)?
-            .with_value(monitor.current_brihtness as f64)?
+            .with_value(monitor.current_brightness as f64)?
             .with_mouse_scrollable()?
             .with_value_changed_handler(cloned!([label] move |args| {
                 label.set_text(hformat!("{}", args.NewValue()?))?;

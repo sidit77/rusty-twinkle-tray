@@ -46,7 +46,7 @@ impl Slider {
     pub fn with_value_changed_handler<F>(self, mut handler: F) -> Result<Self>
         where F: FnMut( /*Option<&::windows_core::IInspectable>, */&RangeBaseValueChangedEventArgs) -> Result<()> + Send + 'static
     {
-        self.0.ValueChanged(&RangeBaseValueChangedEventHandler::new(move |sender, args| {
+        self.0.ValueChanged(&RangeBaseValueChangedEventHandler::new(move | _sender, args| {
             handler(args.some()?).to_win_result()
         }))?;
         Ok(self)

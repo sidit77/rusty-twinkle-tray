@@ -80,27 +80,16 @@ pub fn init(console_level: LevelFilter, debugger_level: LevelFilter) -> bool {
 }
 
 mod debugger {
-    use std::cell::Cell;
     use std::fmt::{Arguments, Write};
 
     use windows::Win32::System::Diagnostics::Debug::OutputDebugStringW;
 
-    use crate::utils::U16TextBuffer;
-
-    fn print_with_buffer(buffer: &mut U16TextBuffer, args: Arguments<'_>) {
-        buffer.clear();
-        buffer.write_fmt(args).expect("Failed to format log string");
-        unsafe { OutputDebugStringW(buffer.finish()) };
-    }
+    use crate::utils::string::U16TextBuffer;
 
     pub fn print(args: Arguments<'_>) {
-        thread_local! { static LOCAL_BUFFER: Cell<Option<U16TextBuffer>> = Default::default() }
-        LOCAL_BUFFER
-            .try_with(|tls| {
-                let mut buffer = tls.take().unwrap_or_default();
-                print_with_buffer(&mut buffer, args);
-                tls.set(Some(buffer));
-            })
-            .unwrap_or_else(|_| print_with_buffer(&mut Default::default(), args));
+        U16TextBuffer::with_local(move |buffer| {
+            buffer.write_fmt(args).expect("Failed to format log string");
+            unsafe { OutputDebugStringW(buffer.finish()) }
+        })
     }
 }

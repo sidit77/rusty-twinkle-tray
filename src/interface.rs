@@ -4,21 +4,19 @@ use windows::UI::Color;
 use windows::UI::Text::FontWeight;
 use windows::Win32::Foundation::HWND;
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
-use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW, WHEEL_DELTA};
+use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW};
 use winit::dpi::PhysicalSize;
 use winit::window::Window;
 use windows_ext::UI::Xaml::Controls::{FontIcon, TextBlock};
 use windows_ext::UI::Xaml::Hosting::DesktopWindowXamlSource;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
 use windows_ext::UI::Xaml::{ElementTheme, TextAlignment, Thickness, VerticalAlignment};
-use windows_ext::UI::Xaml::Controls::Primitives::RangeBaseValueChangedEventHandler;
-use windows_ext::UI::Xaml::Input::PointerEventHandler;
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
-use crate::cloned;
+use crate::{cloned, hformat};
 use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::ui::controls::Slider;
-use crate::utils::error::{OptionExt, Result};
-use crate::utils::WindowExt;
+use crate::utils::error::Result;
+use crate::utils::extensions::WindowExt;
 
 pub struct XamlGui {
     hwnd: HWND,
@@ -155,19 +153,11 @@ impl MonitorEntry {
             .with_value(monitor.current_brihtness as f64)?
             .with_mouse_scrollable()?
             .with_value_changed_handler(cloned!([text_box] move |args| {
-                text_box.SetText(&HSTRING::from(&format!("{}", args.NewValue()?)))?;
+                text_box.SetText(&hformat!("{}", args.NewValue()?))?;
                 Ok(())
             }))?;
 
-        text_box.SetText(&HSTRING::from(&format!("{}", slider.get_value()?)))?;
-
-        //slider.ValueChanged(&RangeBaseValueChangedEventHandler::new({
-        //    let text_box = text_box.clone();
-        //    move |_, event| {
-        //        text_box.SetText(&HSTRING::from(format!("{}", event.some()?.NewValue()?)))?;
-        //        Ok(())
-        //    }
-        //}))?;
+        text_box.SetText(&hformat!("{}", slider.get_value()?))?;
 
 
         let ui = StackPanel::vertical()?

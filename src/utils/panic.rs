@@ -6,7 +6,7 @@ use std::panic::set_hook as set_panic_hook;
 use windows::core::w;
 use windows::Win32::UI::WindowsAndMessaging::{MessageBoxW, MB_ICONERROR, MB_OK, MB_TASKMODAL};
 
-use crate::utils::U16TextBuffer;
+use crate::utils::string::U16TextBuffer;
 
 pub fn set_hook() {
     //let hook = take_panic_hook();

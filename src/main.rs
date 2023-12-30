@@ -22,7 +22,8 @@ use crate::interface::{DetectedMonitor, XamlGui};
 use crate::monitors::Monitor;
 
 use crate::utils::error::OptionExt;
-use crate::utils::{logger, MonitorHandleExt, panic};
+use crate::utils::{logger, panic};
+use crate::utils::extensions::MonitorHandleExt;
 
 pub use crate::utils::error::Result;
 

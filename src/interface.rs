@@ -1,20 +1,20 @@
 use std::path::PathBuf;
 use windows::core::{ComInterface, HSTRING};
 use windows::UI::Color;
-use windows::UI::Text::FontWeight;
 use windows::Win32::Foundation::HWND;
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
 use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW};
 use winit::dpi::PhysicalSize;
 use winit::window::Window;
-use windows_ext::UI::Xaml::Controls::{FontIcon, TextBlock};
+use windows_ext::UI::Xaml::Controls::{FontIcon};
 use windows_ext::UI::Xaml::Hosting::DesktopWindowXamlSource;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
-use windows_ext::UI::Xaml::{ElementTheme, TextAlignment, Thickness, VerticalAlignment};
+use windows_ext::UI::Xaml::{ElementTheme, TextAlignment, VerticalAlignment};
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use crate::{cloned, hformat};
 use crate::ui::container::{Grid, GridSize, StackPanel};
-use crate::ui::controls::Slider;
+use crate::ui::controls::{Slider, TextBlock};
+use crate::ui::FontWeight;
 use crate::utils::error::Result;
 use crate::utils::extensions::WindowExt;
 
@@ -53,19 +53,16 @@ impl XamlGui {
             .with_padding(20.0)?
             .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
             .with_background(&SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 70})?)?
-            .with_child(&{
-                let text_block = TextBlock::new()?;
-                text_block.SetText(&HSTRING::from("Adjust Brightness"))?;
-                text_block.SetVerticalAlignment(VerticalAlignment::Center)?;
-                text_block.SetPadding(Thickness { Left: 20.0, Top: 0.0, Right: 0.0, Bottom: 0.0})?;
-                text_block.SetFontSize(15.0)?;
-                text_block
-            }, 0, 0)?
+            .with_child(&TextBlock::new()?
+                .with_text("Adjust Brightness")?
+                .with_font_size(15.0)?
+                .with_vertical_alignment(VerticalAlignment::Center)?
+                .with_padding((20.0, 0.0, 0.0, 0.0))?, 0, 0)?
             .with_child(&StackPanel::horizontal()?
                 .with_child(&{
                     let icon = FontIcon::new()?;
                     icon.SetGlyph(&HSTRING::from("\u{E713}"))?; // Modern Windows 11 Settings icon
-                    icon.SetFontWeight(FontWeight { Weight: 500 })?;
+                    icon.SetFontWeight(FontWeight::Medium.into())?;
                     icon.SetVerticalAlignment(VerticalAlignment::Center)?;
                     icon
                 })?, 0, 1)?;
@@ -138,26 +135,22 @@ struct MonitorEntry {
 impl MonitorEntry {
 
     pub fn create(monitor: DetectedMonitor) -> Result<Self> {
-        let text_box = {
-            let text_box = TextBlock::new()?;
-            text_box.SetVerticalAlignment(VerticalAlignment::Center)?;
-            text_box.SetTextAlignment(TextAlignment::Center)?;
-            text_box.SetFontSize(20.0)?;
-            text_box.SetFontWeight(FontWeight { Weight: 400 })?;
-            //text_box.SetPadding(Thickness { Left: 10.0, Top: 0.0, Right: 10.0, Bottom: 0.0 })?;
-            text_box
-        };
+        let label = TextBlock::new()?
+            .with_vertical_alignment(VerticalAlignment::Center)?
+            .with_text_alignment(TextAlignment::Center)?
+            .with_font_size(20.0)?
+            .with_font_weight(FontWeight::Medium)?;
 
         let slider = Slider::new()?
             .with_vertical_alignment(VerticalAlignment::Center)?
             .with_value(monitor.current_brihtness as f64)?
             .with_mouse_scrollable()?
-            .with_value_changed_handler(cloned!([text_box] move |args| {
-                text_box.SetText(&hformat!("{}", args.NewValue()?))?;
+            .with_value_changed_handler(cloned!([label] move |args| {
+                label.set_text(hformat!("{}", args.NewValue()?))?;
                 Ok(())
             }))?;
 
-        text_box.SetText(&hformat!("{}", slider.get_value()?))?;
+        label.set_text(hformat!("{}", slider.get_value()?))?;
 
 
         let ui = StackPanel::vertical()?
@@ -168,20 +161,17 @@ impl MonitorEntry {
                     let icon = FontIcon::new()?;
                     //icon.SetFontFamily(&icon_font)?;
                     icon.SetGlyph(&HSTRING::from("\u{E7f4}"))?;
-                    icon.SetFontWeight(FontWeight { Weight: 500 })?;
+                    icon.SetFontWeight(FontWeight::Medium.into())?;
                     icon
                 })?
-                .with_child(&{
-                    let text_block = TextBlock::new()?;
-                    text_block.SetText(&HSTRING::from(monitor.name))?;
-                    text_block.SetFontSize(20.0)?;
-                    text_block
-                })?)?
+                .with_child(&TextBlock::new()?
+                    .with_text(monitor.name)?
+                    .with_font_size(20.0)?)?)?
             .with_child(&Grid::new()?
                 .with_column_widths([GridSize::Fraction(1.0), GridSize::Pixel(40.0)])?
                 .with_column_spacing(8.0)?
                 .with_child(&slider, 0, 0)?
-                .with_child(&text_box, 0, 1)?)?;
+                .with_child(&label, 0, 1)?)?;
 
         Ok(Self {
             path: monitor.path,

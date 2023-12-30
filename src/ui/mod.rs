@@ -51,7 +51,7 @@ pub trait NewType {
     fn as_inner(&self) -> &Self::Inner;
 }
 
-pub use windows_ext::UI::Xaml::VerticalAlignment;
+pub use windows_ext::UI::Xaml::{VerticalAlignment, TextAlignment};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Padding {
@@ -102,5 +102,35 @@ impl From<Padding> for windows_ext::UI::Xaml::Thickness {
             Right: value.right,
             Bottom: value.bottom,
         }
+    }
+}
+
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+pub struct FontWeight(pub u16);
+
+#[allow(non_upper_case_globals)]
+impl FontWeight {
+    pub const ExtraBlack: Self = Self(950);
+    pub const Black: Self = Self(900);
+    pub const ExtraBold: Self = Self(800);
+    pub const Bold: Self = Self(700);
+    pub const SemiBold: Self = Self(600);
+    pub const Medium: Self = Self(500);
+    pub const Normal: Self = Self(500);
+    pub const SemiLight: Self = Self(350);
+    pub const Light: Self = Self(300);
+    pub const ExtraLight: Self = Self(200);
+    pub const Thin: Self = Self(100);
+}
+
+impl From<u16> for FontWeight {
+    fn from(value: u16) -> Self {
+        Self(value)
+    }
+}
+
+impl From<FontWeight> for windows::UI::Text::FontWeight {
+    fn from(value: FontWeight) -> Self {
+        Self { Weight: value.0 }
     }
 }

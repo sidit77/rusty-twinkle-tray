@@ -1,8 +1,8 @@
-use windows::core::ComInterface;
+use windows::core::{ComInterface, HSTRING};
 use windows::Win32::UI::WindowsAndMessaging::WHEEL_DELTA;
 use windows_ext::UI::Xaml::Controls::Primitives::{RangeBaseValueChangedEventArgs, RangeBaseValueChangedEventHandler};
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
-use super::VerticalAlignment;
+use super::{FontWeight, Padding, VerticalAlignment, TextAlignment};
 use crate::Result;
 use crate::ui::NewType;
 use crate::utils::error::{OptionExt, ResultEx};
@@ -58,6 +58,50 @@ impl Slider {
 
     pub fn set_value(&self, value: f64) -> Result<()> {
         Ok(self.0.SetValue2(value)?)
+    }
+
+}
+
+new_type!(TextBlock, windows_ext::UI::Xaml::Controls::TextBlock);
+
+impl TextBlock {
+
+    pub fn new() -> Result<Self> {
+        Ok(Self(<Self as NewType>::Inner::new()?))
+    }
+
+    pub fn with_text<T: Into<HSTRING>>(self, text: T) -> Result<Self> {
+        self.0.SetText(&text.into())?;
+        Ok(self)
+    }
+
+    pub fn with_vertical_alignment(self, alignment: VerticalAlignment) -> Result<Self> {
+        self.0.SetVerticalAlignment(alignment)?;
+        Ok(self)
+    }
+
+    pub fn with_text_alignment(self, alignment: TextAlignment) -> Result<Self> {
+        self.0.SetTextAlignment(alignment)?;
+        Ok(self)
+    }
+
+    pub fn with_padding<P: Into<Padding>>(self, padding: P) -> Result<Self> {
+        self.0.SetPadding(padding.into().into())?;
+        Ok(self)
+    }
+
+    pub fn with_font_size(self, size: f64) -> Result<Self> {
+        self.0.SetFontSize(size)?;
+        Ok(self)
+    }
+
+    pub fn with_font_weight<W: Into<FontWeight>>(self, weight: W) -> Result<Self> {
+        self.0.SetFontWeight(weight.into().into())?;
+        Ok(self)
+    }
+
+    pub fn set_text<T: Into<HSTRING>>(&self, text: T) -> Result<()> {
+        Ok(self.0.SetText(&text.into())?)
     }
 
 }

@@ -46,7 +46,7 @@ fn run() -> Result<()> {
 
     let _tray = TrayIconBuilder::new()
         .with_tooltip("Change Brightness")
-        .with_icon(Icon::from_rgba(vec![255u8; 4 * 32 * 32], 32, 32).unwrap())
+        .with_icon(Icon::from_rgba(generate_circle_icon_rgba(32), 32, 32).unwrap())
         .with_menu(Menu::new([MenuItem::button("Quit", CustomEvent::Quit)]))
         .build_event_loop(&event_loop, |event| match event {
             TrayEvent::Tray(ClickType::Left) => Some(CustomEvent::Show),
@@ -146,5 +146,31 @@ fn main() -> ExitCode {
             ExitCode::FAILURE
         }
     }
+}
+fn generate_circle_icon_rgba(size: usize) -> Vec<u8> {
+    let radius = size as f32 / 2.0;
+    let center = size as f32 / 2.0;
+
+    let mut rgba_data = vec![0; 4 * size * size];
+
+    for y in 0..size {
+        for x in 0..size {
+            let offset = 4 * (y * size + x);
+            let dx = x as f32 - center;
+            let dy = y as f32 - center;
+            let distance_squared = dx * dx + dy * dy;
+
+            // Check if the pixel is inside the circle
+            if distance_squared <= radius * radius {
+                // Create a unique color pattern based on pixel position
+                rgba_data[offset] = (x as u8 + y as u8) % 255;  // Red
+                rgba_data[offset + 1] = ((2 * x as u8 + y as u8) % 255).wrapping_add(128);  // Green
+                rgba_data[offset + 2] = ((x as u8).wrapping_add(2 * (y as u8)) % 255).wrapping_add(64);  // Blue
+                rgba_data[offset + 3] = 255;  // Alpha
+            }
+        }
+    }
+
+    rgba_data
 }
 

@@ -1,8 +1,10 @@
 use std::backtrace::{Backtrace, BacktraceStatus};
+use std::borrow::Cow;
 use std::fmt::{Debug, Display, Formatter};
 use std::panic::Location;
+use betrayer::{ErrorSource, TrayError};
 
-use windows::core::Error;
+use windows::core::{Error, HRESULT};
 use windows::Win32::Foundation::NO_ERROR;
 
 pub type Result<T> = std::result::Result<T, TracedError>;
@@ -45,14 +47,22 @@ impl Display for Trace {
     }
 }
 
+enum InnerError {
+    Win(Error),
+    String(Cow<'static, str>)
+}
+
 pub struct TracedError {
-    inner: Error,
+    inner: InnerError,
     backtrace: Trace
 }
 
 impl TracedError {
-    pub fn error(&self) -> &Error {
-        &self.inner
+    pub fn message(&self) -> String {
+        match &self.inner {
+            InnerError::Win(err) => err.message().to_string_lossy(),
+            InnerError::String(msg) => msg.clone().into_owned()
+        }
     }
 
     pub fn trace(&self) -> &Trace {
@@ -62,36 +72,70 @@ impl TracedError {
 
 impl Debug for TracedError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self.backtrace.is_backtrace() {
-            true => write!(f, "{:?}\n{}", self.inner, self.backtrace),
-            false => f
-                .debug_struct("Error")
-                .field("code", &self.inner.code())
-                .field("message", &self.inner.message())
-                .field("location", &FromDisplay(&self.backtrace))
-                .finish()
+        let mut debug = f.debug_struct("Error");
+
+        match &self.inner {
+            InnerError::Win(err) => debug
+                .field("code", &err.code())
+                .field("message", &err.message()),
+            InnerError::String(msg) => debug
+                .field("message", &FromDisplay(msg))
+        };
+
+        if !self.backtrace.is_backtrace() {
+            debug.field("location", &FromDisplay(&self.backtrace));
         }
+
+        debug.finish()?;
+        if self.backtrace.is_backtrace() {
+            write!(f, "\n{}", self.backtrace)?;
+        }
+
+        Ok(())
     }
 }
 
 impl Display for TracedError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        Display::fmt(&self.inner, f)
+        match &self.inner {
+            InnerError::Win(inner) => Display::fmt(inner, f),
+            InnerError::String(inner) => Display::fmt(inner, f)
+        }
     }
 }
 
 impl std::error::Error for TracedError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        Some(&self.inner)
+        match &self.inner {
+            InnerError::Win(err) => Some(err),
+            InnerError::String(_) => None
+        }
     }
 }
 
-impl<T: Into<Error>> From<T> for TracedError {
+impl From<Error> for TracedError {
     #[track_caller]
-    fn from(value: T) -> Self {
+    fn from(value: Error) -> Self {
         Self {
-            inner: value.into(),
+            inner: InnerError::Win(value),
             backtrace: Trace::capture()
+        }
+    }
+}
+
+impl From<TrayError> for TracedError {
+    #[track_caller]
+    fn from(value: TrayError) -> Self {
+        let inner = match value.source() {
+            ErrorSource::Os(err) => {
+                let code = HRESULT(err.code().0);
+                InnerError::Win(Error::from(code))
+            },
+            ErrorSource::Custom(inner) => InnerError::String(inner.clone())
+        };
+        Self {
+            inner,
+            backtrace: Trace::Location(value.location())
         }
     }
 }
@@ -110,8 +154,10 @@ pub trait ResultEx<T> {
 
 impl<T> ResultEx<T> for Result<T> {
     fn to_win_result(self) -> windows::core::Result<T> {
-        self
-            .map_err(|err| err.inner)
+        self.map_err(|err| match err.inner {
+            InnerError::Win(err) => err,
+            _ => Error::from(NO_ERROR)
+        })
     }
 }
 

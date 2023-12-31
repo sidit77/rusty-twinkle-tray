@@ -23,9 +23,9 @@ use crate::backend::MonitorController;
 use crate::interface::{XamlGui};
 use crate::monitors::MonitorPath;
 
-use crate::utils::error::OptionExt;
+use crate::utils::error::{OptionExt};
 use crate::utils::{logger, panic};
-use crate::utils::extensions::MonitorHandleExt;
+use crate::utils::extensions::{EventLoopExt, MonitorHandleExt};
 
 pub use crate::utils::error::Result;
 
@@ -49,14 +49,13 @@ fn run() -> Result<()> {
 
     let _tray = TrayIconBuilder::new()
         .with_tooltip("Change Brightness")
-        .with_icon(Icon::from_rgba(generate_circle_icon_rgba(32), 32, 32).unwrap())
+        .with_icon(Icon::from_rgba(generate_circle_icon_rgba(32), 32, 32)?)
         .with_menu(Menu::new([MenuItem::button("Quit", CustomEvent::Quit)]))
         .build_event_loop(&event_loop, |event| match event {
             TrayEvent::Tray(ClickType::Left) => Some(CustomEvent::Show),
             TrayEvent::Menu(e) => Some(e),
             _ => None
-        })
-        .unwrap();
+        })?;
 
     let window = WindowBuilder::new()
         .with_title("XAML Window")
@@ -89,9 +88,9 @@ fn run() -> Result<()> {
     window.set_visible(true);
 
     event_loop
-        .run(|event, target| match event {
+        .run_result(|event, target| Ok(match event {
             Event::WindowEvent { event, .. } => match event {
-                WindowEvent::Resized(new) => gui.resize(new).unwrap(),
+                WindowEvent::Resized(new) => gui.resize(new)?,
                 WindowEvent::Focused(true) => gui.focus(),
                 _ => {}
             },
@@ -133,8 +132,7 @@ fn run() -> Result<()> {
                 }
             },
             _ => {}
-        })
-        .unwrap();
+        }))?;
 
     unsafe { RoUninitialize() }
     Ok(())
@@ -148,7 +146,7 @@ fn main() -> ExitCode {
         Ok(()) => ExitCode::SUCCESS,
         Err(err) => {
             log::error!("{:?}", err);
-            panic::show_msg(format_args!("{}\n at {}", err.error().message(), err.trace()));
+            panic::show_msg(format_args!("{}\n at {}", err.message(), err.trace()));
             ExitCode::FAILURE
         }
     }

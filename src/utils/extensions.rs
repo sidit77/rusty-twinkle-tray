@@ -57,7 +57,7 @@ impl<T> EventLoopExt<T> for EventLoop<T> {
                     *result1 = Err(err);
                     target.exit();
                 }
-            }).unwrap();
+            })?;
         }
         result1
     }

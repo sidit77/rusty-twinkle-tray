@@ -42,7 +42,7 @@ fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
-    let event_loop = EventLoopBuilder::with_user_event().build().unwrap();
+    let event_loop = EventLoopBuilder::with_user_event().build()?;
     event_loop.listen_device_events(DeviceEvents::Never);
 
     let controller = MonitorController::new(&event_loop);
@@ -69,8 +69,7 @@ fn run() -> Result<()> {
         .with_visible(true)
         .with_resizable(false)
         .with_enabled_buttons(WindowButtons::empty())
-        .build(&event_loop)
-        .unwrap();
+        .build(&event_loop)?;
 
     let mut gui = XamlGui::new(&window)?;
 
@@ -102,9 +101,11 @@ fn run() -> Result<()> {
                 CustomEvent::Show => {
                     controller.refresh_brightness();
                     if let Some(workspace) = target.primary_monitor().and_then(|m| m.get_work_area().ok()) {
-                        let _ = window.request_inner_size(PhysicalSize::new(
-                            window.outer_size().width,
-                            gui.get_required_height().unwrap()));
+                        if let Ok(height) = gui.get_required_height() {
+                            let _ = window.request_inner_size(PhysicalSize::new(
+                                window.outer_size().width,
+                                height));
+                        }
 
                         let gap = 14;
                         let size = window.outer_size();
@@ -125,10 +126,10 @@ fn run() -> Result<()> {
                 }
                 CustomEvent::RegisterMonitor(name, path) => {
                     log::info!("Found monitor: {}", name);
-                    gui.register_monitor(name, path, controller.create_proxy()).unwrap()
+                    gui.register_monitor(name, path, controller.create_proxy())?
                 },
                 CustomEvent::UpdateBrightness(path, value) => {
-                    gui.update_brightness(path, value).unwrap();
+                    gui.update_brightness(path, value)?;
                 }
             },
             _ => {}

@@ -6,12 +6,13 @@ use betrayer::{ErrorSource, TrayError};
 
 use windows::core::{Error, HRESULT};
 use windows::Win32::Foundation::NO_ERROR;
+use winit::error::{EventLoopError, OsError};
 
 pub type Result<T> = std::result::Result<T, TracedError>;
 
 pub enum Trace {
     Backtrace(Box<Backtrace>),
-    Location(&'static Location<'static>)
+    Location(Location<'static>)
 }
 
 impl Trace {
@@ -20,7 +21,7 @@ impl Trace {
         let capture = Backtrace::capture();
         match capture.status() {
             BacktraceStatus::Captured => Self::Backtrace(Box::new(capture)),
-            _ => Self::Location(Location::caller())
+            _ => Self::Location(*Location::caller())
         }
     }
 
@@ -49,7 +50,8 @@ impl Display for Trace {
 
 enum InnerError {
     Win(Error),
-    String(Cow<'static, str>)
+    String(Cow<'static, str>),
+    External(Box<dyn std::error::Error + 'static>)
 }
 
 pub struct TracedError {
@@ -61,7 +63,8 @@ impl TracedError {
     pub fn message(&self) -> String {
         match &self.inner {
             InnerError::Win(err) => err.message().to_string_lossy(),
-            InnerError::String(msg) => msg.clone().into_owned()
+            InnerError::String(msg) => msg.clone().into_owned(),
+            InnerError::External(msg) => msg.to_string()
         }
     }
 
@@ -79,7 +82,9 @@ impl Debug for TracedError {
                 .field("code", &err.code())
                 .field("message", &err.message()),
             InnerError::String(msg) => debug
-                .field("message", &FromDisplay(msg))
+                .field("message", &FromDisplay(msg)),
+            InnerError::External(err) => debug
+                .field("message", &FromDisplay(err))
         };
 
         if !self.backtrace.is_backtrace() {
@@ -99,7 +104,8 @@ impl Display for TracedError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match &self.inner {
             InnerError::Win(inner) => Display::fmt(inner, f),
-            InnerError::String(inner) => Display::fmt(inner, f)
+            InnerError::String(inner) => Display::fmt(inner, f),
+            InnerError::External(inner) => Display::fmt(inner, f)
         }
     }
 }
@@ -108,7 +114,8 @@ impl std::error::Error for TracedError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match &self.inner {
             InnerError::Win(err) => Some(err),
-            InnerError::String(_) => None
+            InnerError::String(_) => None,
+            InnerError::External(err) => Some(err.as_ref())
         }
     }
 }
@@ -124,7 +131,7 @@ impl From<Error> for TracedError {
 }
 
 impl From<TrayError> for TracedError {
-    #[track_caller]
+
     fn from(value: TrayError) -> Self {
         let inner = match value.source() {
             ErrorSource::Os(err) => {
@@ -135,7 +142,29 @@ impl From<TrayError> for TracedError {
         };
         Self {
             inner,
-            backtrace: Trace::Location(value.location())
+            backtrace: Trace::Location(*value.location())
+        }
+    }
+}
+
+impl From<EventLoopError> for TracedError {
+
+    #[track_caller]
+    fn from(value: EventLoopError) -> Self {
+        Self {
+            inner: InnerError::External(Box::new(value)),
+            backtrace: Trace::capture(),
+        }
+    }
+}
+
+impl From<OsError> for TracedError {
+
+    #[track_caller]
+    fn from(value: OsError) -> Self {
+        Self {
+            inner: InnerError::External(Box::new(value)),
+            backtrace: Trace::capture(),
         }
     }
 }

@@ -1,6 +1,7 @@
-use std::fmt::Debug;
+use std::fmt::{Debug, Formatter};
 use std::ops::RangeInclusive;
 use std::path::{Path, PathBuf};
+use std::sync::Arc;
 use windows::Win32::Devices::Display::*;
 use windows::Win32::Foundation::{BOOL, HANDLE};
 use windows::Win32::Graphics::Gdi::HMONITOR;
@@ -10,10 +11,25 @@ use crate::win_assert;
 use crate::utils::string::WStr;
 use crate::utils::error::{OptionExt, Result};
 
+#[derive(Clone, Eq, PartialEq, PartialOrd, Ord)]
+pub struct MonitorPath(Arc<Path>);
+
+impl Debug for MonitorPath {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        Debug::fmt(&self.0, f)
+    }
+}
+
+impl<const N: usize> From<WStr<N>> for MonitorPath {
+    fn from(value: WStr<N>) -> Self {
+        Self(Arc::from(PathBuf::from(value)))
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Monitor {
     name: String,
-    path: PathBuf,
+    path: MonitorPath,
     hmonitor: HMONITOR
 }
 
@@ -44,7 +60,7 @@ impl Monitor {
     pub fn name(&self) -> &str {
         &self.name
     }
-    pub fn path(&self) -> &Path {
+    pub fn path(&self) -> &MonitorPath {
         &self.path
     }
 
@@ -153,11 +169,10 @@ bitflags! {
 type GdiName = WStr<32>;
 mod paths {
     use std::mem::size_of;
-    use std::path::PathBuf;
     use windows::Win32::Devices::Display::{DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME, DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME, DISPLAYCONFIG_DEVICE_INFO_HEADER, DISPLAYCONFIG_MODE_INFO, DISPLAYCONFIG_PATH_INFO, DISPLAYCONFIG_SOURCE_DEVICE_NAME, DISPLAYCONFIG_TARGET_DEVICE_NAME, DisplayConfigGetDeviceInfo, GetDisplayConfigBufferSizes, QDC_ONLY_ACTIVE_PATHS, QueryDisplayConfig};
     use windows::Win32::Foundation::WIN32_ERROR;
     use crate::utils::error::Result;
-    use super::{GdiName, WStr};
+    use super::{GdiName, MonitorPath, WStr};
 
     pub fn find_all_paths() -> Result<Vec<DISPLAYCONFIG_PATH_INFO>> {
         unsafe {
@@ -190,7 +205,7 @@ mod paths {
         Ok(source_name.viewGdiDeviceName.into())
     }
 
-    pub(super) fn get_name_and_path(path: &DISPLAYCONFIG_PATH_INFO) -> Result<(String, PathBuf)> {
+    pub(super) fn get_name_and_path(path: &DISPLAYCONFIG_PATH_INFO) -> Result<(String, MonitorPath)> {
         let mut target_name = DISPLAYCONFIG_TARGET_DEVICE_NAME  {
             header: DISPLAYCONFIG_DEVICE_INFO_HEADER {
                 r#type: DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME,
@@ -202,6 +217,7 @@ mod paths {
         };
 
         unsafe { WIN32_ERROR( DisplayConfigGetDeviceInfo(&mut target_name.header) as u32).ok()? };
+
 
         let path = WStr::from(target_name.monitorDevicePath).into();
         let name = WStr::from(target_name.monitorFriendlyDeviceName).to_string_lossy();

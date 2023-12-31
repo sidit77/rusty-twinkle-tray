@@ -4,6 +4,7 @@ mod monitors;
 mod utils;
 mod ui;
 mod interface;
+mod backend;
 
 use std::process::ExitCode;
 
@@ -18,8 +19,9 @@ use winit::event::{Event, WindowEvent};
 use winit::event_loop::{DeviceEvents, EventLoopBuilder};
 use winit::platform::windows::{WindowBuilderExtWindows};
 use winit::window::{WindowBuilder, WindowButtons};
-use crate::interface::{DetectedMonitor, XamlGui};
-use crate::monitors::Monitor;
+use crate::backend::MonitorController;
+use crate::interface::{XamlGui};
+use crate::monitors::MonitorPath;
 
 use crate::utils::error::OptionExt;
 use crate::utils::{logger, panic};
@@ -27,22 +29,23 @@ use crate::utils::extensions::MonitorHandleExt;
 
 pub use crate::utils::error::Result;
 
-#[derive(Debug, Copy, Clone)]
-enum CustomEvent {
+#[derive(Debug, Clone)]
+pub enum CustomEvent {
     Quit,
     Show,
-    FocusLost
+    FocusLost,
+    RegisterMonitor(String, MonitorPath),
+    UpdateBrightness(MonitorPath, u32)
 }
 
 fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
-    let monitors = Monitor::find_all()?;
-
     let event_loop = EventLoopBuilder::with_user_event().build().unwrap();
-
     event_loop.listen_device_events(DeviceEvents::Never);
+
+    let controller = MonitorController::new(&event_loop);
 
     let _tray = TrayIconBuilder::new()
         .with_tooltip("Change Brightness")
@@ -70,15 +73,7 @@ fn run() -> Result<()> {
         .build(&event_loop)
         .unwrap();
 
-    let gui = XamlGui::new(&window, monitors
-        .iter()
-        .map(|m| DetectedMonitor {
-            name: m.name().to_string(),
-            path: m.path().to_path_buf(),
-            current_brightness: 0,
-        })
-        .collect()
-    )?;
+    let mut gui = XamlGui::new(&window)?;
 
     FocusManager::LosingFocus(&EventHandler::new({
         let proxy = event_loop.create_proxy();
@@ -101,8 +96,12 @@ fn run() -> Result<()> {
                 _ => {}
             },
             Event::UserEvent(event) => match event {
-                CustomEvent::Quit => target.exit(),
+                CustomEvent::Quit => {
+                    controller.shutdown();
+                    target.exit()
+                },
                 CustomEvent::Show => {
+                    controller.refresh_brightness();
                     if let Some(workspace) = target.primary_monitor().and_then(|m| m.get_work_area().ok()) {
                         let _ = window.request_inner_size(PhysicalSize::new(
                             window.outer_size().width,
@@ -124,6 +123,13 @@ fn run() -> Result<()> {
                 }
                 CustomEvent::FocusLost => {
                     window.set_visible(false);
+                }
+                CustomEvent::RegisterMonitor(name, path) => {
+                    log::info!("Found monitor: {}", name);
+                    gui.register_monitor(name, path, controller.create_proxy()).unwrap()
+                },
+                CustomEvent::UpdateBrightness(path, value) => {
+                    gui.update_brightness(path, value).unwrap();
                 }
             },
             _ => {}

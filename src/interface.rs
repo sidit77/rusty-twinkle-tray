@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::collections::BTreeMap;
 use windows::core::ComInterface;
 use windows::UI::Color;
 use windows::Win32::Foundation::HWND;
@@ -10,6 +10,8 @@ use windows_ext::UI::Xaml::Hosting::DesktopWindowXamlSource;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use crate::{cloned, hformat};
+use crate::backend::MonitorControllerProxy;
+use crate::monitors::MonitorPath;
 use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::ui::controls::{Slider, TextBlock, FontIcon};
 use crate::ui::{FontWeight, ElementTheme, TextAlignment, VerticalAlignment};
@@ -20,12 +22,12 @@ pub struct XamlGui {
     hwnd: HWND,
     bottom_bar: Grid,
     monitor_panel: StackPanel,
-    monitor_controls: Vec<MonitorEntry>,
+    monitor_controls: BTreeMap<MonitorPath, MonitorEntry>,
     _desktop_source: DesktopWindowXamlSource
 }
 
 impl XamlGui {
-    pub fn new(parent: &Window, monitors: Vec<DetectedMonitor>) -> Result<Self> {
+    pub fn new(parent: &Window) -> Result<Self> {
         let desktop_source = DesktopWindowXamlSource::new()?;
         let interop = desktop_source.cast::<IDesktopWindowXamlSourceNative>()?;
         unsafe {
@@ -33,17 +35,12 @@ impl XamlGui {
         }
         let island = unsafe { interop.WindowHandle() }?;
 
-        let monitor_controls = monitors
-            .into_iter()
-            .map(MonitorEntry::create)
-            .collect::<Result<Vec<_>>>()?;
-
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
 
         let stack_panel = StackPanel::vertical()?
             .with_spacing(20.0)?
-            .with_padding((20.0, 14.0))?
-            .with_children(monitor_controls.iter().map(MonitorEntry::ui))?;
+            .with_padding((20.0, 14.0))?;
+            //.with_children(monitor_controls.iter().map(MonitorEntry::ui))?;
 
         // Create a new stack panel for the bottom bar
         let bottom_bar = Grid::new()?
@@ -88,12 +85,28 @@ impl XamlGui {
             bottom_bar,
             _desktop_source: desktop_source,
             monitor_panel: stack_panel,
-            monitor_controls,
+            monitor_controls: BTreeMap::new(),
         })
     }
 
     pub fn get_required_height(&self) -> Result<u32> {
         Ok((self.monitor_panel.get_actual_height()? + self.bottom_bar.get_actual_height()?) as u32)
+    }
+
+    pub fn register_monitor(&mut self, name: String, path: MonitorPath, proxy: MonitorControllerProxy) -> Result<()> {
+        assert!(!self.monitor_controls.contains_key(&path));
+        let monitor = MonitorEntry::create(name, path.clone(), proxy)?;
+        self.monitor_panel.add_child(monitor.ui())?;
+        self.monitor_controls.insert(path, monitor);
+        Ok(())
+    }
+
+    pub fn update_brightness(&self, path: MonitorPath, new_brightness: u32) -> Result<()> {
+        match self.monitor_controls.get(&path) {
+            None => log::warn!("Monitor is not registered: {:?}", path),
+            Some(entry) => entry.set_brightness(new_brightness)?
+        }
+        Ok(())
     }
 
     pub fn resize(&self, new_size: PhysicalSize<u32>) -> Result<()> {
@@ -119,21 +132,14 @@ impl XamlGui {
 
 }
 
-pub struct DetectedMonitor {
-    pub name: String,
-    pub path: PathBuf,
-    pub current_brightness: u32
-}
-
 struct MonitorEntry {
-    path: PathBuf,
     ui: StackPanel,
     slider: Slider
 }
 
 impl MonitorEntry {
 
-    pub fn create(monitor: DetectedMonitor) -> Result<Self> {
+    pub fn create(name: String, path: MonitorPath, proxy: MonitorControllerProxy) -> Result<Self> {
         let label = TextBlock::new()?
             .with_vertical_alignment(VerticalAlignment::Center)?
             .with_text_alignment(TextAlignment::Center)?
@@ -142,10 +148,12 @@ impl MonitorEntry {
 
         let slider = Slider::new()?
             .with_vertical_alignment(VerticalAlignment::Center)?
-            .with_value(monitor.current_brightness as f64)?
+            .with_value(0.0)?
             .with_mouse_scrollable()?
             .with_value_changed_handler(cloned!([label] move |args| {
-                label.set_text(hformat!("{}", args.NewValue()?))?;
+                let new = args.NewValue()? as u32;
+                label.set_text(hformat!("{}", new))?;
+                proxy.set_brightness(path.clone(), new);
                 Ok(())
             }))?;
 
@@ -159,7 +167,7 @@ impl MonitorEntry {
                 .with_child(&FontIcon::new('\u{E7f4}')?
                     .with_font_weight(FontWeight::Medium)?)?
                 .with_child(&TextBlock::new()?
-                    .with_text(monitor.name)?
+                    .with_text(name)?
                     .with_font_size(20.0)?)?)?
             .with_child(&Grid::new()?
                 .with_column_widths([GridSize::Fraction(1.0), GridSize::Pixel(40.0)])?
@@ -168,10 +176,13 @@ impl MonitorEntry {
                 .with_child(&label, 0, 1)?)?;
 
         Ok(Self {
-            path: monitor.path,
             ui,
             slider,
         })
+    }
+
+    pub fn set_brightness(&self, value: u32) -> Result<()> {
+        Ok(self.slider.set_value(value as f64)?)
     }
 
     pub fn ui(&self) -> &StackPanel {

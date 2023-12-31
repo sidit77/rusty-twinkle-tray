@@ -30,17 +30,22 @@ impl StackPanel {
         Ok(self)
     }
 
+    pub fn add_child<T: TryIntoParam<UIElement>>(&self, child: T) -> Result<()> {
+        self.0.Children()?.Append(child)?;
+        Ok(())
+    }
+
     pub fn with_child<T: TryIntoParam<UIElement>>(self, child: T) -> Result<Self> {
         self.0.Children()?.Append(child)?;
         Ok(self)
     }
 
-    pub fn with_children<T: TryIntoParam<UIElement>, I: IntoIterator<Item=T>>(mut self, children: I) -> Result<Self> {
-        for child in children {
-            self = self.with_child(child)?;
-        }
-        Ok(self)
-    }
+    //pub fn with_children<T: TryIntoParam<UIElement>, I: IntoIterator<Item=T>>(mut self, children: I) -> Result<Self> {
+    //    for child in children {
+    //        self.add_child(child)?;
+    //    }
+    //    Ok(self)
+    //}
 
     pub fn get_actual_height(&self) -> Result<f64> {
         Ok(self.0.ActualHeight()?)

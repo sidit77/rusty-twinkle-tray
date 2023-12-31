@@ -46,20 +46,25 @@ impl XamlGui {
             .with_children(monitor_controls.iter().map(MonitorEntry::ui))?;
 
         // Create a new stack panel for the bottom bar
-
         let bottom_bar = Grid::new()?
-            .with_padding(20.0)?
-            .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
-            .with_background(&SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 70})?)?
-            .with_child(&TextBlock::new()?
-                .with_text("Adjust Brightness")?
-                .with_font_size(15.0)?
+        .with_padding(20.0)?
+        .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
+        .with_background(&SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 70})?)?
+        .with_child(&TextBlock::new()?
+            .with_text("Adjust Brightness")?
+            .with_font_size(15.0)?
+            .with_vertical_alignment(VerticalAlignment::Center)?
+            .with_padding((20.0, 0.0, 0.0, 0.0))?, 0, 0)?
+        .with_child(&StackPanel::horizontal()?
+            .with_child(&FontIcon::new('\u{E890}')? // New Hide Icon
                 .with_vertical_alignment(VerticalAlignment::Center)?
-                .with_padding((20.0, 0.0, 0.0, 0.0))?, 0, 0)?
-            .with_child(&StackPanel::horizontal()?
-                .with_child(&FontIcon::new('\u{E713}')? // Modern Windows 11 Settings icon
-                    .with_vertical_alignment(VerticalAlignment::Center)?
-                    .with_font_weight(FontWeight::Medium)?)?, 0, 1)?;
+                .with_font_weight(FontWeight::Medium)?)?
+            .with_child(&FontIcon::new('\u{E713}')? // Modern Windows 11 Settings icon
+                .with_vertical_alignment(VerticalAlignment::Center)?
+                .with_font_weight(FontWeight::Medium)?)?
+            .with_spacing(8.0)?, 0, 1)?;
+    
+    
 
         let main_grid = Grid::new()? // Create a new grid to hold the main stackpanel and the bottom bar
             .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?
@@ -117,7 +122,7 @@ impl XamlGui {
 pub struct DetectedMonitor {
     pub name: String,
     pub path: PathBuf,
-    pub current_brihtness: u32
+    pub current_brightness: u32
 }
 
 struct MonitorEntry {
@@ -137,7 +142,7 @@ impl MonitorEntry {
 
         let slider = Slider::new()?
             .with_vertical_alignment(VerticalAlignment::Center)?
-            .with_value(monitor.current_brihtness as f64)?
+            .with_value(monitor.current_brightness as f64)?
             .with_mouse_scrollable()?
             .with_value_changed_handler(cloned!([label] move |args| {
                 label.set_text(hformat!("{}", args.NewValue()?))?;

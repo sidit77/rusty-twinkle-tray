@@ -20,7 +20,7 @@ use winit::dpi::{PhysicalPosition, PhysicalSize};
 use winit::event::{Event, WindowEvent};
 use winit::event_loop::{DeviceEvents, EventLoopBuilder};
 use winit::platform::windows::{WindowBuilderExtWindows};
-use winit::window::{WindowBuilder, WindowButtons};
+use winit::window::{WindowBuilder, WindowButtons, WindowLevel};
 use crate::backend::MonitorController;
 use crate::config::Config;
 use crate::interface::{XamlGui};
@@ -121,6 +121,7 @@ fn run() -> Result<()> {
                         ));
 
                         window.set_visible(true);
+                        window.set_window_level(WindowLevel::AlwaysOnTop);
                         window.focus_window();
                     } else {
                         log::warn!("Can't find work area of primary monitor");

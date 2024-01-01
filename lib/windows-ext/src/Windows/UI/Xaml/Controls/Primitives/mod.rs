@@ -1,13 +1,14 @@
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IAppBarButtonTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IAppBarButtonTemplateSettings {
     type Vtable = IAppBarButtonTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IAppBarButtonTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IAppBarButtonTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -25,14 +26,15 @@ pub struct IAppBarButtonTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IAppBarTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IAppBarTemplateSettings {
     type Vtable = IAppBarTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IAppBarTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IAppBarTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -74,14 +76,15 @@ pub struct IAppBarTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IAppBarTemplateSettings2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IAppBarTemplateSettings2 {
     type Vtable = IAppBarTemplateSettings2_Vtbl;
-}
-impl ::core::clone::Clone for IAppBarTemplateSettings2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IAppBarTemplateSettings2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -107,14 +110,15 @@ pub struct IAppBarTemplateSettings2_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IAppBarToggleButtonTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IAppBarToggleButtonTemplateSettings {
     type Vtable = IAppBarToggleButtonTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IAppBarToggleButtonTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IAppBarToggleButtonTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -132,14 +136,15 @@ pub struct IAppBarToggleButtonTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IButtonBase(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IButtonBase {
     type Vtable = IButtonBase_Vtbl;
-}
-impl ::core::clone::Clone for IButtonBase {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IButtonBase {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -194,14 +199,15 @@ pub struct IButtonBase_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IButtonBaseFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IButtonBaseFactory {
     type Vtable = IButtonBaseFactory_Vtbl;
-}
-impl ::core::clone::Clone for IButtonBaseFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IButtonBaseFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -221,14 +227,15 @@ pub struct IButtonBaseFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IButtonBaseStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IButtonBaseStatics {
     type Vtable = IButtonBaseStatics_Vtbl;
-}
-impl ::core::clone::Clone for IButtonBaseStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IButtonBaseStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -262,14 +269,15 @@ pub struct IButtonBaseStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ICalendarPanel(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ICalendarPanel {
     type Vtable = ICalendarPanel_Vtbl;
-}
-impl ::core::clone::Clone for ICalendarPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ICalendarPanel {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -283,14 +291,15 @@ pub struct ICalendarPanel_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ICalendarViewTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ICalendarViewTemplateSettings {
     type Vtable = ICalendarViewTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for ICalendarViewTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ICalendarViewTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -364,14 +373,15 @@ pub struct ICalendarViewTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ICarouselPanel(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ICarouselPanel {
     type Vtable = ICarouselPanel_Vtbl;
-}
-impl ::core::clone::Clone for ICarouselPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ICarouselPanel {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -483,14 +493,15 @@ pub struct ICarouselPanel_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ICarouselPanelFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ICarouselPanelFactory {
     type Vtable = ICarouselPanelFactory_Vtbl;
-}
-impl ::core::clone::Clone for ICarouselPanelFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ICarouselPanelFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -510,14 +521,15 @@ pub struct ICarouselPanelFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IColorPickerSlider(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IColorPickerSlider {
     type Vtable = IColorPickerSlider_Vtbl;
-}
-impl ::core::clone::Clone for IColorPickerSlider {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IColorPickerSlider {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -539,14 +551,15 @@ pub struct IColorPickerSlider_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IColorPickerSliderFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IColorPickerSliderFactory {
     type Vtable = IColorPickerSliderFactory_Vtbl;
-}
-impl ::core::clone::Clone for IColorPickerSliderFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IColorPickerSliderFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -566,14 +579,15 @@ pub struct IColorPickerSliderFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IColorPickerSliderStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IColorPickerSliderStatics {
     type Vtable = IColorPickerSliderStatics_Vtbl;
-}
-impl ::core::clone::Clone for IColorPickerSliderStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IColorPickerSliderStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -591,14 +605,15 @@ pub struct IColorPickerSliderStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IColorSpectrum(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IColorSpectrum {
     type Vtable = IColorSpectrum_Vtbl;
-}
-impl ::core::clone::Clone for IColorSpectrum {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IColorSpectrum {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -695,14 +710,15 @@ pub struct IColorSpectrum_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IColorSpectrumFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IColorSpectrumFactory {
     type Vtable = IColorSpectrumFactory_Vtbl;
-}
-impl ::core::clone::Clone for IColorSpectrumFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IColorSpectrumFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -722,14 +738,15 @@ pub struct IColorSpectrumFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IColorSpectrumStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IColorSpectrumStatics {
     type Vtable = IColorSpectrumStatics_Vtbl;
-}
-impl ::core::clone::Clone for IColorSpectrumStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IColorSpectrumStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -783,14 +800,15 @@ pub struct IColorSpectrumStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IComboBoxTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IComboBoxTemplateSettings {
     type Vtable = IComboBoxTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IComboBoxTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IComboBoxTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -820,14 +838,15 @@ pub struct IComboBoxTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IComboBoxTemplateSettings2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IComboBoxTemplateSettings2 {
     type Vtable = IComboBoxTemplateSettings2_Vtbl;
-}
-impl ::core::clone::Clone for IComboBoxTemplateSettings2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IComboBoxTemplateSettings2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -845,14 +864,15 @@ pub struct IComboBoxTemplateSettings2_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ICommandBarFlyoutCommandBar(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ICommandBarFlyoutCommandBar {
     type Vtable = ICommandBarFlyoutCommandBar_Vtbl;
-}
-impl ::core::clone::Clone for ICommandBarFlyoutCommandBar {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ICommandBarFlyoutCommandBar {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -870,14 +890,15 @@ pub struct ICommandBarFlyoutCommandBar_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ICommandBarFlyoutCommandBarFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ICommandBarFlyoutCommandBarFactory {
     type Vtable = ICommandBarFlyoutCommandBarFactory_Vtbl;
-}
-impl ::core::clone::Clone for ICommandBarFlyoutCommandBarFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ICommandBarFlyoutCommandBarFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -897,14 +918,15 @@ pub struct ICommandBarFlyoutCommandBarFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ICommandBarFlyoutCommandBarTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ICommandBarFlyoutCommandBarTemplateSettings {
     type Vtable = ICommandBarFlyoutCommandBarTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for ICommandBarFlyoutCommandBarTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface
 for ICommandBarFlyoutCommandBarTemplateSettings {
@@ -999,14 +1021,15 @@ pub struct ICommandBarFlyoutCommandBarTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ICommandBarTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ICommandBarTemplateSettings {
     type Vtable = ICommandBarTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for ICommandBarTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ICommandBarTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1048,14 +1071,15 @@ pub struct ICommandBarTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ICommandBarTemplateSettings2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ICommandBarTemplateSettings2 {
     type Vtable = ICommandBarTemplateSettings2_Vtbl;
-}
-impl ::core::clone::Clone for ICommandBarTemplateSettings2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ICommandBarTemplateSettings2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1073,14 +1097,15 @@ pub struct ICommandBarTemplateSettings2_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ICommandBarTemplateSettings3(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ICommandBarTemplateSettings3 {
     type Vtable = ICommandBarTemplateSettings3_Vtbl;
-}
-impl ::core::clone::Clone for ICommandBarTemplateSettings3 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ICommandBarTemplateSettings3 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1098,14 +1123,15 @@ pub struct ICommandBarTemplateSettings3_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ICommandBarTemplateSettings4(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ICommandBarTemplateSettings4 {
     type Vtable = ICommandBarTemplateSettings4_Vtbl;
-}
-impl ::core::clone::Clone for ICommandBarTemplateSettings4 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ICommandBarTemplateSettings4 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1131,14 +1157,15 @@ pub struct ICommandBarTemplateSettings4_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDragCompletedEventArgs(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDragCompletedEventArgs {
     type Vtable = IDragCompletedEventArgs_Vtbl;
-}
-impl ::core::clone::Clone for IDragCompletedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDragCompletedEventArgs {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1164,14 +1191,15 @@ pub struct IDragCompletedEventArgs_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDragCompletedEventArgsFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDragCompletedEventArgsFactory {
     type Vtable = IDragCompletedEventArgsFactory_Vtbl;
-}
-impl ::core::clone::Clone for IDragCompletedEventArgsFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDragCompletedEventArgsFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1194,14 +1222,15 @@ pub struct IDragCompletedEventArgsFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDragDeltaEventArgs(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDragDeltaEventArgs {
     type Vtable = IDragDeltaEventArgs_Vtbl;
-}
-impl ::core::clone::Clone for IDragDeltaEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDragDeltaEventArgs {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1223,14 +1252,15 @@ pub struct IDragDeltaEventArgs_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDragDeltaEventArgsFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDragDeltaEventArgsFactory {
     type Vtable = IDragDeltaEventArgsFactory_Vtbl;
-}
-impl ::core::clone::Clone for IDragDeltaEventArgsFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDragDeltaEventArgsFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1252,14 +1282,15 @@ pub struct IDragDeltaEventArgsFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDragStartedEventArgs(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDragStartedEventArgs {
     type Vtable = IDragStartedEventArgs_Vtbl;
-}
-impl ::core::clone::Clone for IDragStartedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDragStartedEventArgs {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1281,14 +1312,15 @@ pub struct IDragStartedEventArgs_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDragStartedEventArgsFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDragStartedEventArgsFactory {
     type Vtable = IDragStartedEventArgsFactory_Vtbl;
-}
-impl ::core::clone::Clone for IDragStartedEventArgsFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDragStartedEventArgsFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1310,14 +1342,15 @@ pub struct IDragStartedEventArgsFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBase(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBase {
     type Vtable = IFlyoutBase_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBase {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBase {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1373,14 +1406,15 @@ pub struct IFlyoutBase_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBase2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBase2 {
     type Vtable = IFlyoutBase2_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBase2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBase2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1439,14 +1473,15 @@ pub struct IFlyoutBase2_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBase3(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBase3 {
     type Vtable = IFlyoutBase3_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBase3 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBase3 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1468,14 +1503,15 @@ pub struct IFlyoutBase3_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBase4(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBase4 {
     type Vtable = IFlyoutBase4_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBase4 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBase4 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1493,14 +1529,15 @@ pub struct IFlyoutBase4_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBase5(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBase5 {
     type Vtable = IFlyoutBase5_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBase5 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBase5 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1543,14 +1580,15 @@ pub struct IFlyoutBase5_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBase6(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBase6 {
     type Vtable = IFlyoutBase6_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBase6 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBase6 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1584,14 +1622,15 @@ pub struct IFlyoutBase6_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBaseClosingEventArgs(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBaseClosingEventArgs {
     type Vtable = IFlyoutBaseClosingEventArgs_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBaseClosingEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBaseClosingEventArgs {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1613,14 +1652,15 @@ pub struct IFlyoutBaseClosingEventArgs_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBaseFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBaseFactory {
     type Vtable = IFlyoutBaseFactory_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBaseFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBaseFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1640,14 +1680,15 @@ pub struct IFlyoutBaseFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBaseOverrides(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBaseOverrides {
     type Vtable = IFlyoutBaseOverrides_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBaseOverrides {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBaseOverrides {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1665,14 +1706,15 @@ pub struct IFlyoutBaseOverrides_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBaseOverrides4(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBaseOverrides4 {
     type Vtable = IFlyoutBaseOverrides4_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBaseOverrides4 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBaseOverrides4 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1690,14 +1732,15 @@ pub struct IFlyoutBaseOverrides4_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBaseStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBaseStatics {
     type Vtable = IFlyoutBaseStatics_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBaseStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBaseStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1733,14 +1776,15 @@ pub struct IFlyoutBaseStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBaseStatics2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBaseStatics2 {
     type Vtable = IFlyoutBaseStatics2_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBaseStatics2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBaseStatics2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1770,14 +1814,15 @@ pub struct IFlyoutBaseStatics2_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBaseStatics3(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBaseStatics3 {
     type Vtable = IFlyoutBaseStatics3_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBaseStatics3 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBaseStatics3 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1795,14 +1840,15 @@ pub struct IFlyoutBaseStatics3_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBaseStatics5(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBaseStatics5 {
     type Vtable = IFlyoutBaseStatics5_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBaseStatics5 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBaseStatics5 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1836,14 +1882,15 @@ pub struct IFlyoutBaseStatics5_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutBaseStatics6(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutBaseStatics6 {
     type Vtable = IFlyoutBaseStatics6_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutBaseStatics6 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutBaseStatics6 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1861,14 +1908,15 @@ pub struct IFlyoutBaseStatics6_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutShowOptions(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutShowOptions {
     type Vtable = IFlyoutShowOptions_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutShowOptions {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutShowOptions {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1914,14 +1962,15 @@ pub struct IFlyoutShowOptions_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFlyoutShowOptionsFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IFlyoutShowOptionsFactory {
     type Vtable = IFlyoutShowOptionsFactory_Vtbl;
-}
-impl ::core::clone::Clone for IFlyoutShowOptionsFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFlyoutShowOptionsFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1941,14 +1990,15 @@ pub struct IFlyoutShowOptionsFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IGeneratorPositionHelper(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IGeneratorPositionHelper {
     type Vtable = IGeneratorPositionHelper_Vtbl;
-}
-impl ::core::clone::Clone for IGeneratorPositionHelper {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IGeneratorPositionHelper {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1962,14 +2012,15 @@ pub struct IGeneratorPositionHelper_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IGeneratorPositionHelperStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IGeneratorPositionHelperStatics {
     type Vtable = IGeneratorPositionHelperStatics_Vtbl;
-}
-impl ::core::clone::Clone for IGeneratorPositionHelperStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IGeneratorPositionHelperStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -1989,14 +2040,15 @@ pub struct IGeneratorPositionHelperStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IGridViewItemPresenter(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IGridViewItemPresenter {
     type Vtable = IGridViewItemPresenter_Vtbl;
-}
-impl ::core::clone::Clone for IGridViewItemPresenter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IGridViewItemPresenter {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2168,14 +2220,15 @@ pub struct IGridViewItemPresenter_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IGridViewItemPresenterFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IGridViewItemPresenterFactory {
     type Vtable = IGridViewItemPresenterFactory_Vtbl;
-}
-impl ::core::clone::Clone for IGridViewItemPresenterFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IGridViewItemPresenterFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2195,14 +2248,15 @@ pub struct IGridViewItemPresenterFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IGridViewItemPresenterStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IGridViewItemPresenterStatics {
     type Vtable = IGridViewItemPresenterStatics_Vtbl;
-}
-impl ::core::clone::Clone for IGridViewItemPresenterStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IGridViewItemPresenterStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2295,14 +2349,15 @@ pub struct IGridViewItemPresenterStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IGridViewItemTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IGridViewItemTemplateSettings {
     type Vtable = IGridViewItemTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IGridViewItemTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IGridViewItemTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2320,14 +2375,15 @@ pub struct IGridViewItemTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IItemsChangedEventArgs(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IItemsChangedEventArgs {
     type Vtable = IItemsChangedEventArgs_Vtbl;
-}
-impl ::core::clone::Clone for IItemsChangedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IItemsChangedEventArgs {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2361,14 +2417,15 @@ pub struct IItemsChangedEventArgs_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IJumpListItemBackgroundConverter(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IJumpListItemBackgroundConverter {
     type Vtable = IJumpListItemBackgroundConverter_Vtbl;
-}
-impl ::core::clone::Clone for IJumpListItemBackgroundConverter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IJumpListItemBackgroundConverter {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2398,14 +2455,15 @@ pub struct IJumpListItemBackgroundConverter_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IJumpListItemBackgroundConverterStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IJumpListItemBackgroundConverterStatics {
     type Vtable = IJumpListItemBackgroundConverterStatics_Vtbl;
-}
-impl ::core::clone::Clone for IJumpListItemBackgroundConverterStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IJumpListItemBackgroundConverterStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2427,14 +2485,15 @@ pub struct IJumpListItemBackgroundConverterStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IJumpListItemForegroundConverter(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IJumpListItemForegroundConverter {
     type Vtable = IJumpListItemForegroundConverter_Vtbl;
-}
-impl ::core::clone::Clone for IJumpListItemForegroundConverter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IJumpListItemForegroundConverter {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2464,14 +2523,15 @@ pub struct IJumpListItemForegroundConverter_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IJumpListItemForegroundConverterStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IJumpListItemForegroundConverterStatics {
     type Vtable = IJumpListItemForegroundConverterStatics_Vtbl;
-}
-impl ::core::clone::Clone for IJumpListItemForegroundConverterStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IJumpListItemForegroundConverterStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2493,14 +2553,15 @@ pub struct IJumpListItemForegroundConverterStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ILayoutInformation(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ILayoutInformation {
     type Vtable = ILayoutInformation_Vtbl;
-}
-impl ::core::clone::Clone for ILayoutInformation {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ILayoutInformation {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2514,14 +2575,15 @@ pub struct ILayoutInformation_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ILayoutInformationStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ILayoutInformationStatics {
     type Vtable = ILayoutInformationStatics_Vtbl;
-}
-impl ::core::clone::Clone for ILayoutInformationStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ILayoutInformationStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2545,14 +2607,15 @@ pub struct ILayoutInformationStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ILayoutInformationStatics2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ILayoutInformationStatics2 {
     type Vtable = ILayoutInformationStatics2_Vtbl;
-}
-impl ::core::clone::Clone for ILayoutInformationStatics2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ILayoutInformationStatics2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2571,14 +2634,15 @@ pub struct ILayoutInformationStatics2_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IListViewItemPresenter(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IListViewItemPresenter {
     type Vtable = IListViewItemPresenter_Vtbl;
-}
-impl ::core::clone::Clone for IListViewItemPresenter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IListViewItemPresenter {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2750,14 +2814,15 @@ pub struct IListViewItemPresenter_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IListViewItemPresenter2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IListViewItemPresenter2 {
     type Vtable = IListViewItemPresenter2_Vtbl;
-}
-impl ::core::clone::Clone for IListViewItemPresenter2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IListViewItemPresenter2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2819,14 +2884,15 @@ pub struct IListViewItemPresenter2_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IListViewItemPresenter3(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IListViewItemPresenter3 {
     type Vtable = IListViewItemPresenter3_Vtbl;
-}
-impl ::core::clone::Clone for IListViewItemPresenter3 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IListViewItemPresenter3 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -2872,14 +2938,15 @@ pub struct IListViewItemPresenter3_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IListViewItemPresenter4(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IListViewItemPresenter4 {
     type Vtable = IListViewItemPresenter4_Vtbl;
-}
-impl ::core::clone::Clone for IListViewItemPresenter4 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IListViewItemPresenter4 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3109,14 +3176,15 @@ pub struct IListViewItemPresenter4_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IListViewItemPresenterFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IListViewItemPresenterFactory {
     type Vtable = IListViewItemPresenterFactory_Vtbl;
-}
-impl ::core::clone::Clone for IListViewItemPresenterFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IListViewItemPresenterFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3136,14 +3204,15 @@ pub struct IListViewItemPresenterFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IListViewItemPresenterStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IListViewItemPresenterStatics {
     type Vtable = IListViewItemPresenterStatics_Vtbl;
-}
-impl ::core::clone::Clone for IListViewItemPresenterStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IListViewItemPresenterStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3236,14 +3305,15 @@ pub struct IListViewItemPresenterStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IListViewItemPresenterStatics2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IListViewItemPresenterStatics2 {
     type Vtable = IListViewItemPresenterStatics2_Vtbl;
-}
-impl ::core::clone::Clone for IListViewItemPresenterStatics2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IListViewItemPresenterStatics2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3281,14 +3351,15 @@ pub struct IListViewItemPresenterStatics2_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IListViewItemPresenterStatics3(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IListViewItemPresenterStatics3 {
     type Vtable = IListViewItemPresenterStatics3_Vtbl;
-}
-impl ::core::clone::Clone for IListViewItemPresenterStatics3 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IListViewItemPresenterStatics3 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3318,14 +3389,15 @@ pub struct IListViewItemPresenterStatics3_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IListViewItemPresenterStatics4(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IListViewItemPresenterStatics4 {
     type Vtable = IListViewItemPresenterStatics4_Vtbl;
-}
-impl ::core::clone::Clone for IListViewItemPresenterStatics4 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IListViewItemPresenterStatics4 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3447,14 +3519,15 @@ pub struct IListViewItemPresenterStatics4_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IListViewItemTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IListViewItemTemplateSettings {
     type Vtable = IListViewItemTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IListViewItemTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IListViewItemTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3472,14 +3545,15 @@ pub struct IListViewItemTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ILoopingSelector(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ILoopingSelector {
     type Vtable = ILoopingSelector_Vtbl;
-}
-impl ::core::clone::Clone for ILoopingSelector {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ILoopingSelector {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3558,14 +3632,15 @@ pub struct ILoopingSelector_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ILoopingSelectorItem(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ILoopingSelectorItem {
     type Vtable = ILoopingSelectorItem_Vtbl;
-}
-impl ::core::clone::Clone for ILoopingSelectorItem {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ILoopingSelectorItem {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3579,14 +3654,15 @@ pub struct ILoopingSelectorItem_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ILoopingSelectorPanel(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ILoopingSelectorPanel {
     type Vtable = ILoopingSelectorPanel_Vtbl;
-}
-impl ::core::clone::Clone for ILoopingSelectorPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ILoopingSelectorPanel {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3600,14 +3676,15 @@ pub struct ILoopingSelectorPanel_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ILoopingSelectorStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ILoopingSelectorStatics {
     type Vtable = ILoopingSelectorStatics_Vtbl;
-}
-impl ::core::clone::Clone for ILoopingSelectorStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ILoopingSelectorStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3649,14 +3726,15 @@ pub struct ILoopingSelectorStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IMenuFlyoutItemTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IMenuFlyoutItemTemplateSettings {
     type Vtable = IMenuFlyoutItemTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IMenuFlyoutItemTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IMenuFlyoutItemTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3674,14 +3752,15 @@ pub struct IMenuFlyoutItemTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IMenuFlyoutPresenterTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IMenuFlyoutPresenterTemplateSettings {
     type Vtable = IMenuFlyoutPresenterTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IMenuFlyoutPresenterTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IMenuFlyoutPresenterTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3699,14 +3778,15 @@ pub struct IMenuFlyoutPresenterTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct INavigationViewItemPresenter(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for INavigationViewItemPresenter {
     type Vtable = INavigationViewItemPresenter_Vtbl;
-}
-impl ::core::clone::Clone for INavigationViewItemPresenter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for INavigationViewItemPresenter {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3728,14 +3808,15 @@ pub struct INavigationViewItemPresenter_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct INavigationViewItemPresenterFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for INavigationViewItemPresenterFactory {
     type Vtable = INavigationViewItemPresenterFactory_Vtbl;
-}
-impl ::core::clone::Clone for INavigationViewItemPresenterFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for INavigationViewItemPresenterFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3755,14 +3836,15 @@ pub struct INavigationViewItemPresenterFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct INavigationViewItemPresenterStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for INavigationViewItemPresenterStatics {
     type Vtable = INavigationViewItemPresenterStatics_Vtbl;
-}
-impl ::core::clone::Clone for INavigationViewItemPresenterStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for INavigationViewItemPresenterStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3780,14 +3862,15 @@ pub struct INavigationViewItemPresenterStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IOrientedVirtualizingPanel(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IOrientedVirtualizingPanel {
     type Vtable = IOrientedVirtualizingPanel_Vtbl;
-}
-impl ::core::clone::Clone for IOrientedVirtualizingPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IOrientedVirtualizingPanel {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3899,14 +3982,15 @@ pub struct IOrientedVirtualizingPanel_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IOrientedVirtualizingPanelFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IOrientedVirtualizingPanelFactory {
     type Vtable = IOrientedVirtualizingPanelFactory_Vtbl;
-}
-impl ::core::clone::Clone for IOrientedVirtualizingPanelFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IOrientedVirtualizingPanelFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3920,14 +4004,15 @@ pub struct IOrientedVirtualizingPanelFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPickerFlyoutBase(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPickerFlyoutBase {
     type Vtable = IPickerFlyoutBase_Vtbl;
-}
-impl ::core::clone::Clone for IPickerFlyoutBase {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPickerFlyoutBase {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3941,14 +4026,15 @@ pub struct IPickerFlyoutBase_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPickerFlyoutBaseFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPickerFlyoutBaseFactory {
     type Vtable = IPickerFlyoutBaseFactory_Vtbl;
-}
-impl ::core::clone::Clone for IPickerFlyoutBaseFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPickerFlyoutBaseFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3968,14 +4054,15 @@ pub struct IPickerFlyoutBaseFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPickerFlyoutBaseOverrides(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPickerFlyoutBaseOverrides {
     type Vtable = IPickerFlyoutBaseOverrides_Vtbl;
-}
-impl ::core::clone::Clone for IPickerFlyoutBaseOverrides {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPickerFlyoutBaseOverrides {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -3996,14 +4083,15 @@ pub struct IPickerFlyoutBaseOverrides_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPickerFlyoutBaseStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPickerFlyoutBaseStatics {
     type Vtable = IPickerFlyoutBaseStatics_Vtbl;
-}
-impl ::core::clone::Clone for IPickerFlyoutBaseStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPickerFlyoutBaseStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4031,14 +4119,15 @@ pub struct IPickerFlyoutBaseStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPivotHeaderItem(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPivotHeaderItem {
     type Vtable = IPivotHeaderItem_Vtbl;
-}
-impl ::core::clone::Clone for IPivotHeaderItem {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPivotHeaderItem {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4052,14 +4141,15 @@ pub struct IPivotHeaderItem_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPivotHeaderItemFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPivotHeaderItemFactory {
     type Vtable = IPivotHeaderItemFactory_Vtbl;
-}
-impl ::core::clone::Clone for IPivotHeaderItemFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPivotHeaderItemFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4079,14 +4169,15 @@ pub struct IPivotHeaderItemFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPivotHeaderPanel(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPivotHeaderPanel {
     type Vtable = IPivotHeaderPanel_Vtbl;
-}
-impl ::core::clone::Clone for IPivotHeaderPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPivotHeaderPanel {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4100,14 +4191,15 @@ pub struct IPivotHeaderPanel_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPivotPanel(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPivotPanel {
     type Vtable = IPivotPanel_Vtbl;
-}
-impl ::core::clone::Clone for IPivotPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPivotPanel {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4121,14 +4213,15 @@ pub struct IPivotPanel_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPopup(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPopup {
     type Vtable = IPopup_Vtbl;
-}
-impl ::core::clone::Clone for IPopup {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPopup {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4202,14 +4295,15 @@ pub struct IPopup_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPopup2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPopup2 {
     type Vtable = IPopup2_Vtbl;
-}
-impl ::core::clone::Clone for IPopup2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPopup2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4231,14 +4325,15 @@ pub struct IPopup2_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPopup3(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPopup3 {
     type Vtable = IPopup3_Vtbl;
-}
-impl ::core::clone::Clone for IPopup3 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPopup3 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4264,14 +4359,15 @@ pub struct IPopup3_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPopup4(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPopup4 {
     type Vtable = IPopup4_Vtbl;
-}
-impl ::core::clone::Clone for IPopup4 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPopup4 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4314,14 +4410,15 @@ pub struct IPopup4_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPopupStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPopupStatics {
     type Vtable = IPopupStatics_Vtbl;
-}
-impl ::core::clone::Clone for IPopupStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPopupStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4359,14 +4456,15 @@ pub struct IPopupStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPopupStatics2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPopupStatics2 {
     type Vtable = IPopupStatics2_Vtbl;
-}
-impl ::core::clone::Clone for IPopupStatics2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPopupStatics2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4384,14 +4482,15 @@ pub struct IPopupStatics2_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPopupStatics3(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPopupStatics3 {
     type Vtable = IPopupStatics3_Vtbl;
-}
-impl ::core::clone::Clone for IPopupStatics3 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPopupStatics3 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4409,14 +4508,15 @@ pub struct IPopupStatics3_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IPopupStatics4(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IPopupStatics4 {
     type Vtable = IPopupStatics4_Vtbl;
-}
-impl ::core::clone::Clone for IPopupStatics4 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IPopupStatics4 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4438,14 +4538,15 @@ pub struct IPopupStatics4_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IProgressBarTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IProgressBarTemplateSettings {
     type Vtable = IProgressBarTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IProgressBarTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IProgressBarTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4487,14 +4588,15 @@ pub struct IProgressBarTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IProgressRingTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IProgressRingTemplateSettings {
     type Vtable = IProgressRingTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IProgressRingTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IProgressRingTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4520,14 +4622,15 @@ pub struct IProgressRingTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IRangeBase(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IRangeBase {
     type Vtable = IRangeBase_Vtbl;
-}
-impl ::core::clone::Clone for IRangeBase {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IRangeBase {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4590,14 +4693,15 @@ pub struct IRangeBase_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IRangeBaseFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IRangeBaseFactory {
     type Vtable = IRangeBaseFactory_Vtbl;
-}
-impl ::core::clone::Clone for IRangeBaseFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IRangeBaseFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4617,14 +4721,15 @@ pub struct IRangeBaseFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IRangeBaseOverrides(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IRangeBaseOverrides {
     type Vtable = IRangeBaseOverrides_Vtbl;
-}
-impl ::core::clone::Clone for IRangeBaseOverrides {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IRangeBaseOverrides {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4653,14 +4758,15 @@ pub struct IRangeBaseOverrides_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IRangeBaseStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IRangeBaseStatics {
     type Vtable = IRangeBaseStatics_Vtbl;
-}
-impl ::core::clone::Clone for IRangeBaseStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IRangeBaseStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4694,14 +4800,15 @@ pub struct IRangeBaseStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IRangeBaseValueChangedEventArgs(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IRangeBaseValueChangedEventArgs {
     type Vtable = IRangeBaseValueChangedEventArgs_Vtbl;
-}
-impl ::core::clone::Clone for IRangeBaseValueChangedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IRangeBaseValueChangedEventArgs {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4723,14 +4830,15 @@ pub struct IRangeBaseValueChangedEventArgs_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IRepeatButton(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IRepeatButton {
     type Vtable = IRepeatButton_Vtbl;
-}
-impl ::core::clone::Clone for IRepeatButton {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IRepeatButton {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4760,14 +4868,15 @@ pub struct IRepeatButton_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IRepeatButtonStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IRepeatButtonStatics {
     type Vtable = IRepeatButtonStatics_Vtbl;
-}
-impl ::core::clone::Clone for IRepeatButtonStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IRepeatButtonStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4789,14 +4898,15 @@ pub struct IRepeatButtonStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IScrollBar(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IScrollBar {
     type Vtable = IScrollBar_Vtbl;
-}
-impl ::core::clone::Clone for IScrollBar {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IScrollBar {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4843,14 +4953,15 @@ pub struct IScrollBar_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IScrollBarStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IScrollBarStatics {
     type Vtable = IScrollBarStatics_Vtbl;
-}
-impl ::core::clone::Clone for IScrollBarStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IScrollBarStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4876,14 +4987,15 @@ pub struct IScrollBarStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IScrollEventArgs(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IScrollEventArgs {
     type Vtable = IScrollEventArgs_Vtbl;
-}
-impl ::core::clone::Clone for IScrollEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IScrollEventArgs {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4904,22 +5016,17 @@ pub struct IScrollEventArgs_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IScrollSnapPointsInfo(::windows_core::IUnknown);
 impl IScrollSnapPointsInfo {}
 ::windows_core::imp::interface_hierarchy!(
     IScrollSnapPointsInfo, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
-impl ::core::cmp::PartialEq for IScrollSnapPointsInfo {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IScrollSnapPointsInfo {}
-impl ::core::fmt::Debug for IScrollSnapPointsInfo {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IScrollSnapPointsInfo").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for IScrollSnapPointsInfo {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"{1b5d1336-e61b-4d51-be41-fd8ddc55c58c}",
@@ -4927,11 +5034,6 @@ impl ::windows_core::RuntimeType for IScrollSnapPointsInfo {
 }
 unsafe impl ::windows_core::Interface for IScrollSnapPointsInfo {
     type Vtable = IScrollSnapPointsInfo_Vtbl;
-}
-impl ::core::clone::Clone for IScrollSnapPointsInfo {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IScrollSnapPointsInfo {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -4984,14 +5086,15 @@ pub struct IScrollSnapPointsInfo_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISelector(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ISelector {
     type Vtable = ISelector_Vtbl;
-}
-impl ::core::clone::Clone for ISelector {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISelector {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5054,14 +5157,15 @@ pub struct ISelector_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISelectorFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ISelectorFactory {
     type Vtable = ISelectorFactory_Vtbl;
-}
-impl ::core::clone::Clone for ISelectorFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISelectorFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5075,14 +5179,15 @@ pub struct ISelectorFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISelectorItem(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ISelectorItem {
     type Vtable = ISelectorItem_Vtbl;
-}
-impl ::core::clone::Clone for ISelectorItem {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISelectorItem {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5104,14 +5209,15 @@ pub struct ISelectorItem_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISelectorItemFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ISelectorItemFactory {
     type Vtable = ISelectorItemFactory_Vtbl;
-}
-impl ::core::clone::Clone for ISelectorItemFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISelectorItemFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5131,14 +5237,15 @@ pub struct ISelectorItemFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISelectorItemStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ISelectorItemStatics {
     type Vtable = ISelectorItemStatics_Vtbl;
-}
-impl ::core::clone::Clone for ISelectorItemStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISelectorItemStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5156,14 +5263,15 @@ pub struct ISelectorItemStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISelectorStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ISelectorStatics {
     type Vtable = ISelectorStatics_Vtbl;
-}
-impl ::core::clone::Clone for ISelectorStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISelectorStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5202,14 +5310,15 @@ pub struct ISelectorStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISettingsFlyoutTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ISettingsFlyoutTemplateSettings {
     type Vtable = ISettingsFlyoutTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for ISettingsFlyoutTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISettingsFlyoutTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5244,14 +5353,15 @@ pub struct ISettingsFlyoutTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISplitViewTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ISplitViewTemplateSettings {
     type Vtable = ISplitViewTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for ISplitViewTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISplitViewTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5289,14 +5399,15 @@ pub struct ISplitViewTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IThumb(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IThumb {
     type Vtable = IThumb_Vtbl;
-}
-impl ::core::clone::Clone for IThumb {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IThumb {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5344,14 +5455,15 @@ pub struct IThumb_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IThumbStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IThumbStatics {
     type Vtable = IThumbStatics_Vtbl;
-}
-impl ::core::clone::Clone for IThumbStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IThumbStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5369,14 +5481,15 @@ pub struct IThumbStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ITickBar(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ITickBar {
     type Vtable = ITickBar_Vtbl;
-}
-impl ::core::clone::Clone for ITickBar {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ITickBar {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5398,14 +5511,15 @@ pub struct ITickBar_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ITickBarStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for ITickBarStatics {
     type Vtable = ITickBarStatics_Vtbl;
-}
-impl ::core::clone::Clone for ITickBarStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ITickBarStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5423,14 +5537,15 @@ pub struct ITickBarStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IToggleButton(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IToggleButton {
     type Vtable = IToggleButton_Vtbl;
-}
-impl ::core::clone::Clone for IToggleButton {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IToggleButton {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5487,14 +5602,15 @@ pub struct IToggleButton_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IToggleButtonFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IToggleButtonFactory {
     type Vtable = IToggleButtonFactory_Vtbl;
-}
-impl ::core::clone::Clone for IToggleButtonFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IToggleButtonFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5514,14 +5630,15 @@ pub struct IToggleButtonFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IToggleButtonOverrides(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IToggleButtonOverrides {
     type Vtable = IToggleButtonOverrides_Vtbl;
-}
-impl ::core::clone::Clone for IToggleButtonOverrides {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IToggleButtonOverrides {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5538,14 +5655,15 @@ pub struct IToggleButtonOverrides_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IToggleButtonStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IToggleButtonStatics {
     type Vtable = IToggleButtonStatics_Vtbl;
-}
-impl ::core::clone::Clone for IToggleButtonStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IToggleButtonStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5567,14 +5685,15 @@ pub struct IToggleButtonStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IToggleSwitchTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IToggleSwitchTemplateSettings {
     type Vtable = IToggleSwitchTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IToggleSwitchTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IToggleSwitchTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5620,14 +5739,15 @@ pub struct IToggleSwitchTemplateSettings_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IToolTipTemplateSettings(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IToolTipTemplateSettings {
     type Vtable = IToolTipTemplateSettings_Vtbl;
-}
-impl ::core::clone::Clone for IToolTipTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IToolTipTemplateSettings {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -5648,28 +5768,18 @@ pub struct IToolTipTemplateSettings_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct AppBarButtonTemplateSettings(::windows_core::IUnknown);
 impl AppBarButtonTemplateSettings {}
-impl ::core::cmp::PartialEq for AppBarButtonTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for AppBarButtonTemplateSettings {}
-impl ::core::fmt::Debug for AppBarButtonTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("AppBarButtonTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for AppBarButtonTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.AppBarButtonTemplateSettings;{cbc9b39d-0c95-4951-bff2-13963691c366})",
     );
-}
-impl ::core::clone::Clone for AppBarButtonTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for AppBarButtonTemplateSettings {
     type Vtable = IAppBarButtonTemplateSettings_Vtbl;
@@ -5688,28 +5798,18 @@ for AppBarButtonTemplateSettings {}
 unsafe impl ::core::marker::Send for AppBarButtonTemplateSettings {}
 unsafe impl ::core::marker::Sync for AppBarButtonTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct AppBarTemplateSettings(::windows_core::IUnknown);
 impl AppBarTemplateSettings {}
-impl ::core::cmp::PartialEq for AppBarTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for AppBarTemplateSettings {}
-impl ::core::fmt::Debug for AppBarTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("AppBarTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for AppBarTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.AppBarTemplateSettings;{bcc2a863-eb35-423c-8389-d7827be3bf67})",
     );
-}
-impl ::core::clone::Clone for AppBarTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for AppBarTemplateSettings {
     type Vtable = IAppBarTemplateSettings_Vtbl;
@@ -5728,28 +5828,18 @@ for AppBarTemplateSettings {}
 unsafe impl ::core::marker::Send for AppBarTemplateSettings {}
 unsafe impl ::core::marker::Sync for AppBarTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct AppBarToggleButtonTemplateSettings(::windows_core::IUnknown);
 impl AppBarToggleButtonTemplateSettings {}
-impl ::core::cmp::PartialEq for AppBarToggleButtonTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for AppBarToggleButtonTemplateSettings {}
-impl ::core::fmt::Debug for AppBarToggleButtonTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("AppBarToggleButtonTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for AppBarToggleButtonTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.AppBarToggleButtonTemplateSettings;{aaf99c48-d8f4-40d9-9fa3-3a64f0fec5d8})",
     );
-}
-impl ::core::clone::Clone for AppBarToggleButtonTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for AppBarToggleButtonTemplateSettings {
     type Vtable = IAppBarToggleButtonTemplateSettings_Vtbl;
@@ -5769,28 +5859,18 @@ for AppBarToggleButtonTemplateSettings {}
 unsafe impl ::core::marker::Send for AppBarToggleButtonTemplateSettings {}
 unsafe impl ::core::marker::Sync for AppBarToggleButtonTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ButtonBase(::windows_core::IUnknown);
 impl ButtonBase {}
-impl ::core::cmp::PartialEq for ButtonBase {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ButtonBase {}
-impl ::core::fmt::Debug for ButtonBase {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ButtonBase").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ButtonBase {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ButtonBase;{fa002c1a-494e-46cf-91d4-e14a8d798674})",
     );
-}
-impl ::core::clone::Clone for ButtonBase {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ButtonBase {
     type Vtable = IButtonBase_Vtbl;
@@ -5812,28 +5892,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for ButtonBase {
 unsafe impl ::core::marker::Send for ButtonBase {}
 unsafe impl ::core::marker::Sync for ButtonBase {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct CalendarPanel(::windows_core::IUnknown);
 impl CalendarPanel {}
-impl ::core::cmp::PartialEq for CalendarPanel {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for CalendarPanel {}
-impl ::core::fmt::Debug for CalendarPanel {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("CalendarPanel").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for CalendarPanel {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.CalendarPanel;{fcd55a2d-02d3-4ee6-9a90-9df3ead00994})",
     );
-}
-impl ::core::clone::Clone for CalendarPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for CalendarPanel {
     type Vtable = ICalendarPanel_Vtbl;
@@ -5854,28 +5924,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for CalendarPane
 unsafe impl ::core::marker::Send for CalendarPanel {}
 unsafe impl ::core::marker::Sync for CalendarPanel {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct CalendarViewTemplateSettings(::windows_core::IUnknown);
 impl CalendarViewTemplateSettings {}
-impl ::core::cmp::PartialEq for CalendarViewTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for CalendarViewTemplateSettings {}
-impl ::core::fmt::Debug for CalendarViewTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("CalendarViewTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for CalendarViewTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.CalendarViewTemplateSettings;{56c71483-64e1-477c-8a0b-cb2f3334b9b0})",
     );
-}
-impl ::core::clone::Clone for CalendarViewTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for CalendarViewTemplateSettings {
     type Vtable = ICalendarViewTemplateSettings_Vtbl;
@@ -5894,28 +5954,18 @@ for CalendarViewTemplateSettings {}
 unsafe impl ::core::marker::Send for CalendarViewTemplateSettings {}
 unsafe impl ::core::marker::Sync for CalendarViewTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct CarouselPanel(::windows_core::IUnknown);
 impl CarouselPanel {}
-impl ::core::cmp::PartialEq for CarouselPanel {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for CarouselPanel {}
-impl ::core::fmt::Debug for CarouselPanel {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("CarouselPanel").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for CarouselPanel {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.CarouselPanel;{deab78b2-373b-4151-8785-e544d0d9362b})",
     );
-}
-impl ::core::clone::Clone for CarouselPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for CarouselPanel {
     type Vtable = ICarouselPanel_Vtbl;
@@ -5938,28 +5988,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for CarouselPane
 unsafe impl ::core::marker::Send for CarouselPanel {}
 unsafe impl ::core::marker::Sync for CarouselPanel {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ColorPickerSlider(::windows_core::IUnknown);
 impl ColorPickerSlider {}
-impl ::core::cmp::PartialEq for ColorPickerSlider {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ColorPickerSlider {}
-impl ::core::fmt::Debug for ColorPickerSlider {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ColorPickerSlider").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ColorPickerSlider {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ColorPickerSlider;{94394d83-e0df-4c5f-bbcd-8155f4020440})",
     );
-}
-impl ::core::clone::Clone for ColorPickerSlider {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ColorPickerSlider {
     type Vtable = IColorPickerSlider_Vtbl;
@@ -5982,28 +6022,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for ColorPickerS
 unsafe impl ::core::marker::Send for ColorPickerSlider {}
 unsafe impl ::core::marker::Sync for ColorPickerSlider {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ColorSpectrum(::windows_core::IUnknown);
 impl ColorSpectrum {}
-impl ::core::cmp::PartialEq for ColorSpectrum {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ColorSpectrum {}
-impl ::core::fmt::Debug for ColorSpectrum {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ColorSpectrum").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ColorSpectrum {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ColorSpectrum;{ce46f271-f509-4f98-8288-e4942fb385df})",
     );
-}
-impl ::core::clone::Clone for ColorSpectrum {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ColorSpectrum {
     type Vtable = IColorSpectrum_Vtbl;
@@ -6024,28 +6054,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for ColorSpectru
 unsafe impl ::core::marker::Send for ColorSpectrum {}
 unsafe impl ::core::marker::Sync for ColorSpectrum {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ComboBoxTemplateSettings(::windows_core::IUnknown);
 impl ComboBoxTemplateSettings {}
-impl ::core::cmp::PartialEq for ComboBoxTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ComboBoxTemplateSettings {}
-impl ::core::fmt::Debug for ComboBoxTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ComboBoxTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ComboBoxTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ComboBoxTemplateSettings;{83285c4e-17f6-4aa3-b61b-e87c718604ea})",
     );
-}
-impl ::core::clone::Clone for ComboBoxTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ComboBoxTemplateSettings {
     type Vtable = IComboBoxTemplateSettings_Vtbl;
@@ -6064,28 +6084,18 @@ for ComboBoxTemplateSettings {}
 unsafe impl ::core::marker::Send for ComboBoxTemplateSettings {}
 unsafe impl ::core::marker::Sync for ComboBoxTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct CommandBarFlyoutCommandBar(::windows_core::IUnknown);
 impl CommandBarFlyoutCommandBar {}
-impl ::core::cmp::PartialEq for CommandBarFlyoutCommandBar {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for CommandBarFlyoutCommandBar {}
-impl ::core::fmt::Debug for CommandBarFlyoutCommandBar {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("CommandBarFlyoutCommandBar").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for CommandBarFlyoutCommandBar {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.CommandBarFlyoutCommandBar;{14146e7c-38c4-55c4-b706-ce18f6061e7e})",
     );
-}
-impl ::core::clone::Clone for CommandBarFlyoutCommandBar {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for CommandBarFlyoutCommandBar {
     type Vtable = ICommandBarFlyoutCommandBar_Vtbl;
@@ -6111,30 +6121,18 @@ for CommandBarFlyoutCommandBar {}
 unsafe impl ::core::marker::Send for CommandBarFlyoutCommandBar {}
 unsafe impl ::core::marker::Sync for CommandBarFlyoutCommandBar {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct CommandBarFlyoutCommandBarTemplateSettings(::windows_core::IUnknown);
 impl CommandBarFlyoutCommandBarTemplateSettings {}
-impl ::core::cmp::PartialEq for CommandBarFlyoutCommandBarTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for CommandBarFlyoutCommandBarTemplateSettings {}
-impl ::core::fmt::Debug for CommandBarFlyoutCommandBarTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("CommandBarFlyoutCommandBarTemplateSettings")
-            .field(&self.0)
-            .finish()
-    }
-}
 impl ::windows_core::RuntimeType for CommandBarFlyoutCommandBarTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.CommandBarFlyoutCommandBarTemplateSettings;{47642c44-26ff-5d14-9cfc-77dc64f3a447})",
     );
-}
-impl ::core::clone::Clone for CommandBarFlyoutCommandBarTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for CommandBarFlyoutCommandBarTemplateSettings {
     type Vtable = ICommandBarFlyoutCommandBarTemplateSettings_Vtbl;
@@ -6154,28 +6152,18 @@ for CommandBarFlyoutCommandBarTemplateSettings {}
 unsafe impl ::core::marker::Send for CommandBarFlyoutCommandBarTemplateSettings {}
 unsafe impl ::core::marker::Sync for CommandBarFlyoutCommandBarTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct CommandBarTemplateSettings(::windows_core::IUnknown);
 impl CommandBarTemplateSettings {}
-impl ::core::cmp::PartialEq for CommandBarTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for CommandBarTemplateSettings {}
-impl ::core::fmt::Debug for CommandBarTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("CommandBarTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for CommandBarTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.CommandBarTemplateSettings;{61c8f92c-05aa-414a-a2ae-482c5a46c08e})",
     );
-}
-impl ::core::clone::Clone for CommandBarTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for CommandBarTemplateSettings {
     type Vtable = ICommandBarTemplateSettings_Vtbl;
@@ -6194,28 +6182,18 @@ for CommandBarTemplateSettings {}
 unsafe impl ::core::marker::Send for CommandBarTemplateSettings {}
 unsafe impl ::core::marker::Sync for CommandBarTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DragCompletedEventArgs(::windows_core::IUnknown);
 impl DragCompletedEventArgs {}
-impl ::core::cmp::PartialEq for DragCompletedEventArgs {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DragCompletedEventArgs {}
-impl ::core::fmt::Debug for DragCompletedEventArgs {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DragCompletedEventArgs").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for DragCompletedEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.DragCompletedEventArgs;{b04f29a1-bd16-48f6-a511-9c2763641331})",
     );
-}
-impl ::core::clone::Clone for DragCompletedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for DragCompletedEventArgs {
     type Vtable = IDragCompletedEventArgs_Vtbl;
@@ -6234,28 +6212,18 @@ for DragCompletedEventArgs {}
 unsafe impl ::core::marker::Send for DragCompletedEventArgs {}
 unsafe impl ::core::marker::Sync for DragCompletedEventArgs {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DragDeltaEventArgs(::windows_core::IUnknown);
 impl DragDeltaEventArgs {}
-impl ::core::cmp::PartialEq for DragDeltaEventArgs {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DragDeltaEventArgs {}
-impl ::core::fmt::Debug for DragDeltaEventArgs {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DragDeltaEventArgs").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for DragDeltaEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.DragDeltaEventArgs;{2c2dd73c-2806-49fc-aae9-6d792b572b6a})",
     );
-}
-impl ::core::clone::Clone for DragDeltaEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for DragDeltaEventArgs {
     type Vtable = IDragDeltaEventArgs_Vtbl;
@@ -6273,28 +6241,18 @@ impl ::windows_core::CanTryInto<super::super::RoutedEventArgs> for DragDeltaEven
 unsafe impl ::core::marker::Send for DragDeltaEventArgs {}
 unsafe impl ::core::marker::Sync for DragDeltaEventArgs {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DragStartedEventArgs(::windows_core::IUnknown);
 impl DragStartedEventArgs {}
-impl ::core::cmp::PartialEq for DragStartedEventArgs {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DragStartedEventArgs {}
-impl ::core::fmt::Debug for DragStartedEventArgs {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DragStartedEventArgs").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for DragStartedEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.DragStartedEventArgs;{9f915dd0-a124-4366-bd85-2408214aeed4})",
     );
-}
-impl ::core::clone::Clone for DragStartedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for DragStartedEventArgs {
     type Vtable = IDragStartedEventArgs_Vtbl;
@@ -6312,28 +6270,18 @@ impl ::windows_core::CanTryInto<super::super::RoutedEventArgs> for DragStartedEv
 unsafe impl ::core::marker::Send for DragStartedEventArgs {}
 unsafe impl ::core::marker::Sync for DragStartedEventArgs {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct FlyoutBase(::windows_core::IUnknown);
 impl FlyoutBase {}
-impl ::core::cmp::PartialEq for FlyoutBase {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for FlyoutBase {}
-impl ::core::fmt::Debug for FlyoutBase {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("FlyoutBase").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for FlyoutBase {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.FlyoutBase;{723eea0b-d12e-430d-a9f0-9bb32bbf9913})",
     );
-}
-impl ::core::clone::Clone for FlyoutBase {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for FlyoutBase {
     type Vtable = IFlyoutBase_Vtbl;
@@ -6351,28 +6299,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for FlyoutBase {
 unsafe impl ::core::marker::Send for FlyoutBase {}
 unsafe impl ::core::marker::Sync for FlyoutBase {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct FlyoutBaseClosingEventArgs(::windows_core::IUnknown);
 impl FlyoutBaseClosingEventArgs {}
-impl ::core::cmp::PartialEq for FlyoutBaseClosingEventArgs {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for FlyoutBaseClosingEventArgs {}
-impl ::core::fmt::Debug for FlyoutBaseClosingEventArgs {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("FlyoutBaseClosingEventArgs").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for FlyoutBaseClosingEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.FlyoutBaseClosingEventArgs;{d075852d-b09a-4fd1-b005-db2ba01206fb})",
     );
-}
-impl ::core::clone::Clone for FlyoutBaseClosingEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for FlyoutBaseClosingEventArgs {
     type Vtable = IFlyoutBaseClosingEventArgs_Vtbl;
@@ -6389,28 +6327,18 @@ impl ::windows_core::RuntimeName for FlyoutBaseClosingEventArgs {
 unsafe impl ::core::marker::Send for FlyoutBaseClosingEventArgs {}
 unsafe impl ::core::marker::Sync for FlyoutBaseClosingEventArgs {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct FlyoutShowOptions(::windows_core::IUnknown);
 impl FlyoutShowOptions {}
-impl ::core::cmp::PartialEq for FlyoutShowOptions {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for FlyoutShowOptions {}
-impl ::core::fmt::Debug for FlyoutShowOptions {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("FlyoutShowOptions").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for FlyoutShowOptions {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.FlyoutShowOptions;{57d693ad-0c74-54dd-b110-1ee43fabadd9})",
     );
-}
-impl ::core::clone::Clone for FlyoutShowOptions {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for FlyoutShowOptions {
     type Vtable = IFlyoutShowOptions_Vtbl;
@@ -6427,28 +6355,18 @@ impl ::windows_core::RuntimeName for FlyoutShowOptions {
 unsafe impl ::core::marker::Send for FlyoutShowOptions {}
 unsafe impl ::core::marker::Sync for FlyoutShowOptions {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct GeneratorPositionHelper(::windows_core::IUnknown);
 impl GeneratorPositionHelper {}
-impl ::core::cmp::PartialEq for GeneratorPositionHelper {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for GeneratorPositionHelper {}
-impl ::core::fmt::Debug for GeneratorPositionHelper {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("GeneratorPositionHelper").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for GeneratorPositionHelper {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.GeneratorPositionHelper;{cd40318d-7745-40d9-ab9d-abbda4a7ffea})",
     );
-}
-impl ::core::clone::Clone for GeneratorPositionHelper {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for GeneratorPositionHelper {
     type Vtable = IGeneratorPositionHelper_Vtbl;
@@ -6465,28 +6383,18 @@ impl ::windows_core::RuntimeName for GeneratorPositionHelper {
 unsafe impl ::core::marker::Send for GeneratorPositionHelper {}
 unsafe impl ::core::marker::Sync for GeneratorPositionHelper {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct GridViewItemPresenter(::windows_core::IUnknown);
 impl GridViewItemPresenter {}
-impl ::core::cmp::PartialEq for GridViewItemPresenter {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for GridViewItemPresenter {}
-impl ::core::fmt::Debug for GridViewItemPresenter {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("GridViewItemPresenter").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for GridViewItemPresenter {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.GridViewItemPresenter;{214f9010-56e2-4821-8a1c-2305709af94b})",
     );
-}
-impl ::core::clone::Clone for GridViewItemPresenter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for GridViewItemPresenter {
     type Vtable = IGridViewItemPresenter_Vtbl;
@@ -6509,28 +6417,18 @@ for GridViewItemPresenter {}
 unsafe impl ::core::marker::Send for GridViewItemPresenter {}
 unsafe impl ::core::marker::Sync for GridViewItemPresenter {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct GridViewItemTemplateSettings(::windows_core::IUnknown);
 impl GridViewItemTemplateSettings {}
-impl ::core::cmp::PartialEq for GridViewItemTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for GridViewItemTemplateSettings {}
-impl ::core::fmt::Debug for GridViewItemTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("GridViewItemTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for GridViewItemTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.GridViewItemTemplateSettings;{9e30baaf-165d-4267-a45e-1a43a75706ac})",
     );
-}
-impl ::core::clone::Clone for GridViewItemTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for GridViewItemTemplateSettings {
     type Vtable = IGridViewItemTemplateSettings_Vtbl;
@@ -6549,28 +6447,18 @@ for GridViewItemTemplateSettings {}
 unsafe impl ::core::marker::Send for GridViewItemTemplateSettings {}
 unsafe impl ::core::marker::Sync for GridViewItemTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ItemsChangedEventArgs(::windows_core::IUnknown);
 impl ItemsChangedEventArgs {}
-impl ::core::cmp::PartialEq for ItemsChangedEventArgs {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ItemsChangedEventArgs {}
-impl ::core::fmt::Debug for ItemsChangedEventArgs {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ItemsChangedEventArgs").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ItemsChangedEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ItemsChangedEventArgs;{e8b45568-7d10-421e-be29-81839a91de20})",
     );
-}
-impl ::core::clone::Clone for ItemsChangedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ItemsChangedEventArgs {
     type Vtable = IItemsChangedEventArgs_Vtbl;
@@ -6587,28 +6475,18 @@ impl ::windows_core::RuntimeName for ItemsChangedEventArgs {
 unsafe impl ::core::marker::Send for ItemsChangedEventArgs {}
 unsafe impl ::core::marker::Sync for ItemsChangedEventArgs {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct JumpListItemBackgroundConverter(::windows_core::IUnknown);
 impl JumpListItemBackgroundConverter {}
-impl ::core::cmp::PartialEq for JumpListItemBackgroundConverter {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for JumpListItemBackgroundConverter {}
-impl ::core::fmt::Debug for JumpListItemBackgroundConverter {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("JumpListItemBackgroundConverter").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for JumpListItemBackgroundConverter {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.JumpListItemBackgroundConverter;{81177858-d224-410c-b16c-c5b6bb6188b2})",
     );
-}
-impl ::core::clone::Clone for JumpListItemBackgroundConverter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for JumpListItemBackgroundConverter {
     type Vtable = IJumpListItemBackgroundConverter_Vtbl;
@@ -6628,28 +6506,18 @@ for JumpListItemBackgroundConverter {}
 unsafe impl ::core::marker::Send for JumpListItemBackgroundConverter {}
 unsafe impl ::core::marker::Sync for JumpListItemBackgroundConverter {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct JumpListItemForegroundConverter(::windows_core::IUnknown);
 impl JumpListItemForegroundConverter {}
-impl ::core::cmp::PartialEq for JumpListItemForegroundConverter {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for JumpListItemForegroundConverter {}
-impl ::core::fmt::Debug for JumpListItemForegroundConverter {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("JumpListItemForegroundConverter").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for JumpListItemForegroundConverter {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.JumpListItemForegroundConverter;{1590ed38-c504-4796-a63a-5bfc9eefaae8})",
     );
-}
-impl ::core::clone::Clone for JumpListItemForegroundConverter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for JumpListItemForegroundConverter {
     type Vtable = IJumpListItemForegroundConverter_Vtbl;
@@ -6669,28 +6537,18 @@ for JumpListItemForegroundConverter {}
 unsafe impl ::core::marker::Send for JumpListItemForegroundConverter {}
 unsafe impl ::core::marker::Sync for JumpListItemForegroundConverter {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct LayoutInformation(::windows_core::IUnknown);
 impl LayoutInformation {}
-impl ::core::cmp::PartialEq for LayoutInformation {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for LayoutInformation {}
-impl ::core::fmt::Debug for LayoutInformation {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("LayoutInformation").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for LayoutInformation {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.LayoutInformation;{b5384c9b-c8cf-41b3-bf16-18c8420e72c9})",
     );
-}
-impl ::core::clone::Clone for LayoutInformation {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for LayoutInformation {
     type Vtable = ILayoutInformation_Vtbl;
@@ -6707,28 +6565,18 @@ impl ::windows_core::RuntimeName for LayoutInformation {
 unsafe impl ::core::marker::Send for LayoutInformation {}
 unsafe impl ::core::marker::Sync for LayoutInformation {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ListViewItemPresenter(::windows_core::IUnknown);
 impl ListViewItemPresenter {}
-impl ::core::cmp::PartialEq for ListViewItemPresenter {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ListViewItemPresenter {}
-impl ::core::fmt::Debug for ListViewItemPresenter {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ListViewItemPresenter").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ListViewItemPresenter {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ListViewItemPresenter;{fc8946bd-a3a2-4969-8174-25b5d3c28033})",
     );
-}
-impl ::core::clone::Clone for ListViewItemPresenter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ListViewItemPresenter {
     type Vtable = IListViewItemPresenter_Vtbl;
@@ -6751,28 +6599,18 @@ for ListViewItemPresenter {}
 unsafe impl ::core::marker::Send for ListViewItemPresenter {}
 unsafe impl ::core::marker::Sync for ListViewItemPresenter {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ListViewItemTemplateSettings(::windows_core::IUnknown);
 impl ListViewItemTemplateSettings {}
-impl ::core::cmp::PartialEq for ListViewItemTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ListViewItemTemplateSettings {}
-impl ::core::fmt::Debug for ListViewItemTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ListViewItemTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ListViewItemTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ListViewItemTemplateSettings;{67af84bf-8279-4686-9326-cd189f27575d})",
     );
-}
-impl ::core::clone::Clone for ListViewItemTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ListViewItemTemplateSettings {
     type Vtable = IListViewItemTemplateSettings_Vtbl;
@@ -6791,28 +6629,18 @@ for ListViewItemTemplateSettings {}
 unsafe impl ::core::marker::Send for ListViewItemTemplateSettings {}
 unsafe impl ::core::marker::Sync for ListViewItemTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct LoopingSelector(::windows_core::IUnknown);
 impl LoopingSelector {}
-impl ::core::cmp::PartialEq for LoopingSelector {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for LoopingSelector {}
-impl ::core::fmt::Debug for LoopingSelector {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("LoopingSelector").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for LoopingSelector {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.LoopingSelector;{4c9a3e04-4827-49d9-8806-093957b0fd21})",
     );
-}
-impl ::core::clone::Clone for LoopingSelector {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for LoopingSelector {
     type Vtable = ILoopingSelector_Vtbl;
@@ -6833,28 +6661,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for LoopingSelec
 unsafe impl ::core::marker::Send for LoopingSelector {}
 unsafe impl ::core::marker::Sync for LoopingSelector {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct LoopingSelectorItem(::windows_core::IUnknown);
 impl LoopingSelectorItem {}
-impl ::core::cmp::PartialEq for LoopingSelectorItem {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for LoopingSelectorItem {}
-impl ::core::fmt::Debug for LoopingSelectorItem {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("LoopingSelectorItem").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for LoopingSelectorItem {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.LoopingSelectorItem;{c69714b9-27c6-4433-9d7c-0dbfb2f4344f})",
     );
-}
-impl ::core::clone::Clone for LoopingSelectorItem {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for LoopingSelectorItem {
     type Vtable = ILoopingSelectorItem_Vtbl;
@@ -6876,28 +6694,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for LoopingSelec
 unsafe impl ::core::marker::Send for LoopingSelectorItem {}
 unsafe impl ::core::marker::Sync for LoopingSelectorItem {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct LoopingSelectorPanel(::windows_core::IUnknown);
 impl LoopingSelectorPanel {}
-impl ::core::cmp::PartialEq for LoopingSelectorPanel {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for LoopingSelectorPanel {}
-impl ::core::fmt::Debug for LoopingSelectorPanel {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("LoopingSelectorPanel").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for LoopingSelectorPanel {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.LoopingSelectorPanel;{40a9ba70-1011-4778-87f7-6bfd20d6377d})",
     );
-}
-impl ::core::clone::Clone for LoopingSelectorPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for LoopingSelectorPanel {
     type Vtable = ILoopingSelectorPanel_Vtbl;
@@ -6922,28 +6730,18 @@ for LoopingSelectorPanel {}
 unsafe impl ::core::marker::Send for LoopingSelectorPanel {}
 unsafe impl ::core::marker::Sync for LoopingSelectorPanel {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct MenuFlyoutItemTemplateSettings(::windows_core::IUnknown);
 impl MenuFlyoutItemTemplateSettings {}
-impl ::core::cmp::PartialEq for MenuFlyoutItemTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for MenuFlyoutItemTemplateSettings {}
-impl ::core::fmt::Debug for MenuFlyoutItemTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("MenuFlyoutItemTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for MenuFlyoutItemTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.MenuFlyoutItemTemplateSettings;{56ad1809-3a16-4147-81cb-d0b35c834e0f})",
     );
-}
-impl ::core::clone::Clone for MenuFlyoutItemTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for MenuFlyoutItemTemplateSettings {
     type Vtable = IMenuFlyoutItemTemplateSettings_Vtbl;
@@ -6963,28 +6761,18 @@ for MenuFlyoutItemTemplateSettings {}
 unsafe impl ::core::marker::Send for MenuFlyoutItemTemplateSettings {}
 unsafe impl ::core::marker::Sync for MenuFlyoutItemTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct MenuFlyoutPresenterTemplateSettings(::windows_core::IUnknown);
 impl MenuFlyoutPresenterTemplateSettings {}
-impl ::core::cmp::PartialEq for MenuFlyoutPresenterTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for MenuFlyoutPresenterTemplateSettings {}
-impl ::core::fmt::Debug for MenuFlyoutPresenterTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("MenuFlyoutPresenterTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for MenuFlyoutPresenterTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.MenuFlyoutPresenterTemplateSettings;{d68fd00d-629d-4349-ac51-b877c80983b8})",
     );
-}
-impl ::core::clone::Clone for MenuFlyoutPresenterTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for MenuFlyoutPresenterTemplateSettings {
     type Vtable = IMenuFlyoutPresenterTemplateSettings_Vtbl;
@@ -7004,28 +6792,18 @@ for MenuFlyoutPresenterTemplateSettings {}
 unsafe impl ::core::marker::Send for MenuFlyoutPresenterTemplateSettings {}
 unsafe impl ::core::marker::Sync for MenuFlyoutPresenterTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct NavigationViewItemPresenter(::windows_core::IUnknown);
 impl NavigationViewItemPresenter {}
-impl ::core::cmp::PartialEq for NavigationViewItemPresenter {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for NavigationViewItemPresenter {}
-impl ::core::fmt::Debug for NavigationViewItemPresenter {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("NavigationViewItemPresenter").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for NavigationViewItemPresenter {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.NavigationViewItemPresenter;{9956d3fc-4693-59cb-b6bf-37249058be96})",
     );
-}
-impl ::core::clone::Clone for NavigationViewItemPresenter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for NavigationViewItemPresenter {
     type Vtable = INavigationViewItemPresenter_Vtbl;
@@ -7050,28 +6828,18 @@ for NavigationViewItemPresenter {}
 unsafe impl ::core::marker::Send for NavigationViewItemPresenter {}
 unsafe impl ::core::marker::Sync for NavigationViewItemPresenter {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct OrientedVirtualizingPanel(::windows_core::IUnknown);
 impl OrientedVirtualizingPanel {}
-impl ::core::cmp::PartialEq for OrientedVirtualizingPanel {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for OrientedVirtualizingPanel {}
-impl ::core::fmt::Debug for OrientedVirtualizingPanel {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("OrientedVirtualizingPanel").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for OrientedVirtualizingPanel {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.OrientedVirtualizingPanel;{f077b577-39bd-46ee-bdd7-0826beed71b8})",
     );
-}
-impl ::core::clone::Clone for OrientedVirtualizingPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for OrientedVirtualizingPanel {
     type Vtable = IOrientedVirtualizingPanel_Vtbl;
@@ -7097,28 +6865,18 @@ for OrientedVirtualizingPanel {}
 unsafe impl ::core::marker::Send for OrientedVirtualizingPanel {}
 unsafe impl ::core::marker::Sync for OrientedVirtualizingPanel {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct PickerFlyoutBase(::windows_core::IUnknown);
 impl PickerFlyoutBase {}
-impl ::core::cmp::PartialEq for PickerFlyoutBase {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for PickerFlyoutBase {}
-impl ::core::fmt::Debug for PickerFlyoutBase {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("PickerFlyoutBase").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for PickerFlyoutBase {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.PickerFlyoutBase;{e33574ea-1076-44d1-9383-dc24ac5cff2a})",
     );
-}
-impl ::core::clone::Clone for PickerFlyoutBase {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for PickerFlyoutBase {
     type Vtable = IPickerFlyoutBase_Vtbl;
@@ -7137,28 +6895,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for PickerFlyout
 unsafe impl ::core::marker::Send for PickerFlyoutBase {}
 unsafe impl ::core::marker::Sync for PickerFlyoutBase {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct PivotHeaderItem(::windows_core::IUnknown);
 impl PivotHeaderItem {}
-impl ::core::cmp::PartialEq for PivotHeaderItem {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for PivotHeaderItem {}
-impl ::core::fmt::Debug for PivotHeaderItem {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("PivotHeaderItem").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for PivotHeaderItem {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.PivotHeaderItem;{594572c2-82aa-410b-9e55-fd8e2c98862d})",
     );
-}
-impl ::core::clone::Clone for PivotHeaderItem {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for PivotHeaderItem {
     type Vtable = IPivotHeaderItem_Vtbl;
@@ -7180,28 +6928,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for PivotHeaderI
 unsafe impl ::core::marker::Send for PivotHeaderItem {}
 unsafe impl ::core::marker::Sync for PivotHeaderItem {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct PivotHeaderPanel(::windows_core::IUnknown);
 impl PivotHeaderPanel {}
-impl ::core::cmp::PartialEq for PivotHeaderPanel {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for PivotHeaderPanel {}
-impl ::core::fmt::Debug for PivotHeaderPanel {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("PivotHeaderPanel").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for PivotHeaderPanel {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.PivotHeaderPanel;{21484ebc-9241-4203-bd37-6c08fb096612})",
     );
-}
-impl ::core::clone::Clone for PivotHeaderPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for PivotHeaderPanel {
     type Vtable = IPivotHeaderPanel_Vtbl;
@@ -7223,28 +6961,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for PivotHeaderP
 unsafe impl ::core::marker::Send for PivotHeaderPanel {}
 unsafe impl ::core::marker::Sync for PivotHeaderPanel {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct PivotPanel(::windows_core::IUnknown);
 impl PivotPanel {}
-impl ::core::cmp::PartialEq for PivotPanel {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for PivotPanel {}
-impl ::core::fmt::Debug for PivotPanel {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("PivotPanel").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for PivotPanel {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.PivotPanel;{ad4ebe80-22a9-4ca3-9212-2773b6359ff3})",
     );
-}
-impl ::core::clone::Clone for PivotPanel {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for PivotPanel {
     type Vtable = IPivotPanel_Vtbl;
@@ -7266,28 +6994,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for PivotPanel {
 unsafe impl ::core::marker::Send for PivotPanel {}
 unsafe impl ::core::marker::Sync for PivotPanel {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct Popup(::windows_core::IUnknown);
 impl Popup {}
-impl ::core::cmp::PartialEq for Popup {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for Popup {}
-impl ::core::fmt::Debug for Popup {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("Popup").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for Popup {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.Popup;{62418240-e6d3-4705-a1dc-39156456ee29})",
     );
-}
-impl ::core::clone::Clone for Popup {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for Popup {
     type Vtable = IPopup_Vtbl;
@@ -7307,28 +7025,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for Popup {}
 unsafe impl ::core::marker::Send for Popup {}
 unsafe impl ::core::marker::Sync for Popup {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ProgressBarTemplateSettings(::windows_core::IUnknown);
 impl ProgressBarTemplateSettings {}
-impl ::core::cmp::PartialEq for ProgressBarTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ProgressBarTemplateSettings {}
-impl ::core::fmt::Debug for ProgressBarTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ProgressBarTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ProgressBarTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ProgressBarTemplateSettings;{3fe2ea2a-e3f2-4c2b-9488-918d77d2bbe4})",
     );
-}
-impl ::core::clone::Clone for ProgressBarTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ProgressBarTemplateSettings {
     type Vtable = IProgressBarTemplateSettings_Vtbl;
@@ -7347,28 +7055,18 @@ for ProgressBarTemplateSettings {}
 unsafe impl ::core::marker::Send for ProgressBarTemplateSettings {}
 unsafe impl ::core::marker::Sync for ProgressBarTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ProgressRingTemplateSettings(::windows_core::IUnknown);
 impl ProgressRingTemplateSettings {}
-impl ::core::cmp::PartialEq for ProgressRingTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ProgressRingTemplateSettings {}
-impl ::core::fmt::Debug for ProgressRingTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ProgressRingTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ProgressRingTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ProgressRingTemplateSettings;{b9b675ec-c723-42e6-83e9-9826272bdc0e})",
     );
-}
-impl ::core::clone::Clone for ProgressRingTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ProgressRingTemplateSettings {
     type Vtable = IProgressRingTemplateSettings_Vtbl;
@@ -7387,28 +7085,18 @@ for ProgressRingTemplateSettings {}
 unsafe impl ::core::marker::Send for ProgressRingTemplateSettings {}
 unsafe impl ::core::marker::Sync for ProgressRingTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct RangeBase(::windows_core::IUnknown);
 impl RangeBase {}
-impl ::core::cmp::PartialEq for RangeBase {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for RangeBase {}
-impl ::core::fmt::Debug for RangeBase {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("RangeBase").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for RangeBase {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.RangeBase;{fa002c1a-494e-46cf-91d4-e14a8d798675})",
     );
-}
-impl ::core::clone::Clone for RangeBase {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for RangeBase {
     type Vtable = IRangeBase_Vtbl;
@@ -7429,6 +7117,12 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for RangeBase {}
 unsafe impl ::core::marker::Send for RangeBase {}
 unsafe impl ::core::marker::Sync for RangeBase {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct RangeBaseValueChangedEventArgs(::windows_core::IUnknown);
 impl RangeBaseValueChangedEventArgs {
     pub fn OldValue(&self) -> ::windows_core::Result<f64> {
@@ -7463,26 +7157,10 @@ impl RangeBaseValueChangedEventArgs {
         }
     }
 }
-impl ::core::cmp::PartialEq for RangeBaseValueChangedEventArgs {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for RangeBaseValueChangedEventArgs {}
-impl ::core::fmt::Debug for RangeBaseValueChangedEventArgs {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("RangeBaseValueChangedEventArgs").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for RangeBaseValueChangedEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs;{a1921777-d5c1-4f9c-a7b0-0401b7e6dc5c})",
     );
-}
-impl ::core::clone::Clone for RangeBaseValueChangedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for RangeBaseValueChangedEventArgs {
     type Vtable = IRangeBaseValueChangedEventArgs_Vtbl;
@@ -7502,28 +7180,18 @@ for RangeBaseValueChangedEventArgs {}
 unsafe impl ::core::marker::Send for RangeBaseValueChangedEventArgs {}
 unsafe impl ::core::marker::Sync for RangeBaseValueChangedEventArgs {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct RepeatButton(::windows_core::IUnknown);
 impl RepeatButton {}
-impl ::core::cmp::PartialEq for RepeatButton {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for RepeatButton {}
-impl ::core::fmt::Debug for RepeatButton {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("RepeatButton").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for RepeatButton {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.RepeatButton;{02200df9-021a-484a-a93b-0f31020314e5})",
     );
-}
-impl ::core::clone::Clone for RepeatButton {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for RepeatButton {
     type Vtable = IRepeatButton_Vtbl;
@@ -7546,28 +7214,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for RepeatButton
 unsafe impl ::core::marker::Send for RepeatButton {}
 unsafe impl ::core::marker::Sync for RepeatButton {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ScrollBar(::windows_core::IUnknown);
 impl ScrollBar {}
-impl ::core::cmp::PartialEq for ScrollBar {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ScrollBar {}
-impl ::core::fmt::Debug for ScrollBar {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ScrollBar").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ScrollBar {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ScrollBar;{f57ae6ca-d1a6-4b90-a4e9-54df1ba8d2ec})",
     );
-}
-impl ::core::clone::Clone for ScrollBar {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ScrollBar {
     type Vtable = IScrollBar_Vtbl;
@@ -7589,28 +7247,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for ScrollBar {}
 unsafe impl ::core::marker::Send for ScrollBar {}
 unsafe impl ::core::marker::Sync for ScrollBar {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ScrollEventArgs(::windows_core::IUnknown);
 impl ScrollEventArgs {}
-impl ::core::cmp::PartialEq for ScrollEventArgs {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ScrollEventArgs {}
-impl ::core::fmt::Debug for ScrollEventArgs {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ScrollEventArgs").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ScrollEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ScrollEventArgs;{c57e5168-3afe-448d-b752-2f364c75d743})",
     );
-}
-impl ::core::clone::Clone for ScrollEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ScrollEventArgs {
     type Vtable = IScrollEventArgs_Vtbl;
@@ -7628,28 +7276,18 @@ impl ::windows_core::CanTryInto<super::super::RoutedEventArgs> for ScrollEventAr
 unsafe impl ::core::marker::Send for ScrollEventArgs {}
 unsafe impl ::core::marker::Sync for ScrollEventArgs {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct Selector(::windows_core::IUnknown);
 impl Selector {}
-impl ::core::cmp::PartialEq for Selector {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for Selector {}
-impl ::core::fmt::Debug for Selector {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("Selector").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for Selector {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.Selector;{e30eb3a5-b36b-42dc-8527-cd25136c083c})",
     );
-}
-impl ::core::clone::Clone for Selector {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for Selector {
     type Vtable = ISelector_Vtbl;
@@ -7672,28 +7310,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for Selector {}
 unsafe impl ::core::marker::Send for Selector {}
 unsafe impl ::core::marker::Sync for Selector {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct SelectorItem(::windows_core::IUnknown);
 impl SelectorItem {}
-impl ::core::cmp::PartialEq for SelectorItem {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for SelectorItem {}
-impl ::core::fmt::Debug for SelectorItem {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("SelectorItem").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for SelectorItem {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.SelectorItem;{541c8d6c-0283-4581-b945-2a64c28a0646})",
     );
-}
-impl ::core::clone::Clone for SelectorItem {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for SelectorItem {
     type Vtable = ISelectorItem_Vtbl;
@@ -7715,28 +7343,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for SelectorItem
 unsafe impl ::core::marker::Send for SelectorItem {}
 unsafe impl ::core::marker::Sync for SelectorItem {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct SettingsFlyoutTemplateSettings(::windows_core::IUnknown);
 impl SettingsFlyoutTemplateSettings {}
-impl ::core::cmp::PartialEq for SettingsFlyoutTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for SettingsFlyoutTemplateSettings {}
-impl ::core::fmt::Debug for SettingsFlyoutTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("SettingsFlyoutTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for SettingsFlyoutTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.SettingsFlyoutTemplateSettings;{bcf14c10-cea7-43f1-9d68-57605ded69d4})",
     );
-}
-impl ::core::clone::Clone for SettingsFlyoutTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for SettingsFlyoutTemplateSettings {
     type Vtable = ISettingsFlyoutTemplateSettings_Vtbl;
@@ -7756,28 +7374,18 @@ for SettingsFlyoutTemplateSettings {}
 unsafe impl ::core::marker::Send for SettingsFlyoutTemplateSettings {}
 unsafe impl ::core::marker::Sync for SettingsFlyoutTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct SplitViewTemplateSettings(::windows_core::IUnknown);
 impl SplitViewTemplateSettings {}
-impl ::core::cmp::PartialEq for SplitViewTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for SplitViewTemplateSettings {}
-impl ::core::fmt::Debug for SplitViewTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("SplitViewTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for SplitViewTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.SplitViewTemplateSettings;{c16ab5a7-4996-4443-b199-6b6b89124eab})",
     );
-}
-impl ::core::clone::Clone for SplitViewTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for SplitViewTemplateSettings {
     type Vtable = ISplitViewTemplateSettings_Vtbl;
@@ -7796,28 +7404,18 @@ for SplitViewTemplateSettings {}
 unsafe impl ::core::marker::Send for SplitViewTemplateSettings {}
 unsafe impl ::core::marker::Sync for SplitViewTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct Thumb(::windows_core::IUnknown);
 impl Thumb {}
-impl ::core::cmp::PartialEq for Thumb {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for Thumb {}
-impl ::core::fmt::Debug for Thumb {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("Thumb").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for Thumb {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.Thumb;{e8b2b281-0d6a-45cf-b333-2402b037f099})",
     );
-}
-impl ::core::clone::Clone for Thumb {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for Thumb {
     type Vtable = IThumb_Vtbl;
@@ -7838,28 +7436,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for Thumb {}
 unsafe impl ::core::marker::Send for Thumb {}
 unsafe impl ::core::marker::Sync for Thumb {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct TickBar(::windows_core::IUnknown);
 impl TickBar {}
-impl ::core::cmp::PartialEq for TickBar {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for TickBar {}
-impl ::core::fmt::Debug for TickBar {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("TickBar").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for TickBar {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.TickBar;{994683fa-f1f6-487d-a5ac-c15921bfa995})",
     );
-}
-impl ::core::clone::Clone for TickBar {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for TickBar {
     type Vtable = ITickBar_Vtbl;
@@ -7879,28 +7467,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for TickBar {}
 unsafe impl ::core::marker::Send for TickBar {}
 unsafe impl ::core::marker::Sync for TickBar {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ToggleButton(::windows_core::IUnknown);
 impl ToggleButton {}
-impl ::core::cmp::PartialEq for ToggleButton {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ToggleButton {}
-impl ::core::fmt::Debug for ToggleButton {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ToggleButton").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ToggleButton {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ToggleButton;{589877fb-0fc7-4036-9d8b-127dfa75c16d})",
     );
-}
-impl ::core::clone::Clone for ToggleButton {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ToggleButton {
     type Vtable = IToggleButton_Vtbl;
@@ -7923,28 +7501,18 @@ impl ::windows_core::CanTryInto<super::super::DependencyObject> for ToggleButton
 unsafe impl ::core::marker::Send for ToggleButton {}
 unsafe impl ::core::marker::Sync for ToggleButton {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ToggleSwitchTemplateSettings(::windows_core::IUnknown);
 impl ToggleSwitchTemplateSettings {}
-impl ::core::cmp::PartialEq for ToggleSwitchTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ToggleSwitchTemplateSettings {}
-impl ::core::fmt::Debug for ToggleSwitchTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ToggleSwitchTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ToggleSwitchTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ToggleSwitchTemplateSettings;{02b7bdcd-628a-4363-86e0-51d6e2e89e58})",
     );
-}
-impl ::core::clone::Clone for ToggleSwitchTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ToggleSwitchTemplateSettings {
     type Vtable = IToggleSwitchTemplateSettings_Vtbl;
@@ -7963,28 +7531,18 @@ for ToggleSwitchTemplateSettings {}
 unsafe impl ::core::marker::Send for ToggleSwitchTemplateSettings {}
 unsafe impl ::core::marker::Sync for ToggleSwitchTemplateSettings {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ToolTipTemplateSettings(::windows_core::IUnknown);
 impl ToolTipTemplateSettings {}
-impl ::core::cmp::PartialEq for ToolTipTemplateSettings {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ToolTipTemplateSettings {}
-impl ::core::fmt::Debug for ToolTipTemplateSettings {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ToolTipTemplateSettings").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ToolTipTemplateSettings {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.ToolTipTemplateSettings;{d4388247-0ec4-4506-affd-afac2225b48c})",
     );
-}
-impl ::core::clone::Clone for ToolTipTemplateSettings {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ToolTipTemplateSettings {
     type Vtable = IToolTipTemplateSettings_Vtbl;
@@ -8583,6 +8141,12 @@ impl ::core::default::Default for GeneratorPosition {
     }
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DragCompletedEventHandler(pub ::windows_core::IUnknown);
 impl DragCompletedEventHandler {}
 #[repr(C)]
@@ -8613,15 +8177,18 @@ impl<
     };
     unsafe extern "system" fn QueryInterface(
         this: *mut ::core::ffi::c_void,
-        iid: &::windows_core::GUID,
-        interface: *mut *const ::core::ffi::c_void,
+        iid: *const ::windows_core::GUID,
+        interface: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT {
         let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
-        *interface = if iid
-            == &<DragCompletedEventHandler as ::windows_core::ComInterface>::IID
-            || iid == &<::windows_core::IUnknown as ::windows_core::ComInterface>::IID
-            || iid
-                == &<::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
+        if iid.is_null() || interface.is_null() {
+            return ::windows_core::HRESULT(-2147467261);
+        }
+        *interface = if *iid
+            == <DragCompletedEventHandler as ::windows_core::ComInterface>::IID
+            || *iid == <::windows_core::IUnknown as ::windows_core::ComInterface>::IID
+            || *iid
+                == <::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
         {
             &mut (*this).vtable as *mut _ as _
         } else {
@@ -8660,24 +8227,8 @@ impl<
             .into()
     }
 }
-impl ::core::cmp::PartialEq for DragCompletedEventHandler {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DragCompletedEventHandler {}
-impl ::core::fmt::Debug for DragCompletedEventHandler {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DragCompletedEventHandler").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for DragCompletedEventHandler {
     type Vtable = DragCompletedEventHandler_Vtbl;
-}
-impl ::core::clone::Clone for DragCompletedEventHandler {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for DragCompletedEventHandler {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -8700,6 +8251,12 @@ pub struct DragCompletedEventHandler_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DragDeltaEventHandler(pub ::windows_core::IUnknown);
 impl DragDeltaEventHandler {}
 #[repr(C)]
@@ -8730,15 +8287,18 @@ impl<
     };
     unsafe extern "system" fn QueryInterface(
         this: *mut ::core::ffi::c_void,
-        iid: &::windows_core::GUID,
-        interface: *mut *const ::core::ffi::c_void,
+        iid: *const ::windows_core::GUID,
+        interface: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT {
         let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
-        *interface = if iid
-            == &<DragDeltaEventHandler as ::windows_core::ComInterface>::IID
-            || iid == &<::windows_core::IUnknown as ::windows_core::ComInterface>::IID
-            || iid
-                == &<::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
+        if iid.is_null() || interface.is_null() {
+            return ::windows_core::HRESULT(-2147467261);
+        }
+        *interface = if *iid
+            == <DragDeltaEventHandler as ::windows_core::ComInterface>::IID
+            || *iid == <::windows_core::IUnknown as ::windows_core::ComInterface>::IID
+            || *iid
+                == <::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
         {
             &mut (*this).vtable as *mut _ as _
         } else {
@@ -8777,24 +8337,8 @@ impl<
             .into()
     }
 }
-impl ::core::cmp::PartialEq for DragDeltaEventHandler {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DragDeltaEventHandler {}
-impl ::core::fmt::Debug for DragDeltaEventHandler {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DragDeltaEventHandler").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for DragDeltaEventHandler {
     type Vtable = DragDeltaEventHandler_Vtbl;
-}
-impl ::core::clone::Clone for DragDeltaEventHandler {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for DragDeltaEventHandler {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -8817,6 +8361,12 @@ pub struct DragDeltaEventHandler_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DragStartedEventHandler(pub ::windows_core::IUnknown);
 impl DragStartedEventHandler {}
 #[repr(C)]
@@ -8847,15 +8397,18 @@ impl<
     };
     unsafe extern "system" fn QueryInterface(
         this: *mut ::core::ffi::c_void,
-        iid: &::windows_core::GUID,
-        interface: *mut *const ::core::ffi::c_void,
+        iid: *const ::windows_core::GUID,
+        interface: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT {
         let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
-        *interface = if iid
-            == &<DragStartedEventHandler as ::windows_core::ComInterface>::IID
-            || iid == &<::windows_core::IUnknown as ::windows_core::ComInterface>::IID
-            || iid
-                == &<::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
+        if iid.is_null() || interface.is_null() {
+            return ::windows_core::HRESULT(-2147467261);
+        }
+        *interface = if *iid
+            == <DragStartedEventHandler as ::windows_core::ComInterface>::IID
+            || *iid == <::windows_core::IUnknown as ::windows_core::ComInterface>::IID
+            || *iid
+                == <::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
         {
             &mut (*this).vtable as *mut _ as _
         } else {
@@ -8894,24 +8447,8 @@ impl<
             .into()
     }
 }
-impl ::core::cmp::PartialEq for DragStartedEventHandler {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DragStartedEventHandler {}
-impl ::core::fmt::Debug for DragStartedEventHandler {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DragStartedEventHandler").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for DragStartedEventHandler {
     type Vtable = DragStartedEventHandler_Vtbl;
-}
-impl ::core::clone::Clone for DragStartedEventHandler {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for DragStartedEventHandler {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -8934,6 +8471,12 @@ pub struct DragStartedEventHandler_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ItemsChangedEventHandler(pub ::windows_core::IUnknown);
 impl ItemsChangedEventHandler {}
 #[repr(C)]
@@ -8964,15 +8507,18 @@ impl<
     };
     unsafe extern "system" fn QueryInterface(
         this: *mut ::core::ffi::c_void,
-        iid: &::windows_core::GUID,
-        interface: *mut *const ::core::ffi::c_void,
+        iid: *const ::windows_core::GUID,
+        interface: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT {
         let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
-        *interface = if iid
-            == &<ItemsChangedEventHandler as ::windows_core::ComInterface>::IID
-            || iid == &<::windows_core::IUnknown as ::windows_core::ComInterface>::IID
-            || iid
-                == &<::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
+        if iid.is_null() || interface.is_null() {
+            return ::windows_core::HRESULT(-2147467261);
+        }
+        *interface = if *iid
+            == <ItemsChangedEventHandler as ::windows_core::ComInterface>::IID
+            || *iid == <::windows_core::IUnknown as ::windows_core::ComInterface>::IID
+            || *iid
+                == <::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
         {
             &mut (*this).vtable as *mut _ as _
         } else {
@@ -9011,24 +8557,8 @@ impl<
             .into()
     }
 }
-impl ::core::cmp::PartialEq for ItemsChangedEventHandler {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ItemsChangedEventHandler {}
-impl ::core::fmt::Debug for ItemsChangedEventHandler {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ItemsChangedEventHandler").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for ItemsChangedEventHandler {
     type Vtable = ItemsChangedEventHandler_Vtbl;
-}
-impl ::core::clone::Clone for ItemsChangedEventHandler {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ItemsChangedEventHandler {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -9051,6 +8581,12 @@ pub struct ItemsChangedEventHandler_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct RangeBaseValueChangedEventHandler(pub ::windows_core::IUnknown);
 impl RangeBaseValueChangedEventHandler {
     pub fn new<
@@ -9111,15 +8647,18 @@ impl<
     };
     unsafe extern "system" fn QueryInterface(
         this: *mut ::core::ffi::c_void,
-        iid: &::windows_core::GUID,
-        interface: *mut *const ::core::ffi::c_void,
+        iid: *const ::windows_core::GUID,
+        interface: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT {
         let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
-        *interface = if iid
-            == &<RangeBaseValueChangedEventHandler as ::windows_core::ComInterface>::IID
-            || iid == &<::windows_core::IUnknown as ::windows_core::ComInterface>::IID
-            || iid
-                == &<::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
+        if iid.is_null() || interface.is_null() {
+            return ::windows_core::HRESULT(-2147467261);
+        }
+        *interface = if *iid
+            == <RangeBaseValueChangedEventHandler as ::windows_core::ComInterface>::IID
+            || *iid == <::windows_core::IUnknown as ::windows_core::ComInterface>::IID
+            || *iid
+                == <::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
         {
             &mut (*this).vtable as *mut _ as _
         } else {
@@ -9158,24 +8697,8 @@ impl<
             .into()
     }
 }
-impl ::core::cmp::PartialEq for RangeBaseValueChangedEventHandler {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for RangeBaseValueChangedEventHandler {}
-impl ::core::fmt::Debug for RangeBaseValueChangedEventHandler {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("RangeBaseValueChangedEventHandler").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for RangeBaseValueChangedEventHandler {
     type Vtable = RangeBaseValueChangedEventHandler_Vtbl;
-}
-impl ::core::clone::Clone for RangeBaseValueChangedEventHandler {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for RangeBaseValueChangedEventHandler {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -9198,6 +8721,12 @@ pub struct RangeBaseValueChangedEventHandler_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ScrollEventHandler(pub ::windows_core::IUnknown);
 impl ScrollEventHandler {}
 #[repr(C)]
@@ -9228,14 +8757,17 @@ impl<
     };
     unsafe extern "system" fn QueryInterface(
         this: *mut ::core::ffi::c_void,
-        iid: &::windows_core::GUID,
-        interface: *mut *const ::core::ffi::c_void,
+        iid: *const ::windows_core::GUID,
+        interface: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT {
         let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
-        *interface = if iid == &<ScrollEventHandler as ::windows_core::ComInterface>::IID
-            || iid == &<::windows_core::IUnknown as ::windows_core::ComInterface>::IID
-            || iid
-                == &<::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
+        if iid.is_null() || interface.is_null() {
+            return ::windows_core::HRESULT(-2147467261);
+        }
+        *interface = if *iid == <ScrollEventHandler as ::windows_core::ComInterface>::IID
+            || *iid == <::windows_core::IUnknown as ::windows_core::ComInterface>::IID
+            || *iid
+                == <::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
         {
             &mut (*this).vtable as *mut _ as _
         } else {
@@ -9274,24 +8806,8 @@ impl<
             .into()
     }
 }
-impl ::core::cmp::PartialEq for ScrollEventHandler {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ScrollEventHandler {}
-impl ::core::fmt::Debug for ScrollEventHandler {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ScrollEventHandler").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for ScrollEventHandler {
     type Vtable = ScrollEventHandler_Vtbl;
-}
-impl ::core::clone::Clone for ScrollEventHandler {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ScrollEventHandler {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(

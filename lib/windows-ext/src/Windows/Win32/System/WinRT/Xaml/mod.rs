@@ -1,4 +1,10 @@
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDesktopWindowXamlSourceNative(::windows_core::IUnknown);
 impl IDesktopWindowXamlSourceNative {
     pub unsafe fn AttachToWindow<P0>(&self, parentwnd: P0) -> ::windows_core::Result<()>
@@ -24,24 +30,8 @@ impl IDesktopWindowXamlSourceNative {
 ::windows_core::imp::interface_hierarchy!(
     IDesktopWindowXamlSourceNative, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for IDesktopWindowXamlSourceNative {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IDesktopWindowXamlSourceNative {}
-impl ::core::fmt::Debug for IDesktopWindowXamlSourceNative {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IDesktopWindowXamlSourceNative").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for IDesktopWindowXamlSourceNative {
     type Vtable = IDesktopWindowXamlSourceNative_Vtbl;
-}
-impl ::core::clone::Clone for IDesktopWindowXamlSourceNative {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDesktopWindowXamlSourceNative {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -62,30 +52,20 @@ pub struct IDesktopWindowXamlSourceNative_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDesktopWindowXamlSourceNative2(::windows_core::IUnknown);
 impl IDesktopWindowXamlSourceNative2 {}
 ::windows_core::imp::interface_hierarchy!(
     IDesktopWindowXamlSourceNative2, ::windows_core::IUnknown,
     IDesktopWindowXamlSourceNative
 );
-impl ::core::cmp::PartialEq for IDesktopWindowXamlSourceNative2 {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IDesktopWindowXamlSourceNative2 {}
-impl ::core::fmt::Debug for IDesktopWindowXamlSourceNative2 {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IDesktopWindowXamlSourceNative2").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for IDesktopWindowXamlSourceNative2 {
     type Vtable = IDesktopWindowXamlSourceNative2_Vtbl;
-}
-impl ::core::clone::Clone for IDesktopWindowXamlSourceNative2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDesktopWindowXamlSourceNative2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -99,29 +79,19 @@ pub struct IDesktopWindowXamlSourceNative2_Vtbl {
     PreTranslateMessage: usize,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IFindReferenceTargetsCallback(::windows_core::IUnknown);
 impl IFindReferenceTargetsCallback {}
 ::windows_core::imp::interface_hierarchy!(
     IFindReferenceTargetsCallback, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for IFindReferenceTargetsCallback {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IFindReferenceTargetsCallback {}
-impl ::core::fmt::Debug for IFindReferenceTargetsCallback {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IFindReferenceTargetsCallback").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for IFindReferenceTargetsCallback {
     type Vtable = IFindReferenceTargetsCallback_Vtbl;
-}
-impl ::core::clone::Clone for IFindReferenceTargetsCallback {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IFindReferenceTargetsCallback {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -138,27 +108,17 @@ pub struct IFindReferenceTargetsCallback_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IReferenceTracker(::windows_core::IUnknown);
 impl IReferenceTracker {}
 ::windows_core::imp::interface_hierarchy!(IReferenceTracker, ::windows_core::IUnknown);
-impl ::core::cmp::PartialEq for IReferenceTracker {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IReferenceTracker {}
-impl ::core::fmt::Debug for IReferenceTracker {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IReferenceTracker").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for IReferenceTracker {
     type Vtable = IReferenceTracker_Vtbl;
-}
-impl ::core::clone::Clone for IReferenceTracker {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IReferenceTracker {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -194,29 +154,19 @@ pub struct IReferenceTracker_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IReferenceTrackerExtension(::windows_core::IUnknown);
 impl IReferenceTrackerExtension {}
 ::windows_core::imp::interface_hierarchy!(
     IReferenceTrackerExtension, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for IReferenceTrackerExtension {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IReferenceTrackerExtension {}
-impl ::core::fmt::Debug for IReferenceTrackerExtension {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IReferenceTrackerExtension").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for IReferenceTrackerExtension {
     type Vtable = IReferenceTrackerExtension_Vtbl;
-}
-impl ::core::clone::Clone for IReferenceTrackerExtension {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IReferenceTrackerExtension {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -229,29 +179,19 @@ pub struct IReferenceTrackerExtension_Vtbl {
     pub base__: ::windows_core::IUnknown_Vtbl,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IReferenceTrackerHost(::windows_core::IUnknown);
 impl IReferenceTrackerHost {}
 ::windows_core::imp::interface_hierarchy!(
     IReferenceTrackerHost, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for IReferenceTrackerHost {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IReferenceTrackerHost {}
-impl ::core::fmt::Debug for IReferenceTrackerHost {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IReferenceTrackerHost").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for IReferenceTrackerHost {
     type Vtable = IReferenceTrackerHost_Vtbl;
-}
-impl ::core::clone::Clone for IReferenceTrackerHost {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IReferenceTrackerHost {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -287,29 +227,19 @@ pub struct IReferenceTrackerHost_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IReferenceTrackerManager(::windows_core::IUnknown);
 impl IReferenceTrackerManager {}
 ::windows_core::imp::interface_hierarchy!(
     IReferenceTrackerManager, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for IReferenceTrackerManager {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IReferenceTrackerManager {}
-impl ::core::fmt::Debug for IReferenceTrackerManager {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IReferenceTrackerManager").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for IReferenceTrackerManager {
     type Vtable = IReferenceTrackerManager_Vtbl;
-}
-impl ::core::clone::Clone for IReferenceTrackerManager {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IReferenceTrackerManager {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -336,29 +266,19 @@ pub struct IReferenceTrackerManager_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IReferenceTrackerTarget(::windows_core::IUnknown);
 impl IReferenceTrackerTarget {}
 ::windows_core::imp::interface_hierarchy!(
     IReferenceTrackerTarget, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for IReferenceTrackerTarget {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IReferenceTrackerTarget {}
-impl ::core::fmt::Debug for IReferenceTrackerTarget {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IReferenceTrackerTarget").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for IReferenceTrackerTarget {
     type Vtable = IReferenceTrackerTarget_Vtbl;
-}
-impl ::core::clone::Clone for IReferenceTrackerTarget {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IReferenceTrackerTarget {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -383,29 +303,19 @@ pub struct IReferenceTrackerTarget_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISurfaceImageSourceManagerNative(::windows_core::IUnknown);
 impl ISurfaceImageSourceManagerNative {}
 ::windows_core::imp::interface_hierarchy!(
     ISurfaceImageSourceManagerNative, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for ISurfaceImageSourceManagerNative {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ISurfaceImageSourceManagerNative {}
-impl ::core::fmt::Debug for ISurfaceImageSourceManagerNative {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ISurfaceImageSourceManagerNative").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for ISurfaceImageSourceManagerNative {
     type Vtable = ISurfaceImageSourceManagerNative_Vtbl;
-}
-impl ::core::clone::Clone for ISurfaceImageSourceManagerNative {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISurfaceImageSourceManagerNative {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -422,29 +332,19 @@ pub struct ISurfaceImageSourceManagerNative_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISurfaceImageSourceNative(::windows_core::IUnknown);
 impl ISurfaceImageSourceNative {}
 ::windows_core::imp::interface_hierarchy!(
     ISurfaceImageSourceNative, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for ISurfaceImageSourceNative {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ISurfaceImageSourceNative {}
-impl ::core::fmt::Debug for ISurfaceImageSourceNative {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ISurfaceImageSourceNative").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for ISurfaceImageSourceNative {
     type Vtable = ISurfaceImageSourceNative_Vtbl;
-}
-impl ::core::clone::Clone for ISurfaceImageSourceNative {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISurfaceImageSourceNative {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -462,29 +362,19 @@ pub struct ISurfaceImageSourceNative_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISurfaceImageSourceNativeWithD2D(::windows_core::IUnknown);
 impl ISurfaceImageSourceNativeWithD2D {}
 ::windows_core::imp::interface_hierarchy!(
     ISurfaceImageSourceNativeWithD2D, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for ISurfaceImageSourceNativeWithD2D {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ISurfaceImageSourceNativeWithD2D {}
-impl ::core::fmt::Debug for ISurfaceImageSourceNativeWithD2D {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ISurfaceImageSourceNativeWithD2D").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for ISurfaceImageSourceNativeWithD2D {
     type Vtable = ISurfaceImageSourceNativeWithD2D_Vtbl;
-}
-impl ::core::clone::Clone for ISurfaceImageSourceNativeWithD2D {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISurfaceImageSourceNativeWithD2D {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -517,29 +407,19 @@ pub struct ISurfaceImageSourceNativeWithD2D_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISwapChainBackgroundPanelNative(::windows_core::IUnknown);
 impl ISwapChainBackgroundPanelNative {}
 ::windows_core::imp::interface_hierarchy!(
     ISwapChainBackgroundPanelNative, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for ISwapChainBackgroundPanelNative {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ISwapChainBackgroundPanelNative {}
-impl ::core::fmt::Debug for ISwapChainBackgroundPanelNative {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ISwapChainBackgroundPanelNative").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for ISwapChainBackgroundPanelNative {
     type Vtable = ISwapChainBackgroundPanelNative_Vtbl;
-}
-impl ::core::clone::Clone for ISwapChainBackgroundPanelNative {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISwapChainBackgroundPanelNative {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -553,29 +433,19 @@ pub struct ISwapChainBackgroundPanelNative_Vtbl {
     SetSwapChain: usize,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISwapChainPanelNative(::windows_core::IUnknown);
 impl ISwapChainPanelNative {}
 ::windows_core::imp::interface_hierarchy!(
     ISwapChainPanelNative, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for ISwapChainPanelNative {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ISwapChainPanelNative {}
-impl ::core::fmt::Debug for ISwapChainPanelNative {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ISwapChainPanelNative").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for ISwapChainPanelNative {
     type Vtable = ISwapChainPanelNative_Vtbl;
-}
-impl ::core::clone::Clone for ISwapChainPanelNative {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISwapChainPanelNative {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -589,29 +459,19 @@ pub struct ISwapChainPanelNative_Vtbl {
     SetSwapChain: usize,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ISwapChainPanelNative2(::windows_core::IUnknown);
 impl ISwapChainPanelNative2 {}
 ::windows_core::imp::interface_hierarchy!(
     ISwapChainPanelNative2, ::windows_core::IUnknown, ISwapChainPanelNative
 );
-impl ::core::cmp::PartialEq for ISwapChainPanelNative2 {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ISwapChainPanelNative2 {}
-impl ::core::fmt::Debug for ISwapChainPanelNative2 {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ISwapChainPanelNative2").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for ISwapChainPanelNative2 {
     type Vtable = ISwapChainPanelNative2_Vtbl;
-}
-impl ::core::clone::Clone for ISwapChainPanelNative2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ISwapChainPanelNative2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -628,27 +488,17 @@ pub struct ISwapChainPanelNative2_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ITrackerOwner(::windows_core::IUnknown);
 impl ITrackerOwner {}
 ::windows_core::imp::interface_hierarchy!(ITrackerOwner, ::windows_core::IUnknown);
-impl ::core::cmp::PartialEq for ITrackerOwner {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ITrackerOwner {}
-impl ::core::fmt::Debug for ITrackerOwner {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ITrackerOwner").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for ITrackerOwner {
     type Vtable = ITrackerOwner_Vtbl;
-}
-impl ::core::clone::Clone for ITrackerOwner {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for ITrackerOwner {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -679,29 +529,19 @@ pub struct ITrackerOwner_Vtbl {
     ) -> u8,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IVirtualSurfaceImageSourceNative(::windows_core::IUnknown);
 impl IVirtualSurfaceImageSourceNative {}
 ::windows_core::imp::interface_hierarchy!(
     IVirtualSurfaceImageSourceNative, ::windows_core::IUnknown, ISurfaceImageSourceNative
 );
-impl ::core::cmp::PartialEq for IVirtualSurfaceImageSourceNative {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IVirtualSurfaceImageSourceNative {}
-impl ::core::fmt::Debug for IVirtualSurfaceImageSourceNative {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IVirtualSurfaceImageSourceNative").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for IVirtualSurfaceImageSourceNative {
     type Vtable = IVirtualSurfaceImageSourceNative_Vtbl;
-}
-impl ::core::clone::Clone for IVirtualSurfaceImageSourceNative {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IVirtualSurfaceImageSourceNative {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -740,29 +580,19 @@ pub struct IVirtualSurfaceImageSourceNative_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IVirtualSurfaceUpdatesCallbackNative(::windows_core::IUnknown);
 impl IVirtualSurfaceUpdatesCallbackNative {}
 ::windows_core::imp::interface_hierarchy!(
     IVirtualSurfaceUpdatesCallbackNative, ::windows_core::IUnknown
 );
-impl ::core::cmp::PartialEq for IVirtualSurfaceUpdatesCallbackNative {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IVirtualSurfaceUpdatesCallbackNative {}
-impl ::core::fmt::Debug for IVirtualSurfaceUpdatesCallbackNative {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IVirtualSurfaceUpdatesCallbackNative").field(&self.0).finish()
-    }
-}
 unsafe impl ::windows_core::Interface for IVirtualSurfaceUpdatesCallbackNative {
     type Vtable = IVirtualSurfaceUpdatesCallbackNative_Vtbl;
-}
-impl ::core::clone::Clone for IVirtualSurfaceUpdatesCallbackNative {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IVirtualSurfaceUpdatesCallbackNative {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -777,13 +607,10 @@ pub struct IVirtualSurfaceUpdatesCallbackNative_Vtbl {
         this: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
 }
-///*Required features: `"Win32_System_WinRT_Xaml"`*
 pub const E_SURFACE_CONTENTS_LOST: u32 = 2150301728u32;
-///*Required features: `"Win32_System_WinRT_Xaml"`*
 pub const XAML_REFERENCETRACKER_DISCONNECT_DEFAULT: XAML_REFERENCETRACKER_DISCONNECT = XAML_REFERENCETRACKER_DISCONNECT(
     0i32,
 );
-///*Required features: `"Win32_System_WinRT_Xaml"`*
 pub const XAML_REFERENCETRACKER_DISCONNECT_SUSPEND: XAML_REFERENCETRACKER_DISCONNECT = XAML_REFERENCETRACKER_DISCONNECT(
     1i32,
 );

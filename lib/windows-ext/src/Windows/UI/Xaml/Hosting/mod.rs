@@ -1,13 +1,14 @@
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDesignerAppExitedEventArgs(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDesignerAppExitedEventArgs {
     type Vtable = IDesignerAppExitedEventArgs_Vtbl;
-}
-impl ::core::clone::Clone for IDesignerAppExitedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDesignerAppExitedEventArgs {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -25,14 +26,15 @@ pub struct IDesignerAppExitedEventArgs_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDesignerAppManager(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDesignerAppManager {
     type Vtable = IDesignerAppManager_Vtbl;
-}
-impl ::core::clone::Clone for IDesignerAppManager {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDesignerAppManager {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -72,14 +74,15 @@ pub struct IDesignerAppManager_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDesignerAppManagerFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDesignerAppManagerFactory {
     type Vtable = IDesignerAppManagerFactory_Vtbl;
-}
-impl ::core::clone::Clone for IDesignerAppManagerFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDesignerAppManagerFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -98,14 +101,15 @@ pub struct IDesignerAppManagerFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDesignerAppView(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDesignerAppView {
     type Vtable = IDesignerAppView_Vtbl;
-}
-impl ::core::clone::Clone for IDesignerAppView {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDesignerAppView {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -141,14 +145,15 @@ pub struct IDesignerAppView_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDesktopWindowXamlSource(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDesktopWindowXamlSource {
     type Vtable = IDesktopWindowXamlSource_Vtbl;
-}
-impl ::core::clone::Clone for IDesktopWindowXamlSource {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDesktopWindowXamlSource {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -197,14 +202,15 @@ pub struct IDesktopWindowXamlSource_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDesktopWindowXamlSourceFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDesktopWindowXamlSourceFactory {
     type Vtable = IDesktopWindowXamlSourceFactory_Vtbl;
-}
-impl ::core::clone::Clone for IDesktopWindowXamlSourceFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDesktopWindowXamlSourceFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -224,14 +230,15 @@ pub struct IDesktopWindowXamlSourceFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDesktopWindowXamlSourceGotFocusEventArgs(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IDesktopWindowXamlSourceGotFocusEventArgs {
     type Vtable = IDesktopWindowXamlSourceGotFocusEventArgs_Vtbl;
-}
-impl ::core::clone::Clone for IDesktopWindowXamlSourceGotFocusEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IDesktopWindowXamlSourceGotFocusEventArgs {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -249,15 +256,16 @@ pub struct IDesktopWindowXamlSourceGotFocusEventArgs_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IDesktopWindowXamlSourceTakeFocusRequestedEventArgs(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface
 for IDesktopWindowXamlSourceTakeFocusRequestedEventArgs {
     type Vtable = IDesktopWindowXamlSourceTakeFocusRequestedEventArgs_Vtbl;
-}
-impl ::core::clone::Clone for IDesktopWindowXamlSourceTakeFocusRequestedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface
 for IDesktopWindowXamlSourceTakeFocusRequestedEventArgs {
@@ -276,14 +284,15 @@ pub struct IDesktopWindowXamlSourceTakeFocusRequestedEventArgs_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IElementCompositionPreview(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IElementCompositionPreview {
     type Vtable = IElementCompositionPreview_Vtbl;
-}
-impl ::core::clone::Clone for IElementCompositionPreview {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IElementCompositionPreview {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -297,14 +306,15 @@ pub struct IElementCompositionPreview_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IElementCompositionPreviewStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IElementCompositionPreviewStatics {
     type Vtable = IElementCompositionPreviewStatics_Vtbl;
-}
-impl ::core::clone::Clone for IElementCompositionPreviewStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IElementCompositionPreviewStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -322,14 +332,15 @@ pub struct IElementCompositionPreviewStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IElementCompositionPreviewStatics2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IElementCompositionPreviewStatics2 {
     type Vtable = IElementCompositionPreviewStatics2_Vtbl;
-}
-impl ::core::clone::Clone for IElementCompositionPreviewStatics2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IElementCompositionPreviewStatics2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -351,14 +362,15 @@ pub struct IElementCompositionPreviewStatics2_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IElementCompositionPreviewStatics3(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IElementCompositionPreviewStatics3 {
     type Vtable = IElementCompositionPreviewStatics3_Vtbl;
-}
-impl ::core::clone::Clone for IElementCompositionPreviewStatics3 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IElementCompositionPreviewStatics3 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -374,14 +386,15 @@ pub struct IElementCompositionPreviewStatics3_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IWindowsXamlManager(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IWindowsXamlManager {
     type Vtable = IWindowsXamlManager_Vtbl;
-}
-impl ::core::clone::Clone for IWindowsXamlManager {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IWindowsXamlManager {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -395,14 +408,15 @@ pub struct IWindowsXamlManager_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IWindowsXamlManagerStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IWindowsXamlManagerStatics {
     type Vtable = IWindowsXamlManagerStatics_Vtbl;
-}
-impl ::core::clone::Clone for IWindowsXamlManagerStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IWindowsXamlManagerStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -420,14 +434,15 @@ pub struct IWindowsXamlManagerStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IXamlSourceFocusNavigationRequest(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IXamlSourceFocusNavigationRequest {
     type Vtable = IXamlSourceFocusNavigationRequest_Vtbl;
-}
-impl ::core::clone::Clone for IXamlSourceFocusNavigationRequest {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IXamlSourceFocusNavigationRequest {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -453,14 +468,15 @@ pub struct IXamlSourceFocusNavigationRequest_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IXamlSourceFocusNavigationRequestFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IXamlSourceFocusNavigationRequestFactory {
     type Vtable = IXamlSourceFocusNavigationRequestFactory_Vtbl;
-}
-impl ::core::clone::Clone for IXamlSourceFocusNavigationRequestFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IXamlSourceFocusNavigationRequestFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -492,14 +508,15 @@ pub struct IXamlSourceFocusNavigationRequestFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IXamlSourceFocusNavigationResult(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IXamlSourceFocusNavigationResult {
     type Vtable = IXamlSourceFocusNavigationResult_Vtbl;
-}
-impl ::core::clone::Clone for IXamlSourceFocusNavigationResult {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IXamlSourceFocusNavigationResult {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -517,14 +534,15 @@ pub struct IXamlSourceFocusNavigationResult_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IXamlSourceFocusNavigationResultFactory(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IXamlSourceFocusNavigationResultFactory {
     type Vtable = IXamlSourceFocusNavigationResultFactory_Vtbl;
-}
-impl ::core::clone::Clone for IXamlSourceFocusNavigationResultFactory {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IXamlSourceFocusNavigationResultFactory {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -543,14 +561,15 @@ pub struct IXamlSourceFocusNavigationResultFactory_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IXamlUIPresenter(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IXamlUIPresenter {
     type Vtable = IXamlUIPresenter_Vtbl;
-}
-impl ::core::clone::Clone for IXamlUIPresenter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IXamlUIPresenter {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -598,22 +617,17 @@ pub struct IXamlUIPresenter_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IXamlUIPresenterHost(::windows_core::IUnknown);
 impl IXamlUIPresenterHost {}
 ::windows_core::imp::interface_hierarchy!(
     IXamlUIPresenterHost, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
-impl ::core::cmp::PartialEq for IXamlUIPresenterHost {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IXamlUIPresenterHost {}
-impl ::core::fmt::Debug for IXamlUIPresenterHost {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IXamlUIPresenterHost").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for IXamlUIPresenterHost {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"{aafb84cd-9f6d-4f80-ac2c-0e6cb9f31659}",
@@ -621,11 +635,6 @@ impl ::windows_core::RuntimeType for IXamlUIPresenterHost {
 }
 unsafe impl ::windows_core::Interface for IXamlUIPresenterHost {
     type Vtable = IXamlUIPresenterHost_Vtbl;
-}
-impl ::core::clone::Clone for IXamlUIPresenterHost {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IXamlUIPresenterHost {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -643,22 +652,17 @@ pub struct IXamlUIPresenterHost_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IXamlUIPresenterHost2(::windows_core::IUnknown);
 impl IXamlUIPresenterHost2 {}
 ::windows_core::imp::interface_hierarchy!(
     IXamlUIPresenterHost2, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
-impl ::core::cmp::PartialEq for IXamlUIPresenterHost2 {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IXamlUIPresenterHost2 {}
-impl ::core::fmt::Debug for IXamlUIPresenterHost2 {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IXamlUIPresenterHost2").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for IXamlUIPresenterHost2 {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"{61595672-7ca4-4a21-b56a-88f4812388ca}",
@@ -666,11 +670,6 @@ impl ::windows_core::RuntimeType for IXamlUIPresenterHost2 {
 }
 unsafe impl ::windows_core::Interface for IXamlUIPresenterHost2 {
     type Vtable = IXamlUIPresenterHost2_Vtbl;
-}
-impl ::core::clone::Clone for IXamlUIPresenterHost2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IXamlUIPresenterHost2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -687,22 +686,17 @@ pub struct IXamlUIPresenterHost2_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IXamlUIPresenterHost3(::windows_core::IUnknown);
 impl IXamlUIPresenterHost3 {}
 ::windows_core::imp::interface_hierarchy!(
     IXamlUIPresenterHost3, ::windows_core::IUnknown, ::windows_core::IInspectable
 );
-impl ::core::cmp::PartialEq for IXamlUIPresenterHost3 {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for IXamlUIPresenterHost3 {}
-impl ::core::fmt::Debug for IXamlUIPresenterHost3 {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("IXamlUIPresenterHost3").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for IXamlUIPresenterHost3 {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"{b14292bf-7320-41bb-9f26-4d6fd34db45a}",
@@ -710,11 +704,6 @@ impl ::windows_core::RuntimeType for IXamlUIPresenterHost3 {
 }
 unsafe impl ::windows_core::Interface for IXamlUIPresenterHost3 {
     type Vtable = IXamlUIPresenterHost3_Vtbl;
-}
-impl ::core::clone::Clone for IXamlUIPresenterHost3 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IXamlUIPresenterHost3 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -735,14 +724,15 @@ pub struct IXamlUIPresenterHost3_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IXamlUIPresenterStatics(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IXamlUIPresenterStatics {
     type Vtable = IXamlUIPresenterStatics_Vtbl;
-}
-impl ::core::clone::Clone for IXamlUIPresenterStatics {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IXamlUIPresenterStatics {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -771,14 +761,15 @@ pub struct IXamlUIPresenterStatics_Vtbl {
 }
 #[doc(hidden)]
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct IXamlUIPresenterStatics2(::windows_core::IUnknown);
 unsafe impl ::windows_core::Interface for IXamlUIPresenterStatics2 {
     type Vtable = IXamlUIPresenterStatics2_Vtbl;
-}
-impl ::core::clone::Clone for IXamlUIPresenterStatics2 {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::ComInterface for IXamlUIPresenterStatics2 {
     const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
@@ -810,28 +801,18 @@ pub struct IXamlUIPresenterStatics2_Vtbl {
     ) -> ::windows_core::HRESULT,
 }
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DesignerAppExitedEventArgs(::windows_core::IUnknown);
 impl DesignerAppExitedEventArgs {}
-impl ::core::cmp::PartialEq for DesignerAppExitedEventArgs {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DesignerAppExitedEventArgs {}
-impl ::core::fmt::Debug for DesignerAppExitedEventArgs {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DesignerAppExitedEventArgs").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for DesignerAppExitedEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Hosting.DesignerAppExitedEventArgs;{f6aac86a-0cad-410c-8f62-dc2936151c74})",
     );
-}
-impl ::core::clone::Clone for DesignerAppExitedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for DesignerAppExitedEventArgs {
     type Vtable = IDesignerAppExitedEventArgs_Vtbl;
@@ -848,28 +829,18 @@ impl ::windows_core::RuntimeName for DesignerAppExitedEventArgs {
 unsafe impl ::core::marker::Send for DesignerAppExitedEventArgs {}
 unsafe impl ::core::marker::Sync for DesignerAppExitedEventArgs {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DesignerAppManager(::windows_core::IUnknown);
 impl DesignerAppManager {}
-impl ::core::cmp::PartialEq for DesignerAppManager {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DesignerAppManager {}
-impl ::core::fmt::Debug for DesignerAppManager {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DesignerAppManager").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for DesignerAppManager {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Hosting.DesignerAppManager;{a6272caa-d5c6-40cb-abd9-27ba43831bb7})",
     );
-}
-impl ::core::clone::Clone for DesignerAppManager {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for DesignerAppManager {
     type Vtable = IDesignerAppManager_Vtbl;
@@ -888,28 +859,18 @@ for DesignerAppManager {}
 unsafe impl ::core::marker::Send for DesignerAppManager {}
 unsafe impl ::core::marker::Sync for DesignerAppManager {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DesignerAppView(::windows_core::IUnknown);
 impl DesignerAppView {}
-impl ::core::cmp::PartialEq for DesignerAppView {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DesignerAppView {}
-impl ::core::fmt::Debug for DesignerAppView {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DesignerAppView").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for DesignerAppView {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Hosting.DesignerAppView;{5c777cea-dd71-4a84-a56f-dacb4b14706f})",
     );
-}
-impl ::core::clone::Clone for DesignerAppView {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for DesignerAppView {
     type Vtable = IDesignerAppView_Vtbl;
@@ -928,6 +889,12 @@ for DesignerAppView {}
 unsafe impl ::core::marker::Send for DesignerAppView {}
 unsafe impl ::core::marker::Sync for DesignerAppView {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DesktopWindowXamlSource(::windows_core::IUnknown);
 impl DesktopWindowXamlSource {
     pub fn SetContent<P0>(&self, value: P0) -> ::windows_core::Result<()>
@@ -970,26 +937,10 @@ impl DesktopWindowXamlSource {
         SHARED.call(callback)
     }
 }
-impl ::core::cmp::PartialEq for DesktopWindowXamlSource {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DesktopWindowXamlSource {}
-impl ::core::fmt::Debug for DesktopWindowXamlSource {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DesktopWindowXamlSource").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for DesktopWindowXamlSource {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Hosting.DesktopWindowXamlSource;{d585bfe1-00ff-51be-ba1d-a1329956ea0a})",
     );
-}
-impl ::core::clone::Clone for DesktopWindowXamlSource {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for DesktopWindowXamlSource {
     type Vtable = IDesktopWindowXamlSource_Vtbl;
@@ -1008,28 +959,18 @@ for DesktopWindowXamlSource {}
 unsafe impl ::core::marker::Send for DesktopWindowXamlSource {}
 unsafe impl ::core::marker::Sync for DesktopWindowXamlSource {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DesktopWindowXamlSourceGotFocusEventArgs(::windows_core::IUnknown);
 impl DesktopWindowXamlSourceGotFocusEventArgs {}
-impl ::core::cmp::PartialEq for DesktopWindowXamlSourceGotFocusEventArgs {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DesktopWindowXamlSourceGotFocusEventArgs {}
-impl ::core::fmt::Debug for DesktopWindowXamlSourceGotFocusEventArgs {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DesktopWindowXamlSourceGotFocusEventArgs").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for DesktopWindowXamlSourceGotFocusEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Hosting.DesktopWindowXamlSourceGotFocusEventArgs;{39be4849-d9cc-5b70-8f05-1ad9a4aaa342})",
     );
-}
-impl ::core::clone::Clone for DesktopWindowXamlSourceGotFocusEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for DesktopWindowXamlSourceGotFocusEventArgs {
     type Vtable = IDesktopWindowXamlSourceGotFocusEventArgs_Vtbl;
@@ -1047,30 +988,18 @@ impl ::windows_core::RuntimeName for DesktopWindowXamlSourceGotFocusEventArgs {
 unsafe impl ::core::marker::Send for DesktopWindowXamlSourceGotFocusEventArgs {}
 unsafe impl ::core::marker::Sync for DesktopWindowXamlSourceGotFocusEventArgs {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct DesktopWindowXamlSourceTakeFocusRequestedEventArgs(::windows_core::IUnknown);
 impl DesktopWindowXamlSourceTakeFocusRequestedEventArgs {}
-impl ::core::cmp::PartialEq for DesktopWindowXamlSourceTakeFocusRequestedEventArgs {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for DesktopWindowXamlSourceTakeFocusRequestedEventArgs {}
-impl ::core::fmt::Debug for DesktopWindowXamlSourceTakeFocusRequestedEventArgs {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("DesktopWindowXamlSourceTakeFocusRequestedEventArgs")
-            .field(&self.0)
-            .finish()
-    }
-}
 impl ::windows_core::RuntimeType for DesktopWindowXamlSourceTakeFocusRequestedEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Hosting.DesktopWindowXamlSourceTakeFocusRequestedEventArgs;{fe61e4b9-a7af-52b3-bdb9-c3305c0b8df2})",
     );
-}
-impl ::core::clone::Clone for DesktopWindowXamlSourceTakeFocusRequestedEventArgs {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface
 for DesktopWindowXamlSourceTakeFocusRequestedEventArgs {
@@ -1090,28 +1019,18 @@ impl ::windows_core::RuntimeName for DesktopWindowXamlSourceTakeFocusRequestedEv
 unsafe impl ::core::marker::Send for DesktopWindowXamlSourceTakeFocusRequestedEventArgs {}
 unsafe impl ::core::marker::Sync for DesktopWindowXamlSourceTakeFocusRequestedEventArgs {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct ElementCompositionPreview(::windows_core::IUnknown);
 impl ElementCompositionPreview {}
-impl ::core::cmp::PartialEq for ElementCompositionPreview {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for ElementCompositionPreview {}
-impl ::core::fmt::Debug for ElementCompositionPreview {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("ElementCompositionPreview").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for ElementCompositionPreview {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Hosting.ElementCompositionPreview;{b6f1a676-cfe6-46ac-acf6-c4687bb65e60})",
     );
-}
-impl ::core::clone::Clone for ElementCompositionPreview {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for ElementCompositionPreview {
     type Vtable = IElementCompositionPreview_Vtbl;
@@ -1128,6 +1047,12 @@ impl ::windows_core::RuntimeName for ElementCompositionPreview {
 unsafe impl ::core::marker::Send for ElementCompositionPreview {}
 unsafe impl ::core::marker::Sync for ElementCompositionPreview {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct WindowsXamlManager(::windows_core::IUnknown);
 impl WindowsXamlManager {
     pub fn InitializeForCurrentThread() -> ::windows_core::Result<WindowsXamlManager> {
@@ -1153,26 +1078,10 @@ impl WindowsXamlManager {
         SHARED.call(callback)
     }
 }
-impl ::core::cmp::PartialEq for WindowsXamlManager {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for WindowsXamlManager {}
-impl ::core::fmt::Debug for WindowsXamlManager {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("WindowsXamlManager").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for WindowsXamlManager {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Hosting.WindowsXamlManager;{56096c31-1aa0-5288-8818-6e74a2dcaff5})",
     );
-}
-impl ::core::clone::Clone for WindowsXamlManager {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for WindowsXamlManager {
     type Vtable = IWindowsXamlManager_Vtbl;
@@ -1191,28 +1100,18 @@ for WindowsXamlManager {}
 unsafe impl ::core::marker::Send for WindowsXamlManager {}
 unsafe impl ::core::marker::Sync for WindowsXamlManager {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct XamlSourceFocusNavigationRequest(::windows_core::IUnknown);
 impl XamlSourceFocusNavigationRequest {}
-impl ::core::cmp::PartialEq for XamlSourceFocusNavigationRequest {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for XamlSourceFocusNavigationRequest {}
-impl ::core::fmt::Debug for XamlSourceFocusNavigationRequest {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("XamlSourceFocusNavigationRequest").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for XamlSourceFocusNavigationRequest {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Hosting.XamlSourceFocusNavigationRequest;{fbb93bb5-1496-5a80-ac00-e757359755e6})",
     );
-}
-impl ::core::clone::Clone for XamlSourceFocusNavigationRequest {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for XamlSourceFocusNavigationRequest {
     type Vtable = IXamlSourceFocusNavigationRequest_Vtbl;
@@ -1230,28 +1129,18 @@ impl ::windows_core::RuntimeName for XamlSourceFocusNavigationRequest {
 unsafe impl ::core::marker::Send for XamlSourceFocusNavigationRequest {}
 unsafe impl ::core::marker::Sync for XamlSourceFocusNavigationRequest {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct XamlSourceFocusNavigationResult(::windows_core::IUnknown);
 impl XamlSourceFocusNavigationResult {}
-impl ::core::cmp::PartialEq for XamlSourceFocusNavigationResult {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for XamlSourceFocusNavigationResult {}
-impl ::core::fmt::Debug for XamlSourceFocusNavigationResult {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("XamlSourceFocusNavigationResult").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for XamlSourceFocusNavigationResult {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Hosting.XamlSourceFocusNavigationResult;{88d55a5f-9603-5d8f-9cc7-d1c4070d9801})",
     );
-}
-impl ::core::clone::Clone for XamlSourceFocusNavigationResult {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for XamlSourceFocusNavigationResult {
     type Vtable = IXamlSourceFocusNavigationResult_Vtbl;
@@ -1269,28 +1158,18 @@ impl ::windows_core::RuntimeName for XamlSourceFocusNavigationResult {
 unsafe impl ::core::marker::Send for XamlSourceFocusNavigationResult {}
 unsafe impl ::core::marker::Sync for XamlSourceFocusNavigationResult {}
 #[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
 pub struct XamlUIPresenter(::windows_core::IUnknown);
 impl XamlUIPresenter {}
-impl ::core::cmp::PartialEq for XamlUIPresenter {
-    fn eq(&self, other: &Self) -> bool {
-        self.0 == other.0
-    }
-}
-impl ::core::cmp::Eq for XamlUIPresenter {}
-impl ::core::fmt::Debug for XamlUIPresenter {
-    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        f.debug_tuple("XamlUIPresenter").field(&self.0).finish()
-    }
-}
 impl ::windows_core::RuntimeType for XamlUIPresenter {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Hosting.XamlUIPresenter;{a714944a-1619-4fc6-b31b-89512ef022a2})",
     );
-}
-impl ::core::clone::Clone for XamlUIPresenter {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
-    }
 }
 unsafe impl ::windows_core::Interface for XamlUIPresenter {
     type Vtable = IXamlUIPresenter_Vtbl;

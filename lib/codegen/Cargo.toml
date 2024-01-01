@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-windows-bindgen = "0.51"
+windows-bindgen = "0.52"
 rayon = "1"
 walkdir = "2"
 syn = "2"

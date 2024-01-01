@@ -288,7 +288,7 @@ dependencies = [
  "once_cell",
  "parking_lot",
  "png",
- "windows 0.52.0",
+ "windows",
  "winit",
  "zbus",
 ]
@@ -1501,7 +1501,7 @@ dependencies = [
  "betrayer",
  "embed-manifest",
  "log",
- "windows 0.51.1",
+ "windows",
  "windows-ext",
  "winit",
 ]
@@ -2133,43 +2133,24 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "windows"
-version = "0.51.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca229916c5ee38c2f2bc1e9d8f04df975b4bd93f9955dc69fabb5d91270045c9"
-dependencies = [
- "windows-core 0.51.1",
- "windows-targets 0.48.5",
-]
-
-[[package]]
-name = "windows"
 version = "0.52.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e48a53791691ab099e5e2ad123536d0fff50652600abaf43bbf952894110d0be"
 dependencies = [
- "windows-core 0.52.0",
+ "windows-core",
  "windows-targets 0.52.0",
 ]
 
 [[package]]
 name = "windows-bindgen"
-version = "0.51.1"
+version = "0.52.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc1f16b778125675feee0d15d6dd9f6af0e3ac52b3233d63a10aa39230c1cd75"
+checksum = "970efb0b6849eb8a87a898f586af7cc167567b070014c7434514c0bde0ca341c"
 dependencies = [
  "proc-macro2",
  "rayon",
  "syn 2.0.43",
  "windows-metadata",
-]
-
-[[package]]
-name = "windows-core"
-version = "0.51.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f1f8cf84f35d2db49a46868f947758c7a1138116f7fac3bc844f43ade1292e64"
-dependencies = [
- "windows-targets 0.48.5",
 ]
 
 [[package]]
@@ -2185,15 +2166,15 @@ dependencies = [
 name = "windows-ext"
 version = "0.1.0"
 dependencies = [
- "windows 0.51.1",
- "windows-core 0.51.1",
+ "windows",
+ "windows-core",
 ]
 
 [[package]]
 name = "windows-metadata"
-version = "0.51.1"
+version = "0.52.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "753135d996f9da437c0b31dbde3032489a61708361929bcc07d4fba0b161000e"
+checksum = "218fd59201e26acdbb894fa2b302d1de84bf3eec7d0eb894ac8e9c5a854ee4ef"
 
 [[package]]
 name = "windows-sys"

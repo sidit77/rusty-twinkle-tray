@@ -16,8 +16,10 @@ members = [
 
 [dependencies]
 log = "0.4"
+winit = "0.29"
+betrayer = { git = "https://github.com/sidit77/betrayer.git", features = ["winit"]}
 windows-ext = { path = "lib/windows-ext" }
-windows = { version = "0.51", features = [
+windows = { version = "0.52", features = [
     "Win32_Foundation",
     "Win32_System_LibraryLoader",
     "Win32_System_WinRT",
@@ -30,8 +32,6 @@ windows = { version = "0.51", features = [
     "Win32_Security",
     "Win32_Devices_Display",
 ]}
-winit = "0.29"
-betrayer = { git = "https://github.com/sidit77/betrayer.git", features = ["winit"]}
 
 
 [build-dependencies]

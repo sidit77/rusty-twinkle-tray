@@ -5,8 +5,10 @@ mod utils;
 mod ui;
 mod interface;
 mod backend;
+mod config;
 
 use std::process::ExitCode;
+use std::sync::{Arc, Mutex};
 
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder, winit::WinitTrayIconBuilderExt};
 use log::LevelFilter;
@@ -20,12 +22,13 @@ use winit::event_loop::{DeviceEvents, EventLoopBuilder};
 use winit::platform::windows::{WindowBuilderExtWindows};
 use winit::window::{WindowBuilder, WindowButtons};
 use crate::backend::MonitorController;
+use crate::config::Config;
 use crate::interface::{XamlGui};
 use crate::monitors::MonitorPath;
 
 use crate::utils::error::{OptionExt};
 use crate::utils::{logger, panic};
-use crate::utils::extensions::{EventLoopExt, MonitorHandleExt};
+use crate::utils::extensions::{EventLoopExt, MonitorHandleExt, MutexExt};
 
 pub use crate::utils::error::Result;
 
@@ -42,10 +45,12 @@ fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
+    let config = Arc::new(Mutex::new(Config::load()?));
+
     let event_loop = EventLoopBuilder::with_user_event().build()?;
     event_loop.listen_device_events(DeviceEvents::Never);
 
-    let controller = MonitorController::new(&event_loop);
+    let controller = MonitorController::new(&event_loop, config.clone());
 
     let _tray = TrayIconBuilder::new()
         .with_tooltip("Change Brightness")
@@ -123,6 +128,7 @@ fn run() -> Result<()> {
                 }
                 CustomEvent::FocusLost => {
                     window.set_visible(false);
+                    config.lock_no_poison().save_if_dirty()?;
                 }
                 CustomEvent::RegisterMonitor(name, path) => {
                     log::info!("Found monitor: {}", name);
@@ -135,6 +141,7 @@ fn run() -> Result<()> {
             _ => {}
         }))?;
 
+    config.lock_no_poison().save_if_dirty()?;
     unsafe { RoUninitialize() }
     Ok(())
 }

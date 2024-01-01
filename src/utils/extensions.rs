@@ -1,4 +1,5 @@
 use std::mem::size_of;
+use std::sync::{Mutex, MutexGuard};
 use windows::Win32::Foundation::{HWND, RECT};
 use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, HMONITOR, MONITORINFO};
 use winit::event::Event;
@@ -60,5 +61,19 @@ impl<T> EventLoopExt<T> for EventLoop<T> {
             })?;
         }
         result1
+    }
+}
+
+pub trait MutexExt {
+    type Guard<'a> where Self: 'a;
+
+    fn lock_no_poison(&self) -> Self::Guard<'_>;
+}
+
+impl<T> MutexExt for Mutex<T> {
+    type Guard<'a> = MutexGuard<'a, T> where T: 'a;
+
+    fn lock_no_poison(&self) -> Self::Guard<'_> {
+        self.lock().unwrap_or_else(|err| err.into_inner())
     }
 }

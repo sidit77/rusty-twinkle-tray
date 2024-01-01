@@ -2,6 +2,7 @@ use std::fmt::{Debug, Formatter};
 use std::ops::RangeInclusive;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
+use serde::{Deserialize, Serialize};
 use windows::Win32::Devices::Display::*;
 use windows::Win32::Foundation::{BOOL, HANDLE};
 use windows::Win32::Graphics::Gdi::HMONITOR;
@@ -11,7 +12,9 @@ use crate::win_assert;
 use crate::utils::string::WStr;
 use crate::utils::error::{OptionExt, Result};
 
-#[derive(Clone, Eq, PartialEq, PartialOrd, Ord)]
+#[derive(Clone, Eq, PartialEq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(transparent)]
+#[repr(transparent)]
 pub struct MonitorPath(Arc<Path>);
 
 impl Debug for MonitorPath {

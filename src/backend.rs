@@ -1,10 +1,13 @@
 use std::collections::BTreeMap;
 use std::sync::mpsc::{channel, Receiver, RecvTimeoutError, Sender};
+use std::sync::{Arc, Mutex};
 use std::thread::{JoinHandle, spawn};
 use std::time::{Duration, Instant};
 use winit::event_loop::{EventLoop, EventLoopProxy};
 use crate::{CustomEvent, Result};
+use crate::config::Config;
 use crate::monitors::{Monitor, MonitorPath};
+use crate::utils::extensions::MutexExt;
 
 #[derive(Debug, Clone)]
 enum  Command {
@@ -20,11 +23,11 @@ pub struct MonitorController {
 
 impl MonitorController {
 
-    pub fn new(eventloop: &EventLoop<CustomEvent>) -> Self {
+    pub fn new(eventloop: &EventLoop<CustomEvent>, config: Arc<Mutex<Config>>) -> Self {
         let proxy = eventloop.create_proxy();
         let (sender, receiver) = channel();
         let _ = sender.send(Command::QueryBrightness);
-        let thread = Some(spawn(move || worker_thread(proxy, receiver)
+        let thread = Some(spawn(move || worker_thread(proxy, receiver, config)
             .unwrap_or_else(|err| log::error!("Worker thread failure: {err}"))));
         Self {
             sender,
@@ -115,10 +118,12 @@ impl MonitorBrightness {
 
 }
 
-fn worker_thread(sender: EventLoopProxy<CustomEvent>, receiver: Receiver<Command>) -> Result<()> {
+fn worker_thread(sender: EventLoopProxy<CustomEvent>, receiver: Receiver<Command>, config: Arc<Mutex<Config>>) -> Result<()> {
     let send = move |event| sender
         .send_event(event)
         .unwrap_or_else(|_| log::warn!("Eventloop closed"));
+
+    let sync_with_config = config.lock_no_poison().restore_from_config;
 
     let monitors = Monitor::find_all()?;
     for monitor in &monitors {
@@ -135,25 +140,47 @@ fn worker_thread(sender: EventLoopProxy<CustomEvent>, receiver: Receiver<Command
             .unwrap_or(Duration::MAX);
         match receiver.recv_timeout(next_update) {
             Ok(command) => match command {
-                Command::Stop => break,
                 Command::QueryBrightness => {
                     for monitor in &monitors {
-                        let (brightness, range) = monitor.open()?.get_brightness()?;
+                        let connection = monitor.open()?;
+                        let (mut brightness, range) = connection.get_brightness()?;
                         if range != (0..=100) {
                             log::warn!("unexpected brightness range: {:?}", range);
                         }
                         let entry = brightness_map
                             .entry(monitor.path().clone())
                             .or_default();
+                        if sync_with_config {
+                            let saved_brightness = config
+                                .lock_no_poison()
+                                .monitors
+                                .get(monitor.path())
+                                .and_then(|s| s.saved_brightness);
+                            //log::trace!("{}: current: {}, saved: {:?}", monitor.name(), brightness, saved_brightness);
+                            if let Some(saved) = saved_brightness {
+                                if saved != brightness {
+                                    log::info!("Restoring saved brightness for {} (current: {}, saved: {})", monitor.name(), brightness, saved);
+                                    brightness = saved;
+                                    connection.set_brightness(saved)?;
+                                    entry.last_update = Some(Instant::now());
+                                }
+                            }
+                        }
                         entry.set_current(brightness, false);
                         send(CustomEvent::UpdateBrightness(monitor.path().clone(), brightness));
                     }
                 }
+                Command::Stop => break,
                 Command::SetBrightness(monitor, value) => {
                     brightness_map
                         .entry(monitor.clone())
                         .or_default()
                         .set_request(value);
+                    if sync_with_config {
+                        let mut config = config.lock_no_poison();
+                        config.monitors.entry(monitor).or_default().saved_brightness = Some(value);
+                        config.dirty = true;
+                    }
                 }
             }
             Err(RecvTimeoutError::Timeout) => {

@@ -76,3 +76,63 @@ impl Config {
     }
 
 }
+
+/*
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+pub struct LocalTime {
+    hours: u16,
+    minutes: u16
+}
+
+impl LocalTime {
+    pub fn current() -> Self {
+        let time = unsafe { GetLocalTime() };
+        Self {
+            hours: time.wHour,
+            minutes: time.wMinute,
+        }
+    }
+}
+
+impl Display for LocalTime {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:02}:{:02}", self.hours, self.minutes)
+    }
+}
+
+impl FromStr for LocalTime {
+    type Err = &'static str;
+
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        let (h, m) = s
+            .split_once(':')
+            .ok_or("Missing separator (\":\")")?;
+        Ok(Self {
+            hours: h
+                .parse()
+                .map_err(|_| "Invalid hour string")
+                .and_then(|h| (h < 24)
+                    .then_some(h)
+                    .ok_or("Hours can't be bigger than 23"))?,
+            minutes: m
+                .parse()
+                .map_err(|_| "Invalid minutes string")
+                .and_then(|m| (m < 60)
+                    .then_some(m)
+                    .ok_or("Minutes can't be bigger than 59"))?
+        })
+    }
+}
+
+impl Serialize for LocalTime {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error> where S: Serializer {
+        serializer.collect_str(self)
+    }
+}
+
+impl<'de> Deserialize<'de> for LocalTime {
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error> where D: Deserializer<'de> {
+        String::deserialize(deserializer)?.parse().map_err(serde::de::Error::custom)
+    }
+}
+ */

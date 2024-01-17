@@ -27,7 +27,7 @@ Unfortunately, the Microsoft-provided [`windows-rs` crate](https://microsoft.git
 - [ ] Settings window
 - [ ] Fluent design for Windows 11+
 - [ ] Respect Dark/Light system setting
-- [ ] Attempt to restore brightness after waking up from sleep
+- [x] Attempt to restore brightness after waking up from sleep
 - [ ] Support integrated laptop screens connected over I2C
 - [ ] Support monitor hot plugging
 

@@ -6,9 +6,11 @@ mod ui;
 mod interface;
 mod backend;
 mod config;
+mod power;
 
 use std::process::ExitCode;
 use std::sync::{Arc, Mutex};
+use std::time::Duration;
 
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder, winit::WinitTrayIconBuilderExt};
 use log::LevelFilter;
@@ -25,6 +27,7 @@ use crate::backend::MonitorController;
 use crate::config::Config;
 use crate::interface::{XamlGui};
 use crate::monitors::MonitorPath;
+use crate::power::{PowerEvent, PowerStateListener};
 
 use crate::utils::error::{OptionExt};
 use crate::utils::{logger, panic};
@@ -47,7 +50,8 @@ fn run() -> Result<()> {
 
     let config = Arc::new(Mutex::new(Config::load()?));
 
-    let event_loop = EventLoopBuilder::with_user_event().build()?;
+    let event_loop = EventLoopBuilder::with_user_event()
+        .build()?;
     event_loop.listen_device_events(DeviceEvents::Never);
 
     let controller = MonitorController::new(&event_loop, config.clone());
@@ -89,6 +93,13 @@ fn run() -> Result<()> {
             Ok(())
         }
     }))?;
+    let _power_listener = PowerStateListener::new({
+        let proxy = controller.create_proxy();
+        move |event| match event {
+            PowerEvent::MonitorOn => proxy.refresh_brightness_in(Duration::from_secs(10)),
+            _ => {}
+        }
+    })?;
     window.set_border_color(BorderColor::NONE);
     window.set_visible(true);
 

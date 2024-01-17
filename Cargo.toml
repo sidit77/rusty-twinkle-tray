@@ -20,12 +20,14 @@ winit = "0.29"
 betrayer = { git = "https://github.com/sidit77/betrayer.git", features = ["winit"]}
 serde = { version = "1", features = ["derive", "rc"] }
 ron = "0.8"
+windows-version = "0.1"
 windows-ext = { path = "lib/windows-ext" }
 windows = { version = "0.52", features = [
     "Win32_Foundation",
     "Win32_System_LibraryLoader",
     "Win32_System_WinRT",
     "Win32_Graphics_Gdi",
+    "Win32_Graphics_Dwm",
     "Win32_UI_WindowsAndMessaging",
     "Win32_UI_Input_KeyboardAndMouse",
     "Win32_System_Diagnostics_Debug",

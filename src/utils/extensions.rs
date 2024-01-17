@@ -1,7 +1,9 @@
 use std::mem::size_of;
 use std::sync::{Mutex, MutexGuard};
-use windows::Win32::Foundation::{HWND, RECT};
+use windows::Win32::Foundation::{COLORREF, HWND, RECT};
+use windows::Win32::Graphics::Dwm::{DwmSetWindowAttribute, DWMWA_BORDER_COLOR, DWMWA_COLOR_NONE};
 use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, HMONITOR, MONITORINFO};
+use windows_version::OsVersion;
 use winit::event::Event;
 use winit::event_loop::{EventLoop, EventLoopWindowTarget};
 use winit::monitor::MonitorHandle;
@@ -10,8 +12,21 @@ use winit::raw_window_handle::{HasWindowHandle, RawWindowHandle};
 use winit::window::Window;
 use crate::Result;
 
+#[repr(transparent)]
+pub struct BorderColor(COLORREF);
+
+impl BorderColor {
+    //pub const DEFAULT: BorderColor = BorderColor::from_u32(DWMWA_COLOR_DEFAULT);
+    pub const NONE: BorderColor = BorderColor::from_u32(DWMWA_COLOR_NONE);
+
+    const fn from_u32(color: u32) -> Self {
+        Self(COLORREF(color))
+    }
+}
+
 pub trait WindowExt {
     fn hwnd(&self) -> HWND;
+    fn set_border_color(&self, color: BorderColor);
 }
 
 impl WindowExt for Window {
@@ -20,6 +35,15 @@ impl WindowExt for Window {
         match handle {
             RawWindowHandle::Win32(handle) => HWND(handle.hwnd.get()),
             _ => unreachable!()
+        }
+    }
+
+    fn set_border_color(&self, color: BorderColor) {
+        if OsVersion::current().build >= 22000 {
+            unsafe {
+                DwmSetWindowAttribute(self.hwnd(), DWMWA_BORDER_COLOR, &color as *const _ as _, 4)
+                    .unwrap_or_else(|err|  log::debug!("Failed to set window border color: {err}"));
+            }
         }
     }
 }

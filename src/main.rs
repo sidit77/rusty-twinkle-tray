@@ -28,7 +28,7 @@ use crate::monitors::MonitorPath;
 
 use crate::utils::error::{OptionExt};
 use crate::utils::{logger, panic};
-use crate::utils::extensions::{EventLoopExt, MonitorHandleExt, MutexExt};
+use crate::utils::extensions::{BorderColor, EventLoopExt, MonitorHandleExt, MutexExt, WindowExt};
 
 pub use crate::utils::error::Result;
 
@@ -89,6 +89,7 @@ fn run() -> Result<()> {
             Ok(())
         }
     }))?;
+    window.set_border_color(BorderColor::NONE);
     window.set_visible(true);
 
     event_loop

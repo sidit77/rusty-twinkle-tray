@@ -1526,6 +1526,7 @@ dependencies = [
  "serde",
  "windows",
  "windows-ext",
+ "windows-version",
  "winit",
 ]
 
@@ -2269,6 +2270,15 @@ dependencies = [
  "windows_x86_64_gnu 0.52.0",
  "windows_x86_64_gnullvm 0.52.0",
  "windows_x86_64_msvc 0.52.0",
+]
+
+[[package]]
+name = "windows-version"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "75aa004c988e080ad34aff5739c39d0312f4684699d6d71fc8a198d057b8b9b4"
+dependencies = [
+ "windows-targets 0.52.0",
 ]
 
 [[package]]

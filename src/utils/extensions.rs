@@ -1,7 +1,7 @@
 use std::mem::size_of;
 use std::sync::{Mutex, MutexGuard};
 use windows::Win32::Foundation::{COLORREF, HWND, RECT};
-use windows::Win32::Graphics::Dwm::{DwmSetWindowAttribute, DWMWA_BORDER_COLOR, DWMWA_COLOR_NONE};
+use windows::Win32::Graphics::Dwm::{DWM_SYSTEMBACKDROP_TYPE, DWMSBT_NONE, DwmSetWindowAttribute, DWMWA_BORDER_COLOR, DWMWA_COLOR_NONE, DWMWA_SYSTEMBACKDROP_TYPE};
 use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, HMONITOR, MONITORINFO};
 use windows_version::OsVersion;
 use winit::event::Event;
@@ -42,6 +42,9 @@ impl WindowExt for Window {
         if OsVersion::current().build >= 22000 {
             unsafe {
                 DwmSetWindowAttribute(self.hwnd(), DWMWA_BORDER_COLOR, &color as *const _ as _, 4)
+                    .unwrap_or_else(|err|  log::debug!("Failed to set window border color: {err}"));
+                DwmSetWindowAttribute(self.hwnd(), DWMWA_SYSTEMBACKDROP_TYPE,
+                                      &DWMSBT_NONE as *const _ as _, size_of::<DWM_SYSTEMBACKDROP_TYPE>() as u32)
                     .unwrap_or_else(|err|  log::debug!("Failed to set window border color: {err}"));
             }
         }

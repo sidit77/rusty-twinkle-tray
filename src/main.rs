@@ -10,7 +10,7 @@ mod power;
 
 use std::process::ExitCode;
 use std::sync::{Arc, Mutex};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder, winit::WinitTrayIconBuilderExt};
 use log::LevelFilter;
@@ -21,7 +21,7 @@ use windows_ext::UI::Xaml::Input::{FocusManager, LosingFocusEventArgs};
 use winit::dpi::{PhysicalPosition, PhysicalSize};
 use winit::event::{Event, WindowEvent};
 use winit::event_loop::{DeviceEvents, EventLoopBuilder};
-use winit::platform::windows::{WindowBuilderExtWindows};
+use winit::platform::windows::{WindowBuilderExtWindows, WindowExtWindows};
 use winit::window::{WindowBuilder, WindowButtons, WindowLevel};
 use crate::backend::MonitorController;
 use crate::config::Config;
@@ -101,8 +101,10 @@ fn run() -> Result<()> {
         }
     })?;
     window.set_border_color(BorderColor::NONE);
-    window.set_visible(true);
+    //Drop input focus
+    window.set_enable(false);
 
+    let mut last_close = Instant::now();
     event_loop
         .run_result(|event, target| Ok(match event {
             Event::WindowEvent { event, .. } => match event {
@@ -115,7 +117,7 @@ fn run() -> Result<()> {
                     controller.shutdown();
                     target.exit()
                 },
-                CustomEvent::Show => {
+                CustomEvent::Show => if last_close.elapsed() >= Duration::from_millis(250) {
                     controller.refresh_brightness();
                     if let Some(workspace) = target.primary_monitor().and_then(|m| m.get_work_area().ok()) {
                         if let Ok(height) = gui.get_required_height() {
@@ -142,6 +144,7 @@ fn run() -> Result<()> {
                 CustomEvent::FocusLost => {
                     window.set_visible(false);
                     config.lock_no_poison().save_if_dirty()?;
+                    last_close = Instant::now();
                 }
                 CustomEvent::RegisterMonitor(name, path) => {
                     log::info!("Found monitor: {}", name);

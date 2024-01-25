@@ -7,14 +7,18 @@ mod interface;
 mod backend;
 mod config;
 mod power;
+mod theme;
 
+use std::mem::size_of;
 use std::process::ExitCode;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder, winit::WinitTrayIconBuilderExt};
 use log::LevelFilter;
+use windows::core::{PCWSTR, w};
 use windows::Foundation::EventHandler;
+use windows::Win32::System::Registry::{HKEY_CURRENT_USER, RegGetValueW, RegQueryValueExW, RRF_RT_ANY, RRF_RT_REG_DWORD, RRF_SUBKEY_WOW6464KEY};
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows_ext::UI::Xaml::Hosting::{WindowsXamlManager};
 use windows_ext::UI::Xaml::Input::{FocusManager, LosingFocusEventArgs};
@@ -35,6 +39,8 @@ use crate::utils::extensions::{BorderColor, EventLoopExt, MonitorHandleExt, Mute
 
 pub use crate::utils::error::Result;
 
+
+
 #[derive(Debug, Clone)]
 pub enum CustomEvent {
     Quit,
@@ -46,6 +52,23 @@ pub enum CustomEvent {
 
 fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
+
+    //println!("{}", unsafe { GetImmersiveUserColorSetPreference(false, false)});
+//
+    //let mut colors = (0..)
+    //    .into_iter()
+    //    .map(|i| unsafe {GetImmersiveColorNamedTypeByIndex(i)
+    //        .as_ref()
+    //        .copied()});
+    //while let Some(name) = colors.next().flatten() {
+    //    unsafe {
+    //        println!("{}: #{:X}", name.display(), lookup_color(name));
+    //    }
+    //}
+    //println!("\n#{:X}", unsafe { lookup_color(w!("ImmersiveLight"))});
+//
+    //println!("{} {}", get_theme_setting(w!("ColorPrevalence")), get_theme_setting(w!("SystemUsesLightTheme")));
+
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
     let config = Arc::new(Mutex::new(Config::load()?));

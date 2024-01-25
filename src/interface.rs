@@ -1,5 +1,5 @@
 use std::collections::BTreeMap;
-use windows::core::ComInterface;
+use windows::core::{ComInterface};
 use windows::UI::Color;
 use windows::Win32::Foundation::HWND;
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
@@ -12,11 +12,13 @@ use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use crate::{cloned, hformat};
 use crate::backend::MonitorControllerProxy;
 use crate::monitors::MonitorPath;
+use crate::theme::{Theme, ThemeColor};
 use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::ui::controls::{Slider, TextBlock, FontIcon};
 use crate::ui::{FontWeight, ElementTheme, TextAlignment, VerticalAlignment};
 use crate::utils::error::Result;
 use crate::utils::extensions::WindowExt;
+
 
 pub struct XamlGui {
     hwnd: HWND,
@@ -67,11 +69,11 @@ impl XamlGui {
             .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?
             .with_background(&{
                 let brush = AcrylicBrush::new()?;
-                let color = Color { R: 70, G: 70, B: 70, A: 255 };
+                let color = ThemeColor::from(Theme::system());
                 brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
-                brush.SetFallbackColor(color)?;
-                brush.SetTintColor(color)?;
-                brush.SetTintOpacity(0.7)?;
+                brush.SetFallbackColor(color.fallback_color())?;
+                brush.SetTintColor(color.tint_color())?;
+                brush.SetTintOpacity(color.opacity())?;
                 brush
             })?
             .with_theme(ElementTheme::Dark)?

@@ -1,4 +1,4 @@
-use std::backtrace::{Backtrace, BacktraceStatus};
+use std::backtrace::{Backtrace};
 use std::borrow::Cow;
 use std::fmt::{Debug, Display, Formatter};
 use std::panic::Location;
@@ -18,11 +18,12 @@ pub enum Trace {
 impl Trace {
     #[track_caller]
     pub fn capture() -> Self {
-        let capture = Backtrace::capture();
-        match capture.status() {
-            BacktraceStatus::Captured => Self::Backtrace(Box::new(capture)),
-            _ => Self::Location(*Location::caller())
-        }
+        //let capture = Backtrace::capture();
+        //match capture.status() {
+        //    BacktraceStatus::Captured => Self::Backtrace(Box::new(capture)),
+        //    _ => Self::Location(*Location::caller())
+        //}
+        Self::Location(*Location::caller())
     }
 
     pub fn is_backtrace(&self) -> bool {

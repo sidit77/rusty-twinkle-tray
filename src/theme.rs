@@ -1,7 +1,14 @@
-use std::mem::size_of;
+use std::ffi::c_void;
+use crate::Result;
+use std::mem::{ManuallyDrop, size_of};
+use std::sync::{Arc, Mutex, Weak};
 use windows::core::{PCWSTR, w};
 use windows::UI::Color;
-use windows::Win32::System::Registry::{HKEY_CURRENT_USER, RegGetValueW, RRF_RT_REG_DWORD, RRF_SUBKEY_WOW6464KEY};
+use windows::Win32::Foundation::{CloseHandle, HANDLE};
+use windows::Win32::System::Registry::{HKEY, HKEY_CURRENT_USER, KEY_READ, KEY_WOW64_64KEY, REG_NOTIFY_CHANGE_LAST_SET, REG_NOTIFY_THREAD_AGNOSTIC, RegCloseKey, RegGetValueW, RegNotifyChangeKeyValue, RegOpenKeyExW, RegQueryValueExW, RRF_RT_REG_DWORD, RRF_SUBKEY_WOW6464KEY};
+use windows::Win32::System::Threading::{CloseThreadpoolWait, CreateEventW, CreateThreadpoolWait, PTP_CALLBACK_INSTANCE, PTP_WAIT, ResetEvent, SetThreadpoolWait};
+use crate::utils::error::TracedError;
+use crate::utils::extensions::{ArcExt, MutexExt};
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum Theme {
@@ -31,7 +38,7 @@ impl Theme {
     fn color_name(self) -> PCWSTR {
         match self {
             Theme::Light => w!("ImmersiveLightChromeMedium"),
-            Theme::Dark => w!("ImmersiveApplicationBackgroundDarkTheme"),
+            Theme::Dark => w!("ImmersiveDarkChromeMedium"),
             Theme::Accent => w!("ImmersiveSystemAccentDark1")
         }
     }
@@ -57,15 +64,16 @@ impl ThemeColor {
     }
 
     pub fn fallback_color(self) -> Color {
-        let d = self.is_light()
-            .then_some(255)
-            .unwrap_or(0);
-        Color {
-            R: lerp(d, self.r, self.opacity),
-            G: lerp(d, self.g, self.opacity),
-            B: lerp(d, self.b, self.opacity),
-            A: 255,
-        }
+        //let d = self.is_light()
+        //    .then_some(255)
+        //    .unwrap_or(0);
+        //Color {
+        //    R: lerp(d, self.r, self.opacity),
+        //    G: lerp(d, self.g, self.opacity),
+        //    B: lerp(d, self.b, self.opacity),
+        //    A: 255,
+        //}
+        Color { R: self.r, G: self.g, B: self.b, A: 255 }
     }
 
     pub fn is_light(self) -> bool {
@@ -106,6 +114,135 @@ extern "system" {
 
     #[link_ordinal(100)]
     fn GetImmersiveColorNamedTypeByIndex(dwImmersiveColorType: u32) -> *const PCWSTR;
+}
+
+pub struct SystemSettings {
+    key: HKEY
+}
+
+impl SystemSettings {
+    pub fn new() -> crate::Result<Self> {
+        let mut key = HKEY::default();
+        unsafe {
+            RegOpenKeyExW(
+                HKEY_CURRENT_USER,
+                w!(r#"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"#),
+                0,
+                KEY_READ | KEY_WOW64_64KEY,
+                &mut key
+            )
+        }?;
+
+        Ok(Self {
+            key,
+        })
+    }
+
+    pub fn add_change_callback<F>(self: &Arc<Self>, callback: F) -> Result<SystemSettingsChangedCallback>
+        where F : FnMut(&SystemSettings) + Send + 'static
+    {
+        SystemSettingsChangedCallbackInner::new(self.clone(), Box::new(callback))
+            .map(SystemSettingsChangedCallback)
+    }
+
+    unsafe fn query_value(&self, name: PCWSTR) -> Result<bool> {
+        let mut data: u32 = 0;
+        unsafe {
+            RegQueryValueExW(self.key, name, None, None,
+                Some(&mut data as *const _ as _),
+                Some(&mut (size_of::<u32>() as u32))
+            )?;
+        }
+        Ok(data > 0)
+    }
+
+    pub fn is_accent_enabled(&self) -> Result<bool> {
+        unsafe { self.query_value(w!("ColorPrevalence")) }
+    }
+
+    pub fn is_system_theme_light(&self) -> Result<bool> {
+        unsafe { self.query_value(w!("SystemUsesLightTheme")) }
+    }
+
+}
+
+impl Drop for SystemSettings {
+    fn drop(&mut self) {
+        unsafe {
+            RegCloseKey(self.key)
+                .unwrap_or_else(|err| log::warn!("Failed to close registry key: {err}"));
+        }
+    }
+}
+
+pub struct SystemSettingsChangedCallback(Arc<SystemSettingsChangedCallbackInner>);
+
+impl SystemSettingsChangedCallback {
+    pub fn detach(self) {
+        std::mem::forget(self)
+    }
+}
+
+struct SystemSettingsChangedCallbackInner {
+    settings: Arc<SystemSettings>,
+    callback: Mutex<Box<dyn FnMut(&SystemSettings) + Send>>,
+    event: HANDLE,
+    waiter: PTP_WAIT
+}
+
+impl SystemSettingsChangedCallbackInner {
+    fn new(settings: Arc<SystemSettings>, callback: Box<dyn FnMut(&SystemSettings) + Send>) -> Result<Arc<Self>> {
+        let r = Arc::try_new_cyclic::<_, TracedError>(move |weak| {
+            let event = unsafe { CreateEventW(None, true, false, None)? };
+            let waiter = unsafe { CreateThreadpoolWait(Some(Self::callback_func), Some(weak.clone().into_raw() as _), None)? };
+            Ok(Self {
+                settings,
+                callback: Mutex::new(callback),
+                event,
+                waiter,
+            })
+        })?;
+        r.register()?;
+        Ok(r)
+    }
+
+    fn register(&self) -> Result<()> {
+        unsafe {
+            ResetEvent(self.event)?;
+            RegNotifyChangeKeyValue(
+                self.settings.key,
+                false,
+                REG_NOTIFY_CHANGE_LAST_SET | REG_NOTIFY_THREAD_AGNOSTIC,
+                self.event,
+                true
+            )?;
+            SetThreadpoolWait(self.waiter, self.event, None);
+        }
+        Ok(())
+    }
+
+    unsafe extern "system" fn callback_func(_: PTP_CALLBACK_INSTANCE, context: *mut c_void, _: PTP_WAIT, _: u32) {
+        let context = ManuallyDrop::new(Weak::<Self>::from_raw(context as _));
+        match context.upgrade() {
+            Some(context) => {
+                (context.callback.lock_no_poison())(&context.settings);
+                context.register()
+                    .unwrap_or_else(|err| log::warn!("Failed to reregister callback: {err}"));
+            }
+            None => log::error!("Weak ptr is gone :(")
+        }
+    }
+
+}
+
+impl Drop for SystemSettingsChangedCallbackInner {
+    fn drop(&mut self) {
+        unsafe {
+            CloseThreadpoolWait(self.waiter);
+            CloseHandle(self.event)
+                .unwrap_or_else(|err| log::warn!("Failed to destroy event: {err}"));
+        }
+    }
 }
 
 pub fn get_theme_setting(name: PCWSTR) -> bool {

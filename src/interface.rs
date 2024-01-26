@@ -1,4 +1,5 @@
 use std::collections::BTreeMap;
+use std::sync::Arc;
 use windows::core::{ComInterface};
 use windows::UI::Color;
 use windows::Win32::Foundation::HWND;
@@ -12,13 +13,12 @@ use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use crate::{cloned, hformat};
 use crate::backend::MonitorControllerProxy;
 use crate::monitors::MonitorPath;
-use crate::theme::{Theme, ThemeColor};
+use crate::theme::{SystemSettings, Theme, ThemeColor};
 use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::ui::controls::{Slider, TextBlock, FontIcon};
 use crate::ui::{FontWeight, ElementTheme, TextAlignment, VerticalAlignment};
 use crate::utils::error::Result;
 use crate::utils::extensions::WindowExt;
-
 
 pub struct XamlGui {
     hwnd: HWND,
@@ -36,6 +36,12 @@ impl XamlGui {
             interop.AttachToWindow(parent.hwnd())?;
         }
         let island = unsafe { interop.WindowHandle() }?;
+
+        let settings = Arc::new(SystemSettings::new()?);
+        settings.add_change_callback(|s| {
+            println!("Accent: {:?}", s.is_accent_enabled());
+            println!("Light: {:?}", s.is_system_theme_light());
+        })?.detach();
 
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
 
@@ -62,8 +68,6 @@ impl XamlGui {
                 .with_vertical_alignment(VerticalAlignment::Center)?
                 .with_font_weight(FontWeight::Medium)?)?
             .with_spacing(8.0)?, 0, 1)?;
-    
-    
 
         let main_grid = Grid::new()? // Create a new grid to hold the main stackpanel and the bottom bar
             .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?

@@ -9,16 +9,13 @@ mod config;
 mod power;
 mod theme;
 
-use std::mem::size_of;
 use std::process::ExitCode;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder, winit::WinitTrayIconBuilderExt};
 use log::LevelFilter;
-use windows::core::{PCWSTR, w};
 use windows::Foundation::EventHandler;
-use windows::Win32::System::Registry::{HKEY_CURRENT_USER, RegGetValueW, RegQueryValueExW, RRF_RT_ANY, RRF_RT_REG_DWORD, RRF_SUBKEY_WOW6464KEY};
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows_ext::UI::Xaml::Hosting::{WindowsXamlManager};
 use windows_ext::UI::Xaml::Input::{FocusManager, LosingFocusEventArgs};

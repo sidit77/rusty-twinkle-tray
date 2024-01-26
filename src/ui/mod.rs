@@ -52,6 +52,7 @@ pub trait NewType {
 }
 
 pub use windows_ext::UI::Xaml::{VerticalAlignment, TextAlignment, ElementTheme};
+pub use dispatcher::DispatchTarget;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Padding {
@@ -134,3 +135,27 @@ impl From<FontWeight> for windows::UI::Text::FontWeight {
         Self { Weight: value.0 }
     }
 }
+
+mod dispatcher {
+    use windows::core::CanTryInto;
+    use windows::Foundation::IAsyncAction;
+    use windows::UI::Core::IdleDispatchedHandler;
+    use windows_ext::UI::Xaml::UIElement;
+
+    pub trait DispatchTarget {
+        fn run_on_idle<F: FnMut() -> crate::Result<()> + Send + 'static>(&self, callback: F) -> windows::core::Result<IAsyncAction>;
+    }
+
+    impl<T: CanTryInto<UIElement>> DispatchTarget for T {
+        fn run_on_idle<F: FnMut() -> crate::Result<()> + Send + 'static>(&self, mut callback: F) -> windows::core::Result<IAsyncAction> {
+            let dispatcher = self.cast::<UIElement>()?.Dispatcher()?;
+            Ok(dispatcher.RunIdleAsync(&IdleDispatchedHandler::new(move |_| {
+                callback()
+                    .unwrap_or_else(|err| log::warn!("Error in callback: {err}"));
+                Ok(())
+            }))?)
+        }
+    }
+
+}
+

@@ -97,6 +97,7 @@ fn run() -> Result<()> {
         .with_skip_taskbar(true)
         .with_visible(true)
         .with_resizable(false)
+        .with_drag_and_drop(false)
         .with_enabled_buttons(WindowButtons::empty())
         .build(&event_loop)?;
 

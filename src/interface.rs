@@ -1,7 +1,8 @@
 use std::collections::BTreeMap;
-use std::sync::Arc;
 use windows::core::{ComInterface};
+use windows::Foundation::TypedEventHandler;
 use windows::UI::Color;
+use windows::UI::ViewManagement::{UISettings};
 use windows::Win32::Foundation::HWND;
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
 use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW};
@@ -13,11 +14,11 @@ use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use crate::{cloned, hformat};
 use crate::backend::MonitorControllerProxy;
 use crate::monitors::MonitorPath;
-use crate::theme::{SystemSettings, Theme, ThemeColor};
+use crate::theme::{ColorSet, SystemSettings};
 use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::ui::controls::{Slider, TextBlock, FontIcon};
-use crate::ui::{FontWeight, ElementTheme, TextAlignment, VerticalAlignment};
-use crate::utils::error::Result;
+use crate::ui::{FontWeight, ElementTheme, TextAlignment, VerticalAlignment, DispatchTarget};
+use crate::utils::error::{OptionExt, Result};
 use crate::utils::extensions::WindowExt;
 
 pub struct XamlGui {
@@ -25,6 +26,7 @@ pub struct XamlGui {
     bottom_bar: Grid,
     monitor_panel: StackPanel,
     monitor_controls: BTreeMap<MonitorPath, MonitorEntry>,
+    _ui_settings: UISettings,
     _desktop_source: DesktopWindowXamlSource
 }
 
@@ -37,11 +39,8 @@ impl XamlGui {
         }
         let island = unsafe { interop.WindowHandle() }?;
 
-        let settings = Arc::new(SystemSettings::new()?);
-        settings.add_change_callback(|s| {
-            println!("Accent: {:?}", s.is_accent_enabled());
-            println!("Light: {:?}", s.is_system_theme_light());
-        })?.detach();
+        let system_settings = SystemSettings::new()?;
+        let ui_settings = UISettings::new()?;
 
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
 
@@ -69,21 +68,41 @@ impl XamlGui {
                 .with_font_weight(FontWeight::Medium)?)?
             .with_spacing(8.0)?, 0, 1)?;
 
+        let background_brush = {
+            let brush = AcrylicBrush::new()?;
+            let color = ColorSet::system(&system_settings, &ui_settings);
+            brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
+            brush.SetFallbackColor(color.fallback)?;
+            brush.SetTintColor(color.tint)?;
+            brush.SetTintOpacity(color.opacity)?;
+            brush
+        };
+
         let main_grid = Grid::new()? // Create a new grid to hold the main stackpanel and the bottom bar
             .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?
-            .with_background(&{
-                let brush = AcrylicBrush::new()?;
-                let color = ThemeColor::from(Theme::system());
-                brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
-                brush.SetFallbackColor(color.fallback_color())?;
-                brush.SetTintColor(color.tint_color())?;
-                brush.SetTintOpacity(color.opacity())?;
-                brush
-            })?
+            .with_background(&background_brush)?
             .with_theme(ElementTheme::Dark)?
             // Add the main stack panel and the bottom bar to the main grid
             .with_child(&stack_panel, 0, 0)?
             .with_child(&bottom_bar, 2, 0)?;
+
+
+        ui_settings.ColorValuesChanged(&TypedEventHandler::new(
+            cloned!([background_brush, main_grid]
+                move |ui_settings: &Option<UISettings>, _| {
+                    let ui_settings = ui_settings.as_ref().some()?;
+                    let colors = ColorSet::system(&system_settings, &ui_settings);
+                    main_grid.run_on_idle(cloned!([background_brush, main_grid] move || {
+                        background_brush.SetFallbackColor(colors.fallback)?;
+                        background_brush.SetTintColor(colors.tint)?;
+                        background_brush.SetOpacity(colors.opacity)?;
+                        main_grid.set_theme(colors.theme)?;
+                        Ok(())
+                    }))?;
+                    Ok(())
+                }
+            )
+        ))?;
 
         desktop_source.SetContent(&main_grid)?;
         Ok(Self {
@@ -92,6 +111,7 @@ impl XamlGui {
             _desktop_source: desktop_source,
             monitor_panel: stack_panel,
             monitor_controls: BTreeMap::new(),
+            _ui_settings: ui_settings,
         })
     }
 

@@ -4811,6 +4811,19 @@ impl AcrylicBrush {
                 .from_abi(result__)
         }
     }
+    pub fn Dispatcher(
+        &self,
+    ) -> ::windows_core::Result<super::super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
     pub fn RegisterPropertyChangedCallback<P0, P1>(
         &self,
         dp: P0,
@@ -6924,6 +6937,19 @@ impl SolidColorBrush {
                     dp.into_param().abi(),
                     &mut result__,
                 )
+                .from_abi(result__)
+        }
+    }
+    pub fn Dispatcher(
+        &self,
+    ) -> ::windows_core::Result<super::super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
         }
     }

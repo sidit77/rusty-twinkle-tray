@@ -7,6 +7,7 @@ classes = [
 
 features = [
     "Foundation",
+    "UI_Core",
     "UI_Text",
     "UI_Input",
     "UI_Xaml_Controls",
@@ -25,7 +26,8 @@ reexports = [
     "Foundation_Collections",
     "UI",
     "UI_Text",
-    "UI_Input"
+    "UI_Input",
+    "UI_Core"
 ]
 
 constructors = [
@@ -45,6 +47,7 @@ IDesktopWindowXamlSourceNative = ["AttachToWindow", "WindowHandle"]
 FocusManager = true
 LosingFocusEventArgs = true
 
+UIElement = ["Dispatcher"]
 UIElementCollection = ["First", "Append"]
 ColumnDefinitionCollection = ["First", "Append", "Clear"]
 RowDefinitionCollection = ["First", "Append", "Clear"]

@@ -1,15 +1,71 @@
-use std::ffi::c_void;
-use crate::Result;
-use std::mem::{ManuallyDrop, size_of};
-use std::sync::{Arc, Mutex, Weak};
+use std::mem::size_of;
+use windows::Win32::System::Registry::{KEY_WOW64_64KEY, RegCloseKey, RegQueryValueExW};
+use windows::Win32::System::Registry::KEY_READ;
+use windows::Win32::System::Registry::HKEY_CURRENT_USER;
 use windows::core::{PCWSTR, w};
 use windows::UI::Color;
-use windows::Win32::Foundation::{CloseHandle, HANDLE};
-use windows::Win32::System::Registry::{HKEY, HKEY_CURRENT_USER, KEY_READ, KEY_WOW64_64KEY, REG_NOTIFY_CHANGE_LAST_SET, REG_NOTIFY_THREAD_AGNOSTIC, RegCloseKey, RegGetValueW, RegNotifyChangeKeyValue, RegOpenKeyExW, RegQueryValueExW, RRF_RT_REG_DWORD, RRF_SUBKEY_WOW6464KEY};
-use windows::Win32::System::Threading::{CloseThreadpoolWait, CreateEventW, CreateThreadpoolWait, PTP_CALLBACK_INSTANCE, PTP_WAIT, ResetEvent, SetThreadpoolWait};
-use crate::utils::error::TracedError;
-use crate::utils::extensions::{ArcExt, MutexExt};
+use windows::UI::ViewManagement::{UIColorType, UISettings};
+use windows::Win32::System::Registry::{HKEY, RegOpenKeyExW};
+use windows_ext::UI::Xaml::ElementTheme;
 
+use crate::Result;
+
+pub struct ColorSet {
+    pub tint: Color,
+    pub fallback: Color,
+    pub opacity: f64,
+    pub theme: ElementTheme
+}
+
+impl ColorSet {
+
+    pub fn dark() -> Self {
+        Self {
+            tint:Color { R: 0, G: 0, B: 0, A: 255 },
+            fallback: Color { R: 0, G: 0, B: 0, A: 255 },
+            opacity: 0.7,
+            theme: ElementTheme::Dark,
+        }
+    }
+
+    pub fn light() -> Self {
+        Self {
+            tint:Color { R: 255, G: 255, B: 255, A: 255 },
+            fallback: Color { R: 255, G: 255, B: 255, A: 255 },
+            opacity: 0.8,
+            theme: ElementTheme::Light,
+        }
+    }
+
+    pub fn accent(color: Color) -> Self {
+        Self {
+            tint: color,
+            fallback: color,
+            opacity: 0.8,
+            theme: ElementTheme::Dark,
+        }
+    }
+
+    pub fn system(system_settings: &SystemSettings, ui_settings: &UISettings) -> Self {
+        system_settings
+            .is_accent_enabled()
+            .map_err(|err| log::warn!("Could not detect accent state: {err}")).ok()
+            .and_then(| enabled| enabled
+                .then_some(UIColorType::AccentDark1)
+                .and_then(|c| ui_settings.GetColorValue(c)
+                    .map_err(|err| log::warn!("Failed to query accent color: {err}")).ok())
+                .map(Self::accent))
+            .or_else(|| system_settings
+                .is_system_theme_light()
+                .map_err(|err| log::warn!("Could not detect system theme state: {err}")).ok()
+                .and_then(|enabled| enabled
+                    .then_some(Self::light())))
+            .unwrap_or(Self::dark())
+    }
+
+}
+
+/*
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum Theme {
     Light,
@@ -116,6 +172,7 @@ extern "system" {
     fn GetImmersiveColorNamedTypeByIndex(dwImmersiveColorType: u32) -> *const PCWSTR;
 }
 
+*/
 pub struct SystemSettings {
     key: HKEY
 }
@@ -138,12 +195,14 @@ impl SystemSettings {
         })
     }
 
+    /*
     pub fn add_change_callback<F>(self: &Arc<Self>, callback: F) -> Result<SystemSettingsChangedCallback>
         where F : FnMut(&SystemSettings) + Send + 'static
     {
         SystemSettingsChangedCallbackInner::new(self.clone(), Box::new(callback))
             .map(SystemSettingsChangedCallback)
     }
+*/
 
     unsafe fn query_value(&self, name: PCWSTR) -> Result<bool> {
         let mut data: u32 = 0;
@@ -175,6 +234,7 @@ impl Drop for SystemSettings {
     }
 }
 
+/*
 pub struct SystemSettingsChangedCallback(Arc<SystemSettingsChangedCallbackInner>);
 
 impl SystemSettingsChangedCallback {
@@ -264,3 +324,5 @@ pub fn get_theme_setting(name: PCWSTR) -> bool {
 fn lerp(a: u8, b: u8, v: f32) -> u8 {
     ((a as f32) * (1.0 - v) + (b as f32) * v) as u8
 }
+
+ */

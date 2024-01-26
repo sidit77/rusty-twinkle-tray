@@ -137,6 +137,11 @@ impl Grid {
         Ok(self)
     }
 
+    pub fn set_theme(&self, theme: ElementTheme) -> Result<()> {
+        self.0.SetRequestedTheme(theme)?;
+        Ok(())
+    }
+
     pub fn get_actual_height(&self) -> Result<f64> {
         Ok(self.0.ActualHeight()?)
     }

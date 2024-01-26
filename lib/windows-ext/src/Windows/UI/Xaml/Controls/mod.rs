@@ -11183,8 +11183,14 @@ pub struct IHandwritingView2_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: bool,
     ) -> ::windows_core::HRESULT,
-    InputDeviceTypes: usize,
-    SetInputDeviceTypes: usize,
+    pub InputDeviceTypes: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Core::CoreInputDeviceTypes,
+    ) -> ::windows_core::HRESULT,
+    pub SetInputDeviceTypes: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::Core::CoreInputDeviceTypes,
+    ) -> ::windows_core::HRESULT,
     pub CandidatesChanged: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         handler: *mut ::core::ffi::c_void,
@@ -28319,7 +28325,11 @@ unsafe impl ::windows_core::ComInterface for ISwapChainBackgroundPanel2 {
 #[doc(hidden)]
 pub struct ISwapChainBackgroundPanel2_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    CreateCoreIndependentInputSource: usize,
+    pub CreateCoreIndependentInputSource: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        devicetypes: super::super::Core::CoreInputDeviceTypes,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -28387,7 +28397,11 @@ pub struct ISwapChainPanel_Vtbl {
         this: *mut ::core::ffi::c_void,
         token: super::super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    CreateCoreIndependentInputSource: usize,
+    pub CreateCoreIndependentInputSource: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        devicetypes: super::super::Core::CoreInputDeviceTypes,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -36389,6 +36403,19 @@ impl ColumnDefinition {
                 .from_abi(result__)
         }
     }
+    pub fn Dispatcher(
+        &self,
+    ) -> ::windows_core::Result<super::super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
     pub fn RegisterPropertyChangedCallback<P0, P1>(
         &self,
         dp: P0,
@@ -37856,6 +37883,19 @@ impl FontIcon {
                     dp.into_param().abi(),
                     &mut result__,
                 )
+                .from_abi(result__)
+        }
+    }
+    pub fn Dispatcher(
+        &self,
+    ) -> ::windows_core::Result<super::super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
         }
     }
@@ -42178,6 +42218,19 @@ impl Grid {
                     dp.into_param().abi(),
                     &mut result__,
                 )
+                .from_abi(result__)
+        }
+    }
+    pub fn Dispatcher(
+        &self,
+    ) -> ::windows_core::Result<super::super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
         }
     }
@@ -50485,6 +50538,19 @@ impl RowDefinition {
                 .from_abi(result__)
         }
     }
+    pub fn Dispatcher(
+        &self,
+    ) -> ::windows_core::Result<super::super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
     pub fn RegisterPropertyChangedCallback<P0, P1>(
         &self,
         dp: P0,
@@ -52574,6 +52640,19 @@ impl Slider {
                     dp.into_param().abi(),
                     &mut result__,
                 )
+                .from_abi(result__)
+        }
+    }
+    pub fn Dispatcher(
+        &self,
+    ) -> ::windows_core::Result<super::super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
         }
     }
@@ -57213,6 +57292,19 @@ impl StackPanel {
                     dp.into_param().abi(),
                     &mut result__,
                 )
+                .from_abi(result__)
+        }
+    }
+    pub fn Dispatcher(
+        &self,
+    ) -> ::windows_core::Result<super::super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
         }
     }
@@ -62045,6 +62137,19 @@ impl TextBlock {
                     dp.into_param().abi(),
                     &mut result__,
                 )
+                .from_abi(result__)
+        }
+    }
+    pub fn Dispatcher(
+        &self,
+    ) -> ::windows_core::Result<super::super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
         }
     }
@@ -68322,6 +68427,19 @@ impl TextBox {
                     dp.into_param().abi(),
                     &mut result__,
                 )
+                .from_abi(result__)
+        }
+    }
+    pub fn Dispatcher(
+        &self,
+    ) -> ::windows_core::Result<super::super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
         }
     }

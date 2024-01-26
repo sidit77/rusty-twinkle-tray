@@ -225,7 +225,10 @@ pub struct ICharacterReceivedRoutedEventArgs_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut u16,
     ) -> ::windows_core::HRESULT,
-    KeyStatus: usize,
+    pub KeyStatus: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Core::CorePhysicalKeyStatus,
+    ) -> ::windows_core::HRESULT,
     pub Handled: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -1180,7 +1183,10 @@ unsafe impl ::windows_core::ComInterface for IKeyRoutedEventArgs {
 pub struct IKeyRoutedEventArgs_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
     Key: usize,
-    KeyStatus: usize,
+    pub KeyStatus: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Core::CorePhysicalKeyStatus,
+    ) -> ::windows_core::HRESULT,
     pub Handled: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,

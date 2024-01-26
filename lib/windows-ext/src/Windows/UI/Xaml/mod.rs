@@ -1391,7 +1391,10 @@ pub struct IDependencyObject_Vtbl {
         dp: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    Dispatcher: usize,
+    pub Dispatcher: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -6844,24 +6847,46 @@ pub struct IWindow_Vtbl {
         this: *mut ::core::ffi::c_void,
         value: *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    CoreWindow: usize,
-    Dispatcher: usize,
-    Activated: usize,
+    pub CoreWindow: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub Dispatcher: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub Activated: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveActivated: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    Closed: usize,
+    pub Closed: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveClosed: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    SizeChanged: usize,
+    pub SizeChanged: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveSizeChanged: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
     ) -> ::windows_core::HRESULT,
-    VisibilityChanged: usize,
+    pub VisibilityChanged: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        handler: *mut ::core::ffi::c_void,
+        result__: *mut super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::HRESULT,
     pub RemoveVisibilityChanged: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         token: super::super::Foundation::EventRegistrationToken,
@@ -8989,7 +9014,17 @@ unsafe impl ::core::marker::Sync for TriggerCollection {}
     ::core::clone::Clone
 )]
 pub struct UIElement(::windows_core::IUnknown);
-impl UIElement {}
+impl UIElement {
+    pub fn Dispatcher(&self) -> ::windows_core::Result<super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+}
 impl ::windows_core::RuntimeType for UIElement {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.UIElement;{676d0be9-b65c-41c6-ba40-58cf87f201c1})",
@@ -12037,6 +12072,446 @@ impl ::windows_core::RuntimeType for VisualStateChangedEventHandler {
 #[repr(C)]
 #[doc(hidden)]
 pub struct VisualStateChangedEventHandler_Vtbl {
+    pub base__: ::windows_core::IUnknown_Vtbl,
+    pub Invoke: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        sender: *mut ::core::ffi::c_void,
+        e: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+}
+#[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
+pub struct WindowActivatedEventHandler(pub ::windows_core::IUnknown);
+impl WindowActivatedEventHandler {}
+#[repr(C)]
+struct WindowActivatedEventHandlerBox<
+    F: FnMut(
+            ::core::option::Option<&::windows_core::IInspectable>,
+            ::core::option::Option<&super::Core::WindowActivatedEventArgs>,
+        ) -> ::windows_core::Result<()> + ::core::marker::Send + 'static,
+> {
+    vtable: *const WindowActivatedEventHandler_Vtbl,
+    invoke: F,
+    count: ::windows_core::imp::RefCount,
+}
+#[allow(dead_code)]
+impl<
+    F: FnMut(
+            ::core::option::Option<&::windows_core::IInspectable>,
+            ::core::option::Option<&super::Core::WindowActivatedEventArgs>,
+        ) -> ::windows_core::Result<()> + ::core::marker::Send + 'static,
+> WindowActivatedEventHandlerBox<F> {
+    const VTABLE: WindowActivatedEventHandler_Vtbl = WindowActivatedEventHandler_Vtbl {
+        base__: ::windows_core::IUnknown_Vtbl {
+            QueryInterface: Self::QueryInterface,
+            AddRef: Self::AddRef,
+            Release: Self::Release,
+        },
+        Invoke: Self::Invoke,
+    };
+    unsafe extern "system" fn QueryInterface(
+        this: *mut ::core::ffi::c_void,
+        iid: *const ::windows_core::GUID,
+        interface: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        if iid.is_null() || interface.is_null() {
+            return ::windows_core::HRESULT(-2147467261);
+        }
+        *interface = if *iid
+            == <WindowActivatedEventHandler as ::windows_core::ComInterface>::IID
+            || *iid == <::windows_core::IUnknown as ::windows_core::ComInterface>::IID
+            || *iid
+                == <::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
+        {
+            &mut (*this).vtable as *mut _ as _
+        } else {
+            ::core::ptr::null_mut()
+        };
+        if (*interface).is_null() {
+            ::windows_core::HRESULT(-2147467262)
+        } else {
+            (*this).count.add_ref();
+            ::windows_core::HRESULT(0)
+        }
+    }
+    unsafe extern "system" fn AddRef(this: *mut ::core::ffi::c_void) -> u32 {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        (*this).count.add_ref()
+    }
+    unsafe extern "system" fn Release(this: *mut ::core::ffi::c_void) -> u32 {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        let remaining = (*this).count.release();
+        if remaining == 0 {
+            let _ = ::std::boxed::Box::from_raw(this);
+        }
+        remaining
+    }
+    unsafe extern "system" fn Invoke(
+        this: *mut ::core::ffi::c_void,
+        sender: *mut ::core::ffi::c_void,
+        e: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        ((*this)
+            .invoke)(
+                ::windows_core::from_raw_borrowed(&sender),
+                ::windows_core::from_raw_borrowed(&e),
+            )
+            .into()
+    }
+}
+unsafe impl ::windows_core::Interface for WindowActivatedEventHandler {
+    type Vtable = WindowActivatedEventHandler_Vtbl;
+}
+unsafe impl ::windows_core::ComInterface for WindowActivatedEventHandler {
+    const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
+        0x18026348_8619_4c7b_b534_ced45d9de219,
+    );
+}
+impl ::windows_core::RuntimeType for WindowActivatedEventHandler {
+    const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
+        b"{18026348-8619-4c7b-b534-ced45d9de219}",
+    );
+}
+#[repr(C)]
+#[doc(hidden)]
+pub struct WindowActivatedEventHandler_Vtbl {
+    pub base__: ::windows_core::IUnknown_Vtbl,
+    pub Invoke: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        sender: *mut ::core::ffi::c_void,
+        e: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+}
+#[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
+pub struct WindowClosedEventHandler(pub ::windows_core::IUnknown);
+impl WindowClosedEventHandler {}
+#[repr(C)]
+struct WindowClosedEventHandlerBox<
+    F: FnMut(
+            ::core::option::Option<&::windows_core::IInspectable>,
+            ::core::option::Option<&super::Core::CoreWindowEventArgs>,
+        ) -> ::windows_core::Result<()> + ::core::marker::Send + 'static,
+> {
+    vtable: *const WindowClosedEventHandler_Vtbl,
+    invoke: F,
+    count: ::windows_core::imp::RefCount,
+}
+#[allow(dead_code)]
+impl<
+    F: FnMut(
+            ::core::option::Option<&::windows_core::IInspectable>,
+            ::core::option::Option<&super::Core::CoreWindowEventArgs>,
+        ) -> ::windows_core::Result<()> + ::core::marker::Send + 'static,
+> WindowClosedEventHandlerBox<F> {
+    const VTABLE: WindowClosedEventHandler_Vtbl = WindowClosedEventHandler_Vtbl {
+        base__: ::windows_core::IUnknown_Vtbl {
+            QueryInterface: Self::QueryInterface,
+            AddRef: Self::AddRef,
+            Release: Self::Release,
+        },
+        Invoke: Self::Invoke,
+    };
+    unsafe extern "system" fn QueryInterface(
+        this: *mut ::core::ffi::c_void,
+        iid: *const ::windows_core::GUID,
+        interface: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        if iid.is_null() || interface.is_null() {
+            return ::windows_core::HRESULT(-2147467261);
+        }
+        *interface = if *iid
+            == <WindowClosedEventHandler as ::windows_core::ComInterface>::IID
+            || *iid == <::windows_core::IUnknown as ::windows_core::ComInterface>::IID
+            || *iid
+                == <::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
+        {
+            &mut (*this).vtable as *mut _ as _
+        } else {
+            ::core::ptr::null_mut()
+        };
+        if (*interface).is_null() {
+            ::windows_core::HRESULT(-2147467262)
+        } else {
+            (*this).count.add_ref();
+            ::windows_core::HRESULT(0)
+        }
+    }
+    unsafe extern "system" fn AddRef(this: *mut ::core::ffi::c_void) -> u32 {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        (*this).count.add_ref()
+    }
+    unsafe extern "system" fn Release(this: *mut ::core::ffi::c_void) -> u32 {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        let remaining = (*this).count.release();
+        if remaining == 0 {
+            let _ = ::std::boxed::Box::from_raw(this);
+        }
+        remaining
+    }
+    unsafe extern "system" fn Invoke(
+        this: *mut ::core::ffi::c_void,
+        sender: *mut ::core::ffi::c_void,
+        e: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        ((*this)
+            .invoke)(
+                ::windows_core::from_raw_borrowed(&sender),
+                ::windows_core::from_raw_borrowed(&e),
+            )
+            .into()
+    }
+}
+unsafe impl ::windows_core::Interface for WindowClosedEventHandler {
+    type Vtable = WindowClosedEventHandler_Vtbl;
+}
+unsafe impl ::windows_core::ComInterface for WindowClosedEventHandler {
+    const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
+        0x0db89161_20d7_45df_9122_ba89576703ba,
+    );
+}
+impl ::windows_core::RuntimeType for WindowClosedEventHandler {
+    const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
+        b"{0db89161-20d7-45df-9122-ba89576703ba}",
+    );
+}
+#[repr(C)]
+#[doc(hidden)]
+pub struct WindowClosedEventHandler_Vtbl {
+    pub base__: ::windows_core::IUnknown_Vtbl,
+    pub Invoke: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        sender: *mut ::core::ffi::c_void,
+        e: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+}
+#[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
+pub struct WindowSizeChangedEventHandler(pub ::windows_core::IUnknown);
+impl WindowSizeChangedEventHandler {}
+#[repr(C)]
+struct WindowSizeChangedEventHandlerBox<
+    F: FnMut(
+            ::core::option::Option<&::windows_core::IInspectable>,
+            ::core::option::Option<&super::Core::WindowSizeChangedEventArgs>,
+        ) -> ::windows_core::Result<()> + ::core::marker::Send + 'static,
+> {
+    vtable: *const WindowSizeChangedEventHandler_Vtbl,
+    invoke: F,
+    count: ::windows_core::imp::RefCount,
+}
+#[allow(dead_code)]
+impl<
+    F: FnMut(
+            ::core::option::Option<&::windows_core::IInspectable>,
+            ::core::option::Option<&super::Core::WindowSizeChangedEventArgs>,
+        ) -> ::windows_core::Result<()> + ::core::marker::Send + 'static,
+> WindowSizeChangedEventHandlerBox<F> {
+    const VTABLE: WindowSizeChangedEventHandler_Vtbl = WindowSizeChangedEventHandler_Vtbl {
+        base__: ::windows_core::IUnknown_Vtbl {
+            QueryInterface: Self::QueryInterface,
+            AddRef: Self::AddRef,
+            Release: Self::Release,
+        },
+        Invoke: Self::Invoke,
+    };
+    unsafe extern "system" fn QueryInterface(
+        this: *mut ::core::ffi::c_void,
+        iid: *const ::windows_core::GUID,
+        interface: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        if iid.is_null() || interface.is_null() {
+            return ::windows_core::HRESULT(-2147467261);
+        }
+        *interface = if *iid
+            == <WindowSizeChangedEventHandler as ::windows_core::ComInterface>::IID
+            || *iid == <::windows_core::IUnknown as ::windows_core::ComInterface>::IID
+            || *iid
+                == <::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
+        {
+            &mut (*this).vtable as *mut _ as _
+        } else {
+            ::core::ptr::null_mut()
+        };
+        if (*interface).is_null() {
+            ::windows_core::HRESULT(-2147467262)
+        } else {
+            (*this).count.add_ref();
+            ::windows_core::HRESULT(0)
+        }
+    }
+    unsafe extern "system" fn AddRef(this: *mut ::core::ffi::c_void) -> u32 {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        (*this).count.add_ref()
+    }
+    unsafe extern "system" fn Release(this: *mut ::core::ffi::c_void) -> u32 {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        let remaining = (*this).count.release();
+        if remaining == 0 {
+            let _ = ::std::boxed::Box::from_raw(this);
+        }
+        remaining
+    }
+    unsafe extern "system" fn Invoke(
+        this: *mut ::core::ffi::c_void,
+        sender: *mut ::core::ffi::c_void,
+        e: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        ((*this)
+            .invoke)(
+                ::windows_core::from_raw_borrowed(&sender),
+                ::windows_core::from_raw_borrowed(&e),
+            )
+            .into()
+    }
+}
+unsafe impl ::windows_core::Interface for WindowSizeChangedEventHandler {
+    type Vtable = WindowSizeChangedEventHandler_Vtbl;
+}
+unsafe impl ::windows_core::ComInterface for WindowSizeChangedEventHandler {
+    const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
+        0x5c21c742_2ced_4fd9_ba38_7118d40e966b,
+    );
+}
+impl ::windows_core::RuntimeType for WindowSizeChangedEventHandler {
+    const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
+        b"{5c21c742-2ced-4fd9-ba38-7118d40e966b}",
+    );
+}
+#[repr(C)]
+#[doc(hidden)]
+pub struct WindowSizeChangedEventHandler_Vtbl {
+    pub base__: ::windows_core::IUnknown_Vtbl,
+    pub Invoke: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        sender: *mut ::core::ffi::c_void,
+        e: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+}
+#[repr(transparent)]
+#[derive(
+    ::core::cmp::PartialEq,
+    ::core::cmp::Eq,
+    ::core::fmt::Debug,
+    ::core::clone::Clone
+)]
+pub struct WindowVisibilityChangedEventHandler(pub ::windows_core::IUnknown);
+impl WindowVisibilityChangedEventHandler {}
+#[repr(C)]
+struct WindowVisibilityChangedEventHandlerBox<
+    F: FnMut(
+            ::core::option::Option<&::windows_core::IInspectable>,
+            ::core::option::Option<&super::Core::VisibilityChangedEventArgs>,
+        ) -> ::windows_core::Result<()> + ::core::marker::Send + 'static,
+> {
+    vtable: *const WindowVisibilityChangedEventHandler_Vtbl,
+    invoke: F,
+    count: ::windows_core::imp::RefCount,
+}
+#[allow(dead_code)]
+impl<
+    F: FnMut(
+            ::core::option::Option<&::windows_core::IInspectable>,
+            ::core::option::Option<&super::Core::VisibilityChangedEventArgs>,
+        ) -> ::windows_core::Result<()> + ::core::marker::Send + 'static,
+> WindowVisibilityChangedEventHandlerBox<F> {
+    const VTABLE: WindowVisibilityChangedEventHandler_Vtbl = WindowVisibilityChangedEventHandler_Vtbl {
+        base__: ::windows_core::IUnknown_Vtbl {
+            QueryInterface: Self::QueryInterface,
+            AddRef: Self::AddRef,
+            Release: Self::Release,
+        },
+        Invoke: Self::Invoke,
+    };
+    unsafe extern "system" fn QueryInterface(
+        this: *mut ::core::ffi::c_void,
+        iid: *const ::windows_core::GUID,
+        interface: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        if iid.is_null() || interface.is_null() {
+            return ::windows_core::HRESULT(-2147467261);
+        }
+        *interface = if *iid
+            == <WindowVisibilityChangedEventHandler as ::windows_core::ComInterface>::IID
+            || *iid == <::windows_core::IUnknown as ::windows_core::ComInterface>::IID
+            || *iid
+                == <::windows_core::imp::IAgileObject as ::windows_core::ComInterface>::IID
+        {
+            &mut (*this).vtable as *mut _ as _
+        } else {
+            ::core::ptr::null_mut()
+        };
+        if (*interface).is_null() {
+            ::windows_core::HRESULT(-2147467262)
+        } else {
+            (*this).count.add_ref();
+            ::windows_core::HRESULT(0)
+        }
+    }
+    unsafe extern "system" fn AddRef(this: *mut ::core::ffi::c_void) -> u32 {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        (*this).count.add_ref()
+    }
+    unsafe extern "system" fn Release(this: *mut ::core::ffi::c_void) -> u32 {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        let remaining = (*this).count.release();
+        if remaining == 0 {
+            let _ = ::std::boxed::Box::from_raw(this);
+        }
+        remaining
+    }
+    unsafe extern "system" fn Invoke(
+        this: *mut ::core::ffi::c_void,
+        sender: *mut ::core::ffi::c_void,
+        e: *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT {
+        let this = this as *mut *mut ::core::ffi::c_void as *mut Self;
+        ((*this)
+            .invoke)(
+                ::windows_core::from_raw_borrowed(&sender),
+                ::windows_core::from_raw_borrowed(&e),
+            )
+            .into()
+    }
+}
+unsafe impl ::windows_core::Interface for WindowVisibilityChangedEventHandler {
+    type Vtable = WindowVisibilityChangedEventHandler_Vtbl;
+}
+unsafe impl ::windows_core::ComInterface for WindowVisibilityChangedEventHandler {
+    const IID: ::windows_core::GUID = ::windows_core::GUID::from_u128(
+        0x10406ad6_b090_4a4a_b2ad_d682df27130f,
+    );
+}
+impl ::windows_core::RuntimeType for WindowVisibilityChangedEventHandler {
+    const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
+        b"{10406ad6-b090-4a4a-b2ad-d682df27130f}",
+    );
+}
+#[repr(C)]
+#[doc(hidden)]
+pub struct WindowVisibilityChangedEventHandler_Vtbl {
     pub base__: ::windows_core::IUnknown_Vtbl,
     pub Invoke: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,

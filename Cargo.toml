@@ -44,4 +44,6 @@ windows = { version = "0.52", features = [
 ]}
 
 [build-dependencies]
-embed-manifest = "1.4"
+# embed-manifest = "1.4"
+tauri-winres = "0.1"
+ico = "0.3"

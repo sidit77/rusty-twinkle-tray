@@ -32,6 +32,7 @@ Unfortunately, the Microsoft-provided [`windows-rs` crate](https://microsoft.git
 - [ ] Support monitor hot plugging
 - [ ] Handle auto hiding taskbar
 - [ ] Improve themes
+- [ ] Adapt icon to system theme
 
 
 ## License

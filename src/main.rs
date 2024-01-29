@@ -19,7 +19,7 @@ use windows::Foundation::EventHandler;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows_ext::UI::Xaml::Hosting::{WindowsXamlManager};
 use windows_ext::UI::Xaml::Input::{FocusManager, LosingFocusEventArgs};
-use winit::dpi::{PhysicalPosition, PhysicalSize};
+use winit::dpi::{LogicalSize, PhysicalPosition};
 use winit::event::{Event, WindowEvent};
 use winit::event_loop::{DeviceEvents, EventLoopBuilder};
 use winit::platform::windows::{WindowBuilderExtWindows, WindowExtWindows};
@@ -90,7 +90,7 @@ fn run() -> Result<()> {
         .with_title("XAML Window")
         //Make the window "invisible" to hide the creation without breaking stuff
         .with_position(PhysicalPosition::new(1000000, 0))
-        .with_inner_size(PhysicalSize::new(400, 250))
+        .with_inner_size(LogicalSize::new(400, 250))
         .with_no_redirection_bitmap(true)
         .with_decorations(false)
         .with_undecorated_shadow(true)
@@ -144,9 +144,11 @@ fn run() -> Result<()> {
                         if let Ok(height) = gui.get_required_height()
                             .map_err(|err| log::debug!("Failed to get required height: {err}"))
                         {
-                            let _ = window.request_inner_size(PhysicalSize::new(
-                                window.outer_size().width,
-                                height));
+                            let width = window.outer_size()
+                                .to_logical::<f32>(window.scale_factor())
+                                .width as u32;
+                            let _ = window.request_inner_size(LogicalSize::new(
+                                width, height));
                         }
 
                         let gap = 14;

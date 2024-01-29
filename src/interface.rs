@@ -17,7 +17,7 @@ use crate::monitors::MonitorPath;
 use crate::theme::{ColorSet, SystemSettings};
 use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::ui::controls::{Slider, TextBlock, FontIcon};
-use crate::ui::{FontWeight, ElementTheme, TextAlignment, VerticalAlignment, DispatchTarget};
+use crate::ui::{FontWeight, TextAlignment, VerticalAlignment, DispatchTarget};
 use crate::utils::error::{OptionExt, Result};
 use crate::utils::extensions::WindowExt;
 

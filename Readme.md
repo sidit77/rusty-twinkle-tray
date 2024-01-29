@@ -33,6 +33,7 @@ Unfortunately, the Microsoft-provided [`windows-rs` crate](https://microsoft.git
 - [ ] Handle auto hiding taskbar
 - [ ] Improve themes
 - [ ] Adapt icon to system theme
+- [ ] Correctly handle display scaling
 
 
 ## License

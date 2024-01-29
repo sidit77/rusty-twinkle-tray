@@ -42,6 +42,7 @@ impl XamlGui {
         let system_settings = SystemSettings::new()?;
         let ui_settings = UISettings::new()?;
 
+        let color = ColorSet::system(&system_settings, &ui_settings);
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
 
         let stack_panel = StackPanel::vertical()?
@@ -70,7 +71,6 @@ impl XamlGui {
 
         let background_brush = {
             let brush = AcrylicBrush::new()?;
-            let color = ColorSet::system(&system_settings, &ui_settings);
             brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
             brush.SetFallbackColor(color.fallback)?;
             brush.SetTintColor(color.tint)?;
@@ -81,7 +81,7 @@ impl XamlGui {
         let main_grid = Grid::new()? // Create a new grid to hold the main stackpanel and the bottom bar
             .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?
             .with_background(&background_brush)?
-            .with_theme(ElementTheme::Dark)?
+            .with_theme(color.theme)?
             // Add the main stack panel and the bottom bar to the main grid
             .with_child(&stack_panel, 0, 0)?
             .with_child(&bottom_bar, 2, 0)?;

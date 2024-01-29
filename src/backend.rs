@@ -129,12 +129,16 @@ fn worker_thread(sender: EventLoopProxy<CustomEvent>, receiver: Receiver<Command
 
     let sync_with_config = config.lock_no_poison().restore_from_config;
 
-    let monitors = Monitor::find_all()
+    let mut monitors = Monitor::find_all()
         .map_err(|err| log::warn!("Failed to enumerate monitors: {err}"))
         .unwrap_or_default();
+    log::debug!("Skipping over unnamed monitors as they are likely integrated displays");
+    monitors.retain(|m| !m.name().is_empty());
     for monitor in &monitors {
         send(CustomEvent::RegisterMonitor(monitor.name().to_string(), monitor.path().clone()));
     }
+    //send(CustomEvent::RegisterMonitor(String::from("Test"), MonitorPath(Arc::from(Path::new("DUMMY_ID")))));
+    //send(CustomEvent::RegisterMonitor(String::from("Test 2"), MonitorPath(Arc::from(Path::new("DUMMY_ID2")))));
 
     let mut brightness_map = BTreeMap::<MonitorPath, MonitorBrightness>::new();
     let mut delayed_query: Option<Instant> = None;

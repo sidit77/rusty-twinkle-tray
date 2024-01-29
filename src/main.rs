@@ -141,7 +141,9 @@ fn run() -> Result<()> {
                 CustomEvent::Show => if last_close.elapsed() >= Duration::from_millis(250) {
                     controller.refresh_brightness();
                     if let Some(workspace) = target.primary_monitor().and_then(|m| m.get_work_area().ok()) {
-                        if let Ok(height) = gui.get_required_height() {
+                        if let Ok(height) = gui.get_required_height()
+                            .map_err(|err| log::debug!("Failed to get required height: {err}"))
+                        {
                             let _ = window.request_inner_size(PhysicalSize::new(
                                 window.outer_size().width,
                                 height));

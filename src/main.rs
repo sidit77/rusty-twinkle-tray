@@ -24,10 +24,9 @@ use winit::event::{Event, WindowEvent};
 use winit::event_loop::{DeviceEvents, EventLoopBuilder};
 use winit::platform::windows::{WindowBuilderExtWindows, WindowExtWindows};
 use winit::window::{WindowBuilder, WindowButtons, WindowLevel};
-use crate::backend::MonitorController;
+use crate::backend::{BackendEvent, MonitorController};
 use crate::config::Config;
 use crate::interface::{XamlGui};
-use crate::monitors::MonitorPath;
 use crate::power::{PowerEvent, PowerStateListener};
 
 use crate::utils::error::{OptionExt};
@@ -43,8 +42,7 @@ pub enum CustomEvent {
     Quit,
     Show,
     FocusLost,
-    RegisterMonitor(String, MonitorPath),
-    UpdateBrightness(MonitorPath, u32)
+    Backend(BackendEvent)
 }
 
 fn run() -> Result<()> {
@@ -170,14 +168,17 @@ fn run() -> Result<()> {
                     window.set_visible(false);
                     config.lock_no_poison().save_if_dirty()?;
                     last_close = Instant::now();
-                }
-                CustomEvent::RegisterMonitor(name, path) => {
-                    log::info!("Found monitor: {}", name);
-                    gui.register_monitor(name, path, controller.create_proxy())?
                 },
-                CustomEvent::UpdateBrightness(path, value) => {
-                    gui.update_brightness(path, value)?;
+                CustomEvent::Backend(event) => match event {
+                    BackendEvent::RegisterMonitor(name, path) => {
+                        log::info!("Found monitor: {}", name);
+                        gui.register_monitor(name, path, controller.create_proxy())?
+                    },
+                    BackendEvent::UpdateBrightness(path, value) => {
+                        gui.update_brightness(path, value)?;
+                    }
                 }
+
             },
             _ => {}
         }))?;

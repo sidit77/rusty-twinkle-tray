@@ -1,9 +1,10 @@
 use std::fmt::Debug;
+use std::future::Future;
 use flume::Receiver;
 use winit::event_loop::EventLoopProxy;
 
 pub trait Sink<T> {
-    async fn send(&self, data: T) -> bool;
+    fn send(&self, data: T) -> impl Future<Output = bool>;
 }
 
 impl<T: Debug> Sink<T> for EventLoopProxy<T> {
@@ -15,7 +16,7 @@ impl<T: Debug> Sink<T> for EventLoopProxy<T> {
 }
 
 pub trait Source<T> {
-    async fn recv(&self) -> Option<T>;
+    fn recv(&self) -> impl Future<Output=Option<T>>;
 }
 
 impl<T> Source<T> for Receiver<T> {

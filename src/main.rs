@@ -8,6 +8,7 @@ mod backend;
 mod config;
 mod power;
 mod theme;
+pub mod runtime;
 
 use std::process::ExitCode;
 use std::sync::{Arc, Mutex};

@@ -14,7 +14,7 @@ macro_rules! new_type {
             const SIGNATURE: windows::core::imp::ConstBuffer = <$orig as windows::core::RuntimeType>::SIGNATURE;
         }
 
-        impl crate::ui::NewType for $name {
+        impl $crate::ui::NewType for $name {
             type Inner = $orig;
 
             fn as_inner(&self) -> &Self::Inner {
@@ -149,11 +149,11 @@ mod dispatcher {
     impl<T: CanTryInto<UIElement>> DispatchTarget for T {
         fn run_on_idle<F: FnMut() -> crate::Result<()> + Send + 'static>(&self, mut callback: F) -> windows::core::Result<IAsyncAction> {
             let dispatcher = self.cast::<UIElement>()?.Dispatcher()?;
-            Ok(dispatcher.RunIdleAsync(&IdleDispatchedHandler::new(move |_| {
+            dispatcher.RunIdleAsync(&IdleDispatchedHandler::new(move |_| {
                 callback()
                     .unwrap_or_else(|err| log::warn!("Error in callback: {err}"));
                 Ok(())
-            }))?)
+            }))
         }
     }
 

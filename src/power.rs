@@ -9,6 +9,7 @@ use windows::Win32::UI::WindowsAndMessaging::{CreateWindowExW, DefWindowProcW, D
 use crate::{Result, win_assert};
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
+#[allow(clippy::enum_variant_names)]
 pub enum  PowerEvent {
     MonitorOff,
     MonitorOn,

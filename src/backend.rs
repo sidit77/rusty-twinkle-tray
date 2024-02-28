@@ -186,7 +186,7 @@ async fn worker_task<S, R>(sender: S, receiver: R, config: Arc<Mutex<Config>>)
                                 .as_ref()
                                 .and_then(|c|c
                                     .monitors
-                                    .get(&p))
+                                    .get(p))
                                 .and_then(|s| s.saved_brightness)));
                 },
                 BackendCommand::QueryBrightness(Some(delay)) => {

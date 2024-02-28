@@ -238,7 +238,7 @@ mod gdi {
 
     fn find_all_hmonitors() -> Result<Vec<HMONITOR>> {
         unsafe {
-            let result = Box::into_raw(Box::new(Vec::new()));
+            let result = Box::into_raw(Box::default());
             unsafe extern "system" fn enum_func(hm: HMONITOR, _: HDC, _: *mut RECT, result: LPARAM) -> BOOL {
                 let result = &mut *(result.0 as *mut Vec<HMONITOR>);
                 result.push(hm);

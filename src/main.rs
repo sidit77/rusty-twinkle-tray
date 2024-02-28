@@ -115,9 +115,8 @@ fn run() -> Result<()> {
     }))?;
     let _power_listener = PowerStateListener::new({
         let proxy = controller.create_proxy();
-        move |event| match event {
-            PowerEvent::MonitorOn => proxy.refresh_brightness_in(Duration::from_secs(10)),
-            _ => {}
+        move |event| if event == PowerEvent::MonitorOn {
+            proxy.refresh_brightness_in(Duration::from_secs(10));
         }
     })?;
     window.set_border_color(BorderColor::NONE);
@@ -126,63 +125,66 @@ fn run() -> Result<()> {
 
     let mut last_close = Instant::now();
     event_loop
-        .run_result(|event, target| Ok(match event {
-            Event::WindowEvent { event, .. } => match event {
-                WindowEvent::Resized(new) => gui.resize(new)?,
-                WindowEvent::Focused(true) => gui.focus(),
-                _ => {}
-            },
-            Event::UserEvent(event) => match event {
-                CustomEvent::Quit => {
-                    controller.shutdown();
-                    target.exit()
+        .run_result(|event, target| {
+            match event {
+                Event::WindowEvent { event, .. } => match event {
+                    WindowEvent::Resized(new) => gui.resize(new)?,
+                    WindowEvent::Focused(true) => gui.focus(),
+                    _ => {}
                 },
-                CustomEvent::Show => if last_close.elapsed() >= Duration::from_millis(250) {
-                    controller.refresh_brightness();
-                    if let Some(workspace) = target.primary_monitor().and_then(|m| m.get_work_area().ok()) {
-                        if let Ok(height) = gui.get_required_height()
-                            .map_err(|err| log::debug!("Failed to get required height: {err}"))
-                        {
-                            let width = window.outer_size()
-                                .to_logical::<f32>(window.scale_factor())
-                                .width as u32;
-                            let _ = window.request_inner_size(LogicalSize::new(
-                                width, height));
-                        }
-
-                        let gap = 14;
-                        let size = window.outer_size();
-
-                        window.set_outer_position(PhysicalPosition::new(
-                            workspace.right - gap - size.width as i32,
-                            workspace.bottom - gap - size.height as i32
-                        ));
-
-                        window.set_visible(true);
-                        window.set_window_level(WindowLevel::AlwaysOnTop);
-                        window.focus_window();
-                    } else {
-                        log::warn!("Can't find work area of primary monitor");
-                    }
-                }
-                CustomEvent::FocusLost => {
-                    window.set_visible(false);
-                    config.lock_no_poison().save_if_dirty()?;
-                    last_close = Instant::now();
-                },
-                CustomEvent::Backend(event) => match event {
-                    BackendEvent::RegisterMonitor(name, path) => {
-                        log::info!("Found monitor: {}", name);
-                        gui.register_monitor(name, path, controller.create_proxy())?
+                Event::UserEvent(event) => match event {
+                    CustomEvent::Quit => {
+                        controller.shutdown();
+                        target.exit()
                     },
-                    BackendEvent::UpdateBrightness(path, value) => {
-                        gui.update_brightness(path, value)?;
-                    }
-                }
+                    CustomEvent::Show => if last_close.elapsed() >= Duration::from_millis(250) {
+                        controller.refresh_brightness();
+                        if let Some(workspace) = target.primary_monitor().and_then(|m| m.get_work_area().ok()) {
+                            if let Ok(height) = gui.get_required_height()
+                                .map_err(|err| log::debug!("Failed to get required height: {err}"))
+                            {
+                                let width = window.outer_size()
+                                    .to_logical::<f32>(window.scale_factor())
+                                    .width as u32;
+                                let _ = window.request_inner_size(LogicalSize::new(
+                                    width, height));
+                            }
 
-            },
-            _ => {}
-        }))?;
+                            let gap = 14;
+                            let size = window.outer_size();
+
+                            window.set_outer_position(PhysicalPosition::new(
+                                workspace.right - gap - size.width as i32,
+                                workspace.bottom - gap - size.height as i32
+                            ));
+
+                            window.set_visible(true);
+                            window.set_window_level(WindowLevel::AlwaysOnTop);
+                            window.focus_window();
+                        } else {
+                            log::warn!("Can't find work area of primary monitor");
+                        }
+                    }
+                    CustomEvent::FocusLost => {
+                        window.set_visible(false);
+                        config.lock_no_poison().save_if_dirty()?;
+                        last_close = Instant::now();
+                    },
+                    CustomEvent::Backend(event) => match event {
+                        BackendEvent::RegisterMonitor(name, path) => {
+                            log::info!("Found monitor: {}", name);
+                            gui.register_monitor(name, path, controller.create_proxy())?
+                        },
+                        BackendEvent::UpdateBrightness(path, value) => {
+                            gui.update_brightness(path, value)?;
+                        }
+                    }
+
+                },
+                _ => {}
+            }
+            Ok(())
+        })?;
 
     config.lock_no_poison().save_if_dirty()?;
     unsafe { RoUninitialize() }

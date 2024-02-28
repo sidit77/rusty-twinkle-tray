@@ -91,7 +91,7 @@ impl XamlGui {
             cloned!([background_brush, main_grid]
                 move |ui_settings: &Option<UISettings>, _| {
                     let ui_settings = ui_settings.as_ref().some()?;
-                    let colors = ColorSet::system(&system_settings, &ui_settings);
+                    let colors = ColorSet::system(&system_settings, ui_settings);
                     main_grid.run_on_idle(cloned!([background_brush, main_grid] move || {
                         background_brush.SetFallbackColor(colors.fallback)?;
                         background_brush.SetTintColor(colors.tint)?;
@@ -208,7 +208,7 @@ impl MonitorEntry {
     }
 
     pub fn set_brightness(&self, value: u32) -> Result<()> {
-        Ok(self.slider.set_value(value as f64)?)
+        self.slider.set_value(value as f64)
     }
 
     pub fn ui(&self) -> &StackPanel {

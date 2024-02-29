@@ -6,7 +6,6 @@ use std::sync::{Arc, Mutex};
 use std::thread::{JoinHandle, spawn};
 use std::time::{Duration, Instant};
 use async_executor::LocalExecutor;
-use async_io::{block_on, Timer};
 use flume::{Sender, unbounded};
 use futures_lite::{FutureExt, StreamExt};
 use futures_lite::stream::iter;
@@ -14,7 +13,7 @@ use winit::event_loop::{EventLoop};
 use crate::{CustomEvent};
 use crate::config::Config;
 use crate::monitors::{Monitor, MonitorConnection, MonitorPath};
-use crate::runtime::Event;
+use crate::runtime::{block_on, Event, Timer};
 use crate::utils::extensions::MutexExt;
 use crate::runtime::{Sink, SinkExt, Source};
 
@@ -128,7 +127,6 @@ impl MonitorControl {
         self.event.signal();
     }
 
-
 }
 
 
@@ -233,6 +231,7 @@ async fn monitor_task<S>(monitor: Monitor, sender: S, control: Rc<MonitorControl
             },
             Some(command) => {
                 if cached_connection.is_none() {
+                    log::trace!("Opening connection to {}", monitor.name());
                     cached_connection = retry(|| monitor.open())
                         .await
                         .map_err(|err| log::warn!("Failed to connect to monitor: {err}"))
@@ -244,6 +243,7 @@ async fn monitor_task<S>(monitor: Monitor, sender: S, control: Rc<MonitorControl
                 };
                 match command {
                     MonitorCommand::QueryBrightness(target) => {
+                        log::trace!("Attempting to read brightness of {}", monitor.name());
                         match retry(|| connection.get_brightness()).await {
                             Ok((brightness, range)) => {
                                 if range != (0..=100) {
@@ -262,6 +262,7 @@ async fn monitor_task<S>(monitor: Monitor, sender: S, control: Rc<MonitorControl
                         }
                     }
                     MonitorCommand::SetBrightness(value, notify) => {
+                        log::trace!("Attempting to set brightness of {}", monitor.name());
                         let success = retry(|| connection.set_brightness(value))
                             .await
                             .map_err(|err| log::warn!("Failed to set brightness: {err}"))

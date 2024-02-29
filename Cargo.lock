@@ -1547,9 +1547,7 @@ name = "rusty-twinkle-tray"
 version = "0.1.0"
 dependencies = [
  "async-executor",
- "async-io 2.2.2",
  "betrayer",
- "either",
  "flume",
  "futures-lite 2.1.0",
  "ico",

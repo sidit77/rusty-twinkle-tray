@@ -49,22 +49,6 @@ pub enum CustomEvent {
 fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
 
-    //println!("{}", unsafe { GetImmersiveUserColorSetPreference(false, false)});
-//
-    //let mut colors = (0..)
-    //    .into_iter()
-    //    .map(|i| unsafe {GetImmersiveColorNamedTypeByIndex(i)
-    //        .as_ref()
-    //        .copied()});
-    //while let Some(name) = colors.next().flatten() {
-    //    unsafe {
-    //        println!("{}: #{:X}", name.display(), lookup_color(name));
-    //    }
-    //}
-    //println!("\n#{:X}", unsafe { lookup_color(w!("ImmersiveLight"))});
-//
-    //println!("{} {}", get_theme_setting(w!("ColorPrevalence")), get_theme_setting(w!("SystemUsesLightTheme")));
-
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
     let config = Arc::new(Mutex::new(Config::load()?));

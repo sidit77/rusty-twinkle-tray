@@ -7,7 +7,7 @@ use std::thread::{JoinHandle, spawn};
 use std::time::{Duration, Instant};
 use async_executor::LocalExecutor;
 use flume::{Sender, unbounded};
-use futures_lite::{FutureExt, StreamExt};
+use futures_lite::{FutureExt, Stream, StreamExt};
 use futures_lite::stream::iter;
 use winit::event_loop::{EventLoop};
 use crate::{CustomEvent};
@@ -15,7 +15,7 @@ use crate::config::Config;
 use crate::monitors::{Monitor, MonitorConnection, MonitorPath};
 use crate::runtime::{block_on, Event, Timer};
 use crate::utils::extensions::MutexExt;
-use crate::runtime::{Sink, SinkExt, Source};
+use crate::runtime::{Sink, SinkExt};
 
 #[derive(Debug, Clone)]
 enum BackendCommand {
@@ -41,7 +41,7 @@ impl MonitorController {
         let proxy = eventloop.create_proxy();
         let (sender, receiver) = unbounded();
         let _ = sender.send(BackendCommand::QueryBrightness(None));
-        let thread = Some(spawn(move || block_on(worker_task(proxy.map(CustomEvent::Backend), receiver, config))));
+        let thread = Some(spawn(move || block_on(worker_task(proxy.map(CustomEvent::Backend), receiver.stream(), config))));
         Self {
             sender,
             thread,
@@ -130,9 +130,9 @@ impl MonitorControl {
 }
 
 
-async fn worker_task<S, R>(sender: S, receiver: R, config: Arc<Mutex<Config>>)
+async fn worker_task<S, R>(sender: S, mut receiver: R, config: Arc<Mutex<Config>>)
     where S: Sink<BackendEvent> + Clone,
-          R: Source<BackendCommand>
+          R: Stream<Item=BackendCommand> + Unpin
 {
     let sync_with_config = config.lock_no_poison().restore_from_config;
 
@@ -168,7 +168,7 @@ async fn worker_task<S, R>(sender: S, receiver: R, config: Arc<Mutex<Config>>)
             };
             let command_event = async {
                 receiver
-                    .recv()
+                    .next()
                     .await
                     .expect("Controller disappeared")
             };

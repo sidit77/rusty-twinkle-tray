@@ -1,6 +1,5 @@
 use std::fmt::Debug;
 use std::future::Future;
-use flume::Receiver;
 use winit::event_loop::EventLoopProxy;
 
 pub trait Sink<T> {
@@ -12,16 +11,6 @@ impl<T: Debug> Sink<T> for EventLoopProxy<T> {
         self.send_event(data)
             .map_err(|e| log::warn!("Eventloop closed. Dropping {:?}.", e.0))
             .is_ok()
-    }
-}
-
-pub trait Source<T> {
-    fn recv(&self) -> impl Future<Output=Option<T>>;
-}
-
-impl<T> Source<T> for Receiver<T> {
-    async fn recv(&self) -> Option<T> {
-        self.recv_async().await.ok()
     }
 }
 

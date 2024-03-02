@@ -16,7 +16,8 @@ use std::time::{Duration, Instant};
 
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder, winit::WinitTrayIconBuilderExt};
 use log::LevelFilter;
-use windows::Foundation::EventHandler;
+use windows::Foundation::{EventHandler, TypedEventHandler};
+use windows::UI::ViewManagement::UISettings;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows_ext::UI::Xaml::Hosting::{WindowsXamlManager};
 use windows_ext::UI::Xaml::Input::{FocusManager, LosingFocusEventArgs};
@@ -25,10 +26,12 @@ use winit::event::{Event, WindowEvent};
 use winit::event_loop::{DeviceEvents, EventLoopBuilder};
 use winit::platform::windows::{WindowBuilderExtWindows, WindowExtWindows};
 use winit::window::{WindowBuilder, WindowButtons, WindowLevel};
+use windows_ext::UI::Xaml::ElementTheme;
 use crate::backend::{BackendEvent, MonitorController};
 use crate::config::Config;
 use crate::interface::{XamlGui};
 use crate::power::{PowerEvent, PowerStateListener};
+use crate::theme::{ColorSet, SystemSettings};
 
 use crate::utils::error::{OptionExt};
 use crate::utils::{logger, panic};
@@ -36,13 +39,14 @@ use crate::utils::extensions::{BorderColor, EventLoopExt, MonitorHandleExt, Mute
 
 pub use crate::utils::error::Result;
 
-
+include!("../assets/ids.rs");
 
 #[derive(Debug, Clone)]
 pub enum CustomEvent {
     Quit,
     Show,
     FocusLost,
+    ThemeChange,
     Backend(BackendEvent)
 }
 
@@ -59,9 +63,15 @@ fn run() -> Result<()> {
 
     let controller = MonitorController::new(&event_loop, config.clone());
 
-    let _tray = TrayIconBuilder::new()
+    let ui_settings = UISettings::new()?;
+    let mut colors = SystemSettings::new()
+        .map_err(|err| log::warn!("Failed to read system settings: {err}"))
+        .ok()
+        .map_or_else(ColorSet::dark, |system_settings| ColorSet::system(&system_settings, &ui_settings));
+
+    let tray = TrayIconBuilder::new()
         .with_tooltip("Change Brightness")
-        .with_icon(Icon::from_resource(32512, None)?)
+        .with_icon(Icon::from_resource(if colors.theme == ElementTheme::Light { BRIGHTNESS_LIGHT_ICON } else { BRIGHTNESS_DARK_ICON}, None)?)
         .with_menu(Menu::new([MenuItem::button("Quit", CustomEvent::Quit)]))
         .build_event_loop(&event_loop, |event| match event {
             TrayEvent::Tray(ClickType::Left) => Some(CustomEvent::Show),
@@ -84,8 +94,6 @@ fn run() -> Result<()> {
         .with_enabled_buttons(WindowButtons::empty())
         .build(&event_loop)?;
 
-    let mut gui = XamlGui::new(&window)?;
-
     FocusManager::LosingFocus(&EventHandler::new({
         let proxy = event_loop.create_proxy();
         move |_e, arg: &Option<LosingFocusEventArgs>| {
@@ -103,6 +111,18 @@ fn run() -> Result<()> {
             proxy.refresh_brightness_in(Duration::from_secs(10));
         }
     })?;
+
+    ui_settings.ColorValuesChanged(&TypedEventHandler::new({
+        let proxy = event_loop.create_proxy();
+        move |_: &Option<UISettings>, _| {
+            proxy
+                .send_event(CustomEvent::ThemeChange)
+                .unwrap_or_else(|err| log::warn!("Failed to forward event: {}", err));
+            Ok(())
+        }
+    }))?;
+
+    let mut gui = XamlGui::new(&window, &colors)?;
     window.set_border_color(BorderColor::NONE);
     //Drop input focus
     window.set_enable(false);
@@ -154,6 +174,15 @@ fn run() -> Result<()> {
                         config.lock_no_poison().save_if_dirty()?;
                         last_close = Instant::now();
                     },
+                    CustomEvent::ThemeChange => {
+                        colors = SystemSettings::new()
+                            .map_err(|err| log::warn!("Failed to read system settings: {err}"))
+                            .ok()
+                            .map_or_else(ColorSet::dark, |system_settings| ColorSet::system(&system_settings, &ui_settings));
+                        gui.update_theme(&colors)
+                            .unwrap_or_else(|err| log::warn!("Failed to update gui theme: {err}"));
+                        tray.set_icon(Icon::from_resource(if colors.theme == ElementTheme::Light { BRIGHTNESS_LIGHT_ICON } else { BRIGHTNESS_DARK_ICON}, None)?);
+                    }
                     CustomEvent::Backend(event) => match event {
                         BackendEvent::RegisterMonitor(name, path) => {
                             log::info!("Found monitor: {}", name);

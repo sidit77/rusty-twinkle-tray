@@ -52,7 +52,7 @@ pub trait NewType {
 }
 
 pub use windows_ext::UI::Xaml::{VerticalAlignment, TextAlignment, ElementTheme};
-pub use dispatcher::DispatchTarget;
+//pub use dispatcher::DispatchTarget;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Padding {

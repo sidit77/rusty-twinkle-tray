@@ -1,8 +1,6 @@
 use std::collections::BTreeMap;
 use windows::core::{ComInterface};
-use windows::Foundation::TypedEventHandler;
 use windows::UI::Color;
-use windows::UI::ViewManagement::{UISettings};
 use windows::Win32::Foundation::HWND;
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
 use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW};
@@ -14,24 +12,25 @@ use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use crate::{cloned, hformat};
 use crate::backend::MonitorControllerProxy;
 use crate::monitors::MonitorPath;
-use crate::theme::{ColorSet, SystemSettings};
+use crate::theme::ColorSet;
 use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::ui::controls::{Slider, TextBlock, FontIcon};
-use crate::ui::{FontWeight, TextAlignment, VerticalAlignment, DispatchTarget};
-use crate::utils::error::{OptionExt, Result};
+use crate::ui::{FontWeight, TextAlignment, VerticalAlignment};
+use crate::utils::error::Result;
 use crate::utils::extensions::WindowExt;
 
 pub struct XamlGui {
     hwnd: HWND,
     bottom_bar: Grid,
     monitor_panel: StackPanel,
+    background_brush: AcrylicBrush,
+    main_grid: Grid,
     monitor_controls: BTreeMap<MonitorPath, MonitorEntry>,
-    _ui_settings: UISettings,
     _desktop_source: DesktopWindowXamlSource
 }
 
 impl XamlGui {
-    pub fn new(parent: &Window) -> Result<Self> {
+    pub fn new(parent: &Window, color: &ColorSet) -> Result<Self> {
         let desktop_source = DesktopWindowXamlSource::new()?;
         let interop = desktop_source.cast::<IDesktopWindowXamlSourceNative>()?;
         unsafe {
@@ -39,10 +38,6 @@ impl XamlGui {
         }
         let island = unsafe { interop.WindowHandle() }?;
 
-        let system_settings = SystemSettings::new()?;
-        let ui_settings = UISettings::new()?;
-
-        let color = ColorSet::system(&system_settings, &ui_settings);
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
 
         let stack_panel = StackPanel::vertical()?
@@ -87,22 +82,22 @@ impl XamlGui {
             .with_child(&bottom_bar, 2, 0)?;
 
 
-        ui_settings.ColorValuesChanged(&TypedEventHandler::new(
-            cloned!([background_brush, main_grid]
-                move |ui_settings: &Option<UISettings>, _| {
-                    let ui_settings = ui_settings.as_ref().some()?;
-                    let colors = ColorSet::system(&system_settings, ui_settings);
-                    main_grid.run_on_idle(cloned!([background_brush, main_grid] move || {
-                        background_brush.SetFallbackColor(colors.fallback)?;
-                        background_brush.SetTintColor(colors.tint)?;
-                        background_brush.SetOpacity(colors.opacity)?;
-                        main_grid.set_theme(colors.theme)?;
-                        Ok(())
-                    }))?;
-                    Ok(())
-                }
-            )
-        ))?;
+        //ui_settings.ColorValuesChanged(&TypedEventHandler::new(
+        //    cloned!([background_brush, main_grid]
+        //        move |ui_settings: &Option<UISettings>, _| {
+        //            let ui_settings = ui_settings.as_ref().some()?;
+        //            let colors = ColorSet::system(&system_settings, ui_settings);
+        //            main_grid.run_on_idle(cloned!([background_brush, main_grid] move || {
+        //                background_brush.SetFallbackColor(colors.fallback)?;
+        //                background_brush.SetTintColor(colors.tint)?;
+        //                background_brush.SetOpacity(colors.opacity)?;
+        //                main_grid.set_theme(colors.theme)?;
+        //                Ok(())
+        //            }))?;
+        //            Ok(())
+        //        }
+        //    )
+        //))?;
 
         desktop_source.SetContent(&main_grid)?;
         Ok(Self {
@@ -110,8 +105,9 @@ impl XamlGui {
             bottom_bar,
             _desktop_source: desktop_source,
             monitor_panel: stack_panel,
-            monitor_controls: BTreeMap::new(),
-            _ui_settings: ui_settings,
+            background_brush,
+            main_grid,
+            monitor_controls: BTreeMap::new()
         })
     }
 
@@ -132,6 +128,14 @@ impl XamlGui {
             None => log::warn!("Monitor is not registered: {:?}", path),
             Some(entry) => entry.set_brightness(new_brightness)?
         }
+        Ok(())
+    }
+
+    pub fn update_theme(&self, colors: &ColorSet) -> Result<()> {
+        self.background_brush.SetFallbackColor(colors.fallback)?;
+        self.background_brush.SetTintColor(colors.tint)?;
+        self.background_brush.SetOpacity(colors.opacity)?;
+        self.main_grid.set_theme(colors.theme)?;
         Ok(())
     }
 

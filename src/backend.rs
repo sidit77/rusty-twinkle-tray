@@ -250,11 +250,13 @@ async fn monitor_task<S>(monitor: Monitor, sender: S, control: Rc<MonitorControl
                                     log::warn!("unexpected brightness range: {:?}", range);
                                 }
                                 current_brightness = Some(brightness);
-                                sender.send(BackendEvent::UpdateBrightness(monitor.path().clone(), brightness)).await;
-                                if let Some(target) = target {
-                                    if target != brightness {
+                                match target {
+                                    Some(target) if target != brightness => {
                                         log::info!("Restoring saved brightness for {} (current: {}, saved: {})", monitor.name(), brightness, target);
                                         control.command.set(Some(MonitorCommand::SetBrightness(target, true)));
+                                    },
+                                    _ => {
+                                        sender.send(BackendEvent::UpdateBrightness(monitor.path().clone(), brightness)).await;
                                     }
                                 }
                             },
@@ -269,8 +271,10 @@ async fn monitor_task<S>(monitor: Monitor, sender: S, control: Rc<MonitorControl
                             .is_ok();
                         if success {
                             current_brightness = Some(value);
-                            if notify {
-                                sender.send(BackendEvent::UpdateBrightness(monitor.path().clone(), value)).await;
+                        }
+                        if notify {
+                            if let Some(current) = current_brightness {
+                                sender.send(BackendEvent::UpdateBrightness(monitor.path().clone(), current)).await;
                             }
                         }
                     }

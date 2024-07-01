@@ -58,15 +58,7 @@ fn run() -> Result<()> {
 
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
-    //let proxy_window = ProxyWindow::new()?;
-    //event_loop();
-    //return Ok(());
-
     let config = Arc::new(Mutex::new(Config::load()?));
-
-    //let event_loop = EventLoopBuilder::with_user_event()
-    //    .build()?;
-    //event_loop.listen_device_events(DeviceEvents::Never);
 
     let (wnd_sender, wnd_receiver) = flume::unbounded();
     let controller = MonitorController::new(wnd_sender.clone(), config.clone());
@@ -88,34 +80,9 @@ fn run() -> Result<()> {
             _ => None
         })))?;
 
-    //let window = WindowBuilder::new()
-    //    .with_title("XAML Window")
-    //    //Make the window "invisible" to hide the creation without breaking stuff
-    //    .with_position(PhysicalPosition::new(0, 0))
-    //    .with_inner_size(PhysicalSize::new(30, 30))
-    //    .with_no_redirection_bitmap(true)
-    //    .with_decorations(true)
-    //    .with_undecorated_shadow(true)
-    //    .with_skip_taskbar(true)
-    //    .with_visible(false)
-    //    .with_resizable(false)
-    //    .with_drag_and_drop(false)
-    //    .with_enabled_buttons(WindowButtons::empty())
-    //    .build(&event_loop)?;
 
     let proxy_window = ProxyWindow::new()?;
 
-    //FocusManager::LosingFocus(&EventHandler::new({
-    //    let proxy = event_loop.create_proxy();
-    //    move |_e, arg: &Option<LosingFocusEventArgs>| {
-    //        if arg.as_ref().some()?.NewFocusedElement().is_err() {
-    //            proxy
-    //                .send_event(CustomEvent::FocusLost)
-    //                .unwrap_or_else(|err| log::warn!("Failed to forward event: {}", err));
-    //        }
-    //        Ok(())
-    //    }
-    //}))?;
     let _power_listener = PowerStateListener::new({
         let proxy = controller.create_proxy();
         move |event| if event == PowerEvent::MonitorOn {
@@ -227,112 +194,12 @@ fn run() -> Result<()> {
         }
         Ok(())
     })?;
-    /*
-    event_loop
-        .run_result(|event, target| {
-            match event {
-                Event::WindowEvent { event, .. } => match event {
-                    //WindowEvent::Resized(new) => gui.resize(new)?,
-                    WindowEvent::Resized(new_size) => {
 
-                    }
-                    //WindowEvent::Focused(true) => gui.focus(),
-                    _ => {}
-                },
-                Event::UserEvent(event) => match event {
-                    CustomEvent::Quit => {
-                        // controller.shutdown();
-                        target.exit()
-                    },
-                    CustomEvent::Show => if last_close.elapsed() >= Duration::from_millis(250) {
-
-                        window.set_visible(true);
-                        // window.set_window_level(WindowLevel::AlwaysOnTop);
-                        window.focus_window();
-
-                        let options = FlyoutShowOptions::new()?;
-                        let pt = Point {
-                            X: 1600.0,
-                            Y: 990.0,
-                        };
-                        options.SetPosition(&Reference::box_value(pt))?;
-                        flyout.ShowAt2(main_content.as_inner(), &options)?;
-                        println!("Show");
-
-                        // controller.refresh_brightness();
-                        //unsafe {
-                        //    //SetWindowPos(island, HWND::default(), 0, 0, 0, 0, SWP_NOZORDER | SWP_SHOWWINDOW)?;
-                        //    SetWindowPos(window.hwnd(), HWND_TOPMOST, 0, 0, 100, 100, SWP_SHOWWINDOW)?;
-                        //    SetForegroundWindow(window.hwnd());
-                        //}
-
-                        //options.SetPosition(&iref)?;
-                        //flyout.ShowAt2(&main_content, &options)?;
-                        //if let Some(workspace) = target.primary_monitor().and_then(|m| m.get_work_area().ok()) {
-                        //    if let Ok(height) = gui.get_required_height()
-                        //        .map_err(|err| log::debug!("Failed to get required height: {err}"))
-                        //    {
-                        //        let width = window.outer_size()
-                        //            .to_logical::<f32>(window.scale_factor())
-                        //            .width as u32;
-                        //        let _ = window.request_inner_size(LogicalSize::new(
-                        //            width, height));
-                        //    }
-//
-                        //    let gap = 14;
-                        //    let size = window.outer_size();
-//
-                        //    window.set_outer_position(PhysicalPosition::new(
-                        //        workspace.right - gap - size.width as i32,
-                        //        workspace.bottom - gap - size.height as i32
-                        //    ));
-//
-                        //    window.set_visible(true);
-                        //    window.set_window_level(WindowLevel::AlwaysOnTop);
-                        //    window.focus_window();
-                        //} else {
-                        //    log::warn!("Can't find work area of primary monitor");
-                        //}
-                    }
-                    CustomEvent::FocusLost => {
-                        println!("Closed");
-                        window.set_visible(false);
-                        //window.set_visible(false);
-                        //config.lock_no_poison().save_if_dirty()?;
-                        last_close = Instant::now();
-                    },
-                    CustomEvent::ThemeChange => {
-                        colors = SystemSettings::new()
-                            .map_err(|err| log::warn!("Failed to read system settings: {err}"))
-                            .ok()
-                            .map_or_else(ColorSet::dark, |system_settings| ColorSet::system(&system_settings, &ui_settings));
-                        //gui.update_theme(&colors)
-                        //    .unwrap_or_else(|err| log::warn!("Failed to update gui theme: {err}"));
-                        tray.set_icon(Icon::from_resource(if colors.theme == ElementTheme::Light { BRIGHTNESS_LIGHT_ICON } else { BRIGHTNESS_DARK_ICON}, None)?);
-                    }
-                    CustomEvent::Backend(event) => match event {
-                        BackendEvent::RegisterMonitor(name, path) => {
-                            log::info!("Found monitor: {}", name);
-                            //gui.register_monitor(name, path, controller.create_proxy())?
-                        },
-                        BackendEvent::UpdateBrightness(path, value) => {
-                            //gui.update_brightness(path, value)?;
-                        }
-                    }
-
-                },
-                _ => {}
-            }
-            Ok(())
-        })?;
-    */
     controller.shutdown();
     config.lock_no_poison().save_if_dirty()?;
     unsafe { RoUninitialize() }
     Ok(())
 }
-
-
 
 
 fn main() -> ExitCode {

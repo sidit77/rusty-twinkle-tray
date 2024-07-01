@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 include!("assets/ids.rs");
 
-const ICONS: &[(u16, &'static str)] = &[
+const ICONS: &[(u16, &str)] = &[
     (APP_ICON, "app.png"),
     (BRIGHTNESS_LIGHT_ICON, "brightness_light.png"),
     (BRIGHTNESS_DARK_ICON, "brightness_dark.png")

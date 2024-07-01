@@ -12,6 +12,19 @@ use winit::raw_window_handle::{HasWindowHandle, RawWindowHandle};
 use winit::window::Window;
 use crate::Result;
 
+pub trait ChannelExt<T> {
+    fn filter_send_ignore(&self, msg: Option<T>);
+}
+
+impl<T> ChannelExt<T> for flume::Sender<T> {
+    #[track_caller]
+    fn filter_send_ignore(&self, msg: Option<T>) {
+        if let Some(msg) = msg {
+            self.send(msg).unwrap_or_else(|err| log::warn!("Failed to send message: {}", err));
+        }
+    }
+}
+
 #[repr(transparent)]
 pub struct BorderColor(COLORREF);
 

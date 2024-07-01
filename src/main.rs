@@ -80,9 +80,9 @@ fn run() -> Result<()> {
     //    .build()?;
     //event_loop.listen_device_events(DeviceEvents::Never);
 
-    //let controller = MonitorController::new(&event_loop, config.clone());
-
     let (wnd_sender, wnd_receiver) = flume::unbounded();
+    let controller = MonitorController::new(wnd_sender.clone(), config.clone());
+
 
     let ui_settings = UISettings::new()?;
     let mut colors = SystemSettings::new()
@@ -128,19 +128,19 @@ fn run() -> Result<()> {
     //        Ok(())
     //    }
     //}))?;
-    //let _power_listener = PowerStateListener::new({
-    //    let proxy = controller.create_proxy();
-    //    move |event| if event == PowerEvent::MonitorOn {
-    //        proxy.refresh_brightness_in(Duration::from_secs(10));
-    //    }
-    //})?;
+    let _power_listener = PowerStateListener::new({
+        let proxy = controller.create_proxy();
+        move |event| if event == PowerEvent::MonitorOn {
+            proxy.refresh_brightness_in(Duration::from_secs(10));
+        }
+    })?;
 
     ui_settings.ColorValuesChanged(&TypedEventHandler::new(cloned!([wnd_sender] move |_: &Option<UISettings>, _| {
         wnd_sender.filter_send_ignore(Some(CustomEvent::ThemeChange));
         Ok(())
     })))?;
 
-    //let mut gui = XamlGui::new(&window, &colors)?;
+    let mut gui = XamlGui::new()?;
     //window.set_border_color(BorderColor::NONE);
     //Drop input focus
     //window.set_enable(false);
@@ -150,23 +150,26 @@ fn run() -> Result<()> {
     proxy_window.set_content(&main_content)?;
 
     let content = StackPanel::vertical()?
-        .with_child(&TextBlock::new()?
-            .with_text("Hello World")?)?
+        .with_theme(colors.theme)?
         .apply(|p| p.SetWidth(400.0))?
-        .apply(|p| p.SetHeight(250.0))?;
+        //.apply(|p| p.SetHeight(250.0))?
+        .with_child(gui.ui())?;
 
 
-    let flyout_style = Style::CreateInstance(&FlyoutPresenter::type_name())?;
-    flyout_style.Setters()?.Append(&Setter::CreateInstance(&Control::BackgroundProperty()?, & {
+    let background_brush = {
         let brush = AcrylicBrush::new()?;
         brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
-        brush.SetFallbackColor(Color { A: 255, R: 0, G: 0, B: 0, } )?;
-        brush.SetTintColor(Color { A: 255, R: 0, G: 0, B: 0, })?;
-        //brush.SetTintOpacity(color.opacity)?;
+        brush.SetFallbackColor(colors.fallback)?;
+        brush.SetTintColor(colors.tint)?;
+        brush.SetTintOpacity(colors.opacity)?;
         brush.SetTintOpacity(0.1)?;
         brush
-    })?)?;
+    };
+
+    let flyout_style = Style::CreateInstance(&FlyoutPresenter::type_name())?;
+    flyout_style.Setters()?.Append(&Setter::CreateInstance(&Control::BackgroundProperty()?, &background_brush)?)?;
     flyout_style.Setters()?.Append(&Setter::CreateInstance(&Control::CornerRadiusProperty()?, &IInspectable::try_from(h!("10.0"))?)?)?;
+    flyout_style.Setters()?.Append(&Setter::CreateInstance(&Control::PaddingProperty()?, &IInspectable::try_from(h!("0.0"))?)?)?;
 
     let flyout = Flyout::new()?;
     flyout.SetContent(&content)?;
@@ -207,17 +210,19 @@ fn run() -> Result<()> {
                         .map_err(|err| log::warn!("Failed to read system settings: {err}"))
                         .ok()
                         .map_or_else(ColorSet::dark, |system_settings| ColorSet::system(&system_settings, &ui_settings));
-                    //gui.update_theme(&colors)
-                    //    .unwrap_or_else(|err| log::warn!("Failed to update gui theme: {err}"));
+                    background_brush.SetFallbackColor(colors.fallback)?;
+                    background_brush.SetTintColor(colors.tint)?;
+                    background_brush.SetOpacity(colors.opacity)?;
+                    content.set_theme(colors.theme)?;
                     tray.set_icon(Icon::from_resource(if colors.theme == ElementTheme::Light { BRIGHTNESS_LIGHT_ICON } else { BRIGHTNESS_DARK_ICON}, None)?);
                 }
                 CustomEvent::Backend(event) => match event {
                     BackendEvent::RegisterMonitor(name, path) => {
                         log::info!("Found monitor: {}", name);
-                        //gui.register_monitor(name, path, controller.create_proxy())?
+                        gui.register_monitor(name, path, controller.create_proxy())?
                     },
                     BackendEvent::UpdateBrightness(path, value) => {
-                        //gui.update_brightness(path, value)?;
+                        gui.update_brightness(path, value)?;
                     }
                 }
             }

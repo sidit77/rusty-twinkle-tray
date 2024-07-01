@@ -26,28 +26,16 @@ use crate::utils::error::{OptionExt, Result};
 use crate::utils::extensions::WindowExt;
 
 pub struct XamlGui {
-    hwnd: HWND,
     bottom_bar: Grid,
     monitor_panel: StackPanel,
-    background_brush: AcrylicBrush,
     main_grid: Grid,
     monitor_controls: BTreeMap<MonitorPath, MonitorEntry>,
-    _desktop_source: DesktopWindowXamlSource
 }
 
 impl XamlGui {
-    pub fn new(parent: &Window, color: &ColorSet) -> Result<Self> {
-        let desktop_source = DesktopWindowXamlSource::new()?;
-        let interop = desktop_source.cast::<IDesktopWindowXamlSourceNative>()?;
-        unsafe {
-            interop.AttachToWindow(parent.hwnd())?;
-        }
-        let island = unsafe { interop.WindowHandle() }?;
+    pub fn new() -> Result<Self> {
 
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
-
-        let red = SolidColorBrush::CreateInstanceWithColor(Color { R: 255, G: 0, B: 0, A: 170 })?;
-
 
         let stack_panel = StackPanel::vertical()?
             .with_spacing(20.0)?
@@ -57,51 +45,6 @@ impl XamlGui {
         let settings = FontIcon::new('\u{E713}')? // Modern Windows 11 Settings icon
             .with_vertical_alignment(VerticalAlignment::Center)?
             .with_font_weight(FontWeight::Medium)?;
-
-        let background_brush = {
-            let brush = AcrylicBrush::new()?;
-            brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
-            brush.SetFallbackColor(color.fallback)?;
-            brush.SetTintColor(color.tint)?;
-            //brush.SetTintOpacity(color.opacity)?;
-            brush.SetTintOpacity(0.1)?;
-            brush
-        };
-
-        let flyout_style_type = TypeName {
-            Name: h!("Windows.UI.Xaml.Controls.FlyoutPresenter").clone(),
-            Kind: TypeKind::Metadata,
-        };
-        let flyout_style = Style::CreateInstance(&flyout_style_type)?;
-        //println!("Flyout style: {:?}", DependencyProperty::GetMetadata(&flyout_style_type))?;
-        flyout_style.Setters()?.Append(&Setter::CreateInstance(&Control::BackgroundProperty()?, &background_brush)?)?;
-        flyout_style.Setters()?.Append(&Setter::CreateInstance(&Control::CornerRadiusProperty()?, &IInspectable::try_from(h!("10.0"))?)?)?;
-        //flyout_style.SetValue(&Control::BorderBrushProperty().unwrap(), &background_brush).unwrap();
-
-
-        //println!("Flyout style: {:?}", flyout_style.ReadLocalValue(&prop)?);
-        // flyout_style.SetValue(&prop, &background_brush)?;
-
-
-
-        let flyout = Flyout::new()?;
-
-        let content = StackPanel::vertical()?
-            .with_padding(450.0)?
-            //.with_background(&background_brush)?
-            .with_child(&TextBlock::new()?.with_text("Settings")?)?;
-
-        flyout.SetFlyoutPresenterStyle(&flyout_style)?;
-        //flyout.SetShouldConstrainToRootBounds(false)?;
-        flyout.SetValue(&Flyout::ContentProperty()?, (content.as_inner()))?;
-        flyout.SetValue(&FlyoutBase::ShouldConstrainToRootBoundsProperty()?, &IInspectable::try_from(false).unwrap())?;
-
-        settings.as_inner().Tapped(&TappedEventHandler::new(move |sender, _| {
-            println!("Settings clicked");
-            let sender = sender.some()?.cast::<FontIcon>()?;
-            flyout.ShowAt(&sender).unwrap();
-            Ok(())
-        }))?;
 
         // Create a new stack panel for the bottom bar
         let bottom_bar = Grid::new()?
@@ -122,37 +65,13 @@ impl XamlGui {
 
         let main_grid = Grid::new()? // Create a new grid to hold the main stackpanel and the bottom bar
             .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?
-            .with_background(&background_brush)?
-            .with_theme(color.theme)?
             // Add the main stack panel and the bottom bar to the main grid
             .with_child(&stack_panel, 0, 0)?
             .with_child(&bottom_bar, 2, 0)?;
 
-
-        //ui_settings.ColorValuesChanged(&TypedEventHandler::new(
-        //    cloned!([background_brush, main_grid]
-        //        move |ui_settings: &Option<UISettings>, _| {
-        //            let ui_settings = ui_settings.as_ref().some()?;
-        //            let colors = ColorSet::system(&system_settings, ui_settings);
-        //            main_grid.run_on_idle(cloned!([background_brush, main_grid] move || {
-        //                background_brush.SetFallbackColor(colors.fallback)?;
-        //                background_brush.SetTintColor(colors.tint)?;
-        //                background_brush.SetOpacity(colors.opacity)?;
-        //                main_grid.set_theme(colors.theme)?;
-        //                Ok(())
-        //            }))?;
-        //            Ok(())
-        //        }
-        //    )
-        //))?;
-
-        desktop_source.SetContent(&main_grid)?;
         Ok(Self {
-            hwnd: island,
             bottom_bar,
-            _desktop_source: desktop_source,
             monitor_panel: stack_panel,
-            background_brush,
             main_grid,
             monitor_controls: BTreeMap::new()
         })
@@ -178,33 +97,8 @@ impl XamlGui {
         Ok(())
     }
 
-    pub fn update_theme(&self, colors: &ColorSet) -> Result<()> {
-        self.background_brush.SetFallbackColor(colors.fallback)?;
-        self.background_brush.SetTintColor(colors.tint)?;
-        self.background_brush.SetOpacity(colors.opacity)?;
-        self.main_grid.set_theme(colors.theme)?;
-        Ok(())
-    }
-
-    pub fn resize(&self, new_size: PhysicalSize<u32>) -> Result<()> {
-        unsafe {
-            SetWindowPos(
-                self.hwnd,
-                HWND::default(),
-                0,
-                0,
-                new_size.width as _,
-                new_size.height as _,
-                SWP_SHOWWINDOW
-            )?;
-        }
-        Ok(())
-    }
-
-    pub fn focus(&self) {
-        unsafe {
-            SetFocus(self.hwnd);
-        }
+    pub fn ui(&self) -> &Grid {
+        &self.main_grid
     }
 
 }

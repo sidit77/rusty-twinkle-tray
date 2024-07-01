@@ -1,14 +1,16 @@
 use std::fmt::Debug;
 use std::future::Future;
+use flume::Sender;
 use winit::event_loop::EventLoopProxy;
 
 pub trait Sink<T> {
     fn send(&self, data: T) -> impl Future<Output = bool>;
 }
 
-impl<T: Debug> Sink<T> for EventLoopProxy<T> {
+impl<T: Debug> Sink<T> for Sender<T> {
     async fn send(&self, data: T) -> bool {
-        self.send_event(data)
+        self.send_async(data)
+            .await
             .map_err(|e| log::warn!("Eventloop closed. Dropping {:?}.", e.0))
             .is_ok()
     }

@@ -37,11 +37,10 @@ pub struct MonitorController {
 
 impl MonitorController {
 
-    pub fn new(eventloop: &EventLoop<CustomEvent>, config: Arc<Mutex<Config>>) -> Self {
-        let proxy = eventloop.create_proxy();
+    pub fn new(eventloop: Sender<CustomEvent>, config: Arc<Mutex<Config>>) -> Self {
         let (sender, receiver) = unbounded();
         let _ = sender.send(BackendCommand::QueryBrightness(None));
-        let thread = Some(spawn(move || block_on(worker_task(proxy.map(CustomEvent::Backend), receiver.stream(), config))));
+        let thread = Some(spawn(move || block_on(worker_task(eventloop.map(CustomEvent::Backend), receiver.stream(), config))));
         Self {
             sender,
             thread,

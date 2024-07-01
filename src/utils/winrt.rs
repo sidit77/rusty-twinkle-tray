@@ -1,6 +1,5 @@
 use windows::core::{Array, GUID, HSTRING, IInspectable, implement, RuntimeName, RuntimeType};
 use windows::Foundation::{DateTime, IPropertyValue_Impl, IReference, IReference_Impl, Point, PropertyType, Rect, Size, TimeSpan};
-use windows::Win32::UI::Shell::IRunnableTask_Impl;
 use windows_ext::UI::Xaml::Interop::{TypeKind, TypeName};
 
 pub trait GetTypeName {

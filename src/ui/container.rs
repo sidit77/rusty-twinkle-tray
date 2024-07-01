@@ -40,6 +40,16 @@ impl StackPanel {
         Ok(self)
     }
 
+    pub fn with_theme(self, theme: ElementTheme) -> Result<Self> {
+        self.0.SetRequestedTheme(theme)?;
+        Ok(self)
+    }
+
+    pub fn set_theme(&self, theme: ElementTheme) -> Result<()> {
+        self.0.SetRequestedTheme(theme)?;
+        Ok(())
+    }
+
     pub fn with_background<B: TryIntoParam<Brush>>(self, brush: B) -> Result<Self> {
         self.0.SetBackground(brush)?;
         Ok(self)

@@ -3,7 +3,7 @@ use std::sync::Once;
 use windows::core::{ComInterface, PCWSTR, TryIntoParam, w};
 use windows::Win32::Foundation::{HMODULE, HWND, LPARAM, LRESULT, RECT, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
-use windows::Win32::UI::WindowsAndMessaging::{CreateWindowExW, CW_USEDEFAULT, DefWindowProcW, DestroyWindow, GetClientRect, GetWindowLongPtrW, GWLP_USERDATA, HWND_TOPMOST, IsWindow, PostQuitMessage, RegisterClassExW, SetForegroundWindow, SetWindowLongPtrW, SetWindowPos, SWP_HIDEWINDOW, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SWP_SHOWWINDOW, WM_DESTROY, WM_NCCREATE, WM_SIZE, WM_SIZING, WNDCLASSEXW, WS_EX_NOREDIRECTIONBITMAP, WS_OVERLAPPEDWINDOW, WS_VISIBLE};
+use windows::Win32::UI::WindowsAndMessaging::{CreateWindowExW, CW_USEDEFAULT, DefWindowProcW, DestroyWindow, GetClientRect, GetWindowLongPtrW, GWLP_USERDATA, HWND_TOPMOST, IsWindow, PostQuitMessage, RegisterClassExW, SetForegroundWindow, SetWindowLongPtrW, SetWindowPos, SWP_HIDEWINDOW, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SWP_SHOWWINDOW, WM_DESTROY, WM_NCCREATE, WM_SIZE, WM_SIZING, WNDCLASSEXW, WS_EX_NOREDIRECTIONBITMAP, WS_OVERLAPPEDWINDOW, WS_POPUP, WS_VISIBLE};
 use windows_ext::UI::Xaml::Hosting::DesktopWindowXamlSource;
 use windows_ext::UI::Xaml::UIElement;
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
@@ -30,7 +30,7 @@ impl ProxyWindow {
                 WS_EX_NOREDIRECTIONBITMAP,
                 Self::CLASS_NAME,
                 w!("XAML Test"),
-                WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+                WS_POPUP,
                 0, 0, 100, 100,
                 None,
                 None,

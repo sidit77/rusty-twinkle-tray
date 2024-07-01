@@ -6,7 +6,7 @@ pub fn should_process_file(file: &Path, enabled: &HashSet<String>) -> bool {
         name if name == "mod.rs" => {
             let package = generate_package_name(file);
             package.is_empty() || enabled.contains(&package)
-        },
+        }
         name if name == "impl.rs" => enabled.contains("implement"),
         _ => unreachable!()
     }

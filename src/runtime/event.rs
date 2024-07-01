@@ -10,7 +10,6 @@ pub struct Event {
 }
 
 impl Event {
-
     pub fn reset(&self) {
         self.signaled.set(false);
         self.waker.set(None);
@@ -25,12 +24,8 @@ impl Event {
     }
 
     pub fn wait(&self) -> WaitFut<'_> {
-        WaitFut {
-            event: self,
-            first: true,
-        }
+        WaitFut { event: self, first: true }
     }
-
 }
 
 pub struct WaitFut<'a> {

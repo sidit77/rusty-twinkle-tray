@@ -9,9 +9,13 @@ macro_rules! new_type {
         #[repr(transparent)]
         pub struct $name($orig);
 
-        unsafe impl windows::core::ComInterface for $name { const IID: windows::core::GUID = <$orig as windows::core::ComInterface>::IID; }
+        unsafe impl windows::core::ComInterface for $name {
+            const IID: windows::core::GUID = <$orig as windows::core::ComInterface>::IID;
+        }
 
-        unsafe impl windows::core::Interface for $name { type Vtable = <$orig as windows::core::Interface>::Vtable; }
+        unsafe impl windows::core::Interface for $name {
+            type Vtable = <$orig as windows::core::Interface>::Vtable;
+        }
 
         impl windows::core::RuntimeType for $name {
             const SIGNATURE: windows::core::imp::ConstBuffer = <$orig as windows::core::RuntimeType>::SIGNATURE;
@@ -60,13 +64,14 @@ pub trait NewType {
     fn as_inner(&self) -> &Self::Inner;
 
     fn apply<F, E>(self, f: F) -> Result<Self, E>
-        where F: FnOnce(&Self::Inner) -> Result<(), E>,
-              Self: Sized {
+    where
+        F: FnOnce(&Self::Inner) -> Result<(), E>,
+        Self: Sized
+    {
         f(self.as_inner())?;
         Ok(self)
     }
 }
-
 
 //pub use dispatcher::DispatchTarget;
 
@@ -75,7 +80,7 @@ pub struct Padding {
     pub left: f64,
     pub top: f64,
     pub right: f64,
-    pub bottom: f64,
+    pub bottom: f64
 }
 
 impl From<f64> for Padding {
@@ -84,7 +89,7 @@ impl From<f64> for Padding {
             left: value,
             top: value,
             right: value,
-            bottom: value,
+            bottom: value
         }
     }
 }
@@ -95,7 +100,7 @@ impl From<(f64, f64)> for Padding {
             left: horizontal,
             top: vertical,
             right: horizontal,
-            bottom: vertical,
+            bottom: vertical
         }
     }
 }
@@ -106,7 +111,7 @@ impl From<(f64, f64, f64, f64)> for Padding {
             left: l,
             top: t,
             right: r,
-            bottom: b,
+            bottom: b
         }
     }
 }
@@ -117,7 +122,7 @@ impl From<Padding> for windows_ext::UI::Xaml::Thickness {
             Left: value.left,
             Top: value.top,
             Right: value.right,
-            Bottom: value.bottom,
+            Bottom: value.bottom
         }
     }
 }
@@ -156,7 +161,6 @@ mod dispatcher {
     use windows::core::CanTryInto;
     use windows::Foundation::IAsyncAction;
     use windows::UI::Core::IdleDispatchedHandler;
-
     use windows_ext::UI::Xaml::UIElement;
 
     pub trait DispatchTarget {
@@ -167,23 +171,20 @@ mod dispatcher {
         fn run_on_idle<F: FnMut() -> crate::Result<()> + Send + 'static>(&self, mut callback: F) -> windows::core::Result<IAsyncAction> {
             let dispatcher = self.cast::<UIElement>()?.Dispatcher()?;
             dispatcher.RunIdleAsync(&IdleDispatchedHandler::new(move |_| {
-                callback()
-                    .unwrap_or_else(|err| log::warn!("Error in callback: {err}"));
+                callback().unwrap_or_else(|err| log::warn!("Error in callback: {err}"));
                 Ok(())
             }))
         }
     }
-
 }
 
 mod style {
     use windows::core::{IInspectable, IntoParam};
-
     use windows_ext::UI::Xaml::{DependencyProperty, Setter};
 
-    use crate::Result;
     use crate::ui::NewType;
     use crate::utils::winrt::GetTypeName;
+    use crate::Result;
 
     new_type!(Style, windows_ext::UI::Xaml::Style, no_ui);
 
@@ -193,13 +194,13 @@ mod style {
         }
 
         pub fn with_setter<P, V>(self, property: P, value: V) -> Result<Self>
-            where P: IntoParam<DependencyProperty>,
-                  V: IntoParam<IInspectable> {
+        where
+            P: IntoParam<DependencyProperty>,
+            V: IntoParam<IInspectable>
+        {
             let setter = Setter::CreateInstance(property, value)?;
             self.0.Setters()?.Append(&setter)?;
             Ok(self)
         }
-
     }
-
 }

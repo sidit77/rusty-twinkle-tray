@@ -33,5 +33,4 @@ fn main() {
         res.compile().unwrap();
     }
     println!("cargo:rerun-if-changed=build.rs");
-
 }

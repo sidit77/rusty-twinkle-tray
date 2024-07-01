@@ -1,5 +1,6 @@
 use std::fmt::Debug;
 use std::future::Future;
+
 use flume::Sender;
 
 pub trait Sink<T> {
@@ -16,15 +17,14 @@ impl<T: Debug> Sink<T> for Sender<T> {
 }
 
 pub trait SinkExt<T> {
-    fn map<U, F: Fn(U) -> T>(self, func: F) -> Map<Self, F> where Self: Sized;
+    fn map<U, F: Fn(U) -> T>(self, func: F) -> Map<Self, F>
+    where
+        Self: Sized;
 }
 
 impl<T, S: Sink<T>> SinkExt<T> for S {
     fn map<U, F: Fn(U) -> T>(self, func: F) -> Map<Self, F> {
-        Map {
-            sink: self,
-            func,
-        }
+        Map { sink: self, func }
     }
 }
 

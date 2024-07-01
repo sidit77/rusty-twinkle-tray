@@ -1,17 +1,19 @@
 mod attributes;
-mod utils;
-mod whitelist;
+mod constructors;
 mod exporter;
 mod filter;
-mod constructors;
+mod utils;
+mod whitelist;
 
 use std::collections::{HashMap, HashSet};
 use std::ops::Sub;
 use std::path::{Path, PathBuf};
+
 use rayon::iter::{ParallelBridge, ParallelIterator};
 use serde::{Deserialize, Serialize};
 use walkdir::WalkDir;
 use windows_bindgen::bindgen;
+
 use crate::attributes::strip_attributes;
 use crate::constructors::generate_constructors;
 use crate::exporter::generate_export;
@@ -57,8 +59,6 @@ impl WhiteList {
     }
 }
 
-
-
 #[derive(Debug, Serialize, Deserialize)]
 struct Config {
     temp_dir: PathBuf,
@@ -70,9 +70,11 @@ struct Config {
 }
 
 fn main() {
-
     let config = {
-        let path = std::env::args().skip(1).next().expect("Missing path to target dir");
+        let path = std::env::args()
+            .skip(1)
+            .next()
+            .expect("Missing path to target dir");
         std::env::set_current_dir(path).expect("Failed to go to target dir");
         let content = std::fs::read_to_string("Codegen.toml").expect("Failed to read config file");
 
@@ -85,9 +87,11 @@ fn main() {
         let mut cached: Cache = std::fs::read_to_string(config.temp_dir.join("cache.toml"))
             .map_err(|err| println!("Failed to read cache file: {err}"))
             .ok()
-            .and_then(|f| toml::from_str(&f)
-                .map_err(|err| println!("Failed to parse cache file: {err}"))
-                .ok())
+            .and_then(|f| {
+                toml::from_str(&f)
+                    .map_err(|err| println!("Failed to parse cache file: {err}"))
+                    .ok()
+            })
             .unwrap_or_default();
 
         if cached.classes != config.classes {
@@ -100,7 +104,13 @@ fn main() {
 
             let mut args = vec![
                 String::from("--out"),
-                config.temp_dir.join("src").join("lib.rs").to_str().unwrap().to_string(),
+                config
+                    .temp_dir
+                    .join("src")
+                    .join("lib.rs")
+                    .to_str()
+                    .unwrap()
+                    .to_string(),
                 String::from("--config"),
                 String::from("package"),
             ];
@@ -112,7 +122,6 @@ fn main() {
             cached.classes = config.classes.clone();
             std::fs::write(config.temp_dir.join("cache.toml"), toml::to_string(&cached).unwrap()).unwrap();
         }
-
     }
 
     let src_dir = config.temp_dir.join("src");
@@ -126,16 +135,8 @@ fn main() {
         .map(Result::unwrap)
         .par_bridge()
         .filter(|e| e.file_type().is_file())
-        .map(|e| e
-            .path()
-            .strip_prefix(&src_dir)
-            .unwrap()
-            .to_path_buf())
-        .flat_map(|e| transform(
-            src_dir.join(&e),
-            target_dir.join(&e),
-            &config
-        ))
+        .map(|e| e.path().strip_prefix(&src_dir).unwrap().to_path_buf())
+        .flat_map(|e| transform(src_dir.join(&e), target_dir.join(&e), &config))
         .collect::<HashSet<String>>();
 
     let disabled_features = {
@@ -156,9 +157,6 @@ fn main() {
     //    &config,
     //    &mut encountered
     //);
-
-
-
 }
 
 fn transform<I: AsRef<Path>, O: AsRef<Path>>(in_file: I, out_file: O, config: &Config) -> HashSet<String> {

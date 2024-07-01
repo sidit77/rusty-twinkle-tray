@@ -2,12 +2,13 @@ mod event_loop;
 mod window;
 
 use std::mem::size_of;
-use windows::Win32::Foundation::{POINT, RECT};
-use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, MONITOR_DEFAULTTOPRIMARY, MonitorFromPoint, MONITORINFO};
-use crate::Result;
 
 pub use event_loop::event_loop;
 pub use window::ProxyWindow;
+use windows::Win32::Foundation::{POINT, RECT};
+use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, MonitorFromPoint, MONITORINFO, MONITOR_DEFAULTTOPRIMARY};
+
+use crate::Result;
 
 pub fn get_primary_work_area() -> Result<RECT> {
     unsafe {

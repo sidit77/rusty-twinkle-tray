@@ -1,13 +1,20 @@
 use std::future::Future;
-use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::task::{Context, Poll, Wake, Waker};
 use std::time::Duration;
+
 use futures_lite::pin;
 use windows::core::Error;
 use windows::Win32::Foundation::{CloseHandle, HANDLE, WAIT_ABANDONED_0, WAIT_FAILED, WAIT_OBJECT_0, WAIT_TIMEOUT};
-use windows::Win32::System::Threading::{CREATE_EVENT_INITIAL_SET, CREATE_EVENT_MANUAL_RESET, CreateEventExW, EVENT_MODIFY_STATE, INFINITE, ResetEvent, SetEvent, SYNCHRONIZATION_SYNCHRONIZE};
-use windows::Win32::UI::WindowsAndMessaging::{DispatchMessageW, MSG, MsgWaitForMultipleObjects, PeekMessageW, PM_REMOVE, QS_ALLINPUT, TranslateMessage};
+use windows::Win32::System::Threading::{
+    CreateEventExW, ResetEvent, SetEvent, CREATE_EVENT_INITIAL_SET, CREATE_EVENT_MANUAL_RESET, EVENT_MODIFY_STATE, INFINITE,
+    SYNCHRONIZATION_SYNCHRONIZE
+};
+use windows::Win32::UI::WindowsAndMessaging::{
+    DispatchMessageW, MsgWaitForMultipleObjects, PeekMessageW, TranslateMessage, MSG, PM_REMOVE, QS_ALLINPUT
+};
+
 use crate::Result;
 
 struct LoopWaker {
@@ -17,18 +24,20 @@ struct LoopWaker {
 }
 
 impl LoopWaker {
-
     pub fn new() -> crate::Result<Self> {
-        let handle = unsafe { CreateEventExW(
-            None,
-            None,
-            CREATE_EVENT_MANUAL_RESET | CREATE_EVENT_INITIAL_SET,
-            (EVENT_MODIFY_STATE | SYNCHRONIZATION_SYNCHRONIZE).0)? };
+        let handle = unsafe {
+            CreateEventExW(
+                None,
+                None,
+                CREATE_EVENT_MANUAL_RESET | CREATE_EVENT_INITIAL_SET,
+                (EVENT_MODIFY_STATE | SYNCHRONIZATION_SYNCHRONIZE).0
+            )?
+        };
 
         Ok(Self {
             event: handle,
             awake: AtomicBool::new(false),
-            notified: AtomicBool::new(true),
+            notified: AtomicBool::new(true)
         })
     }
 
@@ -37,29 +46,25 @@ impl LoopWaker {
             return;
         }
         unsafe {
-            SetEvent(self.event)
-                .unwrap_or_else(|err| log::warn!("Failed to signal event: {}", err));
+            SetEvent(self.event).unwrap_or_else(|err| log::warn!("Failed to signal event: {}", err));
         }
     }
 
     fn reset(&self) {
         unsafe {
-            ResetEvent(self.event)
-                .unwrap_or_else(|err| log::warn!("Failed to reset event: {}", err));
+            ResetEvent(self.event).unwrap_or_else(|err| log::warn!("Failed to reset event: {}", err));
         }
     }
 
     fn handle(&self) -> HANDLE {
         self.event
     }
-
 }
 
 impl Drop for LoopWaker {
     fn drop(&mut self) {
         unsafe {
-            CloseHandle(self.event)
-                .unwrap_or_else(|err| log::warn!("Failed to close handle: {}", err));
+            CloseHandle(self.event).unwrap_or_else(|err| log::warn!("Failed to close handle: {}", err));
         }
     }
 }
@@ -74,7 +79,7 @@ impl Wake for LoopWaker {
     }
 }
 
-pub fn event_loop<F: Future<Output=Result<()>>>(fut: F) -> Result<()> {
+pub fn event_loop<F: Future<Output = Result<()>>>(fut: F) -> Result<()> {
     pin!(fut);
     let notifier = Arc::new(LoopWaker::new()?);
     let waker = Waker::from(notifier.clone());
@@ -90,7 +95,7 @@ pub fn event_loop<F: Future<Output=Result<()>>>(fut: F) -> Result<()> {
                     Poll::Ready(result) => return result,
                     Poll::Pending => {
                         cont |= true;
-                    }//pump_events()
+                    } //pump_events()
                 }
             } else {
                 cont |= false;
@@ -102,12 +107,8 @@ pub fn event_loop<F: Future<Output=Result<()>>>(fut: F) -> Result<()> {
         notifier.awake.store(false, Ordering::SeqCst);
 
         match wait_for(&[notifier.handle()], None)? {
-            WaitResult::Handle(_) => {
-
-            }
-            WaitResult::Message => {
-
-            },
+            WaitResult::Handle(_) => {}
+            WaitResult::Message => {}
             WaitResult::Timeout => panic!("No timers yet! Why was this called?")
         }
     }
@@ -124,24 +125,13 @@ fn wait_for(handles: &[HANDLE], timeout: Option<Duration>) -> windows::core::Res
     const SUCCESS: u32 = WAIT_OBJECT_0.0;
     const ABANDONED: u32 = WAIT_ABANDONED_0.0;
     let timeout = timeout
-        .and_then(|d| d
-            .as_millis()
-            .try_into()
-            .ok())
+        .and_then(|d| d.as_millis().try_into().ok())
         .unwrap_or(INFINITE);
-    let result = unsafe {
-        MsgWaitForMultipleObjects(
-            Some(handles),
-            false,
-            timeout,
-            QS_ALLINPUT)
-    };
+    let result = unsafe { MsgWaitForMultipleObjects(Some(handles), false, timeout, QS_ALLINPUT) };
     match result {
-        r if (SUCCESS..SUCCESS + handles.len() as u32).contains(&r.0)
-            => Ok(WaitResult::Handle((r.0 - SUCCESS) as usize)),
+        r if (SUCCESS..SUCCESS + handles.len() as u32).contains(&r.0) => Ok(WaitResult::Handle((r.0 - SUCCESS) as usize)),
         r if r.0 == SUCCESS + handles.len() as u32 => Ok(WaitResult::Message),
-        r if (ABANDONED..ABANDONED + handles.len() as u32).contains(&r.0)
-            => panic!("One of the handles was abandoned"),
+        r if (ABANDONED..ABANDONED + handles.len() as u32).contains(&r.0) => panic!("One of the handles was abandoned"),
         WAIT_TIMEOUT => Ok(WaitResult::Timeout),
         WAIT_FAILED => Err(Error::from_win32()),
         _ => unreachable!()

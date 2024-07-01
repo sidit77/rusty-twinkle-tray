@@ -19,7 +19,6 @@ pub fn generate_export<P: AsRef<Path>>(module: &str, base: P) {
     export.push_str("*;\n");
     path.push("mod.rs");
 
-
     append(path, export).unwrap();
 }
 

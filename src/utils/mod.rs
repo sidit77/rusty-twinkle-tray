@@ -1,7 +1,7 @@
 pub mod error;
+pub mod extensions;
 pub mod logger;
 pub mod panic;
-pub mod extensions;
 pub mod string;
 pub mod winrt;
 

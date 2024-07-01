@@ -4,11 +4,13 @@ use std::fs::File;
 use std::os::windows::ffi::OsStringExt;
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
+
 use ron::de::from_reader;
-use ron::ser::{PrettyConfig, to_writer_pretty};
+use ron::ser::{to_writer_pretty, PrettyConfig};
 use serde::{Deserialize, Serialize};
 use windows::core::imp::CoTaskMemFree;
-use windows::Win32::UI::Shell::{FOLDERID_RoamingAppData, KF_FLAG_DEFAULT, SHGetKnownFolderPath};
+use windows::Win32::UI::Shell::{FOLDERID_RoamingAppData, SHGetKnownFolderPath, KF_FLAG_DEFAULT};
+
 use crate::monitors::MonitorPath;
 use crate::Result;
 
@@ -25,7 +27,7 @@ impl Default for Config {
         Self {
             dirty: true,
             restore_from_config: true,
-            monitors: Default::default(),
+            monitors: Default::default()
         }
     }
 }
@@ -36,7 +38,6 @@ pub struct MonitorSettings {
 }
 
 impl Config {
-
     pub fn path() -> &'static Path {
         static PATH: OnceLock<PathBuf> = OnceLock::new();
         PATH.get_or_init(|| {
@@ -60,8 +61,7 @@ impl Config {
         Ok(match Self::path().exists() {
             true => {
                 let file = File::open(Self::path())?;
-                from_reader(file)
-                    .map_err(|err| err.code)?
+                from_reader(file).map_err(|err| err.code)?
             }
             false => Config::default()
         })
@@ -74,7 +74,6 @@ impl Config {
         }
         Ok(())
     }
-
 }
 
 /*

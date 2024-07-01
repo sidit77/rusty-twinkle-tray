@@ -1,9 +1,9 @@
-use std::backtrace::{Backtrace};
+use std::backtrace::Backtrace;
 use std::borrow::Cow;
 use std::fmt::{Debug, Display, Formatter};
 use std::panic::Location;
-use betrayer::{ErrorSource, TrayError};
 
+use betrayer::{ErrorSource, TrayError};
 use windows::core::{Error, HRESULT};
 use windows::Win32::Foundation::{NO_ERROR, WIN32_ERROR};
 use winit::error::{EventLoopError, OsError};
@@ -82,10 +82,8 @@ impl Debug for TracedError {
             InnerError::Win(err) => debug
                 .field("code", &err.code())
                 .field("message", &err.message()),
-            InnerError::String(msg) => debug
-                .field("message", &FromDisplay(msg)),
-            InnerError::External(err) => debug
-                .field("message", &FromDisplay(err))
+            InnerError::String(msg) => debug.field("message", &FromDisplay(msg)),
+            InnerError::External(err) => debug.field("message", &FromDisplay(err))
         };
 
         if !self.backtrace.is_backtrace() {
@@ -132,13 +130,12 @@ impl From<Error> for TracedError {
 }
 
 impl From<TrayError> for TracedError {
-
     fn from(value: TrayError) -> Self {
         let inner = match value.source() {
             ErrorSource::Os(err) => {
                 let code = HRESULT(err.code().0);
                 InnerError::Win(Error::from(code))
-            },
+            }
             ErrorSource::Custom(inner) => InnerError::String(inner.clone())
         };
         Self {
@@ -149,40 +146,36 @@ impl From<TrayError> for TracedError {
 }
 
 impl From<EventLoopError> for TracedError {
-
     #[track_caller]
     fn from(value: EventLoopError) -> Self {
         Self {
             inner: InnerError::External(Box::new(value)),
-            backtrace: Trace::capture(),
+            backtrace: Trace::capture()
         }
     }
 }
 
 impl From<OsError> for TracedError {
-
     #[track_caller]
     fn from(value: OsError) -> Self {
         Self {
             inner: InnerError::External(Box::new(value)),
-            backtrace: Trace::capture(),
+            backtrace: Trace::capture()
         }
     }
 }
 
 impl From<ron::Error> for TracedError {
-
     #[track_caller]
     fn from(value: ron::Error) -> Self {
         Self {
             inner: InnerError::External(Box::new(value)),
-            backtrace: Trace::capture(),
+            backtrace: Trace::capture()
         }
     }
 }
 
 impl From<std::io::Error> for TracedError {
-
     #[track_caller]
     fn from(value: std::io::Error) -> Self {
         Self {
@@ -190,7 +183,7 @@ impl From<std::io::Error> for TracedError {
                 None => InnerError::External(Box::new(value)),
                 Some(raw) => InnerError::Win(Error::from(WIN32_ERROR(raw as _)))
             },
-            backtrace: Trace::capture(),
+            backtrace: Trace::capture()
         }
     }
 }

@@ -1,13 +1,13 @@
 use windows::core::TryIntoParam;
 use windows_ext::UI::Xaml::Controls::{ColumnDefinition, Orientation, RowDefinition};
-use windows_ext::UI::Xaml::{FrameworkElement, GridUnitType, UIElement};
 use windows_ext::UI::Xaml::Media::Brush;
-use crate::ui::{NewType, Padding, ElementTheme};
+use windows_ext::UI::Xaml::{FrameworkElement, GridUnitType, UIElement};
+
+use crate::ui::{ElementTheme, NewType, Padding};
 use crate::utils::error::Result;
 
 new_type!(StackPanel, windows_ext::UI::Xaml::Controls::StackPanel);
 impl StackPanel {
-
     pub fn vertical() -> Result<Self> {
         let inner = <Self as NewType>::Inner::new()?;
         inner.SetOrientation(Orientation::Vertical)?;
@@ -70,7 +70,6 @@ impl StackPanel {
     pub fn get_actual_height(&self) -> Result<f64> {
         Ok(self.0.ActualHeight()?)
     }
-
 }
 
 pub enum GridSize {
@@ -91,7 +90,7 @@ impl From<GridSize> for windows_ext::UI::Xaml::GridLength {
                 GridSize::Auto => GridUnitType::Auto,
                 GridSize::Pixel(_) => GridUnitType::Pixel,
                 GridSize::Fraction(_) => GridUnitType::Star
-            },
+            }
         }
     }
 }
@@ -99,12 +98,11 @@ impl From<GridSize> for windows_ext::UI::Xaml::GridLength {
 new_type!(Grid, windows_ext::UI::Xaml::Controls::Grid);
 
 impl Grid {
-
     pub fn new() -> Result<Self> {
         Ok(Self(<Self as NewType>::Inner::new()?))
     }
 
-    pub fn with_column_widths<I: IntoIterator<Item=GridSize>>(self, sizes: I) -> Result<Self> {
+    pub fn with_column_widths<I: IntoIterator<Item = GridSize>>(self, sizes: I) -> Result<Self> {
         let definitions = self.0.ColumnDefinitions()?;
         definitions.Clear()?;
         for size in sizes {
@@ -117,7 +115,7 @@ impl Grid {
         Ok(self)
     }
 
-    pub fn with_row_heights<I: IntoIterator<Item=GridSize>>(self, sizes: I) -> Result<Self> {
+    pub fn with_row_heights<I: IntoIterator<Item = GridSize>>(self, sizes: I) -> Result<Self> {
         let definitions = self.0.RowDefinitions()?;
         definitions.Clear()?;
         for size in sizes {
@@ -165,5 +163,4 @@ impl Grid {
     pub fn get_actual_height(&self) -> Result<f64> {
         Ok(self.0.ActualHeight()?)
     }
-
 }

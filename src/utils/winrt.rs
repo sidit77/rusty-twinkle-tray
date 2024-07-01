@@ -1,4 +1,4 @@
-use windows::core::{Array, GUID, HSTRING, IInspectable, implement, RuntimeName, RuntimeType};
+use windows::core::{implement, Array, IInspectable, RuntimeName, RuntimeType, GUID, HSTRING};
 use windows::Foundation::{DateTime, IPropertyValue_Impl, IReference, IReference_Impl, Point, PropertyType, Rect, Size, TimeSpan};
 use windows_ext::UI::Xaml::Interop::{TypeKind, TypeName};
 
@@ -10,17 +10,15 @@ impl<T: RuntimeName> GetTypeName for T {
     fn type_name() -> TypeName {
         TypeName {
             Name: HSTRING::from(Self::NAME),
-            Kind: TypeKind::Metadata,
+            Kind: TypeKind::Metadata
         }
     }
-
 }
-
 
 #[implement(IReference<T>)]
 pub struct Reference<T>(T)
-    where
-        T: RuntimeType + 'static;
+where
+    T: RuntimeType + 'static;
 
 impl<T: RuntimeType> Reference<T> {
     pub fn box_value(value: T) -> IReference<T> {

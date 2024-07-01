@@ -102,10 +102,8 @@ impl Write for U16TextBuffer {
 #[inline]
 pub fn hformat(args: Arguments<'_>) -> HSTRING {
     U16TextBuffer::with_local(move |buffer| {
-        buffer.write_fmt(args)
-            .expect("Failed to format");
-        HSTRING::from_wide(buffer.as_wide())
-            .unwrap()
+        buffer.write_fmt(args).expect("Failed to format");
+        HSTRING::from_wide(buffer.as_wide()).unwrap()
     })
 }
 

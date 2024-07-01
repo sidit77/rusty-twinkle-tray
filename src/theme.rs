@@ -1,11 +1,9 @@
 use std::mem::size_of;
-use windows::Win32::System::Registry::{KEY_WOW64_64KEY, RegCloseKey, RegQueryValueExW};
-use windows::Win32::System::Registry::KEY_READ;
-use windows::Win32::System::Registry::HKEY_CURRENT_USER;
-use windows::core::{PCWSTR, w};
+
+use windows::core::{w, PCWSTR};
+use windows::Win32::System::Registry::{RegCloseKey, RegOpenKeyExW, RegQueryValueExW, HKEY, HKEY_CURRENT_USER, KEY_READ, KEY_WOW64_64KEY};
 use windows::UI::Color;
 use windows::UI::ViewManagement::{UIColorType, UISettings};
-use windows::Win32::System::Registry::{HKEY, RegOpenKeyExW};
 use windows_ext::UI::Xaml::ElementTheme;
 
 use crate::Result;
@@ -18,22 +16,31 @@ pub struct ColorSet {
 }
 
 impl ColorSet {
-
     pub fn dark() -> Self {
         Self {
-            tint:Color { R: 0, G: 0, B: 0, A: 255 },
+            tint: Color { R: 0, G: 0, B: 0, A: 255 },
             fallback: Color { R: 0, G: 0, B: 0, A: 255 },
             opacity: 0.7,
-            theme: ElementTheme::Dark,
+            theme: ElementTheme::Dark
         }
     }
 
     pub fn light() -> Self {
         Self {
-            tint:Color { R: 255, G: 255, B: 255, A: 255 },
-            fallback: Color { R: 255, G: 255, B: 255, A: 255 },
+            tint: Color {
+                R: 255,
+                G: 255,
+                B: 255,
+                A: 255
+            },
+            fallback: Color {
+                R: 255,
+                G: 255,
+                B: 255,
+                A: 255
+            },
             opacity: 0.8,
-            theme: ElementTheme::Light,
+            theme: ElementTheme::Light
         }
     }
 
@@ -42,27 +49,35 @@ impl ColorSet {
             tint: color,
             fallback: color,
             opacity: 0.8,
-            theme: ElementTheme::Dark,
+            theme: ElementTheme::Dark
         }
     }
 
     pub fn system(system_settings: &SystemSettings, ui_settings: &UISettings) -> Self {
         system_settings
             .is_accent_enabled()
-            .map_err(|err| log::warn!("Could not detect accent state: {err}")).ok()
-            .and_then(| enabled| enabled
-                .then_some(UIColorType::AccentDark1)
-                .and_then(|c| ui_settings.GetColorValue(c)
-                    .map_err(|err| log::warn!("Failed to query accent color: {err}")).ok())
-                .map(Self::accent))
-            .or_else(|| system_settings
-                .is_system_theme_light()
-                .map_err(|err| log::warn!("Could not detect system theme state: {err}")).ok()
-                .and_then(|enabled| enabled
-                    .then_some(Self::light())))
+            .map_err(|err| log::warn!("Could not detect accent state: {err}"))
+            .ok()
+            .and_then(|enabled| {
+                enabled
+                    .then_some(UIColorType::AccentDark1)
+                    .and_then(|c| {
+                        ui_settings
+                            .GetColorValue(c)
+                            .map_err(|err| log::warn!("Failed to query accent color: {err}"))
+                            .ok()
+                    })
+                    .map(Self::accent)
+            })
+            .or_else(|| {
+                system_settings
+                    .is_system_theme_light()
+                    .map_err(|err| log::warn!("Could not detect system theme state: {err}"))
+                    .ok()
+                    .and_then(|enabled| enabled.then_some(Self::light()))
+            })
             .unwrap_or(Self::dark())
     }
-
 }
 
 /*
@@ -190,24 +205,26 @@ impl SystemSettings {
             )
         }?;
 
-        Ok(Self {
-            key,
-        })
+        Ok(Self { key })
     }
 
     /*
-    pub fn add_change_callback<F>(self: &Arc<Self>, callback: F) -> Result<SystemSettingsChangedCallback>
-        where F : FnMut(&SystemSettings) + Send + 'static
-    {
-        SystemSettingsChangedCallbackInner::new(self.clone(), Box::new(callback))
-            .map(SystemSettingsChangedCallback)
-    }
-*/
+        pub fn add_change_callback<F>(self: &Arc<Self>, callback: F) -> Result<SystemSettingsChangedCallback>
+            where F : FnMut(&SystemSettings) + Send + 'static
+        {
+            SystemSettingsChangedCallbackInner::new(self.clone(), Box::new(callback))
+                .map(SystemSettingsChangedCallback)
+        }
+    */
 
     unsafe fn query_value(&self, name: PCWSTR) -> Result<bool> {
         let mut data: u32 = 0;
         unsafe {
-            RegQueryValueExW(self.key, name, None, None,
+            RegQueryValueExW(
+                self.key,
+                name,
+                None,
+                None,
                 Some(&mut data as *const _ as _),
                 Some(&mut (size_of::<u32>() as u32))
             )?;
@@ -222,14 +239,12 @@ impl SystemSettings {
     pub fn is_system_theme_light(&self) -> Result<bool> {
         unsafe { self.query_value(w!("SystemUsesLightTheme")) }
     }
-
 }
 
 impl Drop for SystemSettings {
     fn drop(&mut self) {
         unsafe {
-            RegCloseKey(self.key)
-                .unwrap_or_else(|err| log::warn!("Failed to close registry key: {err}"));
+            RegCloseKey(self.key).unwrap_or_else(|err| log::warn!("Failed to close registry key: {err}"));
         }
     }
 }

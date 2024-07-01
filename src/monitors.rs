@@ -2,15 +2,17 @@ use std::fmt::{Debug, Formatter};
 use std::ops::RangeInclusive;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
+
 use serde::{Deserialize, Serialize};
 use windows::Win32::Devices::Display::*;
 use windows::Win32::Foundation::{BOOL, HANDLE};
 use windows::Win32::Graphics::Gdi::HMONITOR;
+
 use crate::monitors::gdi::find_all_gdi_monitors;
 use crate::monitors::paths::{find_all_paths, get_gdi_name, get_name_and_path};
-use crate::win_assert;
-use crate::utils::string::WStr;
 use crate::utils::error::{OptionExt, Result};
+use crate::utils::string::WStr;
+use crate::win_assert;
 
 #[derive(Clone, Eq, PartialEq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -37,7 +39,6 @@ pub struct Monitor {
 }
 
 impl Monitor {
-
     pub fn find_all() -> Result<Vec<Monitor>> {
         let monitors = find_all_gdi_monitors()?;
 
@@ -46,16 +47,8 @@ impl Monitor {
             .map(|display| {
                 let (name, path) = get_name_and_path(&display)?;
                 let gdi = get_gdi_name(&display)?;
-                let hmonitor = monitors
-                    .iter()
-                    .find(|(n, _)| n == &gdi)
-                    .some()?
-                    .1;
-                Ok(Monitor {
-                    name,
-                    path,
-                    hmonitor,
-                })
+                let hmonitor = monitors.iter().find(|(n, _)| n == &gdi).some()?.1;
+                Ok(Monitor { name, path, hmonitor })
             })
             .collect()
     }
@@ -70,26 +63,27 @@ impl Monitor {
     pub fn open(&self) -> Result<MonitorConnection> {
         MonitorConnection::open(self.hmonitor)
     }
-
 }
-
 
 pub struct MonitorConnection {
     handle: HANDLE
 }
 
 impl MonitorConnection {
-
     fn open(monitor: HMONITOR) -> Result<Self> {
         win_assert!({
             let mut n = 0;
-            unsafe { GetNumberOfPhysicalMonitorsFromHMONITOR(monitor, &mut n)?; };
+            unsafe {
+                GetNumberOfPhysicalMonitorsFromHMONITOR(monitor, &mut n)?;
+            };
             n == 1
         });
         let mut physical_monitor = PHYSICAL_MONITOR::default();
         unsafe { GetPhysicalMonitorsFromHMONITOR(monitor, std::slice::from_mut(&mut physical_monitor))? };
 
-        Ok(Self { handle: physical_monitor.hPhysicalMonitor })
+        Ok(Self {
+            handle: physical_monitor.hPhysicalMonitor
+        })
     }
 
     /*
@@ -119,8 +113,8 @@ impl MonitorConnection {
 
 #[cfg(test)]
 mod tests {
-    use crate::utils::error::Result;
     use super::*;
+    use crate::utils::error::Result;
 
     #[test]
     fn caps() -> Result<()> {
@@ -134,16 +128,11 @@ mod tests {
         }
         Ok(())
     }
-
 }
 
 impl Drop for MonitorConnection {
     fn drop(&mut self) {
-
-        unsafe {
-            DestroyPhysicalMonitor(self.handle)
-                .unwrap_or_else(|err| log::warn!("Failed to release physical monitor: {err}"))
-        }
+        unsafe { DestroyPhysicalMonitor(self.handle).unwrap_or_else(|err| log::warn!("Failed to release physical monitor: {err}")) }
     }
 }
 
@@ -168,14 +157,19 @@ bitflags! {
 }
  */
 
-
 type GdiName = WStr<32>;
 mod paths {
     use std::mem::size_of;
-    use windows::Win32::Devices::Display::{DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME, DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME, DISPLAYCONFIG_DEVICE_INFO_HEADER, DISPLAYCONFIG_MODE_INFO, DISPLAYCONFIG_PATH_INFO, DISPLAYCONFIG_SOURCE_DEVICE_NAME, DISPLAYCONFIG_TARGET_DEVICE_NAME, DisplayConfigGetDeviceInfo, GetDisplayConfigBufferSizes, QDC_ONLY_ACTIVE_PATHS, QueryDisplayConfig};
+
+    use windows::Win32::Devices::Display::{
+        DisplayConfigGetDeviceInfo, GetDisplayConfigBufferSizes, QueryDisplayConfig, DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME,
+        DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME, DISPLAYCONFIG_DEVICE_INFO_HEADER, DISPLAYCONFIG_MODE_INFO, DISPLAYCONFIG_PATH_INFO,
+        DISPLAYCONFIG_SOURCE_DEVICE_NAME, DISPLAYCONFIG_TARGET_DEVICE_NAME, QDC_ONLY_ACTIVE_PATHS
+    };
     use windows::Win32::Foundation::WIN32_ERROR;
-    use crate::utils::error::Result;
+
     use super::{GdiName, MonitorPath, WStr};
+    use crate::utils::error::Result;
 
     pub fn find_all_paths() -> Result<Vec<DISPLAYCONFIG_PATH_INFO>> {
         unsafe {
@@ -186,7 +180,14 @@ mod paths {
             let mut paths = vec![DISPLAYCONFIG_PATH_INFO::default(); path_count as usize];
             let mut modes = vec![DISPLAYCONFIG_MODE_INFO::default(); mode_count as usize];
 
-            QueryDisplayConfig(QDC_ONLY_ACTIVE_PATHS, &mut path_count, paths.as_mut_ptr(), &mut mode_count, modes.as_mut_ptr(), None)?;
+            QueryDisplayConfig(
+                QDC_ONLY_ACTIVE_PATHS,
+                &mut path_count,
+                paths.as_mut_ptr(),
+                &mut mode_count,
+                modes.as_mut_ptr(),
+                None
+            )?;
 
             Ok(paths)
         }
@@ -198,43 +199,43 @@ mod paths {
                 r#type: DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME,
                 size: size_of::<DISPLAYCONFIG_SOURCE_DEVICE_NAME>() as u32,
                 adapterId: path.sourceInfo.adapterId,
-                id: path.sourceInfo.id,
+                id: path.sourceInfo.id
             },
             ..Default::default()
         };
 
-        unsafe { WIN32_ERROR( DisplayConfigGetDeviceInfo(&mut source_name.header) as u32).ok()? };
+        unsafe { WIN32_ERROR(DisplayConfigGetDeviceInfo(&mut source_name.header) as u32).ok()? };
 
         Ok(source_name.viewGdiDeviceName.into())
     }
 
     pub(super) fn get_name_and_path(path: &DISPLAYCONFIG_PATH_INFO) -> Result<(String, MonitorPath)> {
-        let mut target_name = DISPLAYCONFIG_TARGET_DEVICE_NAME  {
+        let mut target_name = DISPLAYCONFIG_TARGET_DEVICE_NAME {
             header: DISPLAYCONFIG_DEVICE_INFO_HEADER {
                 r#type: DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME,
                 size: size_of::<DISPLAYCONFIG_TARGET_DEVICE_NAME>() as u32,
                 adapterId: path.targetInfo.adapterId,
-                id: path.targetInfo.id,
+                id: path.targetInfo.id
             },
             ..Default::default()
         };
 
-        unsafe { WIN32_ERROR( DisplayConfigGetDeviceInfo(&mut target_name.header) as u32).ok()? };
-
+        unsafe { WIN32_ERROR(DisplayConfigGetDeviceInfo(&mut target_name.header) as u32).ok()? };
 
         let path = WStr::from(target_name.monitorDevicePath).into();
         let name = WStr::from(target_name.monitorFriendlyDeviceName).to_string_lossy();
         Ok((name, path))
     }
-
 }
 
 mod gdi {
     use std::mem::size_of;
+
     use windows::Win32::Foundation::{BOOL, LPARAM, RECT, TRUE};
     use windows::Win32::Graphics::Gdi::{EnumDisplayMonitors, GetMonitorInfoW, HDC, HMONITOR, MONITORINFO, MONITORINFOEXW};
-    use crate::utils::error::Result;
+
     use super::GdiName;
+    use crate::utils::error::Result;
 
     fn find_all_hmonitors() -> Result<Vec<HMONITOR>> {
         unsafe {
@@ -267,6 +268,4 @@ mod gdi {
             .map(|hm| get_gdi_name(hm).map(|name| (name, hm)))
             .collect()
     }
-
 }
-

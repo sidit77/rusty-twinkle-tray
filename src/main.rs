@@ -1,14 +1,14 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod monitors;
-mod utils;
-mod ui;
-mod interface;
 mod backend;
 mod config;
+mod interface;
+mod monitors;
 mod power;
-mod theme;
 pub mod runtime;
+mod theme;
+mod ui;
+mod utils;
 mod windowing;
 
 use std::process::ExitCode;
@@ -18,25 +18,24 @@ use std::time::{Duration, Instant};
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use log::LevelFilter;
 use windows::core::{h, IInspectable};
-use windows::Foundation::{TypedEventHandler};
-use windows::UI::ViewManagement::UISettings;
+use windows::Foundation::TypedEventHandler;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
+use windows::UI::ViewManagement::UISettings;
+use windows_ext::UI::Xaml::Controls::Control;
+use windows_ext::UI::Xaml::ElementTheme;
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
-use windows_ext::UI::Xaml::Controls::{Control};
-use windows_ext::UI::Xaml::{ElementTheme};
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
+
 use crate::backend::{BackendEvent, MonitorController};
 use crate::config::Config;
-use crate::interface::{XamlGui};
+use crate::interface::XamlGui;
 use crate::power::{PowerEvent, PowerStateListener};
 use crate::theme::{ColorSet, SystemSettings};
 use crate::ui::container::StackPanel;
-use crate::ui::controls::{Flyout, TextBlock, FlyoutPlacementMode};
-
-use crate::utils::{logger, panic};
-use crate::utils::extensions::{ChannelExt, MutexExt};
-
+use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock};
 pub use crate::utils::error::Result;
+use crate::utils::extensions::{ChannelExt, MutexExt};
+use crate::utils::{logger, panic};
 use crate::windowing::{event_loop, get_primary_work_area, ProxyWindow};
 
 include!("../assets/ids.rs");
@@ -60,7 +59,6 @@ fn run() -> Result<()> {
     let (wnd_sender, wnd_receiver) = flume::unbounded();
     let controller = MonitorController::new(wnd_sender.clone(), config.clone());
 
-
     let ui_settings = UISettings::new()?;
     let mut colors = SystemSettings::new()
         .map_err(|err| log::warn!("Failed to read system settings: {err}"))
@@ -69,7 +67,14 @@ fn run() -> Result<()> {
 
     let tray = TrayIconBuilder::new()
         .with_tooltip("Change Brightness")
-        .with_icon(Icon::from_resource(if colors.theme == ElementTheme::Light { BRIGHTNESS_LIGHT_ICON } else { BRIGHTNESS_DARK_ICON}, None)?)
+        .with_icon(Icon::from_resource(
+            if colors.theme == ElementTheme::Light {
+                BRIGHTNESS_LIGHT_ICON
+            } else {
+                BRIGHTNESS_DARK_ICON
+            },
+            None
+        )?)
         .with_menu(Menu::new([MenuItem::button("Quit", CustomEvent::Quit)]))
         .build(cloned!([wnd_sender] move |event| wnd_sender.filter_send_ignore(match event {
             TrayEvent::Tray(ClickType::Left) => Some(CustomEvent::Show),
@@ -77,13 +82,14 @@ fn run() -> Result<()> {
             _ => None
         })))?;
 
-
     let proxy_window = ProxyWindow::new()?;
 
     let _power_listener = PowerStateListener::new({
         let proxy = controller.create_proxy();
-        move |event| if event == PowerEvent::MonitorOn {
-            proxy.refresh_brightness_in(Duration::from_secs(10));
+        move |event| {
+            if event == PowerEvent::MonitorOn {
+                proxy.refresh_brightness_in(Duration::from_secs(10));
+            }
         }
     })?;
 
@@ -94,15 +100,13 @@ fn run() -> Result<()> {
 
     let mut gui = XamlGui::new()?;
 
-    let main_content = TextBlock::new()?
-        .with_text("Hello World")?;
+    let main_content = TextBlock::new()?.with_text("Hello World")?;
     proxy_window.set_content(&main_content)?;
 
     let content = StackPanel::vertical()?
         .with_theme(colors.theme)?
         .with_width(400.0)?
         .with_child(gui.ui())?;
-
 
     let background_brush = {
         let brush = AcrylicBrush::new()?;
@@ -115,10 +119,12 @@ fn run() -> Result<()> {
     };
 
     let flyout = Flyout::new(&content)?
-        .with_style(|style| style
-            .with_setter(&Control::BackgroundProperty()?, &background_brush)?
-            .with_setter(&Control::CornerRadiusProperty()?, &IInspectable::try_from(h!("10.0"))?)?
-            .with_setter(&Control::PaddingProperty()?, &IInspectable::try_from(h!("0.0"))?))?
+        .with_style(|style| {
+            style
+                .with_setter(&Control::BackgroundProperty()?, &background_brush)?
+                .with_setter(&Control::CornerRadiusProperty()?, &IInspectable::try_from(h!("10.0"))?)?
+                .with_setter(&Control::PaddingProperty()?, &IInspectable::try_from(h!("0.0"))?)
+        })?
         .with_closed_handler(cloned!([wnd_sender] move || {
             wnd_sender.filter_send_ignore(Some(CustomEvent::FocusLost));
             Ok(())
@@ -131,19 +137,26 @@ fn run() -> Result<()> {
             match event {
                 CustomEvent::Quit => {
                     controller.shutdown();
-                    return Ok(())
-                },
-                CustomEvent::Show => if last_close.elapsed() >= Duration::from_millis(250) {
-                    proxy_window.set_visible(true);
-                    proxy_window.focus();
-                    if !proxy_window.set_foreground() {
-                        log::debug!("Failed to set window foreground");
-                        failed_foregound_workaround = true;
+                    return Ok(());
+                }
+                CustomEvent::Show => {
+                    if last_close.elapsed() >= Duration::from_millis(250) {
+                        proxy_window.set_visible(true);
+                        proxy_window.focus();
+                        if !proxy_window.set_foreground() {
+                            log::debug!("Failed to set window foreground");
+                            failed_foregound_workaround = true;
+                        }
+                        let workspace = get_primary_work_area()?;
+                        let gap = 13;
+                        flyout.show_at(
+                            &main_content,
+                            (workspace.right - gap) as f32,
+                            (workspace.bottom - gap) as f32,
+                            FlyoutPlacementMode::LeftEdgeAlignedBottom
+                        )?;
+                        controller.refresh_brightness();
                     }
-                    let workspace = get_primary_work_area()?;
-                    let gap = 13;
-                    flyout.show_at(&main_content, (workspace.right - gap) as f32, (workspace.bottom - gap) as f32, FlyoutPlacementMode::LeftEdgeAlignedBottom)?;
-                    controller.refresh_brightness();
                 }
                 CustomEvent::FocusLost => {
                     if failed_foregound_workaround {
@@ -154,7 +167,7 @@ fn run() -> Result<()> {
                     proxy_window.set_visible(false);
                     config.lock_no_poison().save_if_dirty()?;
                     last_close = Instant::now();
-                },
+                }
                 CustomEvent::ThemeChange => {
                     colors = SystemSettings::new()
                         .map_err(|err| log::warn!("Failed to read system settings: {err}"))
@@ -164,13 +177,20 @@ fn run() -> Result<()> {
                     background_brush.SetTintColor(colors.tint)?;
                     background_brush.SetOpacity(colors.opacity)?;
                     content.set_theme(colors.theme)?;
-                    tray.set_icon(Icon::from_resource(if colors.theme == ElementTheme::Light { BRIGHTNESS_LIGHT_ICON } else { BRIGHTNESS_DARK_ICON}, None)?);
+                    tray.set_icon(Icon::from_resource(
+                        if colors.theme == ElementTheme::Light {
+                            BRIGHTNESS_LIGHT_ICON
+                        } else {
+                            BRIGHTNESS_DARK_ICON
+                        },
+                        None
+                    )?);
                 }
                 CustomEvent::Backend(event) => match event {
                     BackendEvent::RegisterMonitor(name, path) => {
                         log::info!("Found monitor: {}", name);
                         gui.register_monitor(name, path, controller.create_proxy())?
-                    },
+                    }
                     BackendEvent::UpdateBrightness(path, value) => {
                         gui.update_brightness(path, value)?;
                     }
@@ -186,7 +206,6 @@ fn run() -> Result<()> {
     Ok(())
 }
 
-
 fn main() -> ExitCode {
     panic::set_hook();
     logger::init(LevelFilter::Trace, LevelFilter::Warn);
@@ -200,4 +219,3 @@ fn main() -> ExitCode {
         }
     }
 }
-

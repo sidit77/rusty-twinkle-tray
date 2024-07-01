@@ -2,20 +2,19 @@ mod event;
 mod traits;
 
 use std::cell::RefCell;
-use std::collections::{BTreeMap};
+use std::collections::BTreeMap;
 use std::future::Future;
 use std::mem::replace;
 use std::pin::Pin;
-use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::task::{Context, Poll, Wake, Waker};
 use std::thread::{current, park, park_timeout, Thread};
 use std::time::{Duration, Instant};
-use futures_lite::pin;
 
-pub use traits::*;
 pub use event::*;
-
+use futures_lite::pin;
+pub use traits::*;
 
 struct Signal {
     thread: Thread,
@@ -26,7 +25,7 @@ impl Signal {
     fn new() -> Self {
         Self {
             thread: current(),
-            signaled: AtomicBool::new(false),
+            signaled: AtomicBool::new(false)
         }
     }
 
@@ -37,7 +36,6 @@ impl Signal {
     fn reset(&self) {
         self.signaled.store(false, Ordering::SeqCst)
     }
-
 }
 
 impl Wake for Signal {
@@ -58,7 +56,6 @@ struct TimerState {
 }
 
 impl TimerState {
-
     pub fn insert_timer(&mut self, at: Instant, waker: Waker) -> usize {
         let id = self.next_id;
         self.next_id += 1;
@@ -76,9 +73,7 @@ impl TimerState {
         let pending = self.timers.split_off(&(now + Duration::from_nanos(1), 0));
         let ready = replace(&mut self.timers, pending);
 
-        ready
-            .values()
-            .for_each(Waker::wake_by_ref);
+        ready.values().for_each(Waker::wake_by_ref);
 
         if ready.is_empty() {
             self.timers
@@ -96,7 +91,7 @@ thread_local! { static LOCAL_STATE: (Arc<Signal>, RefCell<TimerState>) = (Arc::n
 pub fn block_on<F: Future>(fut: F) -> F::Output {
     pin!(fut);
 
-    LOCAL_STATE.with(|(signal, timers) | {
+    LOCAL_STATE.with(|(signal, timers)| {
         let waker = Waker::from(Arc::clone(signal));
         let mut context = Context::from_waker(&waker);
 
@@ -104,9 +99,7 @@ pub fn block_on<F: Future>(fut: F) -> F::Output {
             signal.reset();
             match fut.as_mut().poll(&mut context) {
                 Poll::Pending => {
-                    let sleep_dur = timers
-                        .borrow_mut()
-                        .process_timers();
+                    let sleep_dur = timers.borrow_mut().process_timers();
                     match signal.ready() {
                         true => continue,
                         false => match sleep_dur {
@@ -114,8 +107,8 @@ pub fn block_on<F: Future>(fut: F) -> F::Output {
                             Some(dur) => park_timeout(dur)
                         }
                     }
-                },
-                Poll::Ready(item) => break item,
+                }
+                Poll::Ready(item) => break item
             }
         }
     })
@@ -128,17 +121,11 @@ pub struct Timer {
 
 impl Timer {
     pub const fn never() -> Self {
-        Self {
-            at: None,
-            id: None,
-        }
+        Self { at: None, id: None }
     }
 
     pub const fn at(instant: Instant) -> Self {
-        Self {
-            at: Some(instant),
-            id: None,
-        }
+        Self { at: Some(instant), id: None }
     }
 
     pub fn after(duration: Duration) -> Self {
@@ -146,7 +133,6 @@ impl Timer {
             .checked_add(duration)
             .map_or_else(Self::never, Self::at)
     }
-
 }
 
 impl Future for Timer {
@@ -159,9 +145,9 @@ impl Future for Timer {
                 true => Poll::Ready(()),
                 false => {
                     if self.id.is_none() {
-                        self.id = LOCAL_STATE.with(|(_, timers)| {
-                            timers.borrow_mut().insert_timer(at, cx.waker().clone())
-                        }).into();
+                        self.id = LOCAL_STATE
+                            .with(|(_, timers)| timers.borrow_mut().insert_timer(at, cx.waker().clone()))
+                            .into();
                     }
                     Poll::Pending
                 }
@@ -179,4 +165,3 @@ impl Drop for Timer {
         }
     }
 }
-

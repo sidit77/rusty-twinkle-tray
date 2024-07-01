@@ -3,18 +3,19 @@ use std::collections::BTreeMap;
 use std::fmt::Display;
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
-use std::thread::{JoinHandle, spawn};
+use std::thread::{spawn, JoinHandle};
 use std::time::{Duration, Instant};
+
 use async_executor::LocalExecutor;
-use flume::{Sender, unbounded};
-use futures_lite::{FutureExt, Stream, StreamExt};
+use flume::{unbounded, Sender};
 use futures_lite::stream::iter;
-use crate::{CustomEvent};
+use futures_lite::{FutureExt, Stream, StreamExt};
+
 use crate::config::Config;
 use crate::monitors::{Monitor, MonitorConnection, MonitorPath};
-use crate::runtime::{block_on, Event, Timer};
+use crate::runtime::{block_on, Event, Sink, SinkExt, Timer};
 use crate::utils::extensions::MutexExt;
-use crate::runtime::{Sink, SinkExt};
+use crate::CustomEvent;
 
 #[derive(Debug, Clone)]
 enum BackendCommand {
@@ -35,15 +36,13 @@ pub struct MonitorController {
 }
 
 impl MonitorController {
-
     pub fn new(eventloop: Sender<CustomEvent>, config: Arc<Mutex<Config>>) -> Self {
         let (sender, receiver) = unbounded();
         let _ = sender.send(BackendCommand::QueryBrightness(None));
-        let thread = Some(spawn(move || block_on(worker_task(eventloop.map(CustomEvent::Backend), receiver.stream(), config))));
-        Self {
-            sender,
-            thread,
-        }
+        let thread = Some(spawn(move || {
+            block_on(worker_task(eventloop.map(CustomEvent::Backend), receiver.stream(), config))
+        }));
+        Self { sender, thread }
     }
     pub fn create_proxy(&self) -> MonitorControllerProxy {
         MonitorControllerProxy(self.sender.clone())
@@ -58,10 +57,10 @@ impl MonitorController {
     }
 
     fn send_command(&self, command: BackendCommand) {
-        self.sender.send(command)
+        self.sender
+            .send(command)
             .expect("Worker thread disappeared!");
     }
-
 }
 
 pub struct MonitorControllerProxy(Sender<BackendCommand>);
@@ -76,8 +75,7 @@ impl MonitorControllerProxy {
     }
 
     fn send_command(&self, command: BackendCommand) {
-        self.0.send(command)
-            .expect("Worker thread disappeared!");
+        self.0.send(command).expect("Worker thread disappeared!");
     }
 }
 
@@ -86,9 +84,7 @@ impl Drop for MonitorController {
         let _ = self.sender.send(BackendCommand::Stop);
         if let Some(handle) = self.thread.take() {
             log::debug!("Waiting for worker thread to shutdown!");
-            handle
-                .join()
-                .expect("worker thread panic");
+            handle.join().expect("worker thread panic");
         }
     }
 }
@@ -96,7 +92,7 @@ impl Drop for MonitorController {
 #[derive(Debug, Copy, Clone)]
 enum MonitorCommand {
     QueryBrightness(Option<u32>),
-    SetBrightness(u32, bool),
+    SetBrightness(u32, bool)
 }
 
 #[derive(Default)]
@@ -106,7 +102,6 @@ struct MonitorControl {
 }
 
 impl MonitorControl {
-
     fn request_brightness(&self, value: u32) {
         self.command.set(Some(match self.command.take() {
             None => MonitorCommand::SetBrightness(value, false),
@@ -124,13 +119,12 @@ impl MonitorControl {
         }));
         self.event.signal();
     }
-
 }
 
-
 async fn worker_task<S, R>(sender: S, mut receiver: R, config: Arc<Mutex<Config>>)
-    where S: Sink<BackendEvent> + Clone,
-          R: Stream<Item=BackendCommand> + Unpin
+where
+    S: Sink<BackendEvent> + Clone,
+    R: Stream<Item = BackendCommand> + Unpin
 {
     let sync_with_config = config.lock_no_poison().restore_from_config;
 
@@ -144,7 +138,9 @@ async fn worker_task<S, R>(sender: S, mut receiver: R, config: Arc<Mutex<Config>
         iter(monitors.into_iter())
             .then(|m| async {
                 let path = m.path().clone();
-                sender.send(BackendEvent::RegisterMonitor(m.name().to_string(), path.clone())).await;
+                sender
+                    .send(BackendEvent::RegisterMonitor(m.name().to_string(), path.clone()))
+                    .await;
                 let control = Rc::new(MonitorControl::default());
                 let task = executor.spawn(monitor_task(m, sender.clone(), control.clone()));
                 (path, (control, task))
@@ -155,62 +151,57 @@ async fn worker_task<S, R>(sender: S, mut receiver: R, config: Arc<Mutex<Config>
 
     let mut delayed_query: Option<Instant> = None;
 
-    executor.run(async {
-        loop {
-            let query_event = async {
-                delayed_query
-                    .map(Timer::at)
-                    .unwrap_or_else(Timer::never)
-                    .await;
-                BackendCommand::QueryBrightness(None)
-            };
-            let command_event = async {
-                receiver
-                    .next()
-                    .await
-                    .expect("Controller disappeared")
-            };
-            match query_event.or(command_event).await {
-                BackendCommand::QueryBrightness(None) => {
-                    delayed_query.take();
-                    let saved = sync_with_config
-                        .then(|| config.lock_no_poison());
-                    monitor_map
-                        .iter()
-                        .for_each(|(p, (c, _))| c
-                            .query_brightness(saved
-                                .as_ref()
-                                .and_then(|c|c
-                                    .monitors
-                                    .get(p))
-                                .and_then(|s| s.saved_brightness)));
-                },
-                BackendCommand::QueryBrightness(Some(delay)) => {
-                    delayed_query = delayed_query
-                        .into_iter()
-                        .chain([Instant::now() + delay])
-                        .min();
-                }
-                BackendCommand::SetBrightness(p, v) => {
-                    monitor_map
-                        .get(&p)
-                        .map(|(c, _)| c
-                            .request_brightness(v))
-                        .unwrap_or_else(|| log::warn!("Unknown monitor {:?}", p));
-                    if sync_with_config {
-                        let mut config = config.lock_no_poison();
-                        config.monitors.entry(p).or_default().saved_brightness = Some(v);
-                        config.dirty = true;
+    executor
+        .run(async {
+            loop {
+                let query_event = async {
+                    delayed_query
+                        .map(Timer::at)
+                        .unwrap_or_else(Timer::never)
+                        .await;
+                    BackendCommand::QueryBrightness(None)
+                };
+                let command_event = async { receiver.next().await.expect("Controller disappeared") };
+                match query_event.or(command_event).await {
+                    BackendCommand::QueryBrightness(None) => {
+                        delayed_query.take();
+                        let saved = sync_with_config.then(|| config.lock_no_poison());
+                        monitor_map.iter().for_each(|(p, (c, _))| {
+                            c.query_brightness(
+                                saved
+                                    .as_ref()
+                                    .and_then(|c| c.monitors.get(p))
+                                    .and_then(|s| s.saved_brightness)
+                            )
+                        });
                     }
+                    BackendCommand::QueryBrightness(Some(delay)) => {
+                        delayed_query = delayed_query
+                            .into_iter()
+                            .chain([Instant::now() + delay])
+                            .min();
+                    }
+                    BackendCommand::SetBrightness(p, v) => {
+                        monitor_map
+                            .get(&p)
+                            .map(|(c, _)| c.request_brightness(v))
+                            .unwrap_or_else(|| log::warn!("Unknown monitor {:?}", p));
+                        if sync_with_config {
+                            let mut config = config.lock_no_poison();
+                            config.monitors.entry(p).or_default().saved_brightness = Some(v);
+                            config.dirty = true;
+                        }
+                    }
+                    BackendCommand::Stop => break
                 }
-                BackendCommand::Stop => break,
             }
-        }
-    }).await;
+        })
+        .await;
 }
 
 async fn monitor_task<S>(monitor: Monitor, sender: S, control: Rc<MonitorControl>)
-    where S: Sink<BackendEvent>
+where
+    S: Sink<BackendEvent>
 {
     let mut current_brightness = None;
     let mut cached_connection: Option<MonitorConnection> = None;
@@ -222,11 +213,11 @@ async fn monitor_task<S>(monitor: Monitor, sender: S, control: Rc<MonitorControl
                 log::trace!("Closing connection to {} and going to sleep", monitor.name());
                 cached_connection = None;
                 control.event.wait().await;
-            },
+            }
             Some(MonitorCommand::SetBrightness(value, _)) if Some(value) == current_brightness => {
                 log::trace!("Brightness already at requested level {}", value);
                 continue;
-            },
+            }
             Some(command) => {
                 if cached_connection.is_none() {
                     log::trace!("Opening connection to {}", monitor.name());
@@ -250,15 +241,24 @@ async fn monitor_task<S>(monitor: Monitor, sender: S, control: Rc<MonitorControl
                                 current_brightness = Some(brightness);
                                 match target {
                                     Some(target) if target != brightness => {
-                                        log::info!("Restoring saved brightness for {} (current: {}, saved: {})", monitor.name(), brightness, target);
-                                        control.command.set(Some(MonitorCommand::SetBrightness(target, true)));
-                                    },
+                                        log::info!(
+                                            "Restoring saved brightness for {} (current: {}, saved: {})",
+                                            monitor.name(),
+                                            brightness,
+                                            target
+                                        );
+                                        control
+                                            .command
+                                            .set(Some(MonitorCommand::SetBrightness(target, true)));
+                                    }
                                     _ => {
-                                        sender.send(BackendEvent::UpdateBrightness(monitor.path().clone(), brightness)).await;
+                                        sender
+                                            .send(BackendEvent::UpdateBrightness(monitor.path().clone(), brightness))
+                                            .await;
                                     }
                                 }
-                            },
-                            Err(err) => log::warn!("Failed to query brightness: {err}"),
+                            }
+                            Err(err) => log::warn!("Failed to query brightness: {err}")
                         }
                     }
                     MonitorCommand::SetBrightness(value, notify) => {
@@ -272,7 +272,9 @@ async fn monitor_task<S>(monitor: Monitor, sender: S, control: Rc<MonitorControl
                         }
                         if notify {
                             if let Some(current) = current_brightness {
-                                sender.send(BackendEvent::UpdateBrightness(monitor.path().clone(), current)).await;
+                                sender
+                                    .send(BackendEvent::UpdateBrightness(monitor.path().clone(), current))
+                                    .await;
                             }
                         }
                     }
@@ -281,7 +283,6 @@ async fn monitor_task<S>(monitor: Monitor, sender: S, control: Rc<MonitorControl
             }
         }
     }
-
 }
 
 async fn retry<R, E: Display, F: FnMut() -> std::result::Result<R, E>>(mut op: F) -> std::result::Result<R, E> {
@@ -295,7 +296,7 @@ async fn retry<R, E: Display, F: FnMut() -> std::result::Result<R, E>>(mut op: F
                 Timer::after(Duration::from_millis(backoff_ms)).await;
                 tries += 1;
                 backoff_ms *= 2;
-            },
+            }
             Err(err) => return Err(err)
         }
     }

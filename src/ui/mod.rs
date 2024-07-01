@@ -1,8 +1,10 @@
 #![allow(dead_code)]
 
+pub use windows_ext::UI::Xaml::{ElementTheme, TextAlignment, VerticalAlignment};
+
 #[macro_export]
 macro_rules! new_type {
-    ($name:ident, $orig:ty) => {
+    ($name:ident, $orig:ty, no_ui) => {
         #[derive(Clone, Eq, PartialEq)]
         #[repr(transparent)]
         pub struct $name($orig);
@@ -33,6 +35,12 @@ macro_rules! new_type {
             }
         }
 
+        impl windows::core::CanTryInto<windows_ext::UI::Xaml::DependencyObject> for $name {
+            const CAN_INTO: bool = <$orig as windows::core::CanTryInto<windows_ext::UI::Xaml::DependencyObject>>::CAN_INTO;
+        }
+    };
+    ($name:ident, $orig:ty) => {
+        new_type!($name, $orig, no_ui);
         impl windows::core::CanTryInto<windows_ext::UI::Xaml::UIElement> for $name {
             const CAN_INTO: bool = <$orig as windows::core::CanTryInto<windows_ext::UI::Xaml::UIElement>>::CAN_INTO;
         }
@@ -45,8 +53,6 @@ macro_rules! new_type {
 
 pub mod container;
 pub mod controls;
-
-pub use windows_ext::UI::Xaml::{VerticalAlignment, TextAlignment, ElementTheme};
 
 pub trait NewType {
     type Inner;
@@ -150,6 +156,7 @@ mod dispatcher {
     use windows::core::CanTryInto;
     use windows::Foundation::IAsyncAction;
     use windows::UI::Core::IdleDispatchedHandler;
+
     use windows_ext::UI::Xaml::UIElement;
 
     pub trait DispatchTarget {
@@ -169,3 +176,30 @@ mod dispatcher {
 
 }
 
+mod style {
+    use windows::core::{IInspectable, IntoParam};
+
+    use windows_ext::UI::Xaml::{DependencyProperty, Setter};
+
+    use crate::Result;
+    use crate::ui::NewType;
+    use crate::utils::winrt::GetTypeName;
+
+    new_type!(Style, windows_ext::UI::Xaml::Style, no_ui);
+
+    impl Style {
+        pub fn new<T: GetTypeName>() -> Result<Self> {
+            Ok(Self(<Self as NewType>::Inner::CreateInstance(&T::type_name())?))
+        }
+
+        pub fn with_setter<P, V>(self, property: P, value: V) -> Result<Self>
+            where P: IntoParam<DependencyProperty>,
+                  V: IntoParam<IInspectable> {
+            let setter = Setter::CreateInstance(property, value)?;
+            self.0.Setters()?.Append(&setter)?;
+            Ok(self)
+        }
+
+    }
+
+}

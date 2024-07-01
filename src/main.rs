@@ -18,13 +18,12 @@ use std::time::{Duration, Instant};
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use log::LevelFilter;
 use windows::core::{h, IInspectable};
-use windows::Foundation::{EventHandler, Point, TypedEventHandler};
+use windows::Foundation::{TypedEventHandler};
 use windows::UI::ViewManagement::UISettings;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
-use windows_ext::UI::Xaml::Controls::{Control, Flyout, FlyoutPresenter};
-use windows_ext::UI::Xaml::Controls::Primitives::{FlyoutPlacementMode, FlyoutShowOptions};
-use windows_ext::UI::Xaml::{ElementTheme, Setter, Style};
+use windows_ext::UI::Xaml::Controls::{Control};
+use windows_ext::UI::Xaml::{ElementTheme};
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 use crate::backend::{BackendEvent, MonitorController};
 use crate::config::Config;
@@ -32,14 +31,12 @@ use crate::interface::{XamlGui};
 use crate::power::{PowerEvent, PowerStateListener};
 use crate::theme::{ColorSet, SystemSettings};
 use crate::ui::container::StackPanel;
-use crate::ui::controls::TextBlock;
-use crate::ui::NewType;
+use crate::ui::controls::{Flyout, TextBlock, FlyoutPlacementMode};
 
 use crate::utils::{logger, panic};
 use crate::utils::extensions::{ChannelExt, MutexExt};
 
 pub use crate::utils::error::Result;
-use crate::utils::winrt::{GetTypeName, Reference};
 use crate::windowing::{event_loop, get_primary_work_area, ProxyWindow};
 
 include!("../assets/ids.rs");
@@ -103,8 +100,7 @@ fn run() -> Result<()> {
 
     let content = StackPanel::vertical()?
         .with_theme(colors.theme)?
-        .apply(|p| p.SetWidth(400.0))?
-        //.apply(|p| p.SetHeight(250.0))?
+        .with_width(400.0)?
         .with_child(gui.ui())?;
 
 
@@ -118,20 +114,16 @@ fn run() -> Result<()> {
         brush
     };
 
-    let flyout_style = Style::CreateInstance(&FlyoutPresenter::type_name())?;
-    flyout_style.Setters()?.Append(&Setter::CreateInstance(&Control::BackgroundProperty()?, &background_brush)?)?;
-    flyout_style.Setters()?.Append(&Setter::CreateInstance(&Control::CornerRadiusProperty()?, &IInspectable::try_from(h!("10.0"))?)?)?;
-    flyout_style.Setters()?.Append(&Setter::CreateInstance(&Control::PaddingProperty()?, &IInspectable::try_from(h!("0.0"))?)?)?;
+    let flyout = Flyout::new(&content)?
+        .with_style(|style| style
+            .with_setter(&Control::BackgroundProperty()?, &background_brush)?
+            .with_setter(&Control::CornerRadiusProperty()?, &IInspectable::try_from(h!("10.0"))?)?
+            .with_setter(&Control::PaddingProperty()?, &IInspectable::try_from(h!("0.0"))?))?
+        .with_closed_handler(cloned!([wnd_sender] move || {
+            wnd_sender.filter_send_ignore(Some(CustomEvent::FocusLost));
+            Ok(())
+        }))?;
 
-    let flyout = Flyout::new()?;
-    flyout.SetContent(&content)?;
-    flyout.SetFlyoutPresenterStyle(&flyout_style)?;
-    flyout.SetShouldConstrainToRootBounds(false)?;
-    flyout.SetAreOpenCloseAnimationsEnabled(true)?;
-    flyout.Closed(&EventHandler::new(cloned!([wnd_sender] move |_, _| {
-        wnd_sender.filter_send_ignore(Some(CustomEvent::FocusLost));
-        Ok(())
-    })))?;
     let mut last_close = Instant::now();
     let mut failed_foregound_workaround = false;
     event_loop(async {
@@ -150,14 +142,7 @@ fn run() -> Result<()> {
                     }
                     let workspace = get_primary_work_area()?;
                     let gap = 13;
-                    let options = FlyoutShowOptions::new()?;
-                    let pt = Point {
-                        X: (workspace.right - gap) as f32,
-                        Y: (workspace.bottom - gap) as f32,
-                    };
-                    options.SetPlacement(FlyoutPlacementMode::LeftEdgeAlignedBottom)?;
-                    options.SetPosition(&Reference::box_value(pt))?;
-                    flyout.ShowAt2(main_content.as_inner(), &options)?;
+                    flyout.show_at(&main_content, (workspace.right - gap) as f32, (workspace.bottom - gap) as f32, FlyoutPlacementMode::LeftEdgeAlignedBottom)?;
                     controller.refresh_brightness();
                 }
                 CustomEvent::FocusLost => {

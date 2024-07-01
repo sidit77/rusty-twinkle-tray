@@ -45,6 +45,11 @@ impl StackPanel {
         Ok(self)
     }
 
+    pub fn with_width(self, width: f64) -> Result<Self> {
+        self.0.SetWidth(width)?;
+        Ok(self)
+    }
+
     pub fn set_theme(&self, theme: ElementTheme) -> Result<()> {
         self.0.SetRequestedTheme(theme)?;
         Ok(())

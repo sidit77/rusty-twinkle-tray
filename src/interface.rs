@@ -1,13 +1,19 @@
 use std::collections::BTreeMap;
-use windows::core::{ComInterface};
+use windows::core::{ComInterface, h, HSTRING, IInspectable, RuntimeName};
+use windows::Foundation::TypedEventHandler;
 use windows::UI::Color;
 use windows::Win32::Foundation::HWND;
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
 use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW};
 use winit::dpi::PhysicalSize;
 use winit::window::Window;
+use windows_ext::UI::Xaml::Controls::{Control, ControlTemplate, Flyout, FlyoutPresenter};
 use windows_ext::UI::Xaml::Hosting::DesktopWindowXamlSource;
-use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
+use windows_ext::UI::Xaml::Input::TappedEventHandler;
+use windows_ext::UI::Xaml::Interop::{TypeKind, TypeName};
+use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, Brush, SolidColorBrush};
+use windows_ext::UI::Xaml::{DependencyObject, DependencyProperty, Setter, Style, Thickness};
+use windows_ext::UI::Xaml::Controls::Primitives::FlyoutBase;
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use crate::{cloned, hformat};
 use crate::backend::MonitorControllerProxy;
@@ -15,8 +21,8 @@ use crate::monitors::MonitorPath;
 use crate::theme::ColorSet;
 use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::ui::controls::{Slider, TextBlock, FontIcon};
-use crate::ui::{FontWeight, TextAlignment, VerticalAlignment};
-use crate::utils::error::Result;
+use crate::ui::{FontWeight, NewType, TextAlignment, VerticalAlignment};
+use crate::utils::error::{OptionExt, Result};
 use crate::utils::extensions::WindowExt;
 
 pub struct XamlGui {
@@ -40,38 +46,79 @@ impl XamlGui {
 
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
 
+        let red = SolidColorBrush::CreateInstanceWithColor(Color { R: 255, G: 0, B: 0, A: 170 })?;
+
+
         let stack_panel = StackPanel::vertical()?
             .with_spacing(20.0)?
             .with_padding((20.0, 14.0))?;
             //.with_children(monitor_controls.iter().map(MonitorEntry::ui))?;
 
-        // Create a new stack panel for the bottom bar
-        let bottom_bar = Grid::new()?
-        .with_padding(20.0)?
-        .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
-        .with_background(&SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 70})?)?
-        .with_child(&TextBlock::new()?
-            .with_text("Adjust Brightness")?
-            .with_font_size(15.0)?
+        let settings = FontIcon::new('\u{E713}')? // Modern Windows 11 Settings icon
             .with_vertical_alignment(VerticalAlignment::Center)?
-            .with_padding((20.0, 0.0, 0.0, 0.0))?, 0, 0)?
-        .with_child(&StackPanel::horizontal()?
-            .with_child(&FontIcon::new('\u{E890}')? // New Hide Icon
-                .with_vertical_alignment(VerticalAlignment::Center)?
-                .with_font_weight(FontWeight::Medium)?)?
-            .with_child(&FontIcon::new('\u{E713}')? // Modern Windows 11 Settings icon
-                .with_vertical_alignment(VerticalAlignment::Center)?
-                .with_font_weight(FontWeight::Medium)?)?
-            .with_spacing(8.0)?, 0, 1)?;
+            .with_font_weight(FontWeight::Medium)?;
 
         let background_brush = {
             let brush = AcrylicBrush::new()?;
             brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
             brush.SetFallbackColor(color.fallback)?;
             brush.SetTintColor(color.tint)?;
-            brush.SetTintOpacity(color.opacity)?;
+            //brush.SetTintOpacity(color.opacity)?;
+            brush.SetTintOpacity(0.1)?;
             brush
         };
+
+        let flyout_style_type = TypeName {
+            Name: h!("Windows.UI.Xaml.Controls.FlyoutPresenter").clone(),
+            Kind: TypeKind::Metadata,
+        };
+        let flyout_style = Style::CreateInstance(&flyout_style_type)?;
+        //println!("Flyout style: {:?}", DependencyProperty::GetMetadata(&flyout_style_type))?;
+        flyout_style.Setters()?.Append(&Setter::CreateInstance(&Control::BackgroundProperty()?, &background_brush)?)?;
+        flyout_style.Setters()?.Append(&Setter::CreateInstance(&Control::CornerRadiusProperty()?, &IInspectable::try_from(h!("10.0"))?)?)?;
+        //flyout_style.SetValue(&Control::BorderBrushProperty().unwrap(), &background_brush).unwrap();
+
+
+        //println!("Flyout style: {:?}", flyout_style.ReadLocalValue(&prop)?);
+        // flyout_style.SetValue(&prop, &background_brush)?;
+
+
+
+        let flyout = Flyout::new()?;
+
+        let content = StackPanel::vertical()?
+            .with_padding(450.0)?
+            //.with_background(&background_brush)?
+            .with_child(&TextBlock::new()?.with_text("Settings")?)?;
+
+        flyout.SetFlyoutPresenterStyle(&flyout_style)?;
+        //flyout.SetShouldConstrainToRootBounds(false)?;
+        flyout.SetValue(&Flyout::ContentProperty()?, (content.as_inner()))?;
+        flyout.SetValue(&FlyoutBase::ShouldConstrainToRootBoundsProperty()?, &IInspectable::try_from(false).unwrap())?;
+
+        settings.as_inner().Tapped(&TappedEventHandler::new(move |sender, _| {
+            println!("Settings clicked");
+            let sender = sender.some()?.cast::<FontIcon>()?;
+            flyout.ShowAt(&sender).unwrap();
+            Ok(())
+        }))?;
+
+        // Create a new stack panel for the bottom bar
+        let bottom_bar = Grid::new()?
+            .with_padding(20.0)?
+            .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
+            .with_background(&SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 70})?)?
+            .with_child(&TextBlock::new()?
+                .with_text("Adjust Brightness")?
+                .with_font_size(15.0)?
+                .with_vertical_alignment(VerticalAlignment::Center)?
+                .with_padding((20.0, 0.0, 0.0, 0.0))?, 0, 0)?
+            .with_child(&StackPanel::horizontal()?
+                .with_child(&FontIcon::new('\u{E890}')? // New Hide Icon
+                    .with_vertical_alignment(VerticalAlignment::Center)?
+                    .with_font_weight(FontWeight::Medium)?)?
+                .with_child(&settings)?
+                .with_spacing(8.0)?, 0, 1)?;
 
         let main_grid = Grid::new()? // Create a new grid to hold the main stackpanel and the bottom bar
             .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?

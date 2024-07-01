@@ -45,13 +45,22 @@ macro_rules! new_type {
 pub mod container;
 pub mod controls;
 
+pub use windows_ext::UI::Xaml::{VerticalAlignment, TextAlignment, ElementTheme};
+
 pub trait NewType {
     type Inner;
 
     fn as_inner(&self) -> &Self::Inner;
+
+    fn apply<F, E>(self, f: F) -> Result<Self, E>
+        where F: FnOnce(&Self::Inner) -> Result<(), E>,
+              Self: Sized {
+        f(self.as_inner())?;
+        Ok(self)
+    }
 }
 
-pub use windows_ext::UI::Xaml::{VerticalAlignment, TextAlignment, ElementTheme};
+
 //pub use dispatcher::DispatchTarget;
 
 #[derive(Debug, Copy, Clone, PartialEq)]

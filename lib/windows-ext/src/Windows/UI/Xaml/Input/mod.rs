@@ -4167,7 +4167,68 @@ unsafe impl ::core::marker::Sync for StandardUICommand {}
     ::core::clone::Clone
 )]
 pub struct TappedRoutedEventArgs(::windows_core::IUnknown);
-impl TappedRoutedEventArgs {}
+impl TappedRoutedEventArgs {
+    pub fn new() -> ::windows_core::Result<Self> {
+        Self::IActivationFactory(|f| f.ActivateInstance::<Self>())
+    }
+    fn IActivationFactory<
+        R,
+        F: FnOnce(&::windows_core::imp::IGenericFactory) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            TappedRoutedEventArgs,
+            ::windows_core::imp::IGenericFactory,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    pub fn OriginalSource(
+        &self,
+    ) -> ::windows_core::Result<::windows_core::IInspectable> {
+        let this = &::windows_core::ComInterface::cast::<super::IRoutedEventArgs>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .OriginalSource)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn Handled(&self) -> ::windows_core::Result<bool> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Handled)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetHandled(&self, value: bool) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetHandled)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn GetPosition<P0>(
+        &self,
+        relativeto: P0,
+    ) -> ::windows_core::Result<super::super::super::Foundation::Point>
+    where
+        P0: ::windows_core::TryIntoParam<super::UIElement>,
+    {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetPosition)(
+                    ::windows_core::Interface::as_raw(this),
+                    relativeto.try_into_param()?.abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+}
 impl ::windows_core::RuntimeType for TappedRoutedEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Input.TappedRoutedEventArgs;{a099e6be-e624-459a-bb1d-e05c73e2cc66})",
@@ -5813,7 +5874,37 @@ pub struct RightTappedEventHandler_Vtbl {
     ::core::clone::Clone
 )]
 pub struct TappedEventHandler(pub ::windows_core::IUnknown);
-impl TappedEventHandler {}
+impl TappedEventHandler {
+    pub fn new<
+        F: FnMut(
+                ::core::option::Option<&::windows_core::IInspectable>,
+                ::core::option::Option<&TappedRoutedEventArgs>,
+            ) -> ::windows_core::Result<()> + ::core::marker::Send + 'static,
+    >(invoke: F) -> Self {
+        let com = TappedEventHandlerBox::<F> {
+            vtable: &TappedEventHandlerBox::<F>::VTABLE,
+            count: ::windows_core::imp::RefCount::new(1),
+            invoke,
+        };
+        unsafe { ::core::mem::transmute(::std::boxed::Box::new(com)) }
+    }
+    pub fn Invoke<P0, P1>(&self, sender: P0, e: P1) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<::windows_core::IInspectable>,
+        P1: ::windows_core::IntoParam<TappedRoutedEventArgs>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Invoke)(
+                    ::windows_core::Interface::as_raw(this),
+                    sender.into_param().abi(),
+                    e.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+}
 #[repr(C)]
 struct TappedEventHandlerBox<
     F: FnMut(

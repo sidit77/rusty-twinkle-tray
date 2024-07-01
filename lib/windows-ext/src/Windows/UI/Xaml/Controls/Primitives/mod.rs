@@ -6277,7 +6277,941 @@ unsafe impl ::core::marker::Sync for DragStartedEventArgs {}
     ::core::clone::Clone
 )]
 pub struct FlyoutBase(::windows_core::IUnknown);
-impl FlyoutBase {}
+impl FlyoutBase {
+    pub fn GetValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetValue<P0, P1>(&self, dp: P0, value: P1) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::super::DependencyProperty>,
+        P1: ::windows_core::IntoParam<::windows_core::IInspectable>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ClearValue<P0>(&self, dp: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ClearValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ReadLocalValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ReadLocalValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn GetAnimationBaseValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<super::super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetAnimationBaseValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn Dispatcher(
+        &self,
+    ) -> ::windows_core::Result<super::super::super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::IDependencyObject,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn RegisterPropertyChangedCallback<P0, P1>(
+        &self,
+        dp: P0,
+        callback: P1,
+    ) -> ::windows_core::Result<i64>
+    where
+        P0: ::windows_core::IntoParam<super::super::DependencyProperty>,
+        P1: ::windows_core::IntoParam<super::super::DependencyPropertyChangedCallback>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::IDependencyObject2,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RegisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    callback.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn UnregisterPropertyChangedCallback<P0>(
+        &self,
+        dp: P0,
+        token: i64,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::super::DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::IDependencyObject2,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .UnregisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    token,
+                )
+                .ok()
+        }
+    }
+    pub fn Placement(&self) -> ::windows_core::Result<FlyoutPlacementMode> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Placement)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetPlacement(
+        &self,
+        value: FlyoutPlacementMode,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetPlacement)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Opened<P0>(
+        &self,
+        handler: P0,
+    ) -> ::windows_core::Result<
+        super::super::super::super::Foundation::EventRegistrationToken,
+    >
+    where
+        P0: ::windows_core::IntoParam<
+            super::super::super::super::Foundation::EventHandler<
+                ::windows_core::IInspectable,
+            >,
+        >,
+    {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Opened)(
+                    ::windows_core::Interface::as_raw(this),
+                    handler.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn RemoveOpened(
+        &self,
+        token: super::super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .RemoveOpened)(::windows_core::Interface::as_raw(this), token)
+                .ok()
+        }
+    }
+    pub fn Closed<P0>(
+        &self,
+        handler: P0,
+    ) -> ::windows_core::Result<
+        super::super::super::super::Foundation::EventRegistrationToken,
+    >
+    where
+        P0: ::windows_core::IntoParam<
+            super::super::super::super::Foundation::EventHandler<
+                ::windows_core::IInspectable,
+            >,
+        >,
+    {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Closed)(
+                    ::windows_core::Interface::as_raw(this),
+                    handler.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn RemoveClosed(
+        &self,
+        token: super::super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .RemoveClosed)(::windows_core::Interface::as_raw(this), token)
+                .ok()
+        }
+    }
+    pub fn Opening<P0>(
+        &self,
+        handler: P0,
+    ) -> ::windows_core::Result<
+        super::super::super::super::Foundation::EventRegistrationToken,
+    >
+    where
+        P0: ::windows_core::IntoParam<
+            super::super::super::super::Foundation::EventHandler<
+                ::windows_core::IInspectable,
+            >,
+        >,
+    {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Opening)(
+                    ::windows_core::Interface::as_raw(this),
+                    handler.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn RemoveOpening(
+        &self,
+        token: super::super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .RemoveOpening)(::windows_core::Interface::as_raw(this), token)
+                .ok()
+        }
+    }
+    pub fn ShowAt<P0>(&self, placementtarget: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::super::FrameworkElement>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ShowAt)(
+                    ::windows_core::Interface::as_raw(this),
+                    placementtarget.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn Hide(&self) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Hide)(::windows_core::Interface::as_raw(this))
+                .ok()
+        }
+    }
+    pub fn Target(&self) -> ::windows_core::Result<super::super::FrameworkElement> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Target)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn AllowFocusOnInteraction(&self) -> ::windows_core::Result<bool> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .AllowFocusOnInteraction)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetAllowFocusOnInteraction(&self, value: bool) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetAllowFocusOnInteraction)(
+                    ::windows_core::Interface::as_raw(this),
+                    value,
+                )
+                .ok()
+        }
+    }
+    pub fn LightDismissOverlayMode(
+        &self,
+    ) -> ::windows_core::Result<super::LightDismissOverlayMode> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .LightDismissOverlayMode)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetLightDismissOverlayMode(
+        &self,
+        value: super::LightDismissOverlayMode,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetLightDismissOverlayMode)(
+                    ::windows_core::Interface::as_raw(this),
+                    value,
+                )
+                .ok()
+        }
+    }
+    pub fn AllowFocusWhenDisabled(&self) -> ::windows_core::Result<bool> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .AllowFocusWhenDisabled)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetAllowFocusWhenDisabled(&self, value: bool) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetAllowFocusWhenDisabled)(
+                    ::windows_core::Interface::as_raw(this),
+                    value,
+                )
+                .ok()
+        }
+    }
+    pub fn ElementSoundMode(
+        &self,
+    ) -> ::windows_core::Result<super::super::ElementSoundMode> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ElementSoundMode)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetElementSoundMode(
+        &self,
+        value: super::super::ElementSoundMode,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetElementSoundMode)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Closing<P0>(
+        &self,
+        handler: P0,
+    ) -> ::windows_core::Result<
+        super::super::super::super::Foundation::EventRegistrationToken,
+    >
+    where
+        P0: ::windows_core::IntoParam<
+            super::super::super::super::Foundation::TypedEventHandler<
+                FlyoutBase,
+                FlyoutBaseClosingEventArgs,
+            >,
+        >,
+    {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Closing)(
+                    ::windows_core::Interface::as_raw(this),
+                    handler.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn RemoveClosing(
+        &self,
+        token: super::super::super::super::Foundation::EventRegistrationToken,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .RemoveClosing)(::windows_core::Interface::as_raw(this), token)
+                .ok()
+        }
+    }
+    pub fn OverlayInputPassThroughElement(
+        &self,
+    ) -> ::windows_core::Result<super::super::DependencyObject> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase3>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .OverlayInputPassThroughElement)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetOverlayInputPassThroughElement<P0>(
+        &self,
+        value: P0,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::super::DependencyObject>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase3>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetOverlayInputPassThroughElement)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn TryInvokeKeyboardAccelerator<P0>(
+        &self,
+        args: P0,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<
+            super::super::Input::ProcessKeyboardAcceleratorEventArgs,
+        >,
+    {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase4>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .TryInvokeKeyboardAccelerator)(
+                    ::windows_core::Interface::as_raw(this),
+                    args.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ShowMode(&self) -> ::windows_core::Result<FlyoutShowMode> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ShowMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetShowMode(&self, value: FlyoutShowMode) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase5>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetShowMode)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn InputDevicePrefersPrimaryCommands(&self) -> ::windows_core::Result<bool> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .InputDevicePrefersPrimaryCommands)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn AreOpenCloseAnimationsEnabled(&self) -> ::windows_core::Result<bool> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .AreOpenCloseAnimationsEnabled)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetAreOpenCloseAnimationsEnabled(
+        &self,
+        value: bool,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase5>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetAreOpenCloseAnimationsEnabled)(
+                    ::windows_core::Interface::as_raw(this),
+                    value,
+                )
+                .ok()
+        }
+    }
+    pub fn IsOpen(&self) -> ::windows_core::Result<bool> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase5>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .IsOpen)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn ShowAt2<P0, P1>(
+        &self,
+        placementtarget: P0,
+        showoptions: P1,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::super::DependencyObject>,
+        P1: ::windows_core::TryIntoParam<FlyoutShowOptions>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase5>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ShowAt)(
+                    ::windows_core::Interface::as_raw(this),
+                    placementtarget.try_into_param()?.abi(),
+                    showoptions.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ShouldConstrainToRootBounds(&self) -> ::windows_core::Result<bool> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase6>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ShouldConstrainToRootBounds)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetShouldConstrainToRootBounds(
+        &self,
+        value: bool,
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase6>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetShouldConstrainToRootBounds)(
+                    ::windows_core::Interface::as_raw(this),
+                    value,
+                )
+                .ok()
+        }
+    }
+    pub fn IsConstrainedToRootBounds(&self) -> ::windows_core::Result<bool> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase6>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .IsConstrainedToRootBounds)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn XamlRoot(&self) -> ::windows_core::Result<super::super::XamlRoot> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase6>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .XamlRoot)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetXamlRoot<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<super::super::XamlRoot>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBase6>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetXamlRoot)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn CreatePresenter(&self) -> ::windows_core::Result<super::Control> {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBaseOverrides>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreatePresenter)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn OnProcessKeyboardAccelerators<P0>(
+        &self,
+        args: P0,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<
+            super::super::Input::ProcessKeyboardAcceleratorEventArgs,
+        >,
+    {
+        let this = &::windows_core::ComInterface::cast::<IFlyoutBaseOverrides4>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .OnProcessKeyboardAccelerators)(
+                    ::windows_core::Interface::as_raw(this),
+                    args.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn PlacementProperty() -> ::windows_core::Result<
+        super::super::DependencyProperty,
+    > {
+        Self::IFlyoutBaseStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .PlacementProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn AttachedFlyoutProperty() -> ::windows_core::Result<
+        super::super::DependencyProperty,
+    > {
+        Self::IFlyoutBaseStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .AttachedFlyoutProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn GetAttachedFlyout<P0>(element: P0) -> ::windows_core::Result<FlyoutBase>
+    where
+        P0: ::windows_core::TryIntoParam<super::super::FrameworkElement>,
+    {
+        Self::IFlyoutBaseStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetAttachedFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    element.try_into_param()?.abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn SetAttachedFlyout<P0, P1>(
+        element: P0,
+        value: P1,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::super::FrameworkElement>,
+        P1: ::windows_core::TryIntoParam<FlyoutBase>,
+    {
+        Self::IFlyoutBaseStatics(|this| unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetAttachedFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    element.try_into_param()?.abi(),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        })
+    }
+    pub fn ShowAttachedFlyout<P0>(flyoutowner: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<super::super::FrameworkElement>,
+    {
+        Self::IFlyoutBaseStatics(|this| unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ShowAttachedFlyout)(
+                    ::windows_core::Interface::as_raw(this),
+                    flyoutowner.try_into_param()?.abi(),
+                )
+                .ok()
+        })
+    }
+    pub fn AllowFocusOnInteractionProperty() -> ::windows_core::Result<
+        super::super::DependencyProperty,
+    > {
+        Self::IFlyoutBaseStatics2(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .AllowFocusOnInteractionProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn LightDismissOverlayModeProperty() -> ::windows_core::Result<
+        super::super::DependencyProperty,
+    > {
+        Self::IFlyoutBaseStatics2(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .LightDismissOverlayModeProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn AllowFocusWhenDisabledProperty() -> ::windows_core::Result<
+        super::super::DependencyProperty,
+    > {
+        Self::IFlyoutBaseStatics2(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .AllowFocusWhenDisabledProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn ElementSoundModeProperty() -> ::windows_core::Result<
+        super::super::DependencyProperty,
+    > {
+        Self::IFlyoutBaseStatics2(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ElementSoundModeProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn OverlayInputPassThroughElementProperty() -> ::windows_core::Result<
+        super::super::DependencyProperty,
+    > {
+        Self::IFlyoutBaseStatics3(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .OverlayInputPassThroughElementProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn TargetProperty() -> ::windows_core::Result<super::super::DependencyProperty> {
+        Self::IFlyoutBaseStatics5(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TargetProperty)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        })
+    }
+    pub fn ShowModeProperty() -> ::windows_core::Result<
+        super::super::DependencyProperty,
+    > {
+        Self::IFlyoutBaseStatics5(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ShowModeProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn InputDevicePrefersPrimaryCommandsProperty() -> ::windows_core::Result<
+        super::super::DependencyProperty,
+    > {
+        Self::IFlyoutBaseStatics5(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .InputDevicePrefersPrimaryCommandsProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn AreOpenCloseAnimationsEnabledProperty() -> ::windows_core::Result<
+        super::super::DependencyProperty,
+    > {
+        Self::IFlyoutBaseStatics5(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .AreOpenCloseAnimationsEnabledProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn IsOpenProperty() -> ::windows_core::Result<super::super::DependencyProperty> {
+        Self::IFlyoutBaseStatics5(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .IsOpenProperty)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        })
+    }
+    pub fn ShouldConstrainToRootBoundsProperty() -> ::windows_core::Result<
+        super::super::DependencyProperty,
+    > {
+        Self::IFlyoutBaseStatics6(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ShouldConstrainToRootBoundsProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn IFlyoutBaseStatics<
+        R,
+        F: FnOnce(&IFlyoutBaseStatics) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            FlyoutBase,
+            IFlyoutBaseStatics,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    #[doc(hidden)]
+    pub fn IFlyoutBaseStatics2<
+        R,
+        F: FnOnce(&IFlyoutBaseStatics2) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            FlyoutBase,
+            IFlyoutBaseStatics2,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    #[doc(hidden)]
+    pub fn IFlyoutBaseStatics3<
+        R,
+        F: FnOnce(&IFlyoutBaseStatics3) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            FlyoutBase,
+            IFlyoutBaseStatics3,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    #[doc(hidden)]
+    pub fn IFlyoutBaseStatics5<
+        R,
+        F: FnOnce(&IFlyoutBaseStatics5) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            FlyoutBase,
+            IFlyoutBaseStatics5,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    #[doc(hidden)]
+    pub fn IFlyoutBaseStatics6<
+        R,
+        F: FnOnce(&IFlyoutBaseStatics6) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            FlyoutBase,
+            IFlyoutBaseStatics6,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::windows_core::RuntimeType for FlyoutBase {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.FlyoutBase;{723eea0b-d12e-430d-a9f0-9bb32bbf9913})",
@@ -6334,7 +7268,136 @@ unsafe impl ::core::marker::Sync for FlyoutBaseClosingEventArgs {}
     ::core::clone::Clone
 )]
 pub struct FlyoutShowOptions(::windows_core::IUnknown);
-impl FlyoutShowOptions {}
+impl FlyoutShowOptions {
+    pub fn Position(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::super::super::Foundation::IReference<
+            super::super::super::super::Foundation::Point,
+        >,
+    > {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Position)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetPosition<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<
+            super::super::super::super::Foundation::IReference<
+                super::super::super::super::Foundation::Point,
+            >,
+        >,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetPosition)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ExclusionRect(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::super::super::Foundation::IReference<
+            super::super::super::super::Foundation::Rect,
+        >,
+    > {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ExclusionRect)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetExclusionRect<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<
+            super::super::super::super::Foundation::IReference<
+                super::super::super::super::Foundation::Rect,
+            >,
+        >,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetExclusionRect)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ShowMode(&self) -> ::windows_core::Result<FlyoutShowMode> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ShowMode)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetShowMode(&self, value: FlyoutShowMode) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetShowMode)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn Placement(&self) -> ::windows_core::Result<FlyoutPlacementMode> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Placement)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetPlacement(
+        &self,
+        value: FlyoutPlacementMode,
+    ) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetPlacement)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn new() -> ::windows_core::Result<FlyoutShowOptions> {
+        Self::IFlyoutShowOptionsFactory(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateInstance)(
+                    ::windows_core::Interface::as_raw(this),
+                    ::core::ptr::null_mut(),
+                    &mut ::core::option::Option::<::windows::core::IInspectable>::None
+                        as *mut _ as _,
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn IFlyoutShowOptionsFactory<
+        R,
+        F: FnOnce(&IFlyoutShowOptionsFactory) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            FlyoutShowOptions,
+            IFlyoutShowOptionsFactory,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::windows_core::RuntimeType for FlyoutShowOptions {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Controls.Primitives.FlyoutShowOptions;{57d693ad-0c74-54dd-b110-1ee43fabadd9})",

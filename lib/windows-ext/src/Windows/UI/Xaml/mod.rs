@@ -1,6 +1,7 @@
 pub mod Controls;
 pub mod Hosting;
 pub mod Input;
+pub mod Interop;
 pub mod Media;
 #[doc(hidden)]
 #[repr(transparent)]
@@ -1506,7 +1507,11 @@ unsafe impl ::windows_core::ComInterface for IDependencyProperty {
 #[doc(hidden)]
 pub struct IDependencyProperty_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    GetMetadata: usize,
+    pub GetMetadata: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        fortype: ::std::mem::MaybeUninit<Interop::TypeName>,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -1567,8 +1572,22 @@ pub struct IDependencyPropertyStatics_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    Register: usize,
-    RegisterAttached: usize,
+    pub Register: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        name: ::std::mem::MaybeUninit<::windows_core::HSTRING>,
+        propertytype: ::std::mem::MaybeUninit<Interop::TypeName>,
+        ownertype: ::std::mem::MaybeUninit<Interop::TypeName>,
+        typemetadata: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
+    pub RegisterAttached: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        name: ::std::mem::MaybeUninit<::windows_core::HSTRING>,
+        propertytype: ::std::mem::MaybeUninit<Interop::TypeName>,
+        ownertype: ::std::mem::MaybeUninit<Interop::TypeName>,
+        defaultmetadata: *mut ::core::ffi::c_void,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -4346,8 +4365,14 @@ pub struct IStyle_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    TargetType: usize,
-    SetTargetType: usize,
+    pub TargetType: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut ::std::mem::MaybeUninit<Interop::TypeName>,
+    ) -> ::windows_core::HRESULT,
+    pub SetTargetType: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: ::std::mem::MaybeUninit<Interop::TypeName>,
+    ) -> ::windows_core::HRESULT,
     pub BasedOn: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
@@ -4381,7 +4406,11 @@ unsafe impl ::windows_core::ComInterface for IStyleFactory {
 #[doc(hidden)]
 pub struct IStyleFactory_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    CreateInstance: usize,
+    pub CreateInstance: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        targettype: ::std::mem::MaybeUninit<Interop::TypeName>,
+        result__: *mut *mut ::core::ffi::c_void,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -7540,7 +7569,145 @@ unsafe impl ::core::marker::Sync for DebugSettings {}
     ::core::clone::Clone
 )]
 pub struct DependencyObject(::windows_core::IUnknown);
-impl DependencyObject {}
+impl DependencyObject {
+    pub fn GetValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetValue<P0, P1>(&self, dp: P0, value: P1) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+        P1: ::windows_core::IntoParam<::windows_core::IInspectable>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ClearValue<P0>(&self, dp: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ClearValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ReadLocalValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ReadLocalValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn GetAnimationBaseValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetAnimationBaseValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn Dispatcher(&self) -> ::windows_core::Result<super::Core::CoreDispatcher> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn RegisterPropertyChangedCallback<P0, P1>(
+        &self,
+        dp: P0,
+        callback: P1,
+    ) -> ::windows_core::Result<i64>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+        P1: ::windows_core::IntoParam<DependencyPropertyChangedCallback>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RegisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    callback.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn UnregisterPropertyChangedCallback<P0>(
+        &self,
+        dp: P0,
+        token: i64,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .UnregisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    token,
+                )
+                .ok()
+        }
+    }
+}
 impl ::windows_core::RuntimeType for DependencyObject {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.DependencyObject;{5c526665-f60e-4912-af59-5fe0680f089d})",
@@ -7626,7 +7793,96 @@ unsafe impl ::core::marker::Sync for DependencyObjectCollection {}
     ::core::clone::Clone
 )]
 pub struct DependencyProperty(::windows_core::IUnknown);
-impl DependencyProperty {}
+impl DependencyProperty {
+    pub fn GetMetadata<P0>(
+        &self,
+        fortype: P0,
+    ) -> ::windows_core::Result<PropertyMetadata>
+    where
+        P0: ::windows_core::IntoParam<Interop::TypeName>,
+    {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetMetadata)(
+                    ::windows_core::Interface::as_raw(this),
+                    fortype.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn UnsetValue() -> ::windows_core::Result<::windows_core::IInspectable> {
+        Self::IDependencyPropertyStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .UnsetValue)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        })
+    }
+    pub fn Register<P0, P1, P2>(
+        name: &::windows_core::HSTRING,
+        propertytype: P0,
+        ownertype: P1,
+        typemetadata: P2,
+    ) -> ::windows_core::Result<DependencyProperty>
+    where
+        P0: ::windows_core::IntoParam<Interop::TypeName>,
+        P1: ::windows_core::IntoParam<Interop::TypeName>,
+        P2: ::windows_core::TryIntoParam<PropertyMetadata>,
+    {
+        Self::IDependencyPropertyStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Register)(
+                    ::windows_core::Interface::as_raw(this),
+                    ::core::mem::transmute_copy(name),
+                    propertytype.into_param().abi(),
+                    ownertype.into_param().abi(),
+                    typemetadata.try_into_param()?.abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn RegisterAttached<P0, P1, P2>(
+        name: &::windows_core::HSTRING,
+        propertytype: P0,
+        ownertype: P1,
+        defaultmetadata: P2,
+    ) -> ::windows_core::Result<DependencyProperty>
+    where
+        P0: ::windows_core::IntoParam<Interop::TypeName>,
+        P1: ::windows_core::IntoParam<Interop::TypeName>,
+        P2: ::windows_core::TryIntoParam<PropertyMetadata>,
+    {
+        Self::IDependencyPropertyStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RegisterAttached)(
+                    ::windows_core::Interface::as_raw(this),
+                    ::core::mem::transmute_copy(name),
+                    propertytype.into_param().abi(),
+                    ownertype.into_param().abi(),
+                    defaultmetadata.try_into_param()?.abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn IDependencyPropertyStatics<
+        R,
+        F: FnOnce(&IDependencyPropertyStatics) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            DependencyProperty,
+            IDependencyPropertyStatics,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::windows_core::RuntimeType for DependencyProperty {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.DependencyProperty;{85b13970-9bc4-4e96-acf1-30c8fd3d55c8})",
@@ -8284,7 +8540,116 @@ unsafe impl ::core::marker::Sync for PointHelper {}
     ::core::clone::Clone
 )]
 pub struct PropertyMetadata(::windows_core::IUnknown);
-impl PropertyMetadata {}
+impl PropertyMetadata {
+    pub fn DefaultValue(&self) -> ::windows_core::Result<::windows_core::IInspectable> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .DefaultValue)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn CreateDefaultValueCallback(
+        &self,
+    ) -> ::windows_core::Result<CreateDefaultValueCallback> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateDefaultValueCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn CreateWithDefaultValue<P0>(
+        defaultvalue: P0,
+    ) -> ::windows_core::Result<PropertyMetadata>
+    where
+        P0: ::windows_core::IntoParam<::windows_core::IInspectable>,
+    {
+        Self::IPropertyMetadataStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateWithDefaultValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    defaultvalue.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn CreateWithDefaultValueAndCallback<P0, P1>(
+        defaultvalue: P0,
+        propertychangedcallback: P1,
+    ) -> ::windows_core::Result<PropertyMetadata>
+    where
+        P0: ::windows_core::IntoParam<::windows_core::IInspectable>,
+        P1: ::windows_core::IntoParam<PropertyChangedCallback>,
+    {
+        Self::IPropertyMetadataStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateWithDefaultValueAndCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    defaultvalue.into_param().abi(),
+                    propertychangedcallback.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn CreateWithFactory<P0>(
+        createdefaultvaluecallback: P0,
+    ) -> ::windows_core::Result<PropertyMetadata>
+    where
+        P0: ::windows_core::IntoParam<CreateDefaultValueCallback>,
+    {
+        Self::IPropertyMetadataStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateWithFactory)(
+                    ::windows_core::Interface::as_raw(this),
+                    createdefaultvaluecallback.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    pub fn CreateWithFactoryAndCallback<P0, P1>(
+        createdefaultvaluecallback: P0,
+        propertychangedcallback: P1,
+    ) -> ::windows_core::Result<PropertyMetadata>
+    where
+        P0: ::windows_core::IntoParam<CreateDefaultValueCallback>,
+        P1: ::windows_core::IntoParam<PropertyChangedCallback>,
+    {
+        Self::IPropertyMetadataStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateWithFactoryAndCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    createdefaultvaluecallback.into_param().abi(),
+                    propertychangedcallback.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn IPropertyMetadataStatics<
+        R,
+        F: FnOnce(&IPropertyMetadataStatics) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            PropertyMetadata,
+            IPropertyMetadataStatics,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::windows_core::RuntimeType for PropertyMetadata {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.PropertyMetadata;{814ef30d-8d18-448a-8644-f2cb51e70380})",
@@ -8542,7 +8907,263 @@ unsafe impl ::core::marker::Sync for ScalarTransition {}
     ::core::clone::Clone
 )]
 pub struct Setter(::windows_core::IUnknown);
-impl Setter {}
+impl Setter {
+    pub fn new() -> ::windows_core::Result<Self> {
+        Self::IActivationFactory(|f| f.ActivateInstance::<Self>())
+    }
+    fn IActivationFactory<
+        R,
+        F: FnOnce(&::windows_core::imp::IGenericFactory) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            Setter,
+            ::windows_core::imp::IGenericFactory,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    pub fn GetValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetValue<P0, P1>(&self, dp: P0, value: P1) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+        P1: ::windows_core::IntoParam<::windows_core::IInspectable>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ClearValue<P0>(&self, dp: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ClearValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ReadLocalValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ReadLocalValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn GetAnimationBaseValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetAnimationBaseValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn Dispatcher(&self) -> ::windows_core::Result<super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn RegisterPropertyChangedCallback<P0, P1>(
+        &self,
+        dp: P0,
+        callback: P1,
+    ) -> ::windows_core::Result<i64>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+        P1: ::windows_core::IntoParam<DependencyPropertyChangedCallback>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RegisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    callback.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn UnregisterPropertyChangedCallback<P0>(
+        &self,
+        dp: P0,
+        token: i64,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .UnregisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    token,
+                )
+                .ok()
+        }
+    }
+    pub fn Property(&self) -> ::windows_core::Result<DependencyProperty> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Property)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetProperty<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetProperty)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn Value(&self) -> ::windows_core::Result<::windows_core::IInspectable> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Value)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetValue2<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<::windows_core::IInspectable>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn Target(&self) -> ::windows_core::Result<TargetPropertyPath> {
+        let this = &::windows_core::ComInterface::cast::<ISetter2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Target)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetTarget<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<TargetPropertyPath>,
+    {
+        let this = &::windows_core::ComInterface::cast::<ISetter2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetTarget)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn IsSealed(&self) -> ::windows_core::Result<bool> {
+        let this = &::windows_core::ComInterface::cast::<ISetterBase>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .IsSealed)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn CreateInstance<P0, P1>(
+        targetproperty: P0,
+        value: P1,
+    ) -> ::windows_core::Result<Setter>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+        P1: ::windows_core::IntoParam<::windows_core::IInspectable>,
+    {
+        Self::ISetterFactory(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateInstance)(
+                    ::windows_core::Interface::as_raw(this),
+                    targetproperty.into_param().abi(),
+                    value.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn ISetterFactory<R, F: FnOnce(&ISetterFactory) -> ::windows_core::Result<R>>(
+        callback: F,
+    ) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<Setter, ISetterFactory> = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::windows_core::RuntimeType for Setter {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Setter;{a73ded29-b4ae-4a81-be85-e690ba0d3b6e})",
@@ -8601,7 +9222,219 @@ unsafe impl ::core::marker::Sync for SetterBase {}
     ::core::clone::Clone
 )]
 pub struct SetterBaseCollection(::windows_core::IUnknown);
-impl SetterBaseCollection {}
+impl SetterBaseCollection {
+    pub fn new() -> ::windows_core::Result<Self> {
+        Self::IActivationFactory(|f| f.ActivateInstance::<Self>())
+    }
+    fn IActivationFactory<
+        R,
+        F: FnOnce(&::windows_core::imp::IGenericFactory) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            SetterBaseCollection,
+            ::windows_core::imp::IGenericFactory,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    pub fn First(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::Foundation::Collections::IIterator<SetterBase>,
+    > {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IIterable<SetterBase>,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .First)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn IsSealed(&self) -> ::windows_core::Result<bool> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .IsSealed)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn GetAt(&self, index: u32) -> ::windows_core::Result<SetterBase> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetAt)(::windows_core::Interface::as_raw(this), index, &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn Size(&self) -> ::windows_core::Result<u32> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Size)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn GetView(
+        &self,
+    ) -> ::windows_core::Result<
+        super::super::Foundation::Collections::IVectorView<SetterBase>,
+    > {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetView)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn IndexOf<P0>(&self, value: P0, index: &mut u32) -> ::windows_core::Result<bool>
+    where
+        P0: ::windows_core::TryIntoParam<SetterBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .IndexOf)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                    index,
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetAt<P0>(&self, index: u32, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<SetterBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetAt)(
+                    ::windows_core::Interface::as_raw(this),
+                    index,
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn InsertAt<P0>(&self, index: u32, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<SetterBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .InsertAt)(
+                    ::windows_core::Interface::as_raw(this),
+                    index,
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn RemoveAt(&self, index: u32) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .RemoveAt)(::windows_core::Interface::as_raw(this), index)
+                .ok()
+        }
+    }
+    pub fn Append<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::TryIntoParam<SetterBase>,
+    {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Append)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn RemoveAtEnd(&self) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .RemoveAtEnd)(::windows_core::Interface::as_raw(this))
+                .ok()
+        }
+    }
+    pub fn Clear(&self) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Clear)(::windows_core::Interface::as_raw(this))
+                .ok()
+        }
+    }
+    pub fn GetMany(
+        &self,
+        startindex: u32,
+        items: &mut [::core::option::Option<SetterBase>],
+    ) -> ::windows_core::Result<u32> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetMany)(
+                    ::windows_core::Interface::as_raw(this),
+                    startindex,
+                    items.len().try_into().unwrap(),
+                    ::core::mem::transmute_copy(&items),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn ReplaceAll(
+        &self,
+        items: &[::core::option::Option<SetterBase>],
+    ) -> ::windows_core::Result<()> {
+        let this = &::windows_core::ComInterface::cast::<
+            super::super::Foundation::Collections::IVector<SetterBase>,
+        >(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ReplaceAll)(
+                    ::windows_core::Interface::as_raw(this),
+                    items.len().try_into().unwrap(),
+                    ::core::mem::transmute(items.as_ptr()),
+                )
+                .ok()
+        }
+    }
+}
 impl ::windows_core::RuntimeType for SetterBaseCollection {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.SetterBaseCollection;{03c40ca8-909e-4117-811c-a4529496bdf1})",
@@ -8767,7 +9600,252 @@ unsafe impl ::core::marker::Sync for StateTriggerBase {}
     ::core::clone::Clone
 )]
 pub struct Style(::windows_core::IUnknown);
-impl Style {}
+impl Style {
+    pub fn new() -> ::windows_core::Result<Self> {
+        Self::IActivationFactory(|f| f.ActivateInstance::<Self>())
+    }
+    fn IActivationFactory<
+        R,
+        F: FnOnce(&::windows_core::imp::IGenericFactory) -> ::windows_core::Result<R>,
+    >(callback: F) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<
+            Style,
+            ::windows_core::imp::IGenericFactory,
+        > = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+    pub fn GetValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn SetValue<P0, P1>(&self, dp: P0, value: P1) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+        P1: ::windows_core::IntoParam<::windows_core::IInspectable>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ClearValue<P0>(&self, dp: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .ClearValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn ReadLocalValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .ReadLocalValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn GetAnimationBaseValue<P0>(
+        &self,
+        dp: P0,
+    ) -> ::windows_core::Result<::windows_core::IInspectable>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .GetAnimationBaseValue)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn Dispatcher(&self) -> ::windows_core::Result<super::Core::CoreDispatcher> {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Dispatcher)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn RegisterPropertyChangedCallback<P0, P1>(
+        &self,
+        dp: P0,
+        callback: P1,
+    ) -> ::windows_core::Result<i64>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+        P1: ::windows_core::IntoParam<DependencyPropertyChangedCallback>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .RegisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    callback.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        }
+    }
+    pub fn UnregisterPropertyChangedCallback<P0>(
+        &self,
+        dp: P0,
+        token: i64,
+    ) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<DependencyProperty>,
+    {
+        let this = &::windows_core::ComInterface::cast::<IDependencyObject2>(self)?;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .UnregisterPropertyChangedCallback)(
+                    ::windows_core::Interface::as_raw(this),
+                    dp.into_param().abi(),
+                    token,
+                )
+                .ok()
+        }
+    }
+    pub fn IsSealed(&self) -> ::windows_core::Result<bool> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .IsSealed)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn Setters(&self) -> ::windows_core::Result<SetterBaseCollection> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Setters)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn TargetType(&self) -> ::windows_core::Result<Interop::TypeName> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .TargetType)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetTargetType<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<Interop::TypeName>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetTargetType)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn BasedOn(&self) -> ::windows_core::Result<Style> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .BasedOn)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetBasedOn<P0>(&self, value: P0) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<Style>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetBasedOn)(
+                    ::windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+    pub fn Seal(&self) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Seal)(::windows_core::Interface::as_raw(this))
+                .ok()
+        }
+    }
+    pub fn CreateInstance<P0>(targettype: P0) -> ::windows_core::Result<Style>
+    where
+        P0: ::windows_core::IntoParam<Interop::TypeName>,
+    {
+        Self::IStyleFactory(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .CreateInstance)(
+                    ::windows_core::Interface::as_raw(this),
+                    targettype.into_param().abi(),
+                    &mut result__,
+                )
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn IStyleFactory<R, F: FnOnce(&IStyleFactory) -> ::windows_core::Result<R>>(
+        callback: F,
+    ) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<Style, IStyleFactory> = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::windows_core::RuntimeType for Style {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Style;{c4a9f225-9db7-4a7d-b6d1-f74edb9293c2})",

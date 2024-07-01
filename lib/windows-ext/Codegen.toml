@@ -15,6 +15,7 @@ features = [
     "UI_Xaml_Hosting",
     "UI_Xaml_Media",
     "UI_Xaml_Input",
+    "UI_Xaml_Interop",
     "Win32_System_WinRT_Xaml",
     "Win32_Foundation",
     "Foundation_Collections"
@@ -37,7 +38,9 @@ constructors = [
     "FontIcon",
     "TextBox",
     "Slider",
-    "AcrylicBrush"
+    "AcrylicBrush",
+    "Flyout",
+    "FlyoutShowOptions"
 ]
 
 [white_list]
@@ -60,6 +63,9 @@ RangeBaseValueChangedEventArgs = true
 PointerEventHandler = true
 PointerRoutedEventArgs = true
 
+TappedEventHandler = true
+TappedRoutedEventArgs = true
+
 AcrylicBrush = true
 SolidColorBrush = true
 
@@ -71,3 +77,14 @@ FontIcon = true
 TextBlock = true
 TextBox = true
 Slider = true
+Flyout = true
+
+Style = true
+DependencyProperty = true
+PropertyMetadata = true
+Control = true
+DependencyObject = true
+FlyoutBase = true
+SetterBaseCollection = true
+Setter = true
+FlyoutShowOptions = true

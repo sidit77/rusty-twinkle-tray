@@ -40,6 +40,11 @@ impl StackPanel {
         Ok(self)
     }
 
+    pub fn with_background<B: TryIntoParam<Brush>>(self, brush: B) -> Result<Self> {
+        self.0.SetBackground(brush)?;
+        Ok(self)
+    }
+
     //pub fn with_children<T: TryIntoParam<UIElement>, I: IntoIterator<Item=T>>(mut self, children: I) -> Result<Self> {
     //    for child in children {
     //        self.add_child(child)?;

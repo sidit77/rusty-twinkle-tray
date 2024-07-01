@@ -26,6 +26,7 @@ futures-lite = "2"
 windows-version = "0.1"
 windows-ext = { path = "lib/windows-ext" }
 windows = { version = "0.52", features = [
+    "implement",
     "Win32_Foundation",
     "Win32_System_LibraryLoader",
     "Win32_System_WinRT",

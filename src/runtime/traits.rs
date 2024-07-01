@@ -1,7 +1,6 @@
 use std::fmt::Debug;
 use std::future::Future;
 use flume::Sender;
-use winit::event_loop::EventLoopProxy;
 
 pub trait Sink<T> {
     fn send(&self, data: T) -> impl Future<Output = bool>;

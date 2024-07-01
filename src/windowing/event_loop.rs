@@ -85,7 +85,6 @@ pub fn event_loop<F: Future<Output=Result<()>>>(fut: F) -> Result<()> {
         while {
             let mut cont = !pump_events();
             if notifier.notified.swap(false, Ordering::SeqCst) {
-                println!("Schedule future");
                 let mut cx = Context::from_waker(&waker);
                 match fut.as_mut().poll(&mut cx) {
                     Poll::Ready(result) => return result,
@@ -158,7 +157,6 @@ fn pump_events() -> bool {
             DispatchMessageW(&message);
             limit -= 1;
             if limit <= 0 {
-                println!("pausing");
                 return false;
             }
         }

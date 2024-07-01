@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 
 #[macro_export]
 macro_rules! new_type {

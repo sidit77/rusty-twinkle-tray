@@ -9,7 +9,6 @@ use async_executor::LocalExecutor;
 use flume::{Sender, unbounded};
 use futures_lite::{FutureExt, Stream, StreamExt};
 use futures_lite::stream::iter;
-use winit::event_loop::{EventLoop};
 use crate::{CustomEvent};
 use crate::config::Config;
 use crate::monitors::{Monitor, MonitorConnection, MonitorPath};

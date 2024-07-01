@@ -15,28 +15,17 @@ use std::process::ExitCode;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
-use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder, winit::WinitTrayIconBuilderExt};
+use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use log::LevelFilter;
-use windows::core::{Array, ComInterface, GUID, h, HSTRING, IInspectable, implement, IntoParam, RuntimeType};
-use windows::Foundation::{DateTime, EventHandler, IPropertyValue_Impl, IReference, IReference_Impl, Point, PropertyType, Rect, Size, TimeSpan, TypedEventHandler};
-use windows::UI::Color;
+use windows::core::{h, IInspectable};
+use windows::Foundation::{EventHandler, Point, TypedEventHandler};
 use windows::UI::ViewManagement::UISettings;
-use windows::Win32::Foundation::HWND;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
-use windows::Win32::UI::WindowsAndMessaging::{HWND_TOPMOST, SetForegroundWindow, SetWindowPos, SWP_NOZORDER, SWP_SHOWWINDOW};
-use windows_ext::UI::Xaml::Hosting::{DesktopWindowXamlSource, WindowsXamlManager};
-use windows_ext::UI::Xaml::Input::{FocusManager, LosingFocusEventArgs};
-use winit::dpi::{LogicalSize, PhysicalPosition, PhysicalSize};
-use winit::event::{Event, WindowEvent};
-use winit::event_loop::{DeviceEvents, EventLoopBuilder};
-use winit::platform::windows::{WindowBuilderExtWindows, WindowExtWindows};
-use winit::window::{WindowBuilder, WindowButtons, WindowLevel};
+use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
 use windows_ext::UI::Xaml::Controls::{Control, Flyout, FlyoutPresenter};
-use windows_ext::UI::Xaml::Controls::Primitives::FlyoutShowOptions;
+use windows_ext::UI::Xaml::Controls::Primitives::{FlyoutPlacementMode, FlyoutShowOptions};
 use windows_ext::UI::Xaml::{ElementTheme, Setter, Style};
-use windows_ext::UI::Xaml::Interop::{TypeKind, TypeName};
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
-use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use crate::backend::{BackendEvent, MonitorController};
 use crate::config::Config;
 use crate::interface::{XamlGui};
@@ -46,13 +35,12 @@ use crate::ui::container::StackPanel;
 use crate::ui::controls::TextBlock;
 use crate::ui::NewType;
 
-use crate::utils::error::{OptionExt};
 use crate::utils::{logger, panic};
-use crate::utils::extensions::{BorderColor, ChannelExt, EventLoopExt, MonitorHandleExt, MutexExt, WindowExt};
+use crate::utils::extensions::{ChannelExt, MutexExt};
 
 pub use crate::utils::error::Result;
 use crate::utils::winrt::{GetTypeName, Reference};
-use crate::windowing::{event_loop, ProxyWindow};
+use crate::windowing::{event_loop, get_primary_work_area, ProxyWindow};
 
 include!("../assets/ids.rs");
 
@@ -141,9 +129,6 @@ fn run() -> Result<()> {
     })))?;
 
     let mut gui = XamlGui::new()?;
-    //window.set_border_color(BorderColor::NONE);
-    //Drop input focus
-    //window.set_enable(false);
 
     let main_content = TextBlock::new()?
         .with_text("Hello World")?;
@@ -181,28 +166,41 @@ fn run() -> Result<()> {
         Ok(())
     })))?;
     let mut last_close = Instant::now();
+    let mut failed_foregound_workaround = false;
     event_loop(async {
         while let Ok(event) = wnd_receiver.recv_async().await {
             match event {
-                CustomEvent::Quit => return Ok(()),
+                CustomEvent::Quit => {
+                    controller.shutdown();
+                    return Ok(())
+                },
                 CustomEvent::Show => if last_close.elapsed() >= Duration::from_millis(250) {
                     proxy_window.set_visible(true);
-                    // window.set_window_level(WindowLevel::AlwaysOnTop);
-                    proxy_window.set_foreground();
-
+                    proxy_window.focus();
+                    if !proxy_window.set_foreground() {
+                        log::debug!("Failed to set window foreground");
+                        failed_foregound_workaround = true;
+                    }
+                    let workspace = get_primary_work_area()?;
+                    let gap = 13;
                     let options = FlyoutShowOptions::new()?;
                     let pt = Point {
-                        X: 1600.0,
-                        Y: 990.0,
+                        X: (workspace.right - gap) as f32,
+                        Y: (workspace.bottom - gap) as f32,
                     };
+                    options.SetPlacement(FlyoutPlacementMode::LeftEdgeAlignedBottom)?;
                     options.SetPosition(&Reference::box_value(pt))?;
                     flyout.ShowAt2(main_content.as_inner(), &options)?;
-                    println!("Show");
+                    controller.refresh_brightness();
                 }
                 CustomEvent::FocusLost => {
-                    println!("Closed");
+                    if failed_foregound_workaround {
+                        let _ = wnd_sender.send(CustomEvent::Show);
+                        failed_foregound_workaround = false;
+                        continue;
+                    }
                     proxy_window.set_visible(false);
-                    //config.lock_no_poison().save_if_dirty()?;
+                    config.lock_no_poison().save_if_dirty()?;
                     last_close = Instant::now();
                 },
                 CustomEvent::ThemeChange => {
@@ -328,6 +326,7 @@ fn run() -> Result<()> {
             Ok(())
         })?;
     */
+    controller.shutdown();
     config.lock_no_poison().save_if_dirty()?;
     unsafe { RoUninitialize() }
     Ok(())

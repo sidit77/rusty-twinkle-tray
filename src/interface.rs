@@ -1,32 +1,15 @@
 use std::collections::BTreeMap;
-use windows::core::{ComInterface, h, HSTRING, IInspectable, RuntimeName};
-use windows::Foundation::TypedEventHandler;
 use windows::UI::Color;
-use windows::Win32::Foundation::HWND;
-use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
-use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, SWP_SHOWWINDOW};
-use winit::dpi::PhysicalSize;
-use winit::window::Window;
-use windows_ext::UI::Xaml::Controls::{Control, ControlTemplate, Flyout, FlyoutPresenter};
-use windows_ext::UI::Xaml::Hosting::DesktopWindowXamlSource;
-use windows_ext::UI::Xaml::Input::TappedEventHandler;
-use windows_ext::UI::Xaml::Interop::{TypeKind, TypeName};
-use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, Brush, SolidColorBrush};
-use windows_ext::UI::Xaml::{DependencyObject, DependencyProperty, Setter, Style, Thickness};
-use windows_ext::UI::Xaml::Controls::Primitives::FlyoutBase;
-use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
+use windows_ext::UI::Xaml::Media::{SolidColorBrush};
 use crate::{cloned, hformat};
 use crate::backend::MonitorControllerProxy;
 use crate::monitors::MonitorPath;
-use crate::theme::ColorSet;
 use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::ui::controls::{Slider, TextBlock, FontIcon};
-use crate::ui::{FontWeight, NewType, TextAlignment, VerticalAlignment};
-use crate::utils::error::{OptionExt, Result};
-use crate::utils::extensions::WindowExt;
+use crate::ui::{FontWeight, TextAlignment, VerticalAlignment};
+use crate::utils::error::{Result};
 
 pub struct XamlGui {
-    bottom_bar: Grid,
     monitor_panel: StackPanel,
     main_grid: Grid,
     monitor_controls: BTreeMap<MonitorPath, MonitorEntry>,
@@ -70,16 +53,15 @@ impl XamlGui {
             .with_child(&bottom_bar, 2, 0)?;
 
         Ok(Self {
-            bottom_bar,
             monitor_panel: stack_panel,
             main_grid,
             monitor_controls: BTreeMap::new()
         })
     }
 
-    pub fn get_required_height(&self) -> Result<u32> {
-        Ok((self.monitor_panel.get_actual_height()? + self.bottom_bar.get_actual_height()?) as u32)
-    }
+    //pub fn get_required_height(&self) -> Result<u32> {
+    //    Ok((self.monitor_panel.get_actual_height()? + self.bottom_bar.get_actual_height()?) as u32)
+    //}
 
     pub fn register_monitor(&mut self, name: String, path: MonitorPath, proxy: MonitorControllerProxy) -> Result<()> {
         assert!(!self.monitor_controls.contains_key(&path));

@@ -4,6 +4,7 @@ use std::sync::Once;
 use windows::core::{w, ComInterface, TryIntoParam, PCWSTR};
 use windows::Win32::Foundation::{HMODULE, HWND, LPARAM, LRESULT, RECT, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
+use windows::Win32::UI::HiDpi::GetDpiForWindow;
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
 use windows::Win32::UI::WindowsAndMessaging::*;
 use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
@@ -87,6 +88,12 @@ impl ProxyWindow {
     pub fn focus(&self) {
         unsafe {
             SetFocus(self.hwnd);
+        }
+    }
+
+    pub fn dpi(&self) -> f32 {
+        unsafe {
+            GetDpiForWindow(self.hwnd) as f32 / USER_DEFAULT_SCREEN_DPI as f32
         }
     }
 

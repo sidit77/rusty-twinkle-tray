@@ -114,7 +114,6 @@ fn run() -> Result<()> {
         brush.SetFallbackColor(colors.fallback)?;
         brush.SetTintColor(colors.tint)?;
         brush.SetTintOpacity(colors.opacity)?;
-        brush.SetTintOpacity(0.1)?;
         brush
     };
 
@@ -147,12 +146,13 @@ fn run() -> Result<()> {
                             log::debug!("Failed to set window foreground");
                             failed_foregound_workaround = true;
                         }
+                        let idpi = 1.0 / proxy_window.dpi();
                         let workspace = get_primary_work_area()?;
                         let gap = 13;
                         flyout.show_at(
                             &main_content,
-                            (workspace.right - gap) as f32,
-                            (workspace.bottom - gap) as f32,
+                            (workspace.right - gap) as f32 * idpi,
+                            (workspace.bottom - gap) as f32 * idpi,
                             FlyoutPlacementMode::LeftEdgeAlignedBottom
                         )?;
                         controller.refresh_brightness();

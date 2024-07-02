@@ -36,7 +36,7 @@ use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock};
 pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
-use crate::windowing::{event_loop, get_primary_work_area, ProxyWindow};
+use crate::windowing::{event_loop, get_primary_work_area, Window};
 
 include!("../assets/ids.rs");
 
@@ -82,7 +82,7 @@ fn run() -> Result<()> {
             _ => None
         })))?;
 
-    let proxy_window = ProxyWindow::new()?;
+    let proxy_window = Window::new()?;
 
     let _power_listener = PowerStateListener::new({
         let proxy = controller.create_proxy();
@@ -100,8 +100,8 @@ fn run() -> Result<()> {
 
     let mut gui = XamlGui::new()?;
 
-    let main_content = TextBlock::new()?.with_text("Hello World")?;
-    proxy_window.set_content(&main_content)?;
+    let proxy_content = TextBlock::new()?.with_text("Hello World")?;
+    proxy_window.set_content(&proxy_content)?;
 
     let content = StackPanel::vertical()?
         .with_theme(colors.theme)?
@@ -150,7 +150,7 @@ fn run() -> Result<()> {
                         let workspace = get_primary_work_area()?;
                         let gap = 13;
                         flyout.show_at(
-                            &main_content,
+                            &proxy_content,
                             (workspace.right - gap) as f32 * idpi,
                             (workspace.bottom - gap) as f32 * idpi,
                             FlyoutPlacementMode::LeftEdgeAlignedBottom

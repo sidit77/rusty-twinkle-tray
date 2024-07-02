@@ -20,7 +20,7 @@ impl ColorSet {
         Self {
             tint: Color { R: 0, G: 0, B: 0, A: 255 },
             fallback: Color { R: 0, G: 0, B: 0, A: 255 },
-            opacity: 0.7,
+            opacity: 0.6,
             theme: ElementTheme::Dark
         }
     }
@@ -39,7 +39,7 @@ impl ColorSet {
                 B: 255,
                 A: 255
             },
-            opacity: 0.8,
+            opacity: 0.7,
             theme: ElementTheme::Light
         }
     }
@@ -48,7 +48,7 @@ impl ColorSet {
         Self {
             tint: color,
             fallback: color,
-            opacity: 0.8,
+            opacity: 0.7,
             theme: ElementTheme::Dark
         }
     }

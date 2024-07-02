@@ -2,7 +2,7 @@ use std::mem::size_of;
 use std::sync::Once;
 
 use windows::core::{w, ComInterface, TryIntoParam, PCWSTR};
-use windows::Win32::Foundation::{HMODULE, HWND, LPARAM, LRESULT, RECT, WPARAM};
+use windows::Win32::Foundation::{COLORREF, HMODULE, HWND, LPARAM, LRESULT, RECT, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::HiDpi::GetDpiForWindow;
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
@@ -13,12 +13,12 @@ use windows_ext::UI::Xaml::UIElement;
 
 use crate::{win_assert, Result};
 
-pub struct ProxyWindow {
+pub struct Window {
     pub hwnd: HWND,
     source: DesktopWindowXamlSource
 }
 
-impl ProxyWindow {
+impl Window {
     const CLASS_NAME: PCWSTR = w!("rusty-twinkle-tray.window");
     pub fn new() -> crate::Result<Self> {
         let instance = unsafe { GetModuleHandleW(None)? };
@@ -29,7 +29,7 @@ impl ProxyWindow {
 
         let hwnd = unsafe {
             CreateWindowExW(
-                WS_EX_NOREDIRECTIONBITMAP | WS_EX_NOACTIVATE, // WS_EX_LAYERED | WS_EX_TOPMOST
+                WS_EX_NOREDIRECTIONBITMAP | WS_EX_NOACTIVATE | WS_EX_LAYERED | WS_EX_TOPMOST,
                 Self::CLASS_NAME,
                 w!("XAML Test"),
                 WS_POPUP,
@@ -44,9 +44,9 @@ impl ProxyWindow {
             )
         };
         win_assert!(hwnd != HWND::default());
-        //unsafe {
-        //    SetLayeredWindowAttributes(hwnd, 0, 0, LWA_ALPHA)?;
-        //}
+        unsafe {
+            SetLayeredWindowAttributes(hwnd, COLORREF::default(), 0, LWA_ALPHA)?;
+        }
 
         let desktop_source = DesktopWindowXamlSource::new()?;
         let interop = desktop_source.cast::<IDesktopWindowXamlSourceNative>()?;
@@ -134,7 +134,7 @@ impl ProxyWindow {
     }
 }
 
-impl Drop for ProxyWindow {
+impl Drop for Window {
     fn drop(&mut self) {
         unsafe {
             if IsWindow(self.hwnd).as_bool() {

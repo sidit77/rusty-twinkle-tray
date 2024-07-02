@@ -6,7 +6,6 @@ use std::panic::Location;
 use betrayer::{ErrorSource, TrayError};
 use windows::core::{Error, HRESULT};
 use windows::Win32::Foundation::{NO_ERROR, WIN32_ERROR};
-use winit::error::{EventLoopError, OsError};
 
 pub type Result<T> = std::result::Result<T, TracedError>;
 
@@ -141,26 +140,6 @@ impl From<TrayError> for TracedError {
         Self {
             inner,
             backtrace: Trace::Location(*value.location())
-        }
-    }
-}
-
-impl From<EventLoopError> for TracedError {
-    #[track_caller]
-    fn from(value: EventLoopError) -> Self {
-        Self {
-            inner: InnerError::External(Box::new(value)),
-            backtrace: Trace::capture()
-        }
-    }
-}
-
-impl From<OsError> for TracedError {
-    #[track_caller]
-    fn from(value: OsError) -> Self {
-        Self {
-            inner: InnerError::External(Box::new(value)),
-            backtrace: Trace::capture()
         }
     }
 }

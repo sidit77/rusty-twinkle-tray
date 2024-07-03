@@ -1,5 +1,5 @@
 use windows::core::{ComInterface, TryIntoParam, HSTRING};
-use windows::Foundation::{EventHandler, Point};
+use windows::Foundation::{EventHandler, IReference, Point, PropertyValue};
 use windows::Win32::UI::WindowsAndMessaging::WHEEL_DELTA;
 use windows_ext::UI::Xaml::Controls::FlyoutPresenter;
 use windows_ext::UI::Xaml::Controls::Primitives::{FlyoutShowOptions, RangeBaseValueChangedEventArgs, RangeBaseValueChangedEventHandler};
@@ -10,7 +10,6 @@ use super::{FontWeight, Padding, TextAlignment, VerticalAlignment};
 use crate::ui::style::Style;
 use crate::ui::NewType;
 use crate::utils::error::{OptionExt, ResultEx};
-use crate::utils::winrt::Reference;
 use crate::Result;
 
 new_type!(Slider, windows_ext::UI::Xaml::Controls::Slider);
@@ -172,7 +171,7 @@ impl Flyout {
     {
         let options = FlyoutShowOptions::new()?;
         let pt = Point { X: x, Y: y };
-        options.SetPosition(&Reference::box_value(pt))?;
+        options.SetPosition(&PropertyValue::CreatePoint(pt)?.cast::<IReference<Point>>()?)?;
         options.SetPlacement(mode)?;
 
         self.0.ShowAt2(base, &options)?;

@@ -1,4 +1,5 @@
 use windows::core::TryIntoParam;
+use windows::Foundation::Size;
 use windows_ext::UI::Xaml::Controls::{ColumnDefinition, Orientation, RowDefinition};
 use windows_ext::UI::Xaml::Media::Brush;
 use windows_ext::UI::Xaml::{FrameworkElement, GridUnitType, UIElement};
@@ -70,6 +71,20 @@ impl StackPanel {
     pub fn get_actual_height(&self) -> Result<f64> {
         Ok(self.0.ActualHeight()?)
     }
+
+    pub fn get_actual_width(&self) -> Result<f64> {
+        Ok(self.0.ActualWidth()?)
+    }
+
+    pub fn measure(&self) -> Result<Size> {
+        self.0.Measure(Size {
+            Width: f32::INFINITY,
+            Height: f32::INFINITY,
+        })?;
+        let s = self.0.DesiredSize()?;
+        Ok(s)
+    }
+
 }
 
 pub enum GridSize {
@@ -162,5 +177,8 @@ impl Grid {
 
     pub fn get_actual_height(&self) -> Result<f64> {
         Ok(self.0.ActualHeight()?)
+    }
+    pub fn get_actual_width(&self) -> Result<f64> {
+        Ok(self.0.ActualWidth()?)
     }
 }

@@ -71,8 +71,12 @@ impl XamlGui {
     }
 
     //pub fn get_required_height(&self) -> Result<u32> {
-    //    Ok((self.monitor_panel.get_actual_height()? + self.bottom_bar.get_actual_height()?) as u32)
+    //    Ok((self.monitor_panel.get_actual_height()? /* + self.bottom_bar.get_actual_height()? */) as u32)
     //}
+
+    pub fn number_of_monitors(&self) -> usize {
+        self.monitor_controls.len()
+    }
 
     pub fn register_monitor(&mut self, name: String, path: MonitorPath, proxy: MonitorControllerProxy) -> Result<()> {
         assert!(!self.monitor_controls.contains_key(&path));

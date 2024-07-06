@@ -29,6 +29,22 @@ impl WindowBuilder {
     }
 }
 
+#[derive(Default, Debug, Copy, Clone, Eq, PartialEq)]
+pub enum WindowLevel {
+    AlwaysOnTop,
+    #[default]
+    Normal
+}
+
+impl From<WindowLevel> for HWND {
+    fn from(value: WindowLevel) -> Self {
+        match value {
+            WindowLevel::AlwaysOnTop => HWND_TOPMOST,
+            WindowLevel::Normal => HWND_TOP,
+        }
+    }
+}
+
 pub struct Window {
     pub hwnd: HWND,
     source: DesktopWindowXamlSource
@@ -43,7 +59,7 @@ impl Window {
             Self::register(instance).unwrap_or_else(|err| log::warn!("Failed to register window class: {}", err));
         });
 
-        let mut ex_style = WS_EX_NOREDIRECTIONBITMAP | WS_EX_NOACTIVATE | WS_EX_TOPMOST;
+        let mut ex_style = WS_EX_NOREDIRECTIONBITMAP | WS_EX_NOACTIVATE; // | WS_EX_TOPMOST;
         if builder.hidden {
             ex_style |= WS_EX_LAYERED;
         }
@@ -52,12 +68,12 @@ impl Window {
             CreateWindowExW(
                 ex_style,
                 Self::CLASS_NAME,
-                w!("XAML Test"),
+                w!("XAML Island Window"),
                 WS_POPUP,
                 0,
                 0,
-                100,
-                100,
+                10,
+                10,
                 None,
                 None,
                 instance,
@@ -90,23 +106,46 @@ impl Window {
         unsafe { SetForegroundWindow(self.hwnd).as_bool() }
     }
 
-    pub fn set_visible(&self, visible: bool) {
+    pub fn set_window_pos(&self, order: Option<WindowLevel>, pos: Option<(i32, i32)>, size: Option<(i32, i32)>, visible: Option<bool>) {
+        let (x, y) = pos.unwrap_or_default();
+        let (w, h) = size.unwrap_or_default();
+        let after = HWND::from(order.unwrap_or_default());
+        let mut flags = SET_WINDOW_POS_FLAGS::default();
+        if pos.is_none() {
+            flags |= SWP_NOMOVE;
+        }
+        if size.is_none() {
+            flags |= SWP_NOSIZE;
+        }
+        if order.is_none() {
+            flags |= SWP_NOZORDER;
+        }
+        if let Some(visible) = visible {
+            flags |= if visible { SWP_SHOWWINDOW } else { SWP_HIDEWINDOW };
+        }
         unsafe {
-            match visible {
-                true => SetWindowPos(self.hwnd, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOMOVE),
-                false => SetWindowPos(
-                    self.hwnd,
-                    HWND_TOPMOST,
-                    0,
-                    0,
-                    0,
-                    0,
-                    SWP_HIDEWINDOW | SWP_NOZORDER | SWP_NOSIZE | SWP_NOMOVE
-                )
-            }
-            .unwrap_or_else(|err| log::warn!("Failed to set window visibility: {}", err));
+            SetWindowPos(self.hwnd, after, x, y, w, h, flags)
+                .unwrap_or_else(|err| log::warn!("Failed to set window position: {}", err));
         }
     }
+
+    //pub fn set_visible(&self, visible: bool) {
+    //    unsafe {
+    //        match visible {
+    //            true => SetWindowPos(self.hwnd, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOMOVE),
+    //            false => SetWindowPos(
+    //                self.hwnd,
+    //                HWND_TOPMOST,
+    //                0,
+    //                0,
+    //                0,
+    //                0,
+    //                SWP_HIDEWINDOW | SWP_NOZORDER | SWP_NOSIZE | SWP_NOMOVE
+    //            )
+    //        }
+    //        .unwrap_or_else(|err| log::warn!("Failed to set window visibility: {}", err));
+    //    }
+    //}
 
     pub fn focus(&self) {
         unsafe {

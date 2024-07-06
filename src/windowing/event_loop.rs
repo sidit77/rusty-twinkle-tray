@@ -16,6 +16,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
 };
 
 use crate::Result;
+use crate::runtime::process_timers_for_current_thread;
 
 struct LoopWaker {
     event: HANDLE,
@@ -24,7 +25,7 @@ struct LoopWaker {
 }
 
 impl LoopWaker {
-    pub fn new() -> crate::Result<Self> {
+    pub fn new() -> Result<Self> {
         let handle = unsafe {
             CreateEventExW(
                 None,
@@ -86,9 +87,10 @@ pub fn event_loop<F: Future<Output = Result<()>>>(fut: F) -> Result<()> {
 
     loop {
         notifier.awake.store(true, Ordering::SeqCst);
-
+        let mut next_timer;
         while {
             let mut cont = !pump_events();
+            next_timer = process_timers_for_current_thread();
             if notifier.notified.swap(false, Ordering::SeqCst) {
                 let mut cx = Context::from_waker(&waker);
                 match fut.as_mut().poll(&mut cx) {
@@ -106,10 +108,10 @@ pub fn event_loop<F: Future<Output = Result<()>>>(fut: F) -> Result<()> {
         notifier.reset();
         notifier.awake.store(false, Ordering::SeqCst);
 
-        match wait_for(&[notifier.handle()], None)? {
+        match wait_for(&[notifier.handle()], next_timer)? {
             WaitResult::Handle(_) => {}
             WaitResult::Message => {}
-            WaitResult::Timeout => panic!("No timers yet! Why was this called?")
+            WaitResult::Timeout => { }
         }
     }
 }

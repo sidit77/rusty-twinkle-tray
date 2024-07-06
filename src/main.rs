@@ -16,7 +16,7 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
-use log::LevelFilter;
+use log::{LevelFilter, trace};
 use windows::core::{h, IInspectable};
 use windows::Foundation::TypedEventHandler;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
@@ -36,7 +36,7 @@ use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock};
 pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
-use crate::windowing::{event_loop, get_primary_work_area, Window};
+use crate::windowing::{event_loop, get_primary_work_area, WindowBuilder};
 
 include!("../assets/ids.rs");
 
@@ -82,7 +82,9 @@ fn run() -> Result<()> {
             _ => None
         })))?;
 
-    let proxy_window = Window::new()?;
+    let proxy_window = WindowBuilder::default()
+        .with_hidden(true)
+        .build()?;
 
     let _power_listener = PowerStateListener::new({
         let proxy = controller.create_proxy();
@@ -139,6 +141,16 @@ fn run() -> Result<()> {
                     return Ok(());
                 }
                 CustomEvent::Show => {
+                    //if failed_foregound_workaround {
+                    //    println!("Show -> Hide");
+                    //    let _ = wnd_sender.try_send(CustomEvent::FocusLost);
+                    //    continue;
+                    //}
+                    if flyout.is_open()? {
+                        trace!("Flyout already open. Closing to instead");
+                        flyout.close()?;
+                        continue;
+                    }
                     if last_close.elapsed() >= Duration::from_millis(250) {
                         proxy_window.set_visible(true);
                         proxy_window.focus();
@@ -155,18 +167,21 @@ fn run() -> Result<()> {
                             (workspace.bottom - gap) as f32 * idpi,
                             FlyoutPlacementMode::LeftEdgeAlignedBottom
                         )?;
+                        //println!("Show");
                         controller.refresh_brightness();
                     }
                 }
                 CustomEvent::FocusLost => {
+                    //println!("HIde");
                     if failed_foregound_workaround {
-                        let _ = wnd_sender.send(CustomEvent::Show);
+                        //let _ = wnd_sender.send(CustomEvent::Show);
                         failed_foregound_workaround = false;
-                        continue;
+                        //continue;
                     }
                     proxy_window.set_visible(false);
                     config.lock_no_poison().save_if_dirty()?;
                     last_close = Instant::now();
+
                 }
                 CustomEvent::ThemeChange => {
                     colors = SystemSettings::new()

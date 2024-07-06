@@ -177,4 +177,13 @@ impl Flyout {
         self.0.ShowAt2(base, &options)?;
         Ok(())
     }
+
+    pub fn is_open(&self) -> Result<bool> {
+        Ok(self.0.IsOpen()?)
+    }
+
+    pub fn close(&self) -> Result<()> {
+        Ok(self.0.Hide()?)
+    }
+
 }

@@ -13,6 +13,22 @@ use windows_ext::UI::Xaml::UIElement;
 
 use crate::{win_assert, Result};
 
+#[derive(Debug, Clone, Default)]
+pub struct WindowBuilder {
+    hidden: bool,
+}
+
+impl WindowBuilder {
+    pub fn with_hidden(mut self, hidden: bool) -> Self {
+        self.hidden = hidden;
+        self
+    }
+
+    pub fn build(self) -> Result<Window> {
+        Window::new(self)
+    }
+}
+
 pub struct Window {
     pub hwnd: HWND,
     source: DesktopWindowXamlSource
@@ -20,16 +36,21 @@ pub struct Window {
 
 impl Window {
     const CLASS_NAME: PCWSTR = w!("rusty-twinkle-tray.window");
-    pub fn new() -> crate::Result<Self> {
+    fn new(builder: WindowBuilder) -> crate::Result<Self> {
         let instance = unsafe { GetModuleHandleW(None)? };
         static REGISTER_WINDOW_CLASS: Once = Once::new();
         REGISTER_WINDOW_CLASS.call_once(|| {
             Self::register(instance).unwrap_or_else(|err| log::warn!("Failed to register window class: {}", err));
         });
 
+        let mut ex_style = WS_EX_NOREDIRECTIONBITMAP | WS_EX_NOACTIVATE | WS_EX_TOPMOST;
+        if builder.hidden {
+            ex_style |= WS_EX_LAYERED;
+        }
+
         let hwnd = unsafe {
             CreateWindowExW(
-                WS_EX_NOREDIRECTIONBITMAP | WS_EX_NOACTIVATE | WS_EX_LAYERED | WS_EX_TOPMOST,
+                ex_style,
                 Self::CLASS_NAME,
                 w!("XAML Test"),
                 WS_POPUP,
@@ -44,8 +65,10 @@ impl Window {
             )
         };
         win_assert!(hwnd != HWND::default());
-        unsafe {
-            SetLayeredWindowAttributes(hwnd, COLORREF::default(), 0, LWA_ALPHA)?;
+        if builder.hidden {
+            unsafe {
+                SetLayeredWindowAttributes(hwnd, COLORREF::default(), 0, LWA_ALPHA)?;
+            }
         }
 
         let desktop_source = DesktopWindowXamlSource::new()?;

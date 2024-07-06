@@ -4,7 +4,8 @@ mod window;
 use std::mem::size_of;
 
 pub use event_loop::event_loop;
-pub use window::Window;
+#[allow(unused_imports)]
+pub use window::{Window, WindowBuilder};
 use windows::Win32::Foundation::{POINT, RECT};
 use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, MonitorFromPoint, MONITORINFO, MONITOR_DEFAULTTOPRIMARY};
 

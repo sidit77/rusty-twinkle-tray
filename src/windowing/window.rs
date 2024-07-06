@@ -15,7 +15,7 @@ use crate::{win_assert, Result};
 
 #[derive(Debug, Clone, Default)]
 pub struct WindowBuilder {
-    hidden: bool,
+    hidden: bool
 }
 
 impl WindowBuilder {
@@ -40,7 +40,7 @@ impl From<WindowLevel> for HWND {
     fn from(value: WindowLevel) -> Self {
         match value {
             WindowLevel::AlwaysOnTop => HWND_TOPMOST,
-            WindowLevel::Normal => HWND_TOP,
+            WindowLevel::Normal => HWND_TOP
         }
     }
 }
@@ -124,8 +124,7 @@ impl Window {
             flags |= if visible { SWP_SHOWWINDOW } else { SWP_HIDEWINDOW };
         }
         unsafe {
-            SetWindowPos(self.hwnd, after, x, y, w, h, flags)
-                .unwrap_or_else(|err| log::warn!("Failed to set window position: {}", err));
+            SetWindowPos(self.hwnd, after, x, y, w, h, flags).unwrap_or_else(|err| log::warn!("Failed to set window position: {}", err));
         }
     }
 
@@ -154,9 +153,7 @@ impl Window {
     }
 
     pub fn dpi(&self) -> f32 {
-        unsafe {
-            GetDpiForWindow(self.hwnd) as f32 / USER_DEFAULT_SCREEN_DPI as f32
-        }
+        unsafe { GetDpiForWindow(self.hwnd) as f32 / USER_DEFAULT_SCREEN_DPI as f32 }
     }
 
     pub fn set_content<T: TryIntoParam<UIElement>>(&self, content: T) -> Result<()> {

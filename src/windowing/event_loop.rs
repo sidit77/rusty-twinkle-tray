@@ -15,8 +15,8 @@ use windows::Win32::UI::WindowsAndMessaging::{
     DispatchMessageW, MsgWaitForMultipleObjects, PeekMessageW, TranslateMessage, MSG, PM_REMOVE, QS_ALLINPUT
 };
 
-use crate::Result;
 use crate::runtime::process_timers_for_current_thread;
+use crate::Result;
 
 struct LoopWaker {
     event: HANDLE,
@@ -111,7 +111,7 @@ pub fn event_loop<F: Future<Output = Result<()>>>(fut: F) -> Result<()> {
         match wait_for(&[notifier.handle()], next_timer)? {
             WaitResult::Handle(_) => {}
             WaitResult::Message => {}
-            WaitResult::Timeout => { }
+            WaitResult::Timeout => {}
         }
     }
 }

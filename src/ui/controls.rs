@@ -185,5 +185,4 @@ impl Flyout {
     pub fn close(&self) -> Result<()> {
         Ok(self.0.Hide()?)
     }
-
 }

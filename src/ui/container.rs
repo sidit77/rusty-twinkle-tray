@@ -79,12 +79,11 @@ impl StackPanel {
     pub fn measure(&self) -> Result<Size> {
         self.0.Measure(Size {
             Width: f32::INFINITY,
-            Height: f32::INFINITY,
+            Height: f32::INFINITY
         })?;
         let s = self.0.DesiredSize()?;
         Ok(s)
     }
-
 }
 
 pub enum GridSize {

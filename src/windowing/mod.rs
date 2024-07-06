@@ -3,19 +3,18 @@ mod window;
 
 use std::mem::size_of;
 use std::time::Duration;
+
+pub use event_loop::event_loop;
 use log::{trace, warn};
+#[allow(unused_imports)]
+pub use window::{Window, WindowBuilder, WindowLevel};
 use windows::Win32::Foundation::{POINT, RECT};
 use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, MonitorFromPoint, MONITORINFO, MONITOR_DEFAULTTOPRIMARY};
 use windows::Win32::UI::Input::KeyboardAndMouse::{GetKeyState, VK_LBUTTON};
 use windows::Win32::UI::WindowsAndMessaging::GetCursorPos;
 
-use crate::Result;
 use crate::runtime::Timer;
-
-pub use event_loop::event_loop;
-#[allow(unused_imports)]
-pub use window::{Window, WindowLevel, WindowBuilder};
-
+use crate::Result;
 
 pub fn get_primary_work_area() -> Result<RECT> {
     unsafe {

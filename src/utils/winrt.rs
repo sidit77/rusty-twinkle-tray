@@ -1,5 +1,4 @@
-use windows::core::{HSTRING, RuntimeName};
-
+use windows::core::{RuntimeName, HSTRING};
 use windows_ext::UI::Xaml::Interop::{TypeKind, TypeName};
 
 pub trait GetTypeName {

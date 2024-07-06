@@ -1,19 +1,18 @@
 use std::future::Future;
 use std::pin::Pin;
-use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::task::{Context, Poll, Wake, Waker};
 use std::thread::{current, park, park_timeout, Thread};
 
-use futures_lite::{pin, Stream};
-
 pub use event::*;
+use futures_lite::{pin, Stream};
+pub use timer::{process_timers_for_current_thread, Timer};
 pub use traits::*;
-pub use timer::{Timer, process_timers_for_current_thread};
 
 mod event;
-mod traits;
 mod timer;
+mod traits;
 
 #[derive(Default)]
 pub enum FutureStream<T> {
@@ -53,12 +52,11 @@ impl<T> Stream for FutureStream<T> {
                     }
                 }
                 Poll::Pending => Poll::Pending
-            }
-            FutureStream::Empty => Poll::Pending,
+            },
+            FutureStream::Empty => Poll::Pending
         }
     }
 }
-
 
 struct Signal {
     thread: Thread,
@@ -93,7 +91,6 @@ impl Wake for Signal {
     }
 }
 
-
 pub fn block_on<F: Future>(fut: F) -> F::Output {
     pin!(fut);
 
@@ -118,4 +115,3 @@ pub fn block_on<F: Future>(fut: F) -> F::Output {
         }
     }
 }
-

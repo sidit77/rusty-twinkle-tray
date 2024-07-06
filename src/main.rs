@@ -16,14 +16,14 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
-use futures_lite::{FutureExt, StreamExt};
 use futures_lite::stream::or;
-use log::{LevelFilter, trace};
+use futures_lite::{FutureExt, StreamExt};
+use log::{trace, LevelFilter};
 use windows::core::{h, IInspectable};
 use windows::Foundation::{Size, TypedEventHandler};
+use windows::Win32::Foundation::RECT;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows::UI::ViewManagement::UISettings;
-use windows::Win32::Foundation::RECT;
 use windows_ext::UI::Xaml::Controls::Control;
 use windows_ext::UI::Xaml::ElementTheme;
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
@@ -87,9 +87,7 @@ fn run() -> Result<()> {
             _ => None
         })))?;
 
-    let proxy_window = WindowBuilder::default()
-        .with_hidden(true)
-        .build()?;
+    let proxy_window = WindowBuilder::default().with_hidden(true).build()?;
 
     let _power_listener = PowerStateListener::new({
         let proxy = controller.create_proxy();
@@ -136,7 +134,6 @@ fn run() -> Result<()> {
             Ok(())
         }))?;
 
-
     let mut last_close = Instant::now();
     event_loop(async {
         let mut click_watcher = FutureStream::new();
@@ -168,7 +165,10 @@ fn run() -> Result<()> {
                             let size = content.measure().unwrap_or_else(|err| {
                                 log::warn!("Failed to measure content: {err}");
                                 // Make a guess
-                                Size { Width: 400.0, Height: 62.0 + 86.0 * gui.number_of_monitors() as f32 }
+                                Size {
+                                    Width: 400.0,
+                                    Height: 62.0 + 86.0 * gui.number_of_monitors() as f32
+                                }
                             });
                             click_watcher.set(async move {
                                 trace!("Calculated flyout size: {:?}", size);
@@ -177,7 +177,7 @@ fn run() -> Result<()> {
                                         left: right - (size.Width / idpi) as i32,
                                         top: bottom - (size.Height / idpi) as i32,
                                         right,
-                                        bottom,
+                                        bottom
                                     };
                                     // We actively poll for clicks outside the flyout for simplicity
                                     // and because low level mouse hooks don't work when the focused application is elevated
@@ -208,7 +208,6 @@ fn run() -> Result<()> {
                     proxy_window.set_window_pos(None, None, None, Some(false));
                     config.lock_no_poison().save_if_dirty()?;
                     last_close = Instant::now();
-
                 }
                 CustomEvent::ClickedOutside => {
                     flyout.close()?;

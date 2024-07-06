@@ -42,7 +42,7 @@ impl TimerState {
 thread_local! { static LOCAL_STATE: RefCell<TimerState> = RefCell::new(TimerState::default()); }
 
 pub fn process_timers_for_current_thread() -> Option<Duration> {
-    LOCAL_STATE.with(| timers| timers.borrow_mut().process_timers())
+    LOCAL_STATE.with(|timers| timers.borrow_mut().process_timers())
 }
 
 pub struct Timer {

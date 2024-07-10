@@ -96,11 +96,9 @@ pub fn event_loop<F: Future<Output = Result<()>>>(fut: F) -> Result<()> {
                 match fut.as_mut().poll(&mut cx) {
                     Poll::Ready(result) => return result,
                     Poll::Pending => {
-                        cont |= true;
+                        cont = true;
                     } //pump_events()
                 }
-            } else {
-                cont |= false;
             }
             cont
         } {}

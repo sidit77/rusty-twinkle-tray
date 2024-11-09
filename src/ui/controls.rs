@@ -1,8 +1,8 @@
 use windows::core::{ComInterface, TryIntoParam, HSTRING};
 use windows::Foundation::{EventHandler, IReference, Point, PropertyValue};
 use windows::Win32::UI::WindowsAndMessaging::WHEEL_DELTA;
-use windows_ext::UI::Xaml::Controls::{FlyoutPresenter, IconElement};
 use windows_ext::UI::Xaml::Controls::Primitives::{FlyoutShowOptions, RangeBaseValueChangedEventArgs, RangeBaseValueChangedEventHandler};
+use windows_ext::UI::Xaml::Controls::{FlyoutPresenter, IconElement};
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
 use windows_ext::UI::Xaml::{DependencyObject, RoutedEventArgs, RoutedEventHandler, UIElement};
 
@@ -144,7 +144,6 @@ impl FontIcon {
 new_type!(AppBarButton, windows_ext::UI::Xaml::Controls::AppBarButton);
 
 impl AppBarButton {
-
     pub fn new() -> Result<Self> {
         let button = <Self as NewType>::Inner::new()?;
         Ok(Self(button))
@@ -169,15 +168,11 @@ impl AppBarButton {
     where
         F: FnMut(/*Option<&::windows_core::IInspectable>, */ &RoutedEventArgs) -> Result<()> + Send + 'static
     {
-        self.0.Click(&RoutedEventHandler::new(move |_sender, args| {
-            handler(args.some()?).to_win_result()
-        }))?;
+        self.0
+            .Click(&RoutedEventHandler::new(move |_sender, args| handler(args.some()?).to_win_result()))?;
         Ok(self)
     }
-
-
 }
-
 
 pub use windows_ext::UI::Xaml::Controls::Primitives::FlyoutPlacementMode;
 new_type!(Flyout, windows_ext::UI::Xaml::Controls::Flyout, no_ui);

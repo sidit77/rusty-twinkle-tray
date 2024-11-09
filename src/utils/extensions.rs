@@ -23,7 +23,10 @@ pub trait MutexExt {
 }
 
 impl<T> MutexExt for Mutex<T> {
-    type Guard<'a> = MutexGuard<'a, T> where T: 'a;
+    type Guard<'a>
+        = MutexGuard<'a, T>
+    where
+        T: 'a;
 
     fn lock_no_poison(&self) -> Self::Guard<'_> {
         self.lock().unwrap_or_else(|err| err.into_inner())

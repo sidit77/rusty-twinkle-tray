@@ -88,7 +88,6 @@ fn run() -> Result<()> {
             _ => None
         })))?;
 
-
     let _power_listener = PowerStateListener::new({
         let proxy = controller.create_proxy();
         move |event| {
@@ -244,7 +243,7 @@ fn run() -> Result<()> {
                     BackendEvent::UpdateBrightness(path, value) => {
                         gui.update_brightness(path, value)?;
                     }
-                },
+                }
             }
         }
         Ok(())

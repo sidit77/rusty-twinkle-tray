@@ -52,7 +52,7 @@ FocusManager = true
 LosingFocusEventArgs = true
 
 UIElement = ["Dispatcher"]
-UIElementCollection = ["First", "Append"]
+UIElementCollection = ["First", "Append", "Clear"]
 ColumnDefinitionCollection = ["First", "Append", "Clear"]
 RowDefinitionCollection = ["First", "Append", "Clear"]
 ColorPaletteResources = ["First"]

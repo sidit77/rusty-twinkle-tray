@@ -93,6 +93,12 @@ impl XamlGui {
         Ok(())
     }
 
+    pub fn clear_monitors(&mut self) -> Result<()> {
+        self.monitor_panel.clear_children()?;
+        self.monitor_controls.clear();
+        Ok(())
+    }
+
     pub fn update_brightness(&self, path: MonitorPath, new_brightness: u32) -> Result<()> {
         match self.monitor_controls.get(&path) {
             None => log::warn!("Monitor is not registered: {:?}", path),

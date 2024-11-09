@@ -87350,6 +87350,14 @@ impl UIElementCollection {
                 .ok()
         }
     }
+    pub fn Clear(&self) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Clear)(::windows_core::Interface::as_raw(this))
+                .ok()
+        }
+    }
 }
 impl ::windows_core::RuntimeType for UIElementCollection {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(

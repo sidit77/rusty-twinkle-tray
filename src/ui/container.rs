@@ -36,6 +36,11 @@ impl StackPanel {
         Ok(())
     }
 
+    pub fn clear_children(&self) -> Result<()> {
+        self.0.Children()?.Clear()?;
+        Ok(())
+    }
+
     pub fn with_child<T: TryIntoParam<UIElement>>(self, child: T) -> Result<Self> {
         self.0.Children()?.Append(child)?;
         Ok(self)

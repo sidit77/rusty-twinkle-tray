@@ -63,7 +63,7 @@ fn run() -> Result<()> {
     let config = Arc::new(Mutex::new(Config::load()?));
 
     let (wnd_sender, wnd_receiver) = flume::unbounded();
-    let controller = MonitorController::new(wnd_sender.clone(), config.clone());
+    let mut controller = MonitorController::new(wnd_sender.clone(), config.clone());
 
     let ui_settings = UISettings::new()?;
     let mut colors = SystemSettings::new()
@@ -232,7 +232,9 @@ fn run() -> Result<()> {
                     )?);
                 }
                 CustomEvent::Refresh => {
-                    println!("Refresh");
+                    log::info!("Restarting backend...");
+                    gui.clear_monitors()?;
+                    controller = MonitorController::new(wnd_sender.clone(), config.clone());
                 }
                 CustomEvent::Backend(event) => match event {
                     BackendEvent::RegisterMonitor(name, path) => {

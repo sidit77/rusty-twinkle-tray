@@ -4,7 +4,7 @@ use windows::Win32::UI::WindowsAndMessaging::WHEEL_DELTA;
 use windows_ext::UI::Xaml::Controls::{FlyoutPresenter, IconElement};
 use windows_ext::UI::Xaml::Controls::Primitives::{FlyoutShowOptions, RangeBaseValueChangedEventArgs, RangeBaseValueChangedEventHandler};
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
-use windows_ext::UI::Xaml::{DependencyObject, UIElement};
+use windows_ext::UI::Xaml::{DependencyObject, RoutedEventArgs, RoutedEventHandler, UIElement};
 
 use super::{FontWeight, Padding, TextAlignment, VerticalAlignment};
 use crate::ui::style::Style;
@@ -113,8 +113,8 @@ impl TextBlock {
 }
 
 new_type!(FontIcon, windows_ext::UI::Xaml::Controls::FontIcon);
-impl windows::core::CanTryInto<windows_ext::UI::Xaml::Controls::IconElement> for FontIcon {
-    const CAN_INTO: bool = <windows_ext::UI::Xaml::Controls::FontIcon as windows::core::CanTryInto<windows_ext::UI::Xaml::Controls::IconElement>>::CAN_INTO;
+impl windows::core::CanTryInto<IconElement> for FontIcon {
+    const CAN_INTO: bool = <windows_ext::UI::Xaml::Controls::FontIcon as windows::core::CanTryInto<IconElement>>::CAN_INTO;
 }
 
 impl FontIcon {
@@ -164,6 +164,17 @@ impl AppBarButton {
         self.0.SetIsEnabled(enabled)?;
         Ok(self)
     }
+
+    pub fn with_click_handler<F>(self, mut handler: F) -> Result<Self>
+    where
+        F: FnMut(/*Option<&::windows_core::IInspectable>, */ &RoutedEventArgs) -> Result<()> + Send + 'static
+    {
+        self.0.Click(&RoutedEventHandler::new(move |_sender, args| {
+            handler(args.some()?).to_win_result()
+        }))?;
+        Ok(self)
+    }
+
 
 }
 

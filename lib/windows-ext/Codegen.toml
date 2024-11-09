@@ -67,6 +67,9 @@ PointerRoutedEventArgs = true
 TappedEventHandler = true
 TappedRoutedEventArgs = true
 
+RoutedEventHandler = true
+RoutedEventArgs = true
+
 AcrylicBrush = true
 SolidColorBrush = true
 

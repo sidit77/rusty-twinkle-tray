@@ -1,4 +1,5 @@
 use std::collections::BTreeMap;
+use flume::Sender;
 use windows::core::h;
 use windows::UI::Color;
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
@@ -9,7 +10,7 @@ use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::ui::controls::{AppBarButton, FontIcon, Slider, TextBlock};
 use crate::ui::{FontWeight, TextAlignment, VerticalAlignment};
 use crate::utils::error::Result;
-use crate::{cloned, hformat};
+use crate::{cloned, hformat, CustomEvent};
 
 pub struct XamlGui {
     monitor_panel: StackPanel,
@@ -18,7 +19,7 @@ pub struct XamlGui {
 }
 
 impl XamlGui {
-    pub fn new() -> Result<Self> {
+    pub fn new(sender: Sender<CustomEvent>) -> Result<Self> {
         //let icon_font = FontFamily::new(&HSTRING::from("Segoe Fluent Icons"))?;
 
         let stack_panel = StackPanel::vertical()?
@@ -33,7 +34,13 @@ impl XamlGui {
 
         let refresh = AppBarButton::new()?
             .with_icon(&FontIcon::new('\u{E72C}')?)?
-            .with_label("Refresh")?;
+            .with_label("Refresh")?
+            .with_click_handler(cloned!([sender] move |_| {
+                sender
+                    .send(CustomEvent::Refresh)
+                    .unwrap_or_else(|_| log::warn!("Failed to send refresh event"));
+                Ok(())
+            }))?;
 
         // Create a new stack panel for the bottom bar
         let bottom_bar = Grid::new()?

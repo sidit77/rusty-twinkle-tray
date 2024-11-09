@@ -51,7 +51,8 @@ pub enum CustomEvent {
     FocusLost,
     ThemeChange,
     Backend(BackendEvent),
-    ClickedOutside
+    ClickedOutside,
+    Refresh
 }
 
 fn run() -> Result<()> {
@@ -87,7 +88,6 @@ fn run() -> Result<()> {
             _ => None
         })))?;
 
-    let proxy_window = WindowBuilder::default().with_hidden(true).build()?;
 
     let _power_listener = PowerStateListener::new({
         let proxy = controller.create_proxy();
@@ -103,8 +103,9 @@ fn run() -> Result<()> {
         Ok(())
     })))?;
 
-    let mut gui = XamlGui::new()?;
+    let mut gui = XamlGui::new(wnd_sender.clone())?;
 
+    let proxy_window = WindowBuilder::default().with_hidden(true).build()?;
     let proxy_content = TextBlock::new()?.with_text("Hello World")?;
     proxy_window.set_content(&proxy_content)?;
 
@@ -230,6 +231,9 @@ fn run() -> Result<()> {
                         None
                     )?);
                 }
+                CustomEvent::Refresh => {
+                    println!("Refresh");
+                }
                 CustomEvent::Backend(event) => match event {
                     BackendEvent::RegisterMonitor(name, path) => {
                         log::info!("Found monitor: {}", name);
@@ -238,7 +242,7 @@ fn run() -> Result<()> {
                     BackendEvent::UpdateBrightness(path, value) => {
                         gui.update_brightness(path, value)?;
                     }
-                }
+                },
             }
         }
         Ok(())

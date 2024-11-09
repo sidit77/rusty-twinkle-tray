@@ -8851,7 +8851,19 @@ unsafe impl ::core::marker::Sync for RoutedEvent {}
     ::core::clone::Clone
 )]
 pub struct RoutedEventArgs(::windows_core::IUnknown);
-impl RoutedEventArgs {}
+impl RoutedEventArgs {
+    pub fn OriginalSource(
+        &self,
+    ) -> ::windows_core::Result<::windows_core::IInspectable> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .OriginalSource)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+}
 impl ::windows_core::RuntimeType for RoutedEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.RoutedEventArgs;{5c985ac6-d802-4b38-a223-bf070c43fedf})",
@@ -12726,7 +12738,37 @@ pub struct PropertyChangedCallback_Vtbl {
     ::core::clone::Clone
 )]
 pub struct RoutedEventHandler(pub ::windows_core::IUnknown);
-impl RoutedEventHandler {}
+impl RoutedEventHandler {
+    pub fn new<
+        F: FnMut(
+                ::core::option::Option<&::windows_core::IInspectable>,
+                ::core::option::Option<&RoutedEventArgs>,
+            ) -> ::windows_core::Result<()> + ::core::marker::Send + 'static,
+    >(invoke: F) -> Self {
+        let com = RoutedEventHandlerBox::<F> {
+            vtable: &RoutedEventHandlerBox::<F>::VTABLE,
+            count: ::windows_core::imp::RefCount::new(1),
+            invoke,
+        };
+        unsafe { ::core::mem::transmute(::std::boxed::Box::new(com)) }
+    }
+    pub fn Invoke<P0, P1>(&self, sender: P0, e: P1) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<::windows_core::IInspectable>,
+        P1: ::windows_core::TryIntoParam<RoutedEventArgs>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Invoke)(
+                    ::windows_core::Interface::as_raw(this),
+                    sender.into_param().abi(),
+                    e.try_into_param()?.abi(),
+                )
+                .ok()
+        }
+    }
+}
 #[repr(C)]
 struct RoutedEventHandlerBox<
     F: FnMut(

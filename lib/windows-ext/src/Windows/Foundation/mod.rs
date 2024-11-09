@@ -1,2 +1,1 @@
-pub use windows::Foundation::*;
-pub mod Collections;
+pub mod Collections;pub use windows::Foundation::*;

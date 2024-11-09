@@ -40,7 +40,8 @@ constructors = [
     "Slider",
     "AcrylicBrush",
     "Flyout",
-    "FlyoutShowOptions"
+    "FlyoutShowOptions",
+    "AppBarButton"
 ]
 
 [white_list]
@@ -78,6 +79,7 @@ TextBlock = true
 TextBox = true
 Slider = true
 Flyout = true
+AppBarButton = true
 
 Style = true
 DependencyProperty = true

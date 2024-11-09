@@ -1,12 +1,12 @@
 use std::collections::BTreeMap;
-
+use windows::core::h;
 use windows::UI::Color;
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
 
 use crate::backend::MonitorControllerProxy;
 use crate::monitors::MonitorPath;
 use crate::ui::container::{Grid, GridSize, StackPanel};
-use crate::ui::controls::{FontIcon, Slider, TextBlock};
+use crate::ui::controls::{AppBarButton, FontIcon, Slider, TextBlock};
 use crate::ui::{FontWeight, TextAlignment, VerticalAlignment};
 use crate::utils::error::Result;
 use crate::{cloned, hformat};
@@ -26,13 +26,18 @@ impl XamlGui {
             .with_padding((20.0, 14.0))?;
         //.with_children(monitor_controls.iter().map(MonitorEntry::ui))?;
 
-        let settings = FontIcon::new('\u{E713}')? // Modern Windows 11 Settings icon
-            .with_vertical_alignment(VerticalAlignment::Center)?
-            .with_font_weight(FontWeight::Medium)?;
+        let settings = AppBarButton::new()?
+            .with_icon(&FontIcon::new('\u{E713}')?)?
+            .with_label("Settings")?
+            .with_enabled(false)?;
+
+        let refresh = AppBarButton::new()?
+            .with_icon(&FontIcon::new('\u{E72C}')?)?
+            .with_label("Refresh")?;
 
         // Create a new stack panel for the bottom bar
         let bottom_bar = Grid::new()?
-            .with_padding(20.0)?
+            //.with_padding(20.0)?
             .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
             .with_background(&SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 70 })?)?
             .with_child(
@@ -46,13 +51,8 @@ impl XamlGui {
             )?
             .with_child(
                 &StackPanel::horizontal()?
-                    .with_child(
-                        &FontIcon::new('\u{E890}')? // New Hide Icon
-                            .with_vertical_alignment(VerticalAlignment::Center)?
-                            .with_font_weight(FontWeight::Medium)?
-                    )?
-                    .with_child(&settings)?
-                    .with_spacing(8.0)?,
+                    .with_child(&refresh)?
+                    .with_child(&settings)?,
                 0,
                 1
             )?;

@@ -1,3 +1,3 @@
 pub mod Xaml;
-pub use windows::UI::*;
-pub mod Text;pub mod Core;pub mod Input;
+pub mod Input;pub mod Core;pub use windows::UI::*;
+pub mod Text;

@@ -1,7 +1,7 @@
 use windows::core::{ComInterface, TryIntoParam, HSTRING};
 use windows::Foundation::{EventHandler, IReference, Point, PropertyValue};
 use windows::Win32::UI::WindowsAndMessaging::WHEEL_DELTA;
-use windows_ext::UI::Xaml::Controls::FlyoutPresenter;
+use windows_ext::UI::Xaml::Controls::{FlyoutPresenter, IconElement};
 use windows_ext::UI::Xaml::Controls::Primitives::{FlyoutShowOptions, RangeBaseValueChangedEventArgs, RangeBaseValueChangedEventHandler};
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
 use windows_ext::UI::Xaml::{DependencyObject, UIElement};
@@ -113,6 +113,9 @@ impl TextBlock {
 }
 
 new_type!(FontIcon, windows_ext::UI::Xaml::Controls::FontIcon);
+impl windows::core::CanTryInto<windows_ext::UI::Xaml::Controls::IconElement> for FontIcon {
+    const CAN_INTO: bool = <windows_ext::UI::Xaml::Controls::FontIcon as windows::core::CanTryInto<windows_ext::UI::Xaml::Controls::IconElement>>::CAN_INTO;
+}
 
 impl FontIcon {
     pub fn new(icon: char) -> Result<Self> {
@@ -137,6 +140,33 @@ impl FontIcon {
         Ok(self)
     }
 }
+
+new_type!(AppBarButton, windows_ext::UI::Xaml::Controls::AppBarButton);
+
+impl AppBarButton {
+
+    pub fn new() -> Result<Self> {
+        let button = <Self as NewType>::Inner::new()?;
+        Ok(Self(button))
+    }
+
+    pub fn with_label<T: Into<HSTRING>>(self, text: T) -> Result<Self> {
+        self.0.SetLabel(&text.into())?;
+        Ok(self)
+    }
+
+    pub fn with_icon<T: TryIntoParam<IconElement>>(self, icon: T) -> Result<Self> {
+        self.0.SetIcon(icon)?;
+        Ok(self)
+    }
+
+    pub fn with_enabled(self, enabled: bool) -> Result<Self> {
+        self.0.SetIsEnabled(enabled)?;
+        Ok(self)
+    }
+
+}
+
 
 pub use windows_ext::UI::Xaml::Controls::Primitives::FlyoutPlacementMode;
 new_type!(Flyout, windows_ext::UI::Xaml::Controls::Flyout, no_ui);

@@ -1,8 +1,9 @@
+use std::cell::Cell;
 use std::mem::size_of;
 use std::sync::Once;
-
-use windows::core::{w, ComInterface, TryIntoParam, PCWSTR};
-use windows::Win32::Foundation::{COLORREF, HMODULE, HWND, LPARAM, LRESULT, RECT, WPARAM};
+use log::trace;
+use windows::core::{h, w, ComInterface, TryIntoParam, HSTRING, PCWSTR};
+use windows::Win32::Foundation::{COLORREF, HANDLE, HMODULE, HWND, LPARAM, LRESULT, RECT, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::HiDpi::GetDpiForWindow;
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
@@ -11,16 +12,50 @@ use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use windows_ext::UI::Xaml::Hosting::DesktopWindowXamlSource;
 use windows_ext::UI::Xaml::UIElement;
 
-use crate::{win_assert, Result};
+use crate::{win_assert, Result, APP_ICON};
 
-#[derive(Debug, Clone, Default)]
+#[derive(Default)]
 pub struct WindowBuilder {
-    hidden: bool
+    hidden: bool,
+    close_handler: Option<Box<dyn FnMut() + 'static>>,
+    title: Option<HSTRING>,
+    icon: Option<u16>,
+    x: Option<i32>,
+    y: Option<i32>,
+    w: Option<i32>,
+    h: Option<i32>,
 }
 
 impl WindowBuilder {
     pub fn with_hidden(mut self, hidden: bool) -> Self {
         self.hidden = hidden;
+        self
+    }
+
+    pub fn with_close_handler<F: FnMut() + 'static>(mut self, handler: F) -> Self {
+        self.close_handler = Some(Box::new(handler));
+        self
+    }
+
+    pub fn with_position(mut self, x: i32, y: i32) -> Self {
+        self.x = Some(x);
+        self.y = Some(y);
+        self
+    }
+
+    pub fn with_size(mut self, w: i32, h: i32) -> Self {
+        self.w = Some(w);
+        self.h = Some(h);
+        self
+    }
+
+    pub fn with_title<T: Into<HSTRING>>(mut self, title: T) -> Self {
+        self.title = Some(title.into());
+        self
+    }
+
+    pub fn with_icon_resource(mut self, icon: u16) -> Self {
+        self.icon = Some(icon);
         self
     }
 
@@ -47,33 +82,39 @@ impl From<WindowLevel> for HWND {
 
 pub struct Window {
     pub hwnd: HWND,
-    source: DesktopWindowXamlSource
+    source: DesktopWindowXamlSource,
+    icon: Option<HANDLE>
 }
 
 impl Window {
     const CLASS_NAME: PCWSTR = w!("rusty-twinkle-tray.window");
-    fn new(builder: WindowBuilder) -> crate::Result<Self> {
+    fn new(builder: WindowBuilder) -> Result<Self> {
         let instance = unsafe { GetModuleHandleW(None)? };
         static REGISTER_WINDOW_CLASS: Once = Once::new();
         REGISTER_WINDOW_CLASS.call_once(|| {
             Self::register(instance).unwrap_or_else(|err| log::warn!("Failed to register window class: {}", err));
         });
 
-        let mut ex_style = WS_EX_NOREDIRECTIONBITMAP | WS_EX_NOACTIVATE; // | WS_EX_TOPMOST;
+        let mut ex_style = WS_EX_NOREDIRECTIONBITMAP; // | WS_EX_TOPMOST;
         if builder.hidden {
-            ex_style |= WS_EX_LAYERED;
+            ex_style |= WS_EX_LAYERED | WS_EX_NOACTIVATE;
         }
+
+        let style = match builder.hidden {
+            true => WS_POPUP,
+            false => WS_OVERLAPPEDWINDOW
+        };
 
         let hwnd = unsafe {
             CreateWindowExW(
                 ex_style,
                 Self::CLASS_NAME,
-                w!("XAML Island Window"),
-                WS_POPUP,
-                0,
-                0,
-                10,
-                10,
+                builder.title.as_ref().unwrap_or(h!("XAML Island Window")),
+                style,
+                builder.x.unwrap_or(CW_USEDEFAULT),
+                builder.y.unwrap_or(CW_USEDEFAULT),
+                builder.w.unwrap_or(CW_USEDEFAULT),
+                builder.h.unwrap_or(CW_USEDEFAULT),
                 None,
                 None,
                 instance,
@@ -92,13 +133,35 @@ impl Window {
         unsafe {
             interop.AttachToWindow(hwnd)?;
             let island = interop.WindowHandle()?;
-            SetWindowLongPtrW(hwnd, GWLP_USERDATA, island.0);
+            let window_data = Box::new(WindowData {
+                island,
+                close_handler: Cell::new(builder.close_handler)
+            });
+            SetWindowLongPtrW(hwnd, GWLP_USERDATA, Box::into_raw(window_data) as _);
             sync_size(hwnd, island)?;
         }
 
+        let icon = match builder.icon {
+            None => None,
+            Some(id) => unsafe {
+                let icon = LoadImageW(
+                    instance,
+                    PCWSTR(APP_ICON as *const u16),
+                    IMAGE_ICON,
+                    0,
+                    0,
+                    LR_DEFAULTSIZE
+                )?;
+                SendMessageW(hwnd, WM_SETICON, WPARAM(ICON_BIG as usize), LPARAM(icon.0));
+                SendMessageW(hwnd, WM_SETICON, WPARAM(ICON_SMALL as usize), LPARAM(icon.0));
+                Some(icon)
+            }
+        };
+
         Ok(Self {
             hwnd,
-            source: desktop_source
+            source: desktop_source,
+            icon
         })
     }
 
@@ -128,23 +191,9 @@ impl Window {
         }
     }
 
-    //pub fn set_visible(&self, visible: bool) {
-    //    unsafe {
-    //        match visible {
-    //            true => SetWindowPos(self.hwnd, HWND_TOP, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE | SWP_NOMOVE),
-    //            false => SetWindowPos(
-    //                self.hwnd,
-    //                HWND_TOPMOST,
-    //                0,
-    //                0,
-    //                0,
-    //                0,
-    //                SWP_HIDEWINDOW | SWP_NOZORDER | SWP_NOSIZE | SWP_NOMOVE
-    //            )
-    //        }
-    //        .unwrap_or_else(|err| log::warn!("Failed to set window visibility: {}", err));
-    //    }
-    //}
+    pub fn set_visible(&self, visible: bool) {
+        self.set_window_pos(None, None, None, Some(visible))
+    }
 
     pub fn focus(&self) {
         unsafe {
@@ -161,7 +210,7 @@ impl Window {
         Ok(())
     }
 
-    fn register(instance: HMODULE) -> crate::Result<()> {
+    fn register(instance: HMODULE) -> Result<()> {
         let class = WNDCLASSEXW {
             cbSize: size_of::<WNDCLASSEXW>() as u32,
             lpfnWndProc: Some(Self::wnd_proc),
@@ -174,18 +223,49 @@ impl Window {
     }
 
     unsafe extern "system" fn wnd_proc(hwnd: HWND, msg: u32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
+        // Treat the pointer as 'const' instead of 'mut' as I'm not sure if this function is reentrant
+        let window_data = GetWindowLongPtrW(hwnd, GWLP_USERDATA) as *const WindowData;
         match msg {
             WM_NCCREATE => {
                 SetWindowLongPtrW(hwnd, GWLP_USERDATA, 0);
             }
             WM_SIZING | WM_SIZE => {
-                let island = GetWindowLongPtrW(hwnd, GWLP_USERDATA);
-                if island != 0 {
-                    sync_size(hwnd, HWND(island)).unwrap_or_else(|err| log::warn!("Failed to sync window size: {}", err));
+                if let Some(data) = window_data.as_ref() {
+                    sync_size(hwnd, data.island).unwrap_or_else(|err| log::warn!("Failed to sync window size: {}", err));
                 }
+            },
+            /*
+            This doesn't seem to produce correct results on Win11 despite what the docs say:
+            https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
+            WM_DPICHANGED => {
+                let suggested_rect = *(lparam.0 as *const RECT);
+                SetWindowPos(
+                    hwnd,
+                    None,
+                    suggested_rect.left,
+                    suggested_rect.right,
+                    suggested_rect.right - suggested_rect.left,
+                    suggested_rect.bottom- suggested_rect.top,
+                    SWP_NOZORDER | SWP_NOACTIVATE
+                ).unwrap();
+            },
+            */
+            WM_CLOSE => {
+                if let Some(data) = window_data.as_ref() {
+                    if let Some(mut callback) = data.close_handler.take() {
+                        callback();
+                        data.close_handler.set(Some(callback))
+                    }
+                }
+                return LRESULT::default()
             }
             WM_DESTROY => {
-                PostQuitMessage(0);
+                trace!("Destroying window data");
+                // Here we really need a 'mut' pointer, but we erase the pointer first so it should be fine
+                SetWindowLongPtrW(hwnd, GWLP_USERDATA, 0);
+                drop(Box::from_raw(window_data as *mut WindowData));
+                // the event loop implementation currently doesn't handle quit messages
+                // PostQuitMessage(0);
             }
             _ => {}
         }
@@ -198,6 +278,9 @@ impl Drop for Window {
         unsafe {
             if IsWindow(self.hwnd).as_bool() {
                 DestroyWindow(self.hwnd).unwrap_or_else(|err| log::warn!("Failed to destroy window: {}", err));
+            }
+            if let Some(icon) = self.icon.take() {
+                DestroyIcon(HICON(icon.0)).unwrap_or_else(|err| log::warn!("Failed to destroy window icon: {}", err))
             }
         }
     }
@@ -218,4 +301,9 @@ fn sync_size(hwnd: HWND, island: HWND) -> Result<()> {
         )?;
         Ok(())
     }
+}
+
+struct WindowData {
+    island: HWND,
+    close_handler: Cell<Option<Box<dyn FnMut() + 'static>>>
 }

@@ -40,7 +40,7 @@ use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock};
 pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
-use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, WindowBuilder, WindowLevel};
+use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, Window, WindowBuilder, WindowLevel};
 
 include!("../assets/ids.rs");
 
@@ -52,7 +52,9 @@ pub enum CustomEvent {
     ThemeChange,
     Backend(BackendEvent),
     ClickedOutside,
-    Refresh
+    Refresh,
+    OpenSettings,
+    CloseSettings
 }
 
 fn run() -> Result<()> {
@@ -91,6 +93,7 @@ fn run() -> Result<()> {
     let _power_listener = PowerStateListener::new({
         let proxy = controller.create_proxy();
         move |event| {
+            trace!("Got power state event: {:?}", event);
             if event == PowerEvent::MonitorOn {
                 proxy.refresh_brightness_in(Duration::from_secs(10));
             }
@@ -104,7 +107,11 @@ fn run() -> Result<()> {
 
     let mut gui = XamlGui::new(wnd_sender.clone())?;
 
-    let proxy_window = WindowBuilder::default().with_hidden(true).build()?;
+    let proxy_window = WindowBuilder::default()
+        .with_position(0, 0)
+        .with_size(10, 10)
+        .with_hidden(true)
+        .build()?;
     let proxy_content = TextBlock::new()?.with_text("Hello World")?;
     proxy_window.set_content(&proxy_content)?;
 
@@ -121,6 +128,8 @@ fn run() -> Result<()> {
         brush.SetTintOpacity(colors.opacity)?;
         brush
     };
+
+    let mut settings_window: Option<Window> = None;
 
     let flyout = Flyout::new(&content)?
         .with_style(|style| {
@@ -235,6 +244,29 @@ fn run() -> Result<()> {
                     gui.clear_monitors()?;
                     controller = MonitorController::new(wnd_sender.clone(), config.clone());
                 }
+                CustomEvent::OpenSettings => {
+                    log::info!("Open Settings");
+                    if let Some(window) = settings_window.as_ref() {
+                        window.set_foreground();
+                    } else {
+                        trace!("Creating settings window");
+                        let window = WindowBuilder::default()
+                            .with_size(800, 800)
+                            .with_title("Rusty Twinkle Tray Settings")
+                            .with_icon_resource(APP_ICON)
+                            .with_close_handler(cloned!([wnd_sender] move || wnd_sender
+                                .send(CustomEvent::CloseSettings)
+                                .unwrap_or_default()))
+                            .build()
+                            .unwrap();
+                        window.set_content(&TextBlock::new().unwrap().with_text("Hello World").unwrap()).unwrap();
+                        window.set_visible(true);
+                        settings_window = Some(window);
+                    }
+                }
+                CustomEvent::CloseSettings => {
+                    settings_window = None;
+                }
                 CustomEvent::Backend(event) => match event {
                     BackendEvent::RegisterMonitor(name, path) => {
                         log::info!("Found monitor: {}", name);
@@ -243,7 +275,7 @@ fn run() -> Result<()> {
                     BackendEvent::UpdateBrightness(path, value) => {
                         gui.update_brightness(path, value)?;
                     }
-                }
+                },
             }
         }
         Ok(())

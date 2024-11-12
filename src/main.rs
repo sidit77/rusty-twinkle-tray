@@ -62,6 +62,8 @@ pub enum CustomEvent {
 }
 
 fn run() -> Result<()> {
+    let settings_mode = std::env::args().any(|arg| arg == "--settings-mode");
+
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
 
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
@@ -149,6 +151,10 @@ fn run() -> Result<()> {
             wnd_sender.filter_send_ignore(Some(CustomEvent::FocusLost));
             Ok(())
         }))?;
+
+    if settings_mode {
+        wnd_sender.send(CustomEvent::OpenSettings).unwrap();
+    }
 
     let mut last_close = Instant::now();
     event_loop(async {
@@ -253,9 +259,7 @@ fn run() -> Result<()> {
                 }
                 CustomEvent::OpenSettings => {
                     log::info!("Open Settings");
-                    if let Some(window) = settings_window.as_ref() {
-                        window.set_foreground();
-                    } else {
+                    if settings_window.is_none() {
                         trace!("Creating settings window");
                         let window = WindowBuilder::default()
                             .with_size(800, 800)
@@ -275,9 +279,15 @@ fn run() -> Result<()> {
                         window.set_visible(true);
                         settings_window = Some(window);
                     }
+                    if let Some(window) = settings_window.as_ref() {
+                        window.focus();
+                    }
                 }
                 CustomEvent::CloseSettings => {
                     settings_window = None;
+                    if settings_mode {
+                        return Ok(());
+                    }
                 }
                 CustomEvent::Backend(event) => match event {
                     BackendEvent::RegisterMonitor(name, path) => {

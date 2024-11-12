@@ -10393,7 +10393,23 @@ unsafe impl ::core::marker::Sync for VisualTransition {}
     ::core::clone::Clone
 )]
 pub struct Window(::windows_core::IUnknown);
-impl Window {}
+impl Window {
+    pub fn Current() -> ::windows_core::Result<Window> {
+        Self::IWindowStatics(|this| unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Current)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        })
+    }
+    #[doc(hidden)]
+    pub fn IWindowStatics<R, F: FnOnce(&IWindowStatics) -> ::windows_core::Result<R>>(
+        callback: F,
+    ) -> ::windows_core::Result<R> {
+        static SHARED: ::windows_core::imp::FactoryCache<Window, IWindowStatics> = ::windows_core::imp::FactoryCache::new();
+        SHARED.call(callback)
+    }
+}
 impl ::windows_core::RuntimeType for Window {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Window;{3276167d-c9f6-462d-9de2-ae4c1fd8c2e5})",

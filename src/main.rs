@@ -18,16 +18,19 @@ use std::time::{Duration, Instant};
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use futures_lite::stream::or;
 use futures_lite::{FutureExt, StreamExt};
-use log::{trace, LevelFilter};
-use windows::core::{h, IInspectable};
+use log::{trace, warn, LevelFilter};
+use windows::core::{h, ComInterface, IInspectable};
 use windows::Foundation::{Size, TypedEventHandler};
+use windows::UI::Color;
 use windows::Win32::Foundation::RECT;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows::UI::ViewManagement::UISettings;
+use windows::Win32::Graphics::Dwm::{DwmSetWindowAttribute, DWMSBT_MAINWINDOW, DWMWA_SYSTEMBACKDROP_TYPE, DWM_SYSTEMBACKDROP_TYPE};
+use windows_ext::IXamlSourceTransparency;
 use windows_ext::UI::Xaml::Controls::Control;
-use windows_ext::UI::Xaml::ElementTheme;
+use windows_ext::UI::Xaml::{ElementTheme, UIElement, Window as XamlWindow};
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
-use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
+use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
 
 use crate::backend::{BackendEvent, MonitorController};
 use crate::config::Config;
@@ -61,9 +64,12 @@ fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
 
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
+    XamlWindow::Current()
+        .and_then(|w| w.cast::<IXamlSourceTransparency>())
+        .and_then(|t| t.SetIsBackgroundTransparent(true))
+        .unwrap_or_else(|e| warn!("Failed to make XAML island background transparent: {e}"));
 
     let config = Arc::new(Mutex::new(Config::load()?));
-
     let (wnd_sender, wnd_receiver) = flume::unbounded();
     let mut controller = MonitorController::new(wnd_sender.clone(), config.clone());
 
@@ -259,7 +265,12 @@ fn run() -> Result<()> {
                                 .unwrap_or_default()))
                             .build()
                             .unwrap();
-                        window.set_content(&TextBlock::new().unwrap().with_text("Hello World").unwrap()).unwrap();
+
+                        unsafe {
+                            DwmSetWindowAttribute(window.hwnd, DWMWA_SYSTEMBACKDROP_TYPE, &DWMSBT_MAINWINDOW as *const _ as _, size_of::<DWM_SYSTEMBACKDROP_TYPE>() as u32).unwrap();
+                        }
+
+                        window.set_content(&build_settings_gui().unwrap()).unwrap();
                         window.set_visible(true);
                         settings_window = Some(window);
                     }
@@ -285,6 +296,23 @@ fn run() -> Result<()> {
     config.lock_no_poison().save_if_dirty()?;
     unsafe { RoUninitialize() }
     Ok(())
+}
+
+fn build_settings_gui() -> Result<impl windows::core::CanTryInto<UIElement>> {
+    let background_brush = {
+        //let brush = AcrylicBrush::new()?;
+        //brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
+        let brush = SolidColorBrush::CreateInstanceWithColor(Color { A: 120, R: 0, G: 0, B: 0, })?;
+        brush
+    };
+
+    let main = StackPanel::vertical()?
+        .with_padding(10.0)?
+        .with_background(&background_brush)?
+        .with_width(200.0)?;
+
+    main.add_child(&TextBlock::new()?.with_text("Hello World")?)?;
+    Ok(main)
 }
 
 fn main() -> ExitCode {

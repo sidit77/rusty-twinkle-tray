@@ -12,7 +12,7 @@ use windows_ext::Win32::System::WinRT::Xaml::IDesktopWindowXamlSourceNative;
 use windows_ext::UI::Xaml::Hosting::DesktopWindowXamlSource;
 use windows_ext::UI::Xaml::UIElement;
 
-use crate::{win_assert, Result, APP_ICON};
+use crate::{win_assert, Result};
 
 #[derive(Default)]
 pub struct WindowBuilder {
@@ -146,7 +146,7 @@ impl Window {
             Some(id) => unsafe {
                 let icon = LoadImageW(
                     instance,
-                    PCWSTR(APP_ICON as *const u16),
+                    PCWSTR(id as *const u16),
                     IMAGE_ICON,
                     0,
                     0,

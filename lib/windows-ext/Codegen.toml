@@ -48,8 +48,8 @@ constructors = [
 WindowsXamlManager = ["InitializeForCurrentThread", "IWindowsXamlManagerStatics"]
 DesktopWindowXamlSource = ["SetContent"]
 IDesktopWindowXamlSourceNative = ["AttachToWindow", "WindowHandle"]
-FocusManager = true
-LosingFocusEventArgs = true
+Window = ["Current", "IWindowStatics"]
+
 
 UIElement = ["Dispatcher"]
 UIElementCollection = ["First", "Append", "Clear"]

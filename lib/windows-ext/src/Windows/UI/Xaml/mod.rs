@@ -8851,19 +8851,7 @@ unsafe impl ::core::marker::Sync for RoutedEvent {}
     ::core::clone::Clone
 )]
 pub struct RoutedEventArgs(::windows_core::IUnknown);
-impl RoutedEventArgs {
-    pub fn OriginalSource(
-        &self,
-    ) -> ::windows_core::Result<::windows_core::IInspectable> {
-        let this = self;
-        unsafe {
-            let mut result__ = ::std::mem::zeroed();
-            (::windows_core::Interface::vtable(this)
-                .OriginalSource)(::windows_core::Interface::as_raw(this), &mut result__)
-                .from_abi(result__)
-        }
-    }
-}
+impl RoutedEventArgs {}
 impl ::windows_core::RuntimeType for RoutedEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.RoutedEventArgs;{5c985ac6-d802-4b38-a223-bf070c43fedf})",

@@ -68,7 +68,6 @@ TappedEventHandler = true
 TappedRoutedEventArgs = true
 
 RoutedEventHandler = true
-RoutedEventArgs = true
 
 AcrylicBrush = true
 SolidColorBrush = true
@@ -83,6 +82,7 @@ TextBox = true
 Slider = true
 Flyout = true
 AppBarButton = true
+ToggleSwitch = true
 
 Style = true
 DependencyProperty = true

@@ -4,7 +4,7 @@ use windows::Win32::UI::WindowsAndMessaging::WHEEL_DELTA;
 use windows_ext::UI::Xaml::Controls::Primitives::{FlyoutShowOptions, RangeBaseValueChangedEventArgs, RangeBaseValueChangedEventHandler};
 use windows_ext::UI::Xaml::Controls::{FlyoutPresenter, IconElement};
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
-use windows_ext::UI::Xaml::{DependencyObject, RoutedEventArgs, RoutedEventHandler, UIElement};
+use windows_ext::UI::Xaml::{DependencyObject, RoutedEventHandler, UIElement};
 
 use super::{FontWeight, Padding, TextAlignment, VerticalAlignment};
 use crate::ui::style::Style;
@@ -77,9 +77,10 @@ impl TextBlock {
         Ok(Self(<Self as NewType>::Inner::new()?))
     }
 
-    pub fn with_text<T: Into<HSTRING>>(self, text: T) -> Result<Self> {
-        self.0.SetText(&text.into())?;
-        Ok(self)
+    pub fn with_text<T: Into<HSTRING>>(text: T) -> Result<Self> {
+        let block = Self::new()?;
+        block.0.SetText(&text.into())?;
+        Ok(block)
     }
 
     pub fn with_vertical_alignment(self, alignment: VerticalAlignment) -> Result<Self> {
@@ -166,12 +167,39 @@ impl AppBarButton {
 
     pub fn with_click_handler<F>(self, mut handler: F) -> Result<Self>
     where
-        F: FnMut(/*Option<&::windows_core::IInspectable>, */ &RoutedEventArgs) -> Result<()> + Send + 'static
+        F: FnMut(/*Option<&::windows_core::IInspectable>,  &RoutedEventArgs*/) -> Result<()> + Send + 'static
     {
         self.0
-            .Click(&RoutedEventHandler::new(move |_sender, args| handler(args.some()?).to_win_result()))?;
+            .Click(&RoutedEventHandler::new(move |_sender, _args| handler().to_win_result()))?;
         Ok(self)
     }
+}
+
+new_type!(ToggleSwitch, windows_ext::UI::Xaml::Controls::ToggleSwitch);
+
+impl ToggleSwitch {
+    pub fn new() -> Result<Self> {
+        let switch = <Self as NewType>::Inner::new()?;
+        Ok(Self(switch))
+    }
+
+    pub fn with_state(self, on: bool) -> Result<Self> {
+        self.0.SetIsOn(on)?;
+        Ok(self)
+    }
+
+    pub fn with_toggled_handler<F>(self, mut handler: F) -> Result<Self>
+        where F: FnMut(bool) -> Result<()> + Send + 'static
+    {
+        self.0.Toggled(&RoutedEventHandler::new(move |sender, _ | {
+            let state = sender.some()?
+                .cast::<Self>()?.0
+                .IsOn()?;
+            handler(state).to_win_result()
+        }))?;
+        Ok(self)
+    }
+
 }
 
 pub use windows_ext::UI::Xaml::Controls::Primitives::FlyoutPlacementMode;

@@ -31,7 +31,7 @@ impl XamlGui {
             .with_icon(&FontIcon::new('\u{E713}')?)?
             .with_label("Settings")?
             //.with_enabled(false)?;
-            .with_click_handler(cloned!([sender] move|_| {
+            .with_click_handler(cloned!([sender] move|| {
                 sender
                     .send(CustomEvent::OpenSettings)
                     .unwrap_or_else(|_| log::warn!("Failed to send settings event"));
@@ -41,7 +41,7 @@ impl XamlGui {
         let refresh = AppBarButton::new()?
             .with_icon(&FontIcon::new('\u{E72C}')?)?
             .with_label("Refresh")?
-            .with_click_handler(cloned!([sender] move |_| {
+            .with_click_handler(cloned!([sender] move || {
                 sender
                     .send(CustomEvent::Refresh)
                     .unwrap_or_else(|_| log::warn!("Failed to send refresh event"));
@@ -54,8 +54,7 @@ impl XamlGui {
             .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
             .with_background(&SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 70 })?)?
             .with_child(
-                &TextBlock::new()?
-                    .with_text("Adjust Brightness")?
+                &TextBlock::with_text("Adjust Brightness")?
                     .with_font_size(15.0)?
                     .with_vertical_alignment(VerticalAlignment::Center)?
                     .with_padding((20.0, 0.0, 0.0, 0.0))?,
@@ -150,7 +149,7 @@ impl MonitorEntry {
                 &StackPanel::horizontal()?
                     .with_spacing(8.0)?
                     .with_child(&FontIcon::new('\u{E7f4}')?.with_font_weight(FontWeight::Medium)?)?
-                    .with_child(&TextBlock::new()?.with_text(name)?.with_font_size(20.0)?)?
+                    .with_child(&TextBlock::with_text(name)?.with_font_size(20.0)?)?
             )?
             .with_child(
                 &Grid::new()?

@@ -2,7 +2,7 @@ use windows::core::TryIntoParam;
 use windows::Foundation::Size;
 use windows_ext::UI::Xaml::Controls::{ColumnDefinition, Orientation, RowDefinition};
 use windows_ext::UI::Xaml::Media::Brush;
-use windows_ext::UI::Xaml::{FrameworkElement, GridUnitType, UIElement};
+use windows_ext::UI::Xaml::{CornerRadius, FrameworkElement, GridUnitType, UIElement};
 
 use crate::ui::{ElementTheme, NewType, Padding};
 use crate::utils::error::Result;
@@ -28,6 +28,21 @@ impl StackPanel {
 
     pub fn with_padding<P: Into<Padding>>(self, padding: P) -> Result<Self> {
         self.0.SetPadding(padding.into().into())?;
+        Ok(self)
+    }
+
+    pub fn with_border_thickness<P: Into<Padding>>(self, thickness: P) -> Result<Self> {
+        self.0.SetBorderThickness(thickness.into().into())?;
+        Ok(self)
+    }
+
+    pub fn with_corner_radius(self, radius: f64) -> Result<Self> {
+        self.0.SetCornerRadius(CornerRadius {
+            TopLeft: radius,
+            TopRight: radius,
+            BottomRight: radius,
+            BottomLeft: radius,
+        })?;
         Ok(self)
     }
 
@@ -63,6 +78,11 @@ impl StackPanel {
 
     pub fn with_background<B: TryIntoParam<Brush>>(self, brush: B) -> Result<Self> {
         self.0.SetBackground(brush)?;
+        Ok(self)
+    }
+
+    pub fn with_border_brush<B: TryIntoParam<Brush>>(self, brush: B) -> Result<Self> {
+        self.0.SetBorderBrush(brush)?;
         Ok(self)
     }
 

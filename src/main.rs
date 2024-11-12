@@ -27,7 +27,7 @@ use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLE
 use windows::UI::ViewManagement::UISettings;
 use windows::Win32::Graphics::Dwm::{DwmSetWindowAttribute, DWMSBT_MAINWINDOW, DWMWA_SYSTEMBACKDROP_TYPE, DWM_SYSTEMBACKDROP_TYPE};
 use windows_ext::IXamlSourceTransparency;
-use windows_ext::UI::Xaml::Controls::Control;
+use windows_ext::UI::Xaml::Controls::{Control};
 use windows_ext::UI::Xaml::{ElementTheme, UIElement, Window as XamlWindow};
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
@@ -39,7 +39,8 @@ use crate::power::{PowerEvent, PowerStateListener};
 use crate::runtime::{FutureStream, Timer};
 use crate::theme::{ColorSet, SystemSettings};
 use crate::ui::container::StackPanel;
-use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock};
+use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock, ToggleSwitch};
+use crate::ui::{FontWeight};
 pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
@@ -118,7 +119,7 @@ fn run() -> Result<()> {
         .with_size(10, 10)
         .with_hidden(true)
         .build()?;
-    let proxy_content = TextBlock::new()?.with_text("Hello World")?;
+    let proxy_content = TextBlock::with_text("This should be invisible!")?;
     proxy_window.set_content(&proxy_content)?;
 
     let content = StackPanel::vertical()?
@@ -265,9 +266,9 @@ fn run() -> Result<()> {
                                 .unwrap_or_default()))
                             .build()
                             .unwrap();
-
                         unsafe {
                             DwmSetWindowAttribute(window.hwnd, DWMWA_SYSTEMBACKDROP_TYPE, &DWMSBT_MAINWINDOW as *const _ as _, size_of::<DWM_SYSTEMBACKDROP_TYPE>() as u32).unwrap();
+                            //DwmSetWindowAttribute(window.hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &TRUE as *const _ as _, size_of::<BOOL>() as u32).unwrap();
                         }
 
                         window.set_content(&build_settings_gui().unwrap()).unwrap();
@@ -299,19 +300,35 @@ fn run() -> Result<()> {
 }
 
 fn build_settings_gui() -> Result<impl windows::core::CanTryInto<UIElement>> {
-    let background_brush = {
-        //let brush = AcrylicBrush::new()?;
-        //brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
-        let brush = SolidColorBrush::CreateInstanceWithColor(Color { A: 120, R: 0, G: 0, B: 0, })?;
-        brush
-    };
+    //let background_brush = {
+    //    let brush = SolidColorBrush::CreateInstanceWithColor(Color { A: 120, R: 0, G: 0, B: 0, })?;
+    //    brush
+    //};
+
+    let section_background_brush = SolidColorBrush::CreateInstanceWithColor(Color { R: 255, G: 255, B: 255, A: 255 })?;
+    let border_brush = SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 30 })?;
+
+    let general = StackPanel::vertical()?
+        .with_background(&section_background_brush)?
+        .with_padding(10.0)?
+        .with_spacing(7.0)?
+        .with_child(&TextBlock::with_text("General")?
+            .with_font_size(24.0)?
+            .with_font_weight(FontWeight::SemiLight)?)?
+        .with_child(&StackPanel::vertical()?
+            .with_child(&TextBlock::with_text("Automatically run on startup")?)?
+            .with_child(&ToggleSwitch::new()?
+                .with_state(true)?
+                .with_toggled_handler(|state| Ok(println!("autostart: {state}")))?)?)?
+
+        .with_border_thickness(1.0)?
+        .with_border_brush(&border_brush)?
+        .with_corner_radius(5.0)?;
 
     let main = StackPanel::vertical()?
         .with_padding(10.0)?
-        .with_background(&background_brush)?
-        .with_width(200.0)?;
+        .with_child(&general)?;
 
-    main.add_child(&TextBlock::new()?.with_text("Hello World")?)?;
     Ok(main)
 }
 

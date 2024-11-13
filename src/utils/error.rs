@@ -118,6 +118,17 @@ impl std::error::Error for TracedError {
     }
 }
 
+impl From<&'static str> for TracedError {
+
+    #[track_caller]
+    fn from(value: &'static str) -> Self {
+        Self {
+            inner: InnerError::String(value.into()),
+            backtrace: Trace::capture()
+        }
+    }
+}
+
 impl From<Error> for TracedError {
     #[track_caller]
     fn from(value: Error) -> Self {
@@ -175,11 +186,11 @@ impl<T: Display> Debug for FromDisplay<T> {
     }
 }
 
-pub trait ResultEx<T> {
+pub trait TracedResultEx<T> {
     fn to_win_result(self) -> windows::core::Result<T>;
 }
 
-impl<T> ResultEx<T> for Result<T> {
+impl<T> TracedResultEx<T> for Result<T> {
     fn to_win_result(self) -> windows::core::Result<T> {
         self.map_err(|err| match err.inner {
             InnerError::Win(err) => err,

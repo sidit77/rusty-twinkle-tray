@@ -3,8 +3,7 @@ use std::ffi::OsString;
 use std::fs::File;
 use std::os::windows::ffi::OsStringExt;
 use std::path::{Path, PathBuf};
-use std::sync::OnceLock;
-
+use std::sync::{LazyLock, OnceLock};
 use ron::de::from_reader;
 use ron::ser::{to_writer_pretty, PrettyConfig};
 use serde::{Deserialize, Serialize};
@@ -75,6 +74,101 @@ impl Config {
         Ok(())
     }
 }
+
+
+
+pub mod autostart {
+    use std::path::PathBuf;
+    use std::sync::LazyLock;
+    use log::warn;
+    use windows::core::{w, PCWSTR};
+    use windows::Win32::System::Registry::KEY_READ;
+    use registry::AutoStartRegKey;
+    use crate::Result;
+
+    static EXE_PATH: LazyLock<PathBuf> = LazyLock::new(|| {
+        std::env::current_exe()
+            .and_then(dunce::canonicalize)
+            .expect("Failed to get exe path")
+    });
+
+    // Programs seems to start in alphabetical order. So we prefix the name with an underscore.
+    const PROGRAM_KEY: PCWSTR = w!("_RustyTwinkleTray");
+
+    pub fn is_enabled() -> bool {
+        AutoStartRegKey::new(KEY_READ)
+            .and_then(|reg| reg.read_path(PROGRAM_KEY))
+            .map_err(|e| warn!("Failed to read registry: {e}"))
+            .ok()
+            .flatten()
+            .map(|path| EXE_PATH.eq(&path))
+            .unwrap_or(false)
+    }
+
+    mod registry {
+        use std::ffi::OsString;
+        use std::mem::zeroed;
+        use std::os::windows::ffi::OsStringExt;
+        use std::path::PathBuf;
+        use log::warn;
+        use windows::core::{w, HRESULT, PCWSTR};
+        use windows::Win32::Foundation::{ERROR_FILE_NOT_FOUND, ERROR_MORE_DATA};
+        use crate::Result;
+        use windows::Win32::System::Registry::{RegCloseKey, RegOpenKeyExW, RegQueryValueExW, HKEY, HKEY_LOCAL_MACHINE, KEY_READ, REG_EXPAND_SZ, REG_SAM_FLAGS, REG_SZ, REG_VALUE_TYPE};
+
+        pub struct AutoStartRegKey {
+            handle: HKEY
+        }
+
+        impl AutoStartRegKey {
+
+            pub fn new(permissions: REG_SAM_FLAGS) -> Result<Self> {
+
+                let handle = unsafe {
+                    let mut handle = zeroed();
+                    RegOpenKeyExW(HKEY_LOCAL_MACHINE, w!(r#"Software\Microsoft\Windows\CurrentVersion\Run"#), 0, permissions, &mut handle)?;
+                    handle
+                };
+                Ok(Self {
+                    handle,
+                })
+            }
+
+            pub fn read_path(&self, key: PCWSTR) -> Result<Option<PathBuf>> {
+                let mut buffer = vec![0u16; 256];
+                loop {
+                    let mut size = buffer.len() as u32 * 2;
+                    let mut ty = REG_VALUE_TYPE::default();
+                    match unsafe { RegQueryValueExW(self.handle, key, None, Some(&mut ty), Some(buffer.as_mut_ptr() as _), Some(&mut size)) } {
+                        Ok(()) => {
+                            if !matches!(ty, REG_SZ | REG_EXPAND_SZ) {
+                                return Err("Invalid registry item type".into());
+                            }
+                            let end = buffer.iter().take_while(|i| **i != 0).count();
+                            return Ok(Some(PathBuf::from(OsString::from_wide(&buffer[..end]))))
+                        },
+                        Err(e) if e.code() == HRESULT::from_win32(ERROR_MORE_DATA.0) => buffer.resize(size as usize / 2, 0),
+                        Err(e) if e.code() == HRESULT::from_win32(ERROR_FILE_NOT_FOUND.0) => return Ok(None),
+                        Err(e) => return Err(e.into())
+                    }
+                }
+
+            }
+
+        }
+
+        impl Drop for AutoStartRegKey {
+            fn drop(&mut self) {
+                unsafe {
+                    RegCloseKey(self.handle)
+                        .unwrap_or_else(|e| warn!("Failed to close registry key: {e}"));
+                }
+            }
+        }
+    }
+}
+
+
 
 /*
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]

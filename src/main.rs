@@ -33,7 +33,7 @@ use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
 
 use crate::backend::{BackendEvent, MonitorController};
-use crate::config::Config;
+use crate::config::{autostart, Config};
 use crate::interface::XamlGui;
 use crate::power::{PowerEvent, PowerStateListener};
 use crate::runtime::{FutureStream, Timer};
@@ -278,6 +278,8 @@ fn run() -> Result<()> {
                         window.set_content(&build_settings_gui().unwrap()).unwrap();
                         window.set_visible(true);
                         settings_window = Some(window);
+
+                        println!("{:?}", autostart::is_enabled());
                     }
                     if let Some(window) = settings_window.as_ref() {
                         window.focus();

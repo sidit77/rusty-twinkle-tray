@@ -22,6 +22,7 @@ ron = "0.8"
 async-executor = "1.8"
 flume = "0.11"
 futures-lite = "2"
+dunce = "1"
 windows-ext = { path = "lib/windows-ext" }
 windows = { version = "0.52", features = [
     "Win32_Foundation",

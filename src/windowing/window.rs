@@ -1,6 +1,7 @@
 use std::cell::Cell;
 use std::mem::size_of;
 use std::sync::Once;
+
 use log::trace;
 use windows::core::{h, w, ComInterface, TryIntoParam, HSTRING, PCWSTR};
 use windows::Win32::Foundation::{COLORREF, HANDLE, HMODULE, HWND, LPARAM, LRESULT, RECT, WPARAM};
@@ -23,7 +24,7 @@ pub struct WindowBuilder {
     x: Option<i32>,
     y: Option<i32>,
     w: Option<i32>,
-    h: Option<i32>,
+    h: Option<i32>
 }
 
 impl WindowBuilder {
@@ -144,14 +145,7 @@ impl Window {
         let icon = match builder.icon {
             None => None,
             Some(id) => unsafe {
-                let icon = LoadImageW(
-                    instance,
-                    PCWSTR(id as *const u16),
-                    IMAGE_ICON,
-                    0,
-                    0,
-                    LR_DEFAULTSIZE
-                )?;
+                let icon = LoadImageW(instance, PCWSTR(id as *const u16), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE)?;
                 SendMessageW(hwnd, WM_SETICON, WPARAM(ICON_BIG as usize), LPARAM(icon.0));
                 SendMessageW(hwnd, WM_SETICON, WPARAM(ICON_SMALL as usize), LPARAM(icon.0));
                 Some(icon)
@@ -233,7 +227,7 @@ impl Window {
                 if let Some(data) = window_data.as_ref() {
                     sync_size(hwnd, data.island).unwrap_or_else(|err| log::warn!("Failed to sync window size: {}", err));
                 }
-            },
+            }
             /*
             This doesn't seem to produce correct results on Win11 despite what the docs say:
             https://learn.microsoft.com/en-us/windows/win32/hidpi/wm-dpichanged
@@ -257,7 +251,7 @@ impl Window {
                         data.close_handler.set(Some(callback))
                     }
                 }
-                return LRESULT::default()
+                return LRESULT::default();
             }
             WM_DESTROY => {
                 trace!("Destroying window data");

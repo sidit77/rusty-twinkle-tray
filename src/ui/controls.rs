@@ -189,17 +189,15 @@ impl ToggleSwitch {
     }
 
     pub fn with_toggled_handler<F>(self, mut handler: F) -> Result<Self>
-        where F: FnMut(bool) -> Result<()> + Send + 'static
+    where
+        F: FnMut(bool) -> Result<()> + Send + 'static
     {
-        self.0.Toggled(&RoutedEventHandler::new(move |sender, _ | {
-            let state = sender.some()?
-                .cast::<Self>()?.0
-                .IsOn()?;
+        self.0.Toggled(&RoutedEventHandler::new(move |sender, _| {
+            let state = sender.some()?.cast::<Self>()?.0.IsOn()?;
             handler(state).to_win_result()
         }))?;
         Ok(self)
     }
-
 }
 
 pub use windows_ext::UI::Xaml::Controls::Primitives::FlyoutPlacementMode;

@@ -21,26 +21,26 @@ use futures_lite::{FutureExt, StreamExt};
 use log::{info, trace, warn, LevelFilter};
 use windows::core::{h, ComInterface, IInspectable};
 use windows::Foundation::{Size, TypedEventHandler};
-use windows::UI::Color;
 use windows::Win32::Foundation::RECT;
-use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
-use windows::UI::ViewManagement::UISettings;
 use windows::Win32::Graphics::Dwm::{DwmSetWindowAttribute, DWMSBT_MAINWINDOW, DWMWA_SYSTEMBACKDROP_TYPE, DWM_SYSTEMBACKDROP_TYPE};
+use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
+use windows::UI::Color;
+use windows::UI::ViewManagement::UISettings;
 use windows_ext::IXamlSourceTransparency;
-use windows_ext::UI::Xaml::Controls::{Control};
-use windows_ext::UI::Xaml::{ElementTheme, UIElement, Window as XamlWindow};
+use windows_ext::UI::Xaml::Controls::Control;
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
+use windows_ext::UI::Xaml::{ElementTheme, UIElement, Window as XamlWindow};
 
-use crate::config::{autostart, Config};
 use crate::backend::MonitorController;
+use crate::config::{autostart, Config};
 use crate::interface::XamlGui;
 use crate::monitors::MonitorPath;
 use crate::runtime::{FutureStream, Timer};
 use crate::theme::{ColorSet, SystemSettings};
 use crate::ui::container::StackPanel;
 use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock, ToggleSwitch};
-use crate::ui::{FontWeight};
+use crate::ui::FontWeight;
 pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
@@ -264,7 +264,7 @@ fn run() -> Result<()> {
                     log::info!("Restarting backend...");
                     gui.clear_monitors()?;
                     controller = MonitorController::new(wnd_sender.clone(), config.clone());
-                },
+                }
                 CustomEvent::OpenSettings => {
                     log::info!("Open Settings");
                     if settings_window.is_none() {

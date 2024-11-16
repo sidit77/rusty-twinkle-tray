@@ -41,7 +41,7 @@ impl StackPanel {
             TopLeft: radius,
             TopRight: radius,
             BottomRight: radius,
-            BottomLeft: radius,
+            BottomLeft: radius
         })?;
         Ok(self)
     }

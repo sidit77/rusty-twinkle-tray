@@ -119,7 +119,6 @@ impl std::error::Error for TracedError {
 }
 
 impl From<&'static str> for TracedError {
-
     #[track_caller]
     fn from(value: &'static str) -> Self {
         Self {

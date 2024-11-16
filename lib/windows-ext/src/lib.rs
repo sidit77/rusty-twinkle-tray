@@ -21,11 +21,11 @@ impl FontFamilyExt for crate::UI::Xaml::Media::FontFamily {
         })
     }
 }
-fn IFontFamilyFactoryFn<R, F: FnOnce(&crate::UI::Xaml::Media::IFontFamilyFactory) -> windows_core::Result<R>>(callback: F) -> windows_core::Result<R> {
-    static SHARED: ::windows_core::imp::FactoryCache<
-        crate::UI::Xaml::Media::FontFamily,
-        crate::UI::Xaml::Media::IFontFamilyFactory
-    > = ::windows_core::imp::FactoryCache::new();
+fn IFontFamilyFactoryFn<R, F: FnOnce(&crate::UI::Xaml::Media::IFontFamilyFactory) -> windows_core::Result<R>>(
+    callback: F
+) -> windows_core::Result<R> {
+    static SHARED: ::windows_core::imp::FactoryCache<crate::UI::Xaml::Media::FontFamily, crate::UI::Xaml::Media::IFontFamilyFactory> =
+        ::windows_core::imp::FactoryCache::new();
     SHARED.call(callback)
 }
 
@@ -34,7 +34,7 @@ fn IFontFamilyFactoryFn<R, F: FnOnce(&crate::UI::Xaml::Media::IFontFamilyFactory
 pub struct IXamlSourceTransparency_Vtbl {
     pub base: windows_core::IInspectable_Vtbl,
     pub IsBackgroundTransparent: unsafe extern "system" fn(this: *mut std::ffi::c_void, *mut bool) -> windows_core::HRESULT,
-    pub SetIsBackgroundTransparent: unsafe extern "system" fn(this: *mut std::ffi::c_void, bool) -> windows_core::HRESULT,
+    pub SetIsBackgroundTransparent: unsafe extern "system" fn(this: *mut std::ffi::c_void, bool) -> windows_core::HRESULT
 }
 
 #[repr(transparent)]
@@ -42,24 +42,17 @@ pub struct IXamlSourceTransparency_Vtbl {
 pub struct IXamlSourceTransparency(windows_core::IUnknown);
 
 impl IXamlSourceTransparency {
-
     pub fn IsBackgroundTransparent(&self) -> windows_core::Result<bool> {
         unsafe {
             let mut result__ = ::std::mem::zeroed();
-            (::windows_core::Interface::vtable(self)
-                .IsBackgroundTransparent)(::windows_core::Interface::as_raw(self), &mut result__)
+            (::windows_core::Interface::vtable(self).IsBackgroundTransparent)(::windows_core::Interface::as_raw(self), &mut result__)
                 .from_abi(result__)
         }
     }
 
     pub fn SetIsBackgroundTransparent(&self, transparent: bool) -> windows_core::Result<()> {
-        unsafe {
-            (::windows_core::Interface::vtable(self)
-                .SetIsBackgroundTransparent)(::windows_core::Interface::as_raw(self), transparent)
-                .ok()
-        }
+        unsafe { (::windows_core::Interface::vtable(self).SetIsBackgroundTransparent)(::windows_core::Interface::as_raw(self), transparent).ok() }
     }
-
 }
 
 windows_core::imp::interface_hierarchy!(IXamlSourceTransparency, windows_core::IUnknown, windows_core::IInspectable);
@@ -70,5 +63,3 @@ unsafe impl windows_core::Interface for IXamlSourceTransparency {
 unsafe impl windows_core::ComInterface for IXamlSourceTransparency {
     const IID: windows_core::GUID = windows_core::GUID::from_u128(0x06636c29_5a17_458d_8ea2_2422d997a922);
 }
-
-

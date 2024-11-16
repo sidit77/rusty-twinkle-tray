@@ -2,9 +2,10 @@ use std::sync::{Mutex, MutexGuard};
 
 pub trait ChannelExt<T> {
     fn filter_send_ignore(&self, msg: Option<T>);
+    fn send_ignore(&self, msg: T);
 }
 
-impl<T> ChannelExt<T> for flume::Sender<T> {
+impl<T> ChannelExt<T> for loole::Sender<T> {
     #[track_caller]
     fn filter_send_ignore(&self, msg: Option<T>) {
         if let Some(msg) = msg {
@@ -12,6 +13,13 @@ impl<T> ChannelExt<T> for flume::Sender<T> {
                 .unwrap_or_else(|err| log::warn!("Failed to send message: {}", err));
         }
     }
+
+    #[track_caller]
+    fn send_ignore(&self, msg: T) {
+        self.send(msg)
+            .unwrap_or_else(|err| log::warn!("Failed to send message: {}", err));
+    }
+
 }
 
 pub trait MutexExt {

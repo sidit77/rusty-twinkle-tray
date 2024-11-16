@@ -18,7 +18,7 @@ use std::time::{Duration, Instant};
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use futures_lite::stream::or;
 use futures_lite::{FutureExt, StreamExt};
-use log::{trace, LevelFilter};
+use log::{trace, warn, LevelFilter};
 use windows::core::{h, IInspectable};
 use windows::Foundation::{Size, TypedEventHandler};
 use windows::Win32::Foundation::RECT;
@@ -29,18 +29,20 @@ use windows_ext::UI::Xaml::ElementTheme;
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 
-use crate::backend::{BackendEvent, MonitorController};
+use crate::backend::{Backend2, MonitorController};
 use crate::config::Config;
 use crate::interface::XamlGui;
+use crate::monitors::MonitorPath;
 use crate::runtime::{FutureStream, Timer};
 use crate::theme::{ColorSet, SystemSettings};
 use crate::ui::container::StackPanel;
 use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock};
-pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
 use crate::watchers::{EventWatcher, PowerEvent};
 use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, WindowBuilder, WindowLevel};
+
+pub use crate::utils::error::Result;
 
 include!("../assets/ids.rs");
 
@@ -50,9 +52,19 @@ pub enum CustomEvent {
     Show,
     FocusLost,
     ThemeChange,
-    Backend(BackendEvent),
     ClickedOutside,
-    Refresh
+    Refresh,
+    MonitorAdded {
+        path: MonitorPath,
+        name: String
+    },
+    MonitorRemoved {
+        path: MonitorPath
+    },
+    BrightnessChanged {
+        path: MonitorPath,
+        value: u32
+    }
 }
 
 fn run() -> Result<()> {
@@ -62,7 +74,7 @@ fn run() -> Result<()> {
 
     let config = Arc::new(Mutex::new(Config::load()?));
 
-    let (wnd_sender, wnd_receiver) = flume::unbounded();
+    let (wnd_sender, wnd_receiver) = loole::unbounded();
     let mut controller = MonitorController::new(wnd_sender.clone(), config.clone());
 
     let ui_settings = UISettings::new()?;
@@ -88,6 +100,8 @@ fn run() -> Result<()> {
             _ => None
         })))?;
 
+    let mut test = Backend2::default();
+    test.scan_monitors();
     let _event_watcher = EventWatcher::new()?
         .on_power_event({
             let proxy = controller.create_proxy();
@@ -97,7 +111,10 @@ fn run() -> Result<()> {
                 }
             }
         })?
-        .on_display_change(|| println!("Display change"))?;
+        .on_display_change(move || {
+            println!("Display change");
+            test.scan_monitors();
+        })?;
 
     /*
     unsafe {
@@ -271,14 +288,13 @@ fn run() -> Result<()> {
                     gui.clear_monitors()?;
                     controller = MonitorController::new(wnd_sender.clone(), config.clone());
                 }
-                CustomEvent::Backend(event) => match event {
-                    BackendEvent::RegisterMonitor(name, path) => {
-                        log::info!("Found monitor: {}", name);
-                        gui.register_monitor(name, path, controller.create_proxy())?
-                    }
-                    BackendEvent::UpdateBrightness(path, value) => {
-                        gui.update_brightness(path, value)?;
-                    }
+                CustomEvent::MonitorAdded { path, name} => {
+                    log::info!("Found monitor: {}", name);
+                    gui.register_monitor(name, path, controller.create_proxy())?
+                }
+                CustomEvent::MonitorRemoved { .. } => warn!("Unregistering monitors is not implemented"),
+                CustomEvent::BrightnessChanged { path, value} => {
+                    gui.update_brightness(path, value)?;
                 }
             }
         }

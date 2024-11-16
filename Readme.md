@@ -29,7 +29,7 @@ Unfortunately, the Microsoft-provided [`windows-rs` crate](https://microsoft.git
 - [x] Respect Dark/Light system setting
 - [x] Attempt to restore brightness after waking up from sleep
 - [ ] Support integrated laptop screens connected over I2C
-- [ ] Support monitor hot plugging
+- [x] Support monitor hot plugging
 - [ ] Handle auto hiding taskbar
 - [ ] Improve themes
 - [x] Adapt icon to system theme

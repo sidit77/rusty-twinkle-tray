@@ -4,12 +4,12 @@ mod backend;
 mod config;
 mod interface;
 mod monitors;
-mod power;
 pub mod runtime;
 mod theme;
 mod ui;
 mod utils;
 mod windowing;
+mod watchers;
 
 use std::process::ExitCode;
 use std::sync::{Arc, Mutex};
@@ -32,7 +32,6 @@ use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 use crate::backend::{BackendEvent, MonitorController};
 use crate::config::Config;
 use crate::interface::XamlGui;
-use crate::power::{PowerEvent, PowerStateListener};
 use crate::runtime::{FutureStream, Timer};
 use crate::theme::{ColorSet, SystemSettings};
 use crate::ui::container::StackPanel;
@@ -40,6 +39,7 @@ use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock};
 pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
+use crate::watchers::{EventWatcher, PowerEvent};
 use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, WindowBuilder, WindowLevel};
 
 include!("../assets/ids.rs");
@@ -88,14 +88,16 @@ fn run() -> Result<()> {
             _ => None
         })))?;
 
-    let _power_listener = PowerStateListener::new({
-        let proxy = controller.create_proxy();
-        move |event| {
-            if event == PowerEvent::MonitorOn {
-                proxy.refresh_brightness_in(Duration::from_secs(10));
+    let _event_watcher = EventWatcher::new()?
+        .on_power_event({
+            let proxy = controller.create_proxy();
+            move |event| {
+                if event == PowerEvent::MonitorOn {
+                    proxy.refresh_brightness_in(Duration::from_secs(10));
+                }
             }
-        }
-    })?;
+        })?
+        .on_display_change(|| println!("Display change"))?;
 
     /*
     unsafe {

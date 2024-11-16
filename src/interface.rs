@@ -1,7 +1,6 @@
 use std::collections::BTreeMap;
 
 use flume::Sender;
-use windows::core::h;
 use windows::UI::Color;
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
 

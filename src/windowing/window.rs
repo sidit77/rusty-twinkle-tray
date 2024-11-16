@@ -184,9 +184,9 @@ impl Window {
                     sync_size(hwnd, HWND(island)).unwrap_or_else(|err| log::warn!("Failed to sync window size: {}", err));
                 }
             },
-            WM_DISPLAYCHANGE => {
-                println!("DISPLAY CHANGE {}x{} {} ppp", (lparam.0 as u32) & 0xFFFF, ((lparam.0 as u32) & 0xFFFF0000) >> 16, wparam.0);
-            },
+            //WM_DISPLAYCHANGE => {
+            //    println!("DISPLAY CHANGE {}x{} {} ppp", (lparam.0 as u32) & 0xFFFF, ((lparam.0 as u32) & 0xFFFF0000) >> 16, wparam.0);
+            //},
             WM_DEVMODECHANGE => {
                 println!("DEVMODE CHANGE: {}", PCWSTR(lparam.0 as _).display());
             },

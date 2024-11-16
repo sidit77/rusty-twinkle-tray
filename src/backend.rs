@@ -1,4 +1,4 @@
-mod proxy;
+
 
 use std::cell::Cell;
 use std::collections::{BTreeMap, BTreeSet};
@@ -19,7 +19,6 @@ use crate::runtime::{block_on, Event, Timer};
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::CustomEvent;
 
-pub use proxy::MonitorControllerProxy;
 
 #[derive(Debug, Clone)]
 enum BackendCommand {
@@ -142,6 +141,11 @@ impl MonitorController {
             .send(command)
             .expect("Worker thread disappeared!");
     }
+
+    pub fn create_proxy(&self) -> MonitorControllerProxy {
+        MonitorControllerProxy(self.sender.clone())
+    }
+
 }
 
 impl Drop for MonitorController {
@@ -283,5 +287,25 @@ async fn retry<R, E: Display, F: FnMut() -> std::result::Result<R, E>>(mut op: F
             }
             Err(err) => return Err(err)
         }
+    }
+}
+
+pub struct MonitorControllerProxy(Sender<BackendCommand>);
+
+impl MonitorControllerProxy {
+    pub fn set_brightness(&self, monitor: MonitorPath, value: u32) {
+        self.send_command(BackendCommand::SetBrightness(monitor, value));
+    }
+
+    pub fn refresh_brightness_in(&self, delay: Duration) {
+        self.send_command(BackendCommand::QueryBrightness(Some(delay)));
+    }
+
+    pub fn refresh_monitors(&self) {
+        self.send_command(BackendCommand::RefreshMonitors);
+    }
+
+    fn send_command(&self, command: BackendCommand) {
+        self.0.send(command).expect("Worker thread disappeared!");
     }
 }

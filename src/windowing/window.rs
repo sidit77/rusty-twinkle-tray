@@ -1,6 +1,5 @@
 use std::mem::size_of;
 use std::sync::Once;
-use log::warn;
 use windows::core::{w, ComInterface, TryIntoParam, PCWSTR};
 use windows::Win32::Foundation::{COLORREF, HMODULE, HWND, LPARAM, LRESULT, RECT, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
@@ -184,29 +183,6 @@ impl Window {
                     sync_size(hwnd, HWND(island)).unwrap_or_else(|err| log::warn!("Failed to sync window size: {}", err));
                 }
             },
-            //WM_DISPLAYCHANGE => {
-            //    println!("DISPLAY CHANGE {}x{} {} ppp", (lparam.0 as u32) & 0xFFFF, ((lparam.0 as u32) & 0xFFFF0000) >> 16, wparam.0);
-            //},
-            WM_DEVMODECHANGE => {
-                println!("DEVMODE CHANGE: {}", PCWSTR(lparam.0 as _).display());
-            },
-            WM_DEVICECHANGE => {
-                match wparam.0 as u32 {
-                    DBT_DEVNODES_CHANGED => println!("DEVICE NODES CHANGED"),
-                    DBT_QUERYCHANGECONFIG => println!("QUERY CHANGE CONFIG"),
-                    DBT_CONFIGCHANGED => println!("CONFIG CHANGED"),
-                    DBT_CONFIGCHANGECANCELED => println!("CONFIG CHANGE CANCELED"),
-                    DBT_DEVICEARRIVAL => println!("DEVICE ARRIVAL"),
-                    DBT_DEVICEQUERYREMOVE => println!("DEVICE QUERY REMOVE"),
-                    DBT_DEVICEQUERYREMOVEFAILED => println!("DEVICE QUERY REMOVE FAILED"),
-                    DBT_DEVICEREMOVEPENDING => println!("DEVICE REMOVE PENDING"),
-                    DBT_DEVICEREMOVECOMPLETE => println!("DEVICE REMOVE COMPLETE"),
-                    DBT_DEVICETYPESPECIFIC => println!("DEVICE TYPE SPECIFIC"),
-                    DBT_CUSTOMEVENT => println!("CUSTOM EVENT"),
-                    DBT_USERDEFINED => println!("USER DEFINED"),
-                    other => warn!("Unknown device change event: 0X{:02X}", other)
-                }
-            }
             WM_DESTROY => {
                 PostQuitMessage(0);
             }

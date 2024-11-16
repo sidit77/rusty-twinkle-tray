@@ -18,7 +18,7 @@ use std::time::{Duration, Instant};
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use futures_lite::stream::or;
 use futures_lite::{FutureExt, StreamExt};
-use log::{trace, warn, LevelFilter};
+use log::{info, trace, LevelFilter};
 use windows::core::{h, IInspectable};
 use windows::Foundation::{Size, TypedEventHandler};
 use windows::Win32::Foundation::RECT;
@@ -29,7 +29,7 @@ use windows_ext::UI::Xaml::ElementTheme;
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 
-use crate::backend::{Backend2, MonitorController};
+use crate::backend::MonitorController;
 use crate::config::Config;
 use crate::interface::XamlGui;
 use crate::monitors::MonitorPath;
@@ -100,8 +100,6 @@ fn run() -> Result<()> {
             _ => None
         })))?;
 
-    let mut test = Backend2::default();
-    test.scan_monitors();
     let _event_watcher = EventWatcher::new()?
         .on_power_event({
             let proxy = controller.create_proxy();
@@ -111,45 +109,11 @@ fn run() -> Result<()> {
                 }
             }
         })?
-        .on_display_change(move || {
-            println!("Display change");
-            test.scan_monitors();
+        .on_display_change({
+            let proxy = controller.create_proxy();
+            move || proxy.refresh_monitors()
         })?;
 
-    /*
-    unsafe {
-        unsafe extern "system" fn callback(hnotify: HCMNOTIFICATION, context: *const c_void, action: CM_NOTIFY_ACTION, eventdata: *const CM_NOTIFY_EVENT_DATA, eventdatasize: u32) -> u32 {
-            match action {
-                CM_NOTIFY_ACTION_DEVICEINTERFACEARRIVAL => println!("CM Device Arrival"),
-                CM_NOTIFY_ACTION_DEVICEINTERFACEREMOVAL => println!("CM Device Removal"),
-                CM_NOTIFY_ACTION_DEVICEQUERYREMOVE => println!("CM Device Query Remove"),
-                CM_NOTIFY_ACTION_DEVICEQUERYREMOVEFAILED => println!("CM Device Query Remove Failed"),
-                CM_NOTIFY_ACTION_DEVICEREMOVEPENDING => println!("CM Device Remove Pending"),
-                CM_NOTIFY_ACTION_DEVICEREMOVECOMPLETE => println!("CM Device Remove Complete"),
-                CM_NOTIFY_ACTION_DEVICECUSTOMEVENT => println!("CM Device Custom Event"),
-                CM_NOTIFY_ACTION_DEVICEINSTANCEENUMERATED => println!("CM Device Instance Enumerated"),
-                CM_NOTIFY_ACTION_DEVICEINSTANCESTARTED => println!("CM Device Instance Started"),
-                CM_NOTIFY_ACTION_DEVICEINSTANCEREMOVED => println!("CM Device Instance Removed"),
-                _ => println!("CM Unknown Action")
-            }
-            ERROR_SUCCESS.0
-        }
-
-        let mut handle = std::mem::zeroed();
-        assert_eq!(CM_Register_Notification(
-            &CM_NOTIFY_FILTER {
-                cbSize: std::mem::size_of::<CM_NOTIFY_FILTER>() as u32,
-                Flags: CM_NOTIFY_FILTER_FLAG_ALL_DEVICE_INSTANCES,
-                FilterType: CM_NOTIFY_FILTER_TYPE_DEVICEINSTANCE,
-                Reserved: 0,
-                u: zeroed(),
-            },
-            None,
-            Some(callback),
-            &mut handle
-        ), CR_SUCCESS);
-    }
-     */
     ui_settings.ColorValuesChanged(&TypedEventHandler::new(cloned!([wnd_sender] move |_: &Option<UISettings>, _| {
         wnd_sender.filter_send_ignore(Some(CustomEvent::ThemeChange));
         Ok(())
@@ -289,10 +253,13 @@ fn run() -> Result<()> {
                     controller = MonitorController::new(wnd_sender.clone(), config.clone());
                 }
                 CustomEvent::MonitorAdded { path, name} => {
-                    log::info!("Found monitor: {}", name);
+                    info!("Found monitor: {}", name);
                     gui.register_monitor(name, path, controller.create_proxy())?
                 }
-                CustomEvent::MonitorRemoved { .. } => warn!("Unregistering monitors is not implemented"),
+                CustomEvent::MonitorRemoved { path } => {
+                    info!("Monitor removed: {:?}", path);
+                    gui.unregister_monitor(&path)?;
+                },
                 CustomEvent::BrightnessChanged { path, value} => {
                     gui.update_brightness(path, value)?;
                 }

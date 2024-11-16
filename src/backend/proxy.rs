@@ -14,6 +14,10 @@ impl MonitorControllerProxy {
         self.send_command(BackendCommand::QueryBrightness(Some(delay)));
     }
 
+    pub fn refresh_monitors(&self) {
+        self.send_command(BackendCommand::RefreshMonitors);
+    }
+
     fn send_command(&self, command: BackendCommand) {
         self.0.send(command).expect("Worker thread disappeared!");
     }

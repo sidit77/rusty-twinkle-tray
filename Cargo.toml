@@ -20,7 +20,6 @@ betrayer = { git = "https://github.com/sidit77/betrayer.git" }
 serde = { version = "1", features = ["derive", "rc"] }
 ron = "0.8"
 async-executor = "1.8"
-flume = "0.11"
 loole = "0.4.0"
 futures-lite = "2"
 windows-ext = { path = "lib/windows-ext" }

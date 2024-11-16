@@ -936,7 +936,6 @@ version = "0.1.0"
 dependencies = [
  "async-executor",
  "betrayer",
- "flume",
  "futures-lite",
  "ico",
  "log",

@@ -285,32 +285,3 @@ async fn retry<R, E: Display, F: FnMut() -> std::result::Result<R, E>>(mut op: F
         }
     }
 }
-
-#[derive(Default)]
-pub struct Backend2 {
-    monitors: BTreeSet<MonitorPath>
-}
-
-impl Backend2 {
-
-    pub fn scan_monitors(&mut self) {
-        let current_monitors = Monitor::find_all()
-            .map_err(|err| log::warn!("Failed to enumerate monitors: {err}"))
-            .unwrap_or_default()
-            .into_iter()
-            .map(|m| m.path().clone())
-            .collect();
-
-        for monitor in self.monitors.difference(&current_monitors) {
-            log::info!("Monitor {:?} disconnected", monitor);
-        }
-
-        for monitor in current_monitors.difference(&self.monitors) {
-            log::info!("Monitor {:?} connected", monitor);
-        }
-
-        self.monitors = current_monitors;
-
-    }
-
-}

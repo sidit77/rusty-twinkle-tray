@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 
-use flume::Sender;
+use log::warn;
+use loole::Sender;
 use windows::UI::Color;
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
 
@@ -95,6 +96,18 @@ impl XamlGui {
         let monitor = MonitorEntry::create(name, path.clone(), proxy)?;
         self.monitor_panel.add_child(monitor.ui())?;
         self.monitor_controls.insert(path, monitor);
+        Ok(())
+    }
+
+    pub fn unregister_monitor(&mut self, path: &MonitorPath) -> Result<()> {
+        if self.monitor_controls.remove(path).is_none() {
+            warn!("Monitor is not registered: {:?}", path);
+        } else {
+            self.monitor_panel.clear_children()?;
+            for monitor in self.monitor_controls.values() {
+                self.monitor_panel.add_child(monitor.ui())?;
+            }
+        }
         Ok(())
     }
 

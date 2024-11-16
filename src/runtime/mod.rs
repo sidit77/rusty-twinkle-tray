@@ -8,11 +8,9 @@ use std::thread::{current, park, park_timeout, Thread};
 pub use event::*;
 use futures_lite::{pin, Stream};
 pub use timer::{process_timers_for_current_thread, Timer};
-pub use traits::*;
 
 mod event;
 mod timer;
-mod traits;
 
 #[derive(Default)]
 pub enum FutureStream<T> {

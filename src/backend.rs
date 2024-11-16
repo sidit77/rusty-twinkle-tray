@@ -1,33 +1,29 @@
 use std::cell::Cell;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Display;
+use std::mem::take;
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 use std::thread::{spawn, JoinHandle};
 use std::time::{Duration, Instant};
 
-use async_executor::LocalExecutor;
-use flume::{unbounded, Sender};
-use futures_lite::stream::iter;
-use futures_lite::{FutureExt, Stream, StreamExt};
+use async_executor::{LocalExecutor, Task};
+use futures_lite::FutureExt;
+use log::{trace, warn};
+use loole::{unbounded, Receiver, Sender};
 
 use crate::config::Config;
 use crate::monitors::{Monitor, MonitorConnection, MonitorPath};
-use crate::runtime::{block_on, Event, Sink, SinkExt, Timer};
-use crate::utils::extensions::MutexExt;
+use crate::runtime::{block_on, Event, Timer};
+use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::CustomEvent;
 
 #[derive(Debug, Clone)]
 enum BackendCommand {
     Stop,
+    RefreshMonitors,
     QueryBrightness(Option<Duration>),
     SetBrightness(MonitorPath, u32)
-}
-
-#[derive(Debug, Clone)]
-pub enum BackendEvent {
-    RegisterMonitor(String, MonitorPath),
-    UpdateBrightness(MonitorPath, u32)
 }
 
 pub struct MonitorController {
@@ -36,16 +32,97 @@ pub struct MonitorController {
 }
 
 impl MonitorController {
-    pub fn new(eventloop: Sender<CustomEvent>, config: Arc<Mutex<Config>>) -> Self {
+    pub fn new(main_sender: Sender<CustomEvent>, config: Arc<Mutex<Config>>) -> Self {
         let (sender, receiver) = unbounded();
-        let _ = sender.send(BackendCommand::QueryBrightness(None));
-        let thread = Some(spawn(move || {
-            block_on(worker_task(eventloop.map(CustomEvent::Backend), receiver.stream(), config))
-        }));
+        sender.send_ignore(BackendCommand::RefreshMonitors);
+        let thread = Some(spawn(move || block_on(Self::worker_task(main_sender, receiver, config))));
         Self { sender, thread }
     }
-    pub fn create_proxy(&self) -> MonitorControllerProxy {
-        MonitorControllerProxy(self.sender.clone())
+
+    async fn worker_task(sender: Sender<CustomEvent>, receiver: Receiver<BackendCommand>, config: Arc<Mutex<Config>>) {
+        let sync_with_config = config.lock_no_poison().restore_from_config;
+
+        let executor = LocalExecutor::new();
+        let mut monitor_map: BTreeMap<MonitorPath, (Rc<MonitorControl>, Task<()>)> = BTreeMap::new();
+        let mut delayed_query: Option<Instant> = None;
+
+        executor
+            .run(async {
+                loop {
+                    let query_event = async {
+                        delayed_query
+                            .map(Timer::at)
+                            .unwrap_or_else(Timer::never)
+                            .await;
+                        BackendCommand::QueryBrightness(None)
+                    };
+                    let command_event = async { receiver.recv_async().await.expect("Controller disappeared") };
+                    match query_event.or(command_event).await {
+                        BackendCommand::QueryBrightness(None) => {
+                            delayed_query.take();
+                            let saved = sync_with_config.then(|| config.lock_no_poison());
+                            monitor_map.iter().for_each(|(p, (c, _))| {
+                                c.query_brightness(
+                                    saved
+                                        .as_ref()
+                                        .and_then(|c| c.monitors.get(p))
+                                        .and_then(|s| s.saved_brightness)
+                                )
+                            });
+                        }
+                        BackendCommand::RefreshMonitors => {
+                            trace!("Refreshing monitor list");
+                            let mut current_monitors = Monitor::find_all()
+                                .map_err(|err| log::warn!("Failed to enumerate monitors: {err}"))
+                                .unwrap_or_default();
+                            log::debug!("Skipping over unnamed monitors as they are likely integrated displays");
+                            current_monitors.retain(|m| !m.name().is_empty());
+
+                            let old_monitors = take(&mut monitor_map).into_keys().collect::<BTreeSet<_>>();
+
+                            for path in &old_monitors {
+                                if current_monitors.iter().all(|m| m.path() != path) {
+                                    sender.send_ignore(CustomEvent::MonitorRemoved { path: path.clone() });
+                                }
+                            }
+
+                            for monitor in current_monitors {
+                                let path = monitor.path().clone();
+                                if !old_monitors.contains(&path) {
+                                    sender.send_ignore(CustomEvent::MonitorAdded {
+                                        path: path.clone(),
+                                        name: monitor.name().to_string()
+                                    });
+                                }
+                                let control = Rc::new(MonitorControl::default());
+                                let task = executor.spawn(monitor_task(monitor, sender.clone(), control.clone()));
+                                monitor_map.insert(path, (control, task));
+                            }
+
+                            delayed_query = Some(Instant::now());
+                        }
+                        BackendCommand::QueryBrightness(Some(delay)) => {
+                            delayed_query = delayed_query
+                                .into_iter()
+                                .chain([Instant::now() + delay])
+                                .min();
+                        }
+                        BackendCommand::SetBrightness(p, v) => {
+                            monitor_map
+                                .get(&p)
+                                .map(|(c, _)| c.request_brightness(v))
+                                .unwrap_or_else(|| log::warn!("Unknown monitor {:?}", p));
+                            if sync_with_config {
+                                let mut config = config.lock_no_poison();
+                                config.monitors.entry(p).or_default().saved_brightness = Some(v);
+                                config.dirty = true;
+                            }
+                        }
+                        BackendCommand::Stop => break
+                    }
+                }
+            })
+            .await;
     }
 
     pub fn refresh_brightness(&self) {
@@ -61,21 +138,9 @@ impl MonitorController {
             .send(command)
             .expect("Worker thread disappeared!");
     }
-}
 
-pub struct MonitorControllerProxy(Sender<BackendCommand>);
-
-impl MonitorControllerProxy {
-    pub fn set_brightness(&self, monitor: MonitorPath, value: u32) {
-        self.send_command(BackendCommand::SetBrightness(monitor, value));
-    }
-
-    pub fn refresh_brightness_in(&self, delay: Duration) {
-        self.send_command(BackendCommand::QueryBrightness(Some(delay)));
-    }
-
-    fn send_command(&self, command: BackendCommand) {
-        self.0.send(command).expect("Worker thread disappeared!");
+    pub fn create_proxy(&self) -> MonitorControllerProxy {
+        MonitorControllerProxy(self.sender.clone())
     }
 }
 
@@ -121,88 +186,7 @@ impl MonitorControl {
     }
 }
 
-async fn worker_task<S, R>(sender: S, mut receiver: R, config: Arc<Mutex<Config>>)
-where
-    S: Sink<BackendEvent> + Clone,
-    R: Stream<Item = BackendCommand> + Unpin
-{
-    let sync_with_config = config.lock_no_poison().restore_from_config;
-
-    let executor = LocalExecutor::new();
-    let monitor_map = {
-        let mut monitors = Monitor::find_all()
-            .map_err(|err| log::warn!("Failed to enumerate monitors: {err}"))
-            .unwrap_or_default();
-        log::debug!("Skipping over unnamed monitors as they are likely integrated displays");
-        monitors.retain(|m| !m.name().is_empty());
-        iter(monitors.into_iter())
-            .then(|m| async {
-                let path = m.path().clone();
-                sender
-                    .send(BackendEvent::RegisterMonitor(m.name().to_string(), path.clone()))
-                    .await;
-                let control = Rc::new(MonitorControl::default());
-                let task = executor.spawn(monitor_task(m, sender.clone(), control.clone()));
-                (path, (control, task))
-            })
-            .collect::<BTreeMap<_, _>>()
-            .await
-    };
-
-    let mut delayed_query: Option<Instant> = None;
-
-    executor
-        .run(async {
-            loop {
-                let query_event = async {
-                    delayed_query
-                        .map(Timer::at)
-                        .unwrap_or_else(Timer::never)
-                        .await;
-                    BackendCommand::QueryBrightness(None)
-                };
-                let command_event = async { receiver.next().await.expect("Controller disappeared") };
-                match query_event.or(command_event).await {
-                    BackendCommand::QueryBrightness(None) => {
-                        delayed_query.take();
-                        let saved = sync_with_config.then(|| config.lock_no_poison());
-                        monitor_map.iter().for_each(|(p, (c, _))| {
-                            c.query_brightness(
-                                saved
-                                    .as_ref()
-                                    .and_then(|c| c.monitors.get(p))
-                                    .and_then(|s| s.saved_brightness)
-                            )
-                        });
-                    }
-                    BackendCommand::QueryBrightness(Some(delay)) => {
-                        delayed_query = delayed_query
-                            .into_iter()
-                            .chain([Instant::now() + delay])
-                            .min();
-                    }
-                    BackendCommand::SetBrightness(p, v) => {
-                        monitor_map
-                            .get(&p)
-                            .map(|(c, _)| c.request_brightness(v))
-                            .unwrap_or_else(|| log::warn!("Unknown monitor {:?}", p));
-                        if sync_with_config {
-                            let mut config = config.lock_no_poison();
-                            config.monitors.entry(p).or_default().saved_brightness = Some(v);
-                            config.dirty = true;
-                        }
-                    }
-                    BackendCommand::Stop => break
-                }
-            }
-        })
-        .await;
-}
-
-async fn monitor_task<S>(monitor: Monitor, sender: S, control: Rc<MonitorControl>)
-where
-    S: Sink<BackendEvent>
-{
+async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, control: Rc<MonitorControl>) {
     let mut current_brightness = None;
     let mut cached_connection: Option<MonitorConnection> = None;
 
@@ -210,20 +194,20 @@ where
         control.event.reset();
         match control.command.take() {
             None => {
-                log::trace!("Closing connection to {} and going to sleep", monitor.name());
+                trace!("Closing connection to {} and going to sleep", monitor.name());
                 cached_connection = None;
                 control.event.wait().await;
             }
             Some(MonitorCommand::SetBrightness(value, _)) if Some(value) == current_brightness => {
-                log::trace!("Brightness already at requested level {}", value);
+                trace!("Brightness already at requested level {}", value);
                 continue;
             }
             Some(command) => {
                 if cached_connection.is_none() {
-                    log::trace!("Opening connection to {}", monitor.name());
+                    trace!("Opening connection to {}", monitor.name());
                     cached_connection = retry(|| monitor.open())
                         .await
-                        .map_err(|err| log::warn!("Failed to connect to monitor: {err}"))
+                        .map_err(|err| warn!("Failed to connect to monitor: {err}"))
                         .ok();
                 }
                 let connection = match cached_connection.as_ref() {
@@ -232,7 +216,7 @@ where
                 };
                 match command {
                     MonitorCommand::QueryBrightness(target) => {
-                        log::trace!("Attempting to read brightness of {}", monitor.name());
+                        trace!("Attempting to read brightness of {}", monitor.name());
                         match retry(|| connection.get_brightness()).await {
                             Ok((brightness, range)) => {
                                 if range != (0..=100) {
@@ -252,9 +236,10 @@ where
                                             .set(Some(MonitorCommand::SetBrightness(target, true)));
                                     }
                                     _ => {
-                                        sender
-                                            .send(BackendEvent::UpdateBrightness(monitor.path().clone(), brightness))
-                                            .await;
+                                        sender.send_ignore(CustomEvent::BrightnessChanged {
+                                            path: monitor.path().clone(),
+                                            value: brightness
+                                        });
                                     }
                                 }
                             }
@@ -272,9 +257,10 @@ where
                         }
                         if notify {
                             if let Some(current) = current_brightness {
-                                sender
-                                    .send(BackendEvent::UpdateBrightness(monitor.path().clone(), current))
-                                    .await;
+                                sender.send_ignore(CustomEvent::BrightnessChanged {
+                                    path: monitor.path().clone(),
+                                    value: current
+                                });
                             }
                         }
                     }
@@ -299,5 +285,25 @@ async fn retry<R, E: Display, F: FnMut() -> std::result::Result<R, E>>(mut op: F
             }
             Err(err) => return Err(err)
         }
+    }
+}
+
+pub struct MonitorControllerProxy(Sender<BackendCommand>);
+
+impl MonitorControllerProxy {
+    pub fn set_brightness(&self, monitor: MonitorPath, value: u32) {
+        self.send_command(BackendCommand::SetBrightness(monitor, value));
+    }
+
+    pub fn refresh_brightness_in(&self, delay: Duration) {
+        self.send_command(BackendCommand::QueryBrightness(Some(delay)));
+    }
+
+    pub fn refresh_monitors(&self) {
+        self.send_command(BackendCommand::RefreshMonitors);
+    }
+
+    fn send_command(&self, command: BackendCommand) {
+        self.0.send(command).expect("Worker thread disappeared!");
     }
 }

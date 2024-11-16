@@ -4,11 +4,11 @@ mod backend;
 mod config;
 mod interface;
 mod monitors;
-mod power;
 pub mod runtime;
 mod theme;
 mod ui;
 mod utils;
+mod watchers;
 mod windowing;
 
 use std::process::ExitCode;
@@ -18,6 +18,8 @@ use std::time::{Duration, Instant};
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use futures_lite::stream::or;
 use futures_lite::{FutureExt, StreamExt};
+use log::{info, trace, LevelFilter};
+use windows::core::{h, IInspectable};
 use log::{trace, warn, LevelFilter};
 use windows::core::{h, ComInterface, IInspectable};
 use windows::Foundation::{Size, TypedEventHandler};
@@ -34,8 +36,10 @@ use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidC
 
 use crate::backend::{BackendEvent, MonitorController};
 use crate::config::{autostart, Config};
+use crate::backend::MonitorController;
+use crate::config::Config;
 use crate::interface::XamlGui;
-use crate::power::{PowerEvent, PowerStateListener};
+use crate::monitors::MonitorPath;
 use crate::runtime::{FutureStream, Timer};
 use crate::theme::{ColorSet, SystemSettings};
 use crate::ui::container::StackPanel;
@@ -44,6 +48,8 @@ use crate::ui::{FontWeight};
 pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
+use crate::watchers::{EventWatcher, PowerEvent};
+use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, WindowBuilder, WindowLevel};
 use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, Window, WindowBuilder, WindowLevel};
 
 include!("../assets/ids.rs");
@@ -54,11 +60,13 @@ pub enum CustomEvent {
     Show,
     FocusLost,
     ThemeChange,
-    Backend(BackendEvent),
     ClickedOutside,
     Refresh,
     OpenSettings,
-    CloseSettings
+    CloseSettings,
+    MonitorAdded { path: MonitorPath, name: String },
+    MonitorRemoved { path: MonitorPath },
+    BrightnessChanged { path: MonitorPath, value: u32 }
 }
 
 fn run() -> Result<()> {
@@ -73,7 +81,8 @@ fn run() -> Result<()> {
         .unwrap_or_else(|e| warn!("Failed to make XAML island background transparent: {e}"));
 
     let config = Arc::new(Mutex::new(Config::load()?));
-    let (wnd_sender, wnd_receiver) = flume::unbounded();
+
+    let (wnd_sender, wnd_receiver) = loole::unbounded();
     let mut controller = MonitorController::new(wnd_sender.clone(), config.clone());
 
     let ui_settings = UISettings::new()?;
@@ -99,15 +108,19 @@ fn run() -> Result<()> {
             _ => None
         })))?;
 
-    let _power_listener = PowerStateListener::new({
-        let proxy = controller.create_proxy();
-        move |event| {
-            trace!("Got power state event: {:?}", event);
-            if event == PowerEvent::MonitorOn {
-                proxy.refresh_brightness_in(Duration::from_secs(10));
+    let _event_watcher = EventWatcher::new()?
+        .on_power_event({
+            let proxy = controller.create_proxy();
+            move |event| {
+                if event == PowerEvent::MonitorOn {
+                    proxy.refresh_brightness_in(Duration::from_secs(10));
+                }
             }
-        }
-    })?;
+        })?
+        .on_display_change({
+            let proxy = controller.create_proxy();
+            move || proxy.refresh_monitors()
+        })?;
 
     ui_settings.ColorValuesChanged(&TypedEventHandler::new(cloned!([wnd_sender] move |_: &Option<UISettings>, _| {
         wnd_sender.filter_send_ignore(Some(CustomEvent::ThemeChange));
@@ -256,7 +269,7 @@ fn run() -> Result<()> {
                     log::info!("Restarting backend...");
                     gui.clear_monitors()?;
                     controller = MonitorController::new(wnd_sender.clone(), config.clone());
-                }
+                },
                 CustomEvent::OpenSettings => {
                     log::info!("Open Settings");
                     if settings_window.is_none() {
@@ -291,15 +304,17 @@ fn run() -> Result<()> {
                         return Ok(());
                     }
                 }
-                CustomEvent::Backend(event) => match event {
-                    BackendEvent::RegisterMonitor(name, path) => {
-                        log::info!("Found monitor: {}", name);
-                        gui.register_monitor(name, path, controller.create_proxy())?
-                    }
-                    BackendEvent::UpdateBrightness(path, value) => {
-                        gui.update_brightness(path, value)?;
-                    }
-                },
+                CustomEvent::MonitorAdded { path, name } => {
+                    info!("Found monitor: {}", name);
+                    gui.register_monitor(name, path, controller.create_proxy())?
+                }
+                CustomEvent::MonitorRemoved { path } => {
+                    info!("Monitor removed: {:?}", path);
+                    gui.unregister_monitor(&path)?;
+                }
+                CustomEvent::BrightnessChanged { path, value } => {
+                    gui.update_brightness(path, value)?;
+                }
             }
         }
         Ok(())

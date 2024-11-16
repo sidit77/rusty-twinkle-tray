@@ -1,4 +1,5 @@
 use std::collections::BTreeMap;
+
 use log::warn;
 use loole::Sender;
 use windows::UI::Color;
@@ -94,7 +95,7 @@ impl XamlGui {
     }
 
     pub fn unregister_monitor(&mut self, path: &MonitorPath) -> Result<()> {
-        if let None = self.monitor_controls.remove(path) {
+        if self.monitor_controls.remove(path).is_none() {
             warn!("Monitor is not registered: {:?}", path);
         } else {
             self.monitor_panel.clear_children()?;

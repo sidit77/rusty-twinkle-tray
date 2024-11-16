@@ -1,17 +1,20 @@
-mod power;
 mod display_change;
+mod power;
 
 use std::sync::Once;
+
+use display_change::DisplayChangeEventRegistration;
+pub use power::PowerEvent;
+use power::PowerEventRegistration;
 use windows::core::{w, PCWSTR};
 use windows::Win32::Foundation::{HMODULE, HWND, LPARAM, LRESULT, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
-use windows::Win32::UI::WindowsAndMessaging::{CreateWindowExW, DefWindowProcW, DestroyWindow, IsWindow, RegisterClassW, HMENU, WINDOW_STYLE, WNDCLASSW, WS_EX_LAYERED, WS_EX_NOACTIVATE, WS_EX_TOOLWINDOW, WS_EX_TRANSPARENT};
+use windows::Win32::UI::WindowsAndMessaging::{
+    CreateWindowExW, DefWindowProcW, DestroyWindow, IsWindow, RegisterClassW, HMENU, WINDOW_STYLE, WNDCLASSW, WS_EX_LAYERED, WS_EX_NOACTIVATE,
+    WS_EX_TOOLWINDOW, WS_EX_TRANSPARENT
+};
 
 use crate::Result;
-use display_change::DisplayChangeEventRegistration;
-use power::PowerEventRegistration;
-
-pub use power::PowerEvent;
 
 pub struct EventWatcher {
     hwnd: HWND,
@@ -41,7 +44,11 @@ impl EventWatcher {
                 None
             )
         };
-        Ok(Self { hwnd, power_state_listener: None, display_change_listener: None })
+        Ok(Self {
+            hwnd,
+            power_state_listener: None,
+            display_change_listener: None
+        })
     }
 
     pub fn on_power_event<F: FnMut(PowerEvent)>(mut self, callback: F) -> Result<Self> {
@@ -77,10 +84,10 @@ impl EventWatcher {
 
         class_name
     }
-
 }
 
 impl Drop for EventWatcher {
+    #[allow(clippy::drop_non_drop)]
     fn drop(&mut self) {
         drop(self.power_state_listener.take());
         drop(self.display_change_listener.take());

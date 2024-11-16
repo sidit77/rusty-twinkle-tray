@@ -8,8 +8,8 @@ pub mod runtime;
 mod theme;
 mod ui;
 mod utils;
-mod windowing;
 mod watchers;
+mod windowing;
 
 use std::process::ExitCode;
 use std::sync::{Arc, Mutex};
@@ -37,12 +37,11 @@ use crate::runtime::{FutureStream, Timer};
 use crate::theme::{ColorSet, SystemSettings};
 use crate::ui::container::StackPanel;
 use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock};
+pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
 use crate::watchers::{EventWatcher, PowerEvent};
 use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, WindowBuilder, WindowLevel};
-
-pub use crate::utils::error::Result;
 
 include!("../assets/ids.rs");
 
@@ -54,17 +53,9 @@ pub enum CustomEvent {
     ThemeChange,
     ClickedOutside,
     Refresh,
-    MonitorAdded {
-        path: MonitorPath,
-        name: String
-    },
-    MonitorRemoved {
-        path: MonitorPath
-    },
-    BrightnessChanged {
-        path: MonitorPath,
-        value: u32
-    }
+    MonitorAdded { path: MonitorPath, name: String },
+    MonitorRemoved { path: MonitorPath },
+    BrightnessChanged { path: MonitorPath, value: u32 }
 }
 
 fn run() -> Result<()> {
@@ -252,15 +243,15 @@ fn run() -> Result<()> {
                     gui.clear_monitors()?;
                     controller = MonitorController::new(wnd_sender.clone(), config.clone());
                 }
-                CustomEvent::MonitorAdded { path, name} => {
+                CustomEvent::MonitorAdded { path, name } => {
                     info!("Found monitor: {}", name);
                     gui.register_monitor(name, path, controller.create_proxy())?
                 }
                 CustomEvent::MonitorRemoved { path } => {
                     info!("Monitor removed: {:?}", path);
                     gui.unregister_monitor(&path)?;
-                },
-                CustomEvent::BrightnessChanged { path, value} => {
+                }
+                CustomEvent::BrightnessChanged { path, value } => {
                     gui.update_brightness(path, value)?;
                 }
             }

@@ -3,6 +3,7 @@ use windows::Win32::System::Power::{RegisterPowerSettingNotification, Unregister
 use windows::Win32::System::SystemServices::GUID_SESSION_DISPLAY_STATUS;
 use windows::Win32::UI::Shell::{DefSubclassProc, SetWindowSubclass};
 use windows::Win32::UI::WindowsAndMessaging::{DEVICE_NOTIFY_WINDOW_HANDLE, WM_DESTROY, WM_POWERBROADCAST};
+
 use crate::Result;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
@@ -12,7 +13,6 @@ pub enum PowerEvent {
     MonitorOn,
     MonitorDim
 }
-
 
 pub struct PowerEventRegistration(HPOWERNOTIFY);
 
@@ -24,7 +24,8 @@ impl PowerEventRegistration {
                 Some(Self::wnd_proc::<F>),
                 super::POWER_SUBCLASS_ID,
                 Box::into_raw(Box::new((true, callback))) as _
-            ).ok()?;
+            )
+            .ok()?;
         }
         let registration = unsafe { RegisterPowerSettingNotification(HANDLE(hwnd.0), &GUID_SESSION_DISPLAY_STATUS, DEVICE_NOTIFY_WINDOW_HANDLE.0)? };
         Ok(Self(registration))
@@ -64,8 +65,7 @@ impl PowerEventRegistration {
 impl Drop for PowerEventRegistration {
     fn drop(&mut self) {
         unsafe {
-            UnregisterPowerSettingNotification(self.0)
-                .unwrap_or_else(|err| log::warn!("Failed to remove power notification registration: {err}"));
+            UnregisterPowerSettingNotification(self.0).unwrap_or_else(|err| log::warn!("Failed to remove power notification registration: {err}"));
         };
     }
 }

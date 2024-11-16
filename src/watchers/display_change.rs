@@ -1,6 +1,7 @@
 use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, WPARAM};
 use windows::Win32::UI::Shell::{DefSubclassProc, SetWindowSubclass};
 use windows::Win32::UI::WindowsAndMessaging::{WM_DESTROY, WM_DISPLAYCHANGE};
+
 use crate::Result;
 
 pub struct DisplayChangeEventRegistration;
@@ -13,7 +14,8 @@ impl DisplayChangeEventRegistration {
                 Some(Self::wnd_proc::<F>),
                 super::DISPLAY_CHANGE_SUBCLASS_ID,
                 Box::into_raw(Box::new(callback)) as _
-            ).ok()?;
+            )
+            .ok()?;
         }
         Ok(Self)
     }

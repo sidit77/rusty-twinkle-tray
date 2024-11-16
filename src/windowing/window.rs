@@ -1,5 +1,6 @@
 use std::mem::size_of;
 use std::sync::Once;
+
 use windows::core::{w, ComInterface, TryIntoParam, PCWSTR};
 use windows::Win32::Foundation::{COLORREF, HMODULE, HWND, LPARAM, LRESULT, RECT, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
@@ -182,7 +183,7 @@ impl Window {
                 if island != 0 {
                     sync_size(hwnd, HWND(island)).unwrap_or_else(|err| log::warn!("Failed to sync window size: {}", err));
                 }
-            },
+            }
             WM_DESTROY => {
                 PostQuitMessage(0);
             }

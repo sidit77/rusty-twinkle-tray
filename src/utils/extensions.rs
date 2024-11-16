@@ -19,7 +19,6 @@ impl<T> ChannelExt<T> for loole::Sender<T> {
         self.send(msg)
             .unwrap_or_else(|err| log::warn!("Failed to send message: {}", err));
     }
-
 }
 
 pub trait MutexExt {

@@ -18,9 +18,7 @@ use std::time::{Duration, Instant};
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use futures_lite::stream::or;
 use futures_lite::{FutureExt, StreamExt};
-use log::{info, trace, LevelFilter};
-use windows::core::{h, IInspectable};
-use log::{trace, warn, LevelFilter};
+use log::{info, trace, warn, LevelFilter};
 use windows::core::{h, ComInterface, IInspectable};
 use windows::Foundation::{Size, TypedEventHandler};
 use windows::UI::Color;
@@ -34,10 +32,8 @@ use windows_ext::UI::Xaml::{ElementTheme, UIElement, Window as XamlWindow};
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
 
-use crate::backend::{BackendEvent, MonitorController};
 use crate::config::{autostart, Config};
 use crate::backend::MonitorController;
-use crate::config::Config;
 use crate::interface::XamlGui;
 use crate::monitors::MonitorPath;
 use crate::runtime::{FutureStream, Timer};
@@ -49,7 +45,6 @@ pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
 use crate::watchers::{EventWatcher, PowerEvent};
-use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, WindowBuilder, WindowLevel};
 use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, Window, WindowBuilder, WindowLevel};
 
 include!("../assets/ids.rs");
@@ -87,7 +82,7 @@ fn run() -> Result<()> {
 
     let ui_settings = UISettings::new()?;
     let mut colors = SystemSettings::new()
-        .map_err(|err| log::warn!("Failed to read system settings: {err}"))
+        .map_err(|err| warn!("Failed to read system settings: {err}"))
         .ok()
         .map_or_else(ColorSet::dark, |system_settings| ColorSet::system(&system_settings, &ui_settings));
 

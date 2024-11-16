@@ -3,7 +3,7 @@ use std::ffi::OsString;
 use std::fs::File;
 use std::os::windows::ffi::OsStringExt;
 use std::path::{Path, PathBuf};
-use std::sync::{LazyLock, OnceLock};
+use std::sync::OnceLock;
 use ron::de::from_reader;
 use ron::ser::{to_writer_pretty, PrettyConfig};
 use serde::{Deserialize, Serialize};
@@ -84,7 +84,6 @@ pub mod autostart {
     use windows::core::{w, PCWSTR};
     use windows::Win32::System::Registry::KEY_READ;
     use registry::AutoStartRegKey;
-    use crate::Result;
 
     static EXE_PATH: LazyLock<PathBuf> = LazyLock::new(|| {
         std::env::current_exe()
@@ -114,7 +113,7 @@ pub mod autostart {
         use windows::core::{w, HRESULT, PCWSTR};
         use windows::Win32::Foundation::{ERROR_FILE_NOT_FOUND, ERROR_MORE_DATA};
         use crate::Result;
-        use windows::Win32::System::Registry::{RegCloseKey, RegOpenKeyExW, RegQueryValueExW, HKEY, HKEY_LOCAL_MACHINE, KEY_READ, REG_EXPAND_SZ, REG_SAM_FLAGS, REG_SZ, REG_VALUE_TYPE};
+        use windows::Win32::System::Registry::{RegCloseKey, RegOpenKeyExW, RegQueryValueExW, HKEY, HKEY_LOCAL_MACHINE, REG_EXPAND_SZ, REG_SAM_FLAGS, REG_SZ, REG_VALUE_TYPE};
 
         pub struct AutoStartRegKey {
             handle: HKEY

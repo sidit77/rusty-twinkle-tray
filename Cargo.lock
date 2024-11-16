@@ -943,7 +943,6 @@ dependencies = [
  "async-executor",
  "betrayer",
  "dunce",
- "flume",
  "futures-lite",
  "ico",
  "log",

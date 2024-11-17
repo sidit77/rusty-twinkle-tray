@@ -5,11 +5,10 @@ use std::sync::Arc;
 use std::task::{Context, Poll, Wake, Waker};
 use std::thread::{current, park, park_timeout, Thread};
 
-pub use event::*;
 use futures_lite::{pin, Stream};
 pub use timer::{process_timers_for_current_thread, Timer};
 
-mod event;
+pub mod reducing_spsc;
 mod timer;
 
 #[derive(Default)]

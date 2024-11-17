@@ -9,7 +9,7 @@ use windows_ext::UI::Xaml::{DependencyObject, RoutedEventArgs, RoutedEventHandle
 use super::{FontWeight, Padding, TextAlignment, VerticalAlignment};
 use crate::ui::style::Style;
 use crate::ui::NewType;
-use crate::utils::error::{OptionExt, ResultEx};
+use crate::utils::error::{WinOptionExt, ResultEx};
 use crate::Result;
 
 new_type!(Slider, windows_ext::UI::Xaml::Controls::Slider);

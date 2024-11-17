@@ -1,18 +1,18 @@
 use std::sync::{Mutex, MutexGuard};
+use crate::runtime::reducing_spsc::{Reducible, ReducingSender};
 
 pub trait ChannelExt<T> {
-    fn filter_send_ignore(&self, msg: Option<T>);
+
+    #[track_caller]
+    fn filter_send_ignore(&self, msg: Option<T>){
+        if let Some(msg) = msg {
+            self.send_ignore(msg);
+        }
+    }
     fn send_ignore(&self, msg: T);
 }
 
 impl<T> ChannelExt<T> for loole::Sender<T> {
-    #[track_caller]
-    fn filter_send_ignore(&self, msg: Option<T>) {
-        if let Some(msg) = msg {
-            self.send(msg)
-                .unwrap_or_else(|err| log::warn!("Failed to send message: {}", err));
-        }
-    }
 
     #[track_caller]
     fn send_ignore(&self, msg: T) {
@@ -20,6 +20,33 @@ impl<T> ChannelExt<T> for loole::Sender<T> {
             .unwrap_or_else(|err| log::warn!("Failed to send message: {}", err));
     }
 }
+
+impl<T: Reducible> ChannelExt<T> for ReducingSender<T> {
+
+    #[track_caller]
+    fn send_ignore(&self, msg: T) {
+        self.try_send(msg)
+            .unwrap_or_else(|err| log::warn!("Failed to send message: {:?}", err));
+    }
+}
+
+/*
+pub trait OptionExt<T> {
+    fn or_future(self, fut: impl Future<Output = Option<T>>) -> impl Future<Output = Option<T>>;
+}
+
+impl<T> OptionExt<T> for Option<T> {
+    fn or_future(self, fut: impl Future<Output = Option<T>>) -> impl Future<Output = Option<T>> {
+        async move {
+            match self {
+                Some(v) => Some(v),
+                None => fut.await,
+            }
+        }
+    }
+}
+ */
+
 
 pub trait MutexExt {
     type Guard<'a>

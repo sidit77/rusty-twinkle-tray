@@ -61,7 +61,7 @@ impl<T> Drop for ReducingSender<T> {
 pub struct ReducingReceiver<T>(Rc<Shared<T>>);
 
 impl<T> ReducingReceiver<T> {
-    pub fn try_recv(&self) -> Result<T, TryRecvError> {
+    pub fn try_recv(&mut self) -> Result<T, TryRecvError> {
         match self.0.value.take() {
             None => match self.0.closed.get() {
                 true => Err(TryRecvError::Closed),
@@ -71,7 +71,7 @@ impl<T> ReducingReceiver<T> {
         }
     }
 
-    pub fn recv(&self) -> impl Future<Output = Option<T>> + '_{
+    pub fn recv(&mut self) -> impl Future<Output = Option<T>> + '_{
         poll_fn(move |cx| {
             match self.try_recv() {
                 Ok(v) => Poll::Ready(Some(v)),

@@ -184,7 +184,7 @@ impl Reducible for MonitorCommand {
 }
 
 
-async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, control: ReducingReceiver<MonitorCommand>) {
+async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, mut control: ReducingReceiver<MonitorCommand>) {
     let mut current_brightness = None;
     let mut cached_connection: Option<MonitorConnection> = None;
 

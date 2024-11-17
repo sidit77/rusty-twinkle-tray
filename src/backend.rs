@@ -5,7 +5,6 @@ use std::sync::{Arc, Mutex};
 use std::thread::{spawn, JoinHandle};
 use std::time::{Duration, Instant};
 
-use async_executor::{LocalExecutor};
 use futures_lite::future::yield_now;
 use futures_lite::FutureExt;
 use log::{debug, trace, warn};
@@ -13,7 +12,7 @@ use loole::{unbounded, Receiver, Sender};
 
 use crate::config::Config;
 use crate::monitors::{Monitor, MonitorConnection, MonitorPath};
-use crate::runtime::{block_on, reducing_spsc, Timer};
+use crate::runtime::{block_on, reducing_spsc, LocalExecutor, Timer};
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::CustomEvent;
 use crate::runtime::reducing_spsc::{Reducible, ReducingReceiver, ReducingSender, TryRecvError};
@@ -42,7 +41,7 @@ impl MonitorController {
     async fn worker_task(sender: Sender<CustomEvent>, receiver: Receiver<BackendCommand>, config: Arc<Mutex<Config>>) {
         let sync_with_config = config.lock_no_poison().restore_from_config;
 
-        let executor = LocalExecutor::new();
+        let executor = LocalExecutor::default();
         let mut monitor_map: BTreeMap<MonitorPath, ReducingSender<MonitorCommand>> = BTreeMap::new();
         let mut delayed_query: Option<Instant> = None;
 
@@ -75,7 +74,7 @@ impl MonitorController {
                             let mut current_monitors = Monitor::find_all()
                                 .map_err(|err| log::warn!("Failed to enumerate monitors: {err}"))
                                 .unwrap_or_default();
-                            log::debug!("Skipping over unnamed monitors as they are likely integrated displays");
+                            debug!("Skipping over unnamed monitors as they are likely integrated displays");
                             current_monitors.retain(|m| !m.name().is_empty());
 
                             let old_monitors = take(&mut monitor_map).into_keys().collect::<BTreeSet<_>>();
@@ -98,7 +97,7 @@ impl MonitorController {
                                     });
                                 }
                                 let (tx, rx) = reducing_spsc::channel();
-                                executor.spawn(monitor_task(monitor, sender.clone(), rx)).detach();
+                                executor.spawn(monitor_task(monitor, sender.clone(), rx));
                                 monitor_map.insert(path, tx);
                             }
 
@@ -263,7 +262,7 @@ async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, control: Re
                         }
                     }
                 }
-                Timer::after(Duration::from_millis(500)).await;
+                Timer::after(Duration::from_millis(250)).await;
             }
         }
     }
@@ -278,7 +277,7 @@ async fn retry<R, E: Display, F: FnMut() -> std::result::Result<R, E>>(mut op: F
         match op() {
             Ok(result) => return Ok(result),
             Err(err) if tries <= 4 => {
-                log::debug!("Retrying in {}: {}", backoff_ms, err);
+                debug!("Retrying in {}: {}", backoff_ms, err);
                 Timer::after(Duration::from_millis(backoff_ms)).await;
                 tries += 1;
                 backoff_ms *= 2;

@@ -7,9 +7,12 @@ use std::thread::{current, park, park_timeout, Thread};
 
 use futures_lite::{pin, Stream};
 pub use timer::{process_timers_for_current_thread, Timer};
+pub use executor::LocalExecutor;
 
 pub mod reducing_spsc;
 mod timer;
+mod executor;
+
 
 #[derive(Default)]
 pub enum FutureStream<T> {

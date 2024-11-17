@@ -940,7 +940,6 @@ dependencies = [
 name = "rusty-twinkle-tray"
 version = "0.1.0"
 dependencies = [
- "async-executor",
  "betrayer",
  "dunce",
  "futures-lite",

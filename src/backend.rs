@@ -1,22 +1,21 @@
-use std::cell::Cell;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Display;
 use std::mem::take;
-use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 use std::thread::{spawn, JoinHandle};
 use std::time::{Duration, Instant};
 
-use async_executor::{LocalExecutor, Task};
+use futures_lite::future::yield_now;
 use futures_lite::FutureExt;
-use log::{trace, warn};
+use log::{debug, trace, warn};
 use loole::{unbounded, Receiver, Sender};
 
 use crate::config::Config;
 use crate::monitors::{Monitor, MonitorConnection, MonitorPath};
-use crate::runtime::{block_on, Event, Timer};
+use crate::runtime::{block_on, reducing_spsc, LocalExecutor, Timer};
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::CustomEvent;
+use crate::runtime::reducing_spsc::{Reducible, ReducingReceiver, ReducingSender, TryRecvError};
 
 #[derive(Debug, Clone)]
 enum BackendCommand {
@@ -42,8 +41,8 @@ impl MonitorController {
     async fn worker_task(sender: Sender<CustomEvent>, receiver: Receiver<BackendCommand>, config: Arc<Mutex<Config>>) {
         let sync_with_config = config.lock_no_poison().restore_from_config;
 
-        let executor = LocalExecutor::new();
-        let mut monitor_map: BTreeMap<MonitorPath, (Rc<MonitorControl>, Task<()>)> = BTreeMap::new();
+        let executor = LocalExecutor::default();
+        let mut monitor_map: BTreeMap<MonitorPath, ReducingSender<MonitorCommand>> = BTreeMap::new();
         let mut delayed_query: Option<Instant> = None;
 
         executor
@@ -61,13 +60,13 @@ impl MonitorController {
                         BackendCommand::QueryBrightness(None) => {
                             delayed_query.take();
                             let saved = sync_with_config.then(|| config.lock_no_poison());
-                            monitor_map.iter().for_each(|(p, (c, _))| {
-                                c.query_brightness(
-                                    saved
+                            monitor_map.iter().for_each(|(p, s)| {
+                                s.send_ignore(MonitorCommand::QueryBrightness {
+                                    target: saved
                                         .as_ref()
-                                        .and_then(|c| c.monitors.get(p))
-                                        .and_then(|s| s.saved_brightness)
-                                )
+                                        .and_then( | c| c.monitors.get(p))
+                                        .and_then( | s| s.saved_brightness)
+                                })
                             });
                         }
                         BackendCommand::RefreshMonitors => {
@@ -75,10 +74,13 @@ impl MonitorController {
                             let mut current_monitors = Monitor::find_all()
                                 .map_err(|err| log::warn!("Failed to enumerate monitors: {err}"))
                                 .unwrap_or_default();
-                            log::debug!("Skipping over unnamed monitors as they are likely integrated displays");
+                            debug!("Skipping over unnamed monitors as they are likely integrated displays");
                             current_monitors.retain(|m| !m.name().is_empty());
 
                             let old_monitors = take(&mut monitor_map).into_keys().collect::<BTreeSet<_>>();
+
+                            // Yield to allow the monitor tasks to finish
+                            yield_now().await;
 
                             for path in &old_monitors {
                                 if current_monitors.iter().all(|m| m.path() != path) {
@@ -94,9 +96,9 @@ impl MonitorController {
                                         name: monitor.name().to_string()
                                     });
                                 }
-                                let control = Rc::new(MonitorControl::default());
-                                let task = executor.spawn(monitor_task(monitor, sender.clone(), control.clone()));
-                                monitor_map.insert(path, (control, task));
+                                let (tx, rx) = reducing_spsc::channel();
+                                executor.spawn(monitor_task(monitor, sender.clone(), rx));
+                                monitor_map.insert(path, tx);
                             }
 
                             delayed_query = Some(Instant::now());
@@ -110,8 +112,8 @@ impl MonitorController {
                         BackendCommand::SetBrightness(p, v) => {
                             monitor_map
                                 .get(&p)
-                                .map(|(c, _)| c.request_brightness(v))
-                                .unwrap_or_else(|| log::warn!("Unknown monitor {:?}", p));
+                                .map(|s| s.send_ignore(MonitorCommand::SetBrightness { value: v, notify: false }))
+                                .unwrap_or_else(|| warn!("Unknown monitor {:?}", p));
                             if sync_with_config {
                                 let mut config = config.lock_no_poison();
                                 config.monitors.entry(p).or_default().saved_brightness = Some(v);
@@ -148,7 +150,7 @@ impl Drop for MonitorController {
     fn drop(&mut self) {
         let _ = self.sender.send(BackendCommand::Stop);
         if let Some(handle) = self.thread.take() {
-            log::debug!("Waiting for worker thread to shutdown!");
+            debug!("Waiting for worker thread to shutdown!");
             handle.join().expect("worker thread panic");
         }
     }
@@ -156,53 +158,50 @@ impl Drop for MonitorController {
 
 #[derive(Debug, Copy, Clone)]
 enum MonitorCommand {
-    QueryBrightness(Option<u32>),
-    SetBrightness(u32, bool)
-}
-
-#[derive(Default)]
-struct MonitorControl {
-    command: Cell<Option<MonitorCommand>>,
-    event: Event
-}
-
-impl MonitorControl {
-    fn request_brightness(&self, value: u32) {
-        self.command.set(Some(match self.command.take() {
-            None => MonitorCommand::SetBrightness(value, false),
-            Some(MonitorCommand::SetBrightness(_, notify)) => MonitorCommand::SetBrightness(value, notify),
-            Some(MonitorCommand::QueryBrightness(_)) => MonitorCommand::QueryBrightness(Some(value))
-        }));
-        self.event.signal();
-    }
-
-    fn query_brightness(&self, target: Option<u32>) {
-        self.command.set(Some(match self.command.take() {
-            None => MonitorCommand::QueryBrightness(target),
-            Some(MonitorCommand::QueryBrightness(value)) => MonitorCommand::QueryBrightness(target.or(value)),
-            Some(MonitorCommand::SetBrightness(value, _)) => MonitorCommand::QueryBrightness(Some(target.unwrap_or(value)))
-        }));
-        self.event.signal();
+    QueryBrightness {
+        target: Option<u32>
+    },
+    SetBrightness {
+        value: u32,
+        notify: bool
     }
 }
 
-async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, control: Rc<MonitorControl>) {
+impl Reducible for MonitorCommand {
+    fn reduce(self, other: Self) -> Self {
+        use MonitorCommand::*;
+        match (self, other) {
+            (QueryBrightness { target: current }, QueryBrightness { target: next })
+                => QueryBrightness { target: next.or(current) },
+            (QueryBrightness { .. }, SetBrightness { value, .. })
+                => QueryBrightness { target: Some(value) },
+            (SetBrightness { value, .. }, QueryBrightness { target })
+                => QueryBrightness { target: Some(target.unwrap_or(value)) },
+            (SetBrightness { .. }, SetBrightness { value, notify })
+                => SetBrightness { value, notify }
+        }
+    }
+}
+
+
+async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, control: ReducingReceiver<MonitorCommand>) {
     let mut current_brightness = None;
     let mut cached_connection: Option<MonitorConnection> = None;
 
+    let mut next_command = None;
+
     loop {
-        control.event.reset();
-        match control.command.take() {
-            None => {
+        match next_command.take().ok_or(()).or(control.try_recv()) {
+            Err(TryRecvError::Closed) => break,
+            Err(TryRecvError::Empty) => {
                 trace!("Closing connection to {} and going to sleep", monitor.name());
                 cached_connection = None;
-                control.event.wait().await;
+                next_command = control.recv().await;
             }
-            Some(MonitorCommand::SetBrightness(value, _)) if Some(value) == current_brightness => {
+            Ok(MonitorCommand::SetBrightness { value, ..}) if Some(value) == current_brightness => {
                 trace!("Brightness already at requested level {}", value);
-                continue;
             }
-            Some(command) => {
+            Ok(command) => {
                 if cached_connection.is_none() {
                     trace!("Opening connection to {}", monitor.name());
                     cached_connection = retry(|| monitor.open())
@@ -215,12 +214,12 @@ async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, control: Rc
                     None => continue
                 };
                 match command {
-                    MonitorCommand::QueryBrightness(target) => {
+                    MonitorCommand::QueryBrightness { target } => {
                         trace!("Attempting to read brightness of {}", monitor.name());
                         match retry(|| connection.get_brightness()).await {
                             Ok((brightness, range)) => {
                                 if range != (0..=100) {
-                                    log::warn!("unexpected brightness range: {:?}", range);
+                                    warn!("unexpected brightness range: {:?}", range);
                                 }
                                 current_brightness = Some(brightness);
                                 match target {
@@ -231,9 +230,7 @@ async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, control: Rc
                                             brightness,
                                             target
                                         );
-                                        control
-                                            .command
-                                            .set(Some(MonitorCommand::SetBrightness(target, true)));
+                                        next_command = Some(MonitorCommand::SetBrightness { value: target, notify: true });
                                     }
                                     _ => {
                                         sender.send_ignore(CustomEvent::BrightnessChanged {
@@ -243,14 +240,14 @@ async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, control: Rc
                                     }
                                 }
                             }
-                            Err(err) => log::warn!("Failed to query brightness: {err}")
+                            Err(err) => warn!("Failed to query brightness: {err}")
                         }
                     }
-                    MonitorCommand::SetBrightness(value, notify) => {
-                        log::trace!("Attempting to set brightness of {}", monitor.name());
+                    MonitorCommand::SetBrightness { value, notify } => {
+                        trace!("Attempting to set brightness of {}", monitor.name());
                         let success = retry(|| connection.set_brightness(value))
                             .await
-                            .map_err(|err| log::warn!("Failed to set brightness: {err}"))
+                            .map_err(|err| warn!("Failed to set brightness: {err}"))
                             .is_ok();
                         if success {
                             current_brightness = Some(value);
@@ -265,10 +262,12 @@ async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, control: Rc
                         }
                     }
                 }
-                Timer::after(Duration::from_millis(500)).await;
+                Timer::after(Duration::from_millis(250)).await;
             }
         }
     }
+
+    trace!("Monitor task for {} is shutting down", monitor.name());
 }
 
 async fn retry<R, E: Display, F: FnMut() -> std::result::Result<R, E>>(mut op: F) -> std::result::Result<R, E> {
@@ -278,7 +277,7 @@ async fn retry<R, E: Display, F: FnMut() -> std::result::Result<R, E>>(mut op: F
         match op() {
             Ok(result) => return Ok(result),
             Err(err) if tries <= 4 => {
-                log::debug!("Retrying in {}: {}", backoff_ms, err);
+                debug!("Retrying in {}: {}", backoff_ms, err);
                 Timer::after(Duration::from_millis(backoff_ms)).await;
                 tries += 1;
                 backoff_ms *= 2;

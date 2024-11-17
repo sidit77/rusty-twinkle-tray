@@ -198,11 +198,11 @@ impl<T> TracedResultEx<T> for Result<T> {
     }
 }
 
-pub trait OptionExt<T> {
+pub trait WinOptionExt<T> {
     fn some(self) -> windows::core::Result<T>;
 }
 
-impl<T> OptionExt<T> for Option<T> {
+impl<T> WinOptionExt<T> for Option<T> {
     fn some(self) -> windows::core::Result<T> {
         self.ok_or(Error::from(NO_ERROR))
     }

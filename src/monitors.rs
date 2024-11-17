@@ -10,7 +10,7 @@ use windows::Win32::Graphics::Gdi::HMONITOR;
 
 use crate::monitors::gdi::find_all_gdi_monitors;
 use crate::monitors::paths::{find_all_paths, get_gdi_name, get_name_and_path};
-use crate::utils::error::{OptionExt, Result};
+use crate::utils::error::{WinOptionExt, Result};
 use crate::utils::string::WStr;
 use crate::win_assert;
 

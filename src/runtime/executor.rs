@@ -47,4 +47,10 @@ impl LocalExecutor {
         self.queue_task(Box::pin(fut));
     }
 
+    pub fn clean_pending_tasks(&self) {
+        let mut tasks = self.tasks.take();
+        tasks.clear();
+        self.tasks.set(tasks);
+    }
+
 }

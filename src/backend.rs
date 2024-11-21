@@ -81,6 +81,7 @@ impl MonitorController {
 
                             // Yield to allow the monitor tasks to finish
                             yield_now().await;
+                            executor.clean_pending_tasks();
 
                             for path in &old_monitors {
                                 if current_monitors.iter().all(|m| m.path() != path) {

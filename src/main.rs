@@ -10,6 +10,7 @@ mod ui;
 mod utils;
 mod watchers;
 mod windowing;
+mod views;
 
 use std::process::ExitCode;
 use std::sync::{Arc, Mutex};
@@ -19,18 +20,15 @@ use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use futures_lite::stream::or;
 use futures_lite::{FutureExt, StreamExt};
 use log::{info, trace, warn, LevelFilter};
-use windows::core::{h, ComInterface, IInspectable};
+use windows::core::{h, IInspectable};
 use windows::Foundation::{Size, TypedEventHandler};
 use windows::Win32::Foundation::RECT;
-use windows::Win32::Graphics::Dwm::{DwmSetWindowAttribute, DWMSBT_MAINWINDOW, DWMWA_SYSTEMBACKDROP_TYPE, DWM_SYSTEMBACKDROP_TYPE};
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
-use windows::UI::Color;
 use windows::UI::ViewManagement::UISettings;
-use windows_ext::IXamlSourceTransparency;
 use windows_ext::UI::Xaml::Controls::Control;
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
-use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
-use windows_ext::UI::Xaml::{ElementTheme, UIElement, Window as XamlWindow};
+use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
+use windows_ext::UI::Xaml::ElementTheme;
 
 use crate::backend::MonitorController;
 use crate::config::{autostart, Config};
@@ -39,13 +37,13 @@ use crate::monitors::MonitorPath;
 use crate::runtime::{FutureStream, Timer};
 use crate::theme::{ColorSet, SystemSettings};
 use crate::ui::container::StackPanel;
-use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock, ToggleSwitch};
-use crate::ui::FontWeight;
+use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock};
 pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
+use crate::views::SettingsWindow;
 use crate::watchers::{EventWatcher, PowerEvent};
-use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, Window, WindowBuilder, WindowLevel};
+use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, WindowBuilder, WindowLevel};
 
 include!("../assets/ids.rs");
 
@@ -70,10 +68,7 @@ fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
 
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
-    XamlWindow::Current()
-        .and_then(|w| w.cast::<IXamlSourceTransparency>())
-        .and_then(|t| t.SetIsBackgroundTransparent(true))
-        .unwrap_or_else(|e| warn!("Failed to make XAML island background transparent: {e}"));
+
 
     let config = Arc::new(Mutex::new(Config::load()?));
 
@@ -146,7 +141,7 @@ fn run() -> Result<()> {
         brush
     };
 
-    let mut settings_window: Option<Window> = None;
+    let mut settings_window: Option<SettingsWindow> = None;
 
     let flyout = Flyout::new(&content)?
         .with_style(|style| {
@@ -269,23 +264,8 @@ fn run() -> Result<()> {
                     log::info!("Open Settings");
                     if settings_window.is_none() {
                         trace!("Creating settings window");
-                        let window = WindowBuilder::default()
-                            .with_size(800, 800)
-                            .with_title("Rusty Twinkle Tray Settings")
-                            .with_icon_resource(APP_ICON)
-                            .with_close_handler(cloned!([wnd_sender] move || wnd_sender
-                                .send(CustomEvent::CloseSettings)
-                                .unwrap_or_default()))
-                            .build()
-                            .unwrap();
-                        unsafe {
-                            DwmSetWindowAttribute(window.hwnd, DWMWA_SYSTEMBACKDROP_TYPE, &DWMSBT_MAINWINDOW as *const _ as _, size_of::<DWM_SYSTEMBACKDROP_TYPE>() as u32).unwrap();
-                            //DwmSetWindowAttribute(window.hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &TRUE as *const _ as _, size_of::<BOOL>() as u32).unwrap();
-                        }
 
-                        window.set_content(&build_settings_gui().unwrap()).unwrap();
-                        window.set_visible(true);
-                        settings_window = Some(window);
+                        settings_window = Some(SettingsWindow::new(wnd_sender.clone())?);
 
                         println!("{:?}", autostart::is_enabled());
                     }
@@ -319,39 +299,6 @@ fn run() -> Result<()> {
     config.lock_no_poison().save_if_dirty()?;
     unsafe { RoUninitialize() }
     Ok(())
-}
-
-fn build_settings_gui() -> Result<impl windows::core::CanTryInto<UIElement>> {
-    //let background_brush = {
-    //    let brush = SolidColorBrush::CreateInstanceWithColor(Color { A: 120, R: 0, G: 0, B: 0, })?;
-    //    brush
-    //};
-
-    let section_background_brush = SolidColorBrush::CreateInstanceWithColor(Color { R: 255, G: 255, B: 255, A: 255 })?;
-    let border_brush = SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 30 })?;
-
-    let general = StackPanel::vertical()?
-        .with_background(&section_background_brush)?
-        .with_padding(10.0)?
-        .with_spacing(7.0)?
-        .with_child(&TextBlock::with_text("General")?
-            .with_font_size(24.0)?
-            .with_font_weight(FontWeight::SemiLight)?)?
-        .with_child(&StackPanel::vertical()?
-            .with_child(&TextBlock::with_text("Automatically run on startup")?)?
-            .with_child(&ToggleSwitch::new()?
-                .with_state(true)?
-                .with_toggled_handler(|state| Ok(println!("autostart: {state}")))?)?)?
-
-        .with_border_thickness(1.0)?
-        .with_border_brush(&border_brush)?
-        .with_corner_radius(5.0)?;
-
-    let main = StackPanel::vertical()?
-        .with_padding(10.0)?
-        .with_child(&general)?;
-
-    Ok(main)
 }
 
 fn main() -> ExitCode {

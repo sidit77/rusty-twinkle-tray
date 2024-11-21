@@ -30,6 +30,24 @@ impl<T: Reducible> ChannelExt<T> for ReducingSender<T> {
     }
 }
 
+pub trait FunctionalExt: Sized {
+
+    fn apply_or<R, Y: FnOnce(Self) -> R, N: FnOnce(Self) -> R>(self, condition: bool, y: Y, n: N) -> R;
+
+    fn apply_if<E, Y: FnOnce(Self) -> Result<Self, E>>(self, condition: bool, y: Y) -> Result<Self, E> {
+        self.apply_or(condition, y, Ok)
+    }
+}
+
+impl<T: Sized> FunctionalExt for T {
+    fn apply_or<R, Y: FnOnce(Self) -> R, N: FnOnce(Self) -> R>(self, condition: bool, y: Y, n: N) -> R {
+        match condition {
+            true => y(self),
+            false => n(self)
+        }
+    }
+}
+
 /*
 pub trait OptionExt<T> {
     fn or_future(self, fut: impl Future<Output = Option<T>>) -> impl Future<Output = Option<T>>;

@@ -254,6 +254,11 @@ fn run() -> Result<()> {
                         },
                         None
                     )?);
+                    if let Some(window) = settings_window.as_ref() {
+                        window
+                            .sync_theme()
+                            .unwrap_or_else(|e| warn!("Failed to sync theme: {e}"));
+                    }
                 }
                 CustomEvent::Refresh => {
                     log::info!("Restarting backend...");

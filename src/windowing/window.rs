@@ -4,7 +4,8 @@ use std::sync::Once;
 
 use log::trace;
 use windows::core::{h, w, ComInterface, TryIntoParam, HSTRING, PCWSTR};
-use windows::Win32::Foundation::{COLORREF, HANDLE, HMODULE, HWND, LPARAM, LRESULT, RECT, WPARAM};
+use windows::Win32::Foundation::{BOOL, COLORREF, HANDLE, HMODULE, HWND, LPARAM, LRESULT, RECT, WPARAM};
+use windows::Win32::Graphics::Dwm::{DwmSetWindowAttribute, DWMSBT_MAINWINDOW, DWMWA_CAPTION_COLOR, DWMWA_COLOR_NONE, DWMWA_SYSTEMBACKDROP_TYPE, DWMWA_USE_IMMERSIVE_DARK_MODE, DWM_SYSTEMBACKDROP_TYPE};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::HiDpi::GetDpiForWindow;
 use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
@@ -201,6 +202,27 @@ impl Window {
 
     pub fn set_content<T: TryIntoParam<UIElement>>(&self, content: T) -> Result<()> {
         self.source.SetContent(content)?;
+        Ok(())
+    }
+
+    pub fn apply_mica_backdrop(&self) -> Result<()> {
+        unsafe {
+            DwmSetWindowAttribute(self.hwnd, DWMWA_SYSTEMBACKDROP_TYPE, &DWMSBT_MAINWINDOW as *const _ as _, size_of::<DWM_SYSTEMBACKDROP_TYPE>() as u32)?
+        }
+        Ok(())
+    }
+
+    pub fn make_titlebar_transparent(&self) -> Result<()> {
+        unsafe {
+            DwmSetWindowAttribute(self.hwnd, DWMWA_CAPTION_COLOR, &DWMWA_COLOR_NONE as *const _ as _, size_of::<COLORREF>() as u32)?
+        }
+        Ok(())
+    }
+
+    pub fn enable_immersive_dark_mode(&self, enabled: bool) -> Result<()> {
+        unsafe {
+            DwmSetWindowAttribute(self.hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &BOOL::from(&enabled) as *const _ as _, size_of::<BOOL>() as u32)?
+        }
         Ok(())
     }
 

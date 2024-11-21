@@ -2,10 +2,8 @@ use log::warn;
 use loole::Sender;
 use windows::core::ComInterface;
 use windows::UI::Color;
-use windows::Win32::Foundation::COLORREF;
-use windows::Win32::Graphics::Dwm::{DwmSetWindowAttribute, DWMSBT_MAINWINDOW, DWMWA_CAPTION_COLOR, DWMWA_COLOR_DEFAULT, DWMWA_COLOR_NONE, DWMWA_SYSTEMBACKDROP_TYPE, DWM_SYSTEMBACKDROP_TYPE};
 use windows_ext::IXamlSourceTransparency;
-use windows_ext::UI::Xaml::{UIElement, Window as XamlWindow};
+use windows_ext::UI::Xaml::{ElementTheme, Window as XamlWindow};
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
 use crate::windowing::{Window, WindowBuilder};
 use crate::{cloned, CustomEvent, Result, APP_ICON};
@@ -23,7 +21,10 @@ thread_local! {
 }
 
 pub struct SettingsWindow {
-    window: Window
+    window: Window,
+    mica: bool,
+    content: Option<StackPanel>,
+    background_brush: SolidColorBrush,
 }
 
 impl SettingsWindow {
@@ -40,44 +41,63 @@ impl SettingsWindow {
                                 .send(CustomEvent::CloseSettings)
                                 .unwrap_or_default()))
             .build()?;
-        unsafe {
-            if mica {
-                mica &= DwmSetWindowAttribute(window.hwnd, DWMWA_SYSTEMBACKDROP_TYPE, &DWMSBT_MAINWINDOW as *const _ as _, size_of::<DWM_SYSTEMBACKDROP_TYPE>() as u32)
-                    .map_err(|e| warn!("Failed to set DWM system backdrop attribute: {e}"))
-                    .is_ok();
-            }
-            if mica {
-                DwmSetWindowAttribute(window.hwnd, DWMWA_CAPTION_COLOR, &DWMWA_COLOR_NONE as *const _ as _, size_of::<COLORREF>() as u32)
-                    .unwrap_or_else(|e| warn!("Failed to set DWM caption color attribute: {e}"));
-            }
-
-            //DwmSetWindowAttribute(window.hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &TRUE as *const _ as _, size_of::<BOOL>() as u32).unwrap();
+        if mica {
+            mica &= window
+                .apply_mica_backdrop()
+                .map_err(|e| warn!("Failed to set DWM system backdrop attribute: {e}"))
+                .is_ok();
+        }
+        if mica {
+            window
+                .make_titlebar_transparent()
+                .unwrap_or_else(|e| warn!("Failed to set DWM caption color attribute: {e}"));
         }
 
-        window.set_content(&Self::build_gui(mica)?)?;
-        window.set_visible(true);
+        let mut result = Self {
+            window,
+            mica,
+            content: None,
+            background_brush: SolidColorBrush::new()?,
+        };
+        result.build_gui()?;
+        result
+            .sync_theme()
+            .unwrap_or_else(|e| warn!("Failed to sync theme: {e}"));
+        result.window.set_visible(true);
 
-        Ok(Self {
-            window
-        })
+        Ok(result)
     }
 
     pub fn focus(&self) {
         self.window.focus();
     }
 
-    fn build_gui(mica: bool) -> Result<impl windows::core::CanTryInto<UIElement>> {
-        //let background_brush = {
-        //    let brush = SolidColorBrush::CreateInstanceWithColor(Color { A: 120, R: 0, G: 0, B: 0, })?;
-        //    brush
-        //};
+    pub fn sync_theme(&self) -> Result<()> {
+        let theme = self
+            .content
+            .as_ref()
+            .and_then(|c| c.theme().ok())
+            .filter(|t| *t != ElementTheme::Default)
+            .unwrap_or(ElementTheme::Light);
 
-        let section_background_brush = SolidColorBrush::CreateInstanceWithColor(Color { R: 255, G: 255, B: 255, A: 255 })?;
+        let (color, dark) = match theme {
+            ElementTheme::Dark => (Color { R: 45, G: 45, B: 45, A: 255 }, true),
+            ElementTheme::Light => (Color { R: 251, G: 251, B: 251, A: 255 }, false),
+            _ => unreachable!(),
+        };
+
+        self.background_brush.SetColor(color)?;
+        if self.mica {
+            self.window.enable_immersive_dark_mode(dark)?;
+        }
+        Ok(())
+    }
+
+    fn build_gui(&mut self) -> Result<()> {
         let border_brush = SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 30 })?;
-
-        let general = StackPanel::vertical()?
-            .apply_if(mica, |p| p
-                .with_win11_style(&section_background_brush, &border_brush))?
+         let general = StackPanel::vertical()?
+            .apply_if(self.mica, |p| p
+                .with_win11_style(&self.background_brush, &border_brush))?
             .with_padding(10.0)?
             .with_spacing(7.0)?
             .with_child(&TextBlock::with_text("General")?
@@ -90,12 +110,14 @@ impl SettingsWindow {
                     .with_toggled_handler(|state| Ok(println!("autostart: {state}")))?)?)?;
 
         let main = StackPanel::vertical()?
-            .apply_if(!mica, |p| p
-                .with_background(&section_background_brush))?
+            .apply_if(!self.mica, |p| p
+                .with_background(&self.background_brush))?
             .with_padding(10.0)?
             .with_child(&general)?;
 
-        Ok(main)
+        self.window.set_content(&main)?;
+        self.content = Some(main);
+        Ok(())
     }
 
 }

@@ -1,3 +1,4 @@
+use std::sync::{Arc, Mutex};
 use log::warn;
 use loole::Sender;
 use windows::core::ComInterface;
@@ -7,11 +8,11 @@ use windows_ext::UI::Xaml::{ElementTheme, Window as XamlWindow};
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
 use crate::windowing::{Window, WindowBuilder};
 use crate::{cloned, CustomEvent, Result, APP_ICON};
-use crate::config::autostart;
+use crate::config::{autostart, Config};
 use crate::ui::container::StackPanel;
 use crate::ui::controls::{TextBlock, ToggleSwitch};
 use crate::ui::{FontWeight};
-use crate::utils::extensions::FunctionalExt;
+use crate::utils::extensions::{FunctionalExt, MutexExt};
 
 thread_local! {
     static TRANSPARENT_BACKGROUND: bool = XamlWindow::Current()
@@ -29,7 +30,7 @@ pub struct SettingsWindow {
 }
 
 impl SettingsWindow {
-    pub fn new(sender: Sender<CustomEvent>) -> Result<Self> {
+    pub fn new(sender: Sender<CustomEvent>, config: Arc<Mutex<Config>>) -> Result<Self> {
         let mut mica = TRANSPARENT_BACKGROUND.with(|t| *t);
 
         //mica = false;
@@ -60,7 +61,7 @@ impl SettingsWindow {
             content: None,
             background_brush: SolidColorBrush::new()?,
         };
-        result.build_gui()?;
+        result.build_gui(config)?;
         result
             .sync_theme()
             .unwrap_or_else(|e| warn!("Failed to sync theme: {e}"));
@@ -94,7 +95,7 @@ impl SettingsWindow {
         Ok(())
     }
 
-    fn build_gui(&mut self) -> Result<()> {
+    fn build_gui(&mut self, config: Arc<Mutex<Config>>) -> Result<()> {
         let border_brush = SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 30 })?;
          let general = StackPanel::vertical()?
             .apply_if(self.mica, |p| p
@@ -112,7 +113,17 @@ impl SettingsWindow {
                         autostart::set_enabled(state)
                             .unwrap_or_else(|e| warn!("Failed to set autostart: {e}"));
                         Ok(())
-                    })?)?)?;
+                    })?)?)?
+             .with_child(&StackPanel::vertical()?
+                 .with_child(&TextBlock::with_text("Automatically restore saved brightness")?)?
+                 .with_child(&ToggleSwitch::new()?
+                     .with_state(config.lock_no_poison().restore_from_config)?
+                     .with_toggled_handler(cloned!([config] move |state| {
+                         let mut config = config.lock_no_poison();
+                         config.restore_from_config = state;
+                         config.dirty = true;
+                         Ok(())
+                     }))?)?)?;
 
         let main = StackPanel::vertical()?
             .apply_if(!self.mica, |p| p

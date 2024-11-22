@@ -270,7 +270,7 @@ fn run() -> Result<()> {
                     if settings_window.is_none() {
                         trace!("Creating settings window");
 
-                        settings_window = Some(SettingsWindow::new(wnd_sender.clone())?);
+                        settings_window = Some(SettingsWindow::new(wnd_sender.clone(), config.clone())?);
                     }
                     if let Some(window) = settings_window.as_ref() {
                         window.focus();
@@ -278,6 +278,7 @@ fn run() -> Result<()> {
                 }
                 CustomEvent::CloseSettings => {
                     settings_window = None;
+                    config.lock_no_poison().save_if_dirty()?;
                     if settings_mode {
                         return Ok(());
                     }

@@ -39,8 +39,6 @@ impl MonitorController {
     }
 
     async fn worker_task(sender: Sender<CustomEvent>, receiver: Receiver<BackendCommand>, config: Arc<Mutex<Config>>) {
-        let sync_with_config = config.lock_no_poison().restore_from_config;
-
         let executor = LocalExecutor::default();
         let mut monitor_map: BTreeMap<MonitorPath, ReducingSender<MonitorCommand>> = BTreeMap::new();
         let mut delayed_query: Option<Instant> = None;
@@ -59,12 +57,13 @@ impl MonitorController {
                     match query_event.or(command_event).await {
                         BackendCommand::QueryBrightness(None) => {
                             delayed_query.take();
-                            let saved = sync_with_config.then(|| config.lock_no_poison());
+                            let config = config.lock_no_poison();
                             monitor_map.iter().for_each(|(p, s)| {
                                 s.send_ignore(MonitorCommand::QueryBrightness {
-                                    target: saved
-                                        .as_ref()
-                                        .and_then( | c| c.monitors.get(p))
+                                    target: config
+                                        .restore_from_config
+                                        .then(|| config.monitors.get(p))
+                                        .flatten()
                                         .and_then( | s| s.saved_brightness)
                                 })
                             });
@@ -115,8 +114,8 @@ impl MonitorController {
                                 .get(&p)
                                 .map(|s| s.send_ignore(MonitorCommand::SetBrightness { value: v, notify: false }))
                                 .unwrap_or_else(|| warn!("Unknown monitor {:?}", p));
-                            if sync_with_config {
-                                let mut config = config.lock_no_poison();
+                            let mut config = config.lock_no_poison();
+                            if config.restore_from_config {
                                 config.monitors.entry(p).or_default().saved_brightness = Some(v);
                                 config.dirty = true;
                             }

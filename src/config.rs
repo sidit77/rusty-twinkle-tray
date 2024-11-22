@@ -83,7 +83,7 @@ pub mod autostart {
     use log::warn;
     use registry::AutoStartRegKey;
     use windows::core::{w, PCWSTR};
-    use windows::Win32::System::Registry::KEY_READ;
+    use windows::Win32::System::Registry::{KEY_READ, KEY_SET_VALUE};
 
     static EXE_PATH: LazyLock<PathBuf> = LazyLock::new(|| {
         std::env::current_exe()
@@ -104,18 +104,25 @@ pub mod autostart {
             .unwrap_or(false)
     }
 
+    pub fn set_enabled(enabled: bool) -> crate::Result<()> {
+        let reg = AutoStartRegKey::new(KEY_READ | KEY_SET_VALUE)?;
+        match enabled {
+            true => reg.write_path(PROGRAM_KEY, &*EXE_PATH)?,
+            false => reg.delete(PROGRAM_KEY)?
+        }
+        Ok(())
+    }
+
     mod registry {
         use std::ffi::OsString;
         use std::mem::zeroed;
-        use std::os::windows::ffi::OsStringExt;
+        use std::os::windows::ffi::{OsStrExt, OsStringExt};
         use std::path::PathBuf;
-
+        use std::slice;
         use log::warn;
         use windows::core::{w, HRESULT, PCWSTR};
         use windows::Win32::Foundation::{ERROR_FILE_NOT_FOUND, ERROR_MORE_DATA};
-        use windows::Win32::System::Registry::{
-            RegCloseKey, RegOpenKeyExW, RegQueryValueExW, HKEY, HKEY_LOCAL_MACHINE, REG_EXPAND_SZ, REG_SAM_FLAGS, REG_SZ, REG_VALUE_TYPE
-        };
+        use windows::Win32::System::Registry::{RegCloseKey, RegDeleteValueW, RegOpenKeyExW, RegQueryValueExW, RegSetValueExW, HKEY, HKEY_CURRENT_USER, REG_EXPAND_SZ, REG_SAM_FLAGS, REG_SZ, REG_VALUE_TYPE};
 
         use crate::Result;
 
@@ -128,7 +135,7 @@ pub mod autostart {
                 let handle = unsafe {
                     let mut handle = zeroed();
                     RegOpenKeyExW(
-                        HKEY_LOCAL_MACHINE,
+                        HKEY_CURRENT_USER,
                         w!(r#"Software\Microsoft\Windows\CurrentVersion\Run"#),
                         0,
                         permissions,
@@ -157,6 +164,18 @@ pub mod autostart {
                         Err(e) => return Err(e.into())
                     }
                 }
+            }
+
+            pub fn delete(&self, key: PCWSTR) -> Result<()> {
+                unsafe { RegDeleteValueW(self.handle, key)? };
+                Ok(())
+            }
+
+            pub fn write_path(&self, key: PCWSTR, path: &PathBuf) -> Result<()> {
+                let path = path.as_os_str().encode_wide().chain(Some(0)).collect::<Vec<_>>();
+                let path = unsafe { slice::from_raw_parts(path.as_ptr() as  _, path.len() * 2) };
+                unsafe { RegSetValueExW(self.handle, key, 0, REG_SZ, Some(path))? };
+                Ok(())
             }
         }
 

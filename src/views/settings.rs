@@ -7,6 +7,7 @@ use windows_ext::UI::Xaml::{ElementTheme, Window as XamlWindow};
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
 use crate::windowing::{Window, WindowBuilder};
 use crate::{cloned, CustomEvent, Result, APP_ICON};
+use crate::config::autostart;
 use crate::ui::container::StackPanel;
 use crate::ui::controls::{TextBlock, ToggleSwitch};
 use crate::ui::{FontWeight};
@@ -106,8 +107,12 @@ impl SettingsWindow {
             .with_child(&StackPanel::vertical()?
                 .with_child(&TextBlock::with_text("Automatically run on startup")?)?
                 .with_child(&ToggleSwitch::new()?
-                    .with_state(true)?
-                    .with_toggled_handler(|state| Ok(println!("autostart: {state}")))?)?)?;
+                    .with_state(autostart::is_enabled())?
+                    .with_toggled_handler(|state| {
+                        autostart::set_enabled(state)
+                            .unwrap_or_else(|e| warn!("Failed to set autostart: {e}"));
+                        Ok(())
+                    })?)?)?;
 
         let main = StackPanel::vertical()?
             .apply_if(!self.mica, |p| p

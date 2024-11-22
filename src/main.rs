@@ -31,7 +31,7 @@ use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 use windows_ext::UI::Xaml::ElementTheme;
 
 use crate::backend::MonitorController;
-use crate::config::{autostart, Config};
+use crate::config::Config;
 use crate::interface::XamlGui;
 use crate::monitors::MonitorPath;
 use crate::runtime::{FutureStream, Timer};
@@ -271,8 +271,6 @@ fn run() -> Result<()> {
                         trace!("Creating settings window");
 
                         settings_window = Some(SettingsWindow::new(wnd_sender.clone())?);
-
-                        println!("{:?}", autostart::is_enabled());
                     }
                     if let Some(window) = settings_window.as_ref() {
                         window.focus();

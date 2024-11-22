@@ -24,7 +24,12 @@ This program uses the default [UWP Controls](https://learn.microsoft.com/en-us/u
 Unfortunately, the Microsoft-provided [`windows-rs` crate](https://microsoft.github.io/windows-docs-rs/doc/windows/) does not include bindings for the `Window.UI.Xaml` namespace. To nevertheless use it with Rust, this project directly uses [`windows-bindgen`](https://crates.io/crates/windows-bindgen) to manually generate the missing bindings (`libs/windows-ext`). However, the generated bindings are quite large (~1.5m LOC; ~1m of that in a single file). To keep the IDE happy, this project additionally used a post-processor (`/libs/codegen`) that deletes many unused functions. The file `libs/windows-ext/Codegen.toml` controls which functions are kept. To regenerate the bindings after editing this file, simply run `just update-bindings` (requires [just](https://github.com/casey/just)).
 
 ### Todos
-- [ ] Settings window
+- [x] Settings window
+  - [x] Toggle autostart
+  - [x] Toggle brightness restore
+  - [ ] Rename monitors
+  - [ ] Reorder monitors
+  - [ ] Change various delays / timeouts
 - [ ] Fluent design for Windows 11+
 - [x] Respect Dark/Light system setting
 - [x] Attempt to restore brightness after waking up from sleep

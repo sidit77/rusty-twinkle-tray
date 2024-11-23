@@ -4,6 +4,7 @@ pub mod logger;
 pub mod panic;
 pub mod string;
 pub mod winrt;
+pub mod elevation;
 
 #[macro_export]
 macro_rules! cloned {

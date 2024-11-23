@@ -188,13 +188,18 @@ impl ToggleSwitch {
         Ok(self)
     }
 
+    pub fn with_enabled(self, enabled: bool) -> Result<Self> {
+        self.0.SetIsEnabled(enabled)?;
+        Ok(self)
+    }
+
     pub fn with_toggled_handler<F>(self, mut handler: F) -> Result<Self>
     where
-        F: FnMut(bool) -> Result<()> + Send + 'static
+        F: FnMut(&Self) -> Result<()> + Send + 'static
     {
         self.0.Toggled(&RoutedEventHandler::new(move |sender, _| {
-            let state = sender.some()?.cast::<Self>()?.0.IsOn()?;
-            handler(state).to_win_result()
+            let state = sender.some()?.cast::<Self>()?;
+            handler(&state).to_win_result()
         }))?;
         Ok(self)
     }
@@ -203,6 +208,19 @@ impl ToggleSwitch {
         self.0.SetWidth(width)?;
         Ok(self)
     }
+
+    pub fn get_state(&self) -> Result<bool> {
+        Ok(self.0.IsOn()?)
+    }
+
+    pub fn set_state(&self, on: bool) -> Result<()> {
+        Ok(self.0.SetIsOn(on)?)
+    }
+
+    pub fn set_enabled(&self, enabled: bool) -> Result<()> {
+        Ok(self.0.SetIsEnabled(enabled)?)
+    }
+
 }
 
 pub use windows_ext::UI::Xaml::Controls::Primitives::FlyoutPlacementMode;

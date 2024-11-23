@@ -31,7 +31,7 @@ use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 use windows_ext::UI::Xaml::ElementTheme;
 
 use crate::backend::MonitorController;
-use crate::config::Config;
+use crate::config::{autostart, Config};
 use crate::interface::XamlGui;
 use crate::monitors::MonitorPath;
 use crate::runtime::{FutureStream, Timer};
@@ -63,6 +63,15 @@ pub enum CustomEvent {
 }
 
 fn run() -> Result<()> {
+    // For changing the autostart setting with an elevated instance
+    if let Some(arg) = std::env::args().skip_while(|arg| arg != "--config-autostart").nth(1) {
+        match arg.as_str() {
+            "enable" => autostart::set_enabled(false, true)?,
+            "disable" => autostart::set_enabled(false, false)?,
+            _ => panic!("Invalid argument: {}", arg)
+        }
+        return Ok(());
+    }
     let settings_mode = std::env::args().any(|arg| arg == "--settings-mode");
 
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };

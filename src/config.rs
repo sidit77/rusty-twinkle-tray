@@ -19,6 +19,7 @@ pub struct Config {
     #[serde(skip)]
     pub dirty: bool,
     pub restore_from_config: bool,
+    pub use_prioritized_autostart: bool,
     pub monitors: BTreeMap<MonitorPath, MonitorSettings>
 }
 
@@ -27,6 +28,7 @@ impl Default for Config {
         Self {
             dirty: true,
             restore_from_config: true,
+            use_prioritized_autostart: false,
             monitors: Default::default()
         }
     }
@@ -94,8 +96,8 @@ pub mod autostart {
     // Programs seems to start in alphabetical order. So we prefix the name with an underscore.
     const PROGRAM_KEY: PCWSTR = w!("_RustyTwinkleTray");
 
-    pub fn is_enabled() -> bool {
-        AutoStartRegKey::new(KEY_READ)
+    pub fn is_enabled(user: bool) -> bool {
+        AutoStartRegKey::new(user, KEY_READ)
             .and_then(|reg| reg.read_path(PROGRAM_KEY))
             .map_err(|e| warn!("Failed to read registry: {e}"))
             .ok()
@@ -104,8 +106,8 @@ pub mod autostart {
             .unwrap_or(false)
     }
 
-    pub fn set_enabled(enabled: bool) -> crate::Result<()> {
-        let reg = AutoStartRegKey::new(KEY_READ | KEY_SET_VALUE)?;
+    pub fn set_enabled(user: bool, enabled: bool) -> crate::Result<()> {
+        let reg = AutoStartRegKey::new(user, KEY_READ | KEY_SET_VALUE)?;
         match enabled {
             true => reg.write_path(PROGRAM_KEY, &*EXE_PATH)?,
             false => reg.delete(PROGRAM_KEY)?
@@ -122,7 +124,7 @@ pub mod autostart {
         use log::warn;
         use windows::core::{w, HRESULT, PCWSTR};
         use windows::Win32::Foundation::{ERROR_FILE_NOT_FOUND, ERROR_MORE_DATA};
-        use windows::Win32::System::Registry::{RegCloseKey, RegDeleteValueW, RegOpenKeyExW, RegQueryValueExW, RegSetValueExW, HKEY, HKEY_CURRENT_USER, REG_EXPAND_SZ, REG_SAM_FLAGS, REG_SZ, REG_VALUE_TYPE};
+        use windows::Win32::System::Registry::{RegCloseKey, RegDeleteValueW, RegOpenKeyExW, RegQueryValueExW, RegSetValueExW, HKEY, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, REG_EXPAND_SZ, REG_SAM_FLAGS, REG_SZ, REG_VALUE_TYPE};
 
         use crate::Result;
 
@@ -131,11 +133,14 @@ pub mod autostart {
         }
 
         impl AutoStartRegKey {
-            pub fn new(permissions: REG_SAM_FLAGS) -> Result<Self> {
+            pub fn new(user: bool, permissions: REG_SAM_FLAGS) -> Result<Self> {
                 let handle = unsafe {
                     let mut handle = zeroed();
                     RegOpenKeyExW(
-                        HKEY_CURRENT_USER,
+                        match user {
+                            true => HKEY_CURRENT_USER,
+                            false => HKEY_LOCAL_MACHINE
+                        },
                         w!(r#"Software\Microsoft\Windows\CurrentVersion\Run"#),
                         0,
                         permissions,

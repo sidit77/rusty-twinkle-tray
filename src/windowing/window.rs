@@ -160,6 +160,10 @@ impl Window {
         })
     }
 
+    pub fn hwnd(&self) -> HWND {
+        self.hwnd
+    }
+
     pub fn set_foreground(&self) -> bool {
         unsafe { SetForegroundWindow(self.hwnd).as_bool() }
     }

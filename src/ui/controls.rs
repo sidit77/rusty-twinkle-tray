@@ -198,6 +198,11 @@ impl ToggleSwitch {
         }))?;
         Ok(self)
     }
+
+    pub fn with_width(self, width: f64) -> Result<Self> {
+        self.0.SetWidth(width)?;
+        Ok(self)
+    }
 }
 
 pub use windows_ext::UI::Xaml::Controls::Primitives::FlyoutPlacementMode;

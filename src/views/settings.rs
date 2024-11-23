@@ -4,7 +4,7 @@ use loole::Sender;
 use windows::core::ComInterface;
 use windows::UI::Color;
 use windows_ext::IXamlSourceTransparency;
-use windows_ext::UI::Xaml::{ElementTheme, Window as XamlWindow};
+use windows_ext::UI::Xaml::{ElementTheme, VerticalAlignment, Window as XamlWindow};
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
 use crate::windowing::{Window, WindowBuilder};
 use crate::{cloned, CustomEvent, Result, APP_ICON};
@@ -96,6 +96,8 @@ impl SettingsWindow {
     }
 
     fn build_gui(&mut self, config: Arc<Mutex<Config>>) -> Result<()> {
+        const TOGGLE_WIDTH: f64 = 100.0;
+
         let border_brush = SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 30 })?;
          let general = StackPanel::vertical()?
             .apply_if(self.mica, |p| p
@@ -105,25 +107,29 @@ impl SettingsWindow {
             .with_child(&TextBlock::with_text("General")?
                 .with_font_size(24.0)?
                 .with_font_weight(FontWeight::SemiLight)?)?
-            .with_child(&StackPanel::vertical()?
-                .with_child(&TextBlock::with_text("Automatically run on startup")?)?
+            .with_child(&StackPanel::horizontal()?
                 .with_child(&ToggleSwitch::new()?
+                    .with_width(TOGGLE_WIDTH)?
                     .with_state(autostart::is_enabled())?
                     .with_toggled_handler(|state| {
                         autostart::set_enabled(state)
                             .unwrap_or_else(|e| warn!("Failed to set autostart: {e}"));
                         Ok(())
-                    })?)?)?
-             .with_child(&StackPanel::vertical()?
-                 .with_child(&TextBlock::with_text("Automatically restore saved brightness")?)?
+                    })?)?
+                .with_child(&TextBlock::with_text("Automatically run on startup")?
+                    .with_vertical_alignment(VerticalAlignment::Center)?)?)?
+             .with_child(&StackPanel::horizontal()?
                  .with_child(&ToggleSwitch::new()?
+                     .with_width(TOGGLE_WIDTH)?
                      .with_state(config.lock_no_poison().restore_from_config)?
                      .with_toggled_handler(cloned!([config] move |state| {
                          let mut config = config.lock_no_poison();
                          config.restore_from_config = state;
                          config.dirty = true;
                          Ok(())
-                     }))?)?)?;
+                     }))?)?
+                 .with_child(&TextBlock::with_text("Automatically restore saved brightness")?
+                     .with_vertical_alignment(VerticalAlignment::Center)?)?)?;
 
         let main = StackPanel::vertical()?
             .apply_if(!self.mica, |p| p

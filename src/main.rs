@@ -79,7 +79,7 @@ fn run() -> Result<()> {
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
 
 
-    let config = Arc::new(Mutex::new(Config::load()?));
+    let config = Arc::new(Mutex::new(Config::restore()?));
 
     let (wnd_sender, wnd_receiver) = loole::unbounded();
     let mut controller = MonitorController::new(wnd_sender.clone(), config.clone());

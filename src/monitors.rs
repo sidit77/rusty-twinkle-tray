@@ -3,7 +3,6 @@ use std::ops::RangeInclusive;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
-use serde::{Deserialize, Serialize};
 use windows::Win32::Devices::Display::*;
 use windows::Win32::Foundation::{BOOL, HANDLE};
 use windows::Win32::Graphics::Gdi::HMONITOR;
@@ -14,10 +13,16 @@ use crate::utils::error::{WinOptionExt, Result};
 use crate::utils::string::WStr;
 use crate::win_assert;
 
-#[derive(Clone, Eq, PartialEq, PartialOrd, Ord, Serialize, Deserialize)]
-#[serde(transparent)]
+#[derive(Clone, Eq, PartialEq, PartialOrd, Ord,)]
 #[repr(transparent)]
 pub struct MonitorPath(Arc<Path>);
+
+impl MonitorPath {
+
+    pub fn as_str(&self) -> &str {
+        self.0.to_str().expect("MonitorPath is not valid UTF-8")
+    }
+}
 
 impl Debug for MonitorPath {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -27,6 +32,12 @@ impl Debug for MonitorPath {
 
 impl<const N: usize> From<WStr<N>> for MonitorPath {
     fn from(value: WStr<N>) -> Self {
+        Self(Arc::from(PathBuf::from(value)))
+    }
+}
+
+impl From<&str> for MonitorPath {
+    fn from(value: &str) -> Self {
         Self(Arc::from(PathBuf::from(value)))
     }
 }

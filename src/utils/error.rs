@@ -1,8 +1,9 @@
 use std::backtrace::Backtrace;
 use std::borrow::Cow;
 use std::fmt::{Debug, Display, Formatter};
+use std::num::ParseIntError;
 use std::panic::Location;
-
+use std::str::ParseBoolError;
 use betrayer::{ErrorSource, TrayError};
 use windows::core::{Error, HRESULT};
 use windows::Win32::Foundation::{NO_ERROR, WIN32_ERROR};
@@ -128,6 +129,16 @@ impl From<&'static str> for TracedError {
     }
 }
 
+impl From<String> for TracedError {
+    #[track_caller]
+    fn from(value: String) -> Self {
+        Self {
+            inner: InnerError::String(value.into()),
+            backtrace: Trace::capture()
+        }
+    }
+}
+
 impl From<Error> for TracedError {
     #[track_caller]
     fn from(value: Error) -> Self {
@@ -136,6 +147,28 @@ impl From<Error> for TracedError {
             backtrace: Trace::capture()
         }
     }
+}
+
+impl From<ParseBoolError> for TracedError {
+    #[track_caller]
+    fn from(value: ParseBoolError) -> Self {
+        Self {
+            inner: InnerError::External(value.into()),
+            backtrace: Trace::capture()
+        }
+    }
+
+}
+
+impl From<ParseIntError> for TracedError {
+    #[track_caller]
+    fn from(value: ParseIntError) -> Self {
+        Self {
+            inner: InnerError::External(value.into()),
+            backtrace: Trace::capture()
+        }
+    }
+
 }
 
 impl From<TrayError> for TracedError {
@@ -150,16 +183,6 @@ impl From<TrayError> for TracedError {
         Self {
             inner,
             backtrace: Trace::Location(*value.location())
-        }
-    }
-}
-
-impl From<ron::Error> for TracedError {
-    #[track_caller]
-    fn from(value: ron::Error) -> Self {
-        Self {
-            inner: InnerError::External(Box::new(value)),
-            backtrace: Trace::capture()
         }
     }
 }

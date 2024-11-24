@@ -17,10 +17,8 @@ members = [
 [dependencies]
 log = "0.4"
 betrayer = "0.3.0"
-serde = { version = "1", features = ["derive", "rc"] }
-ron = "0.8"
 loole = "0.4.0"
-futures-lite = "2"
+futures-lite = { version = "2", default-features = false }
 dunce = "1"
 windows-ext = { path = "lib/windows-ext" }
 windows = { version = "0.52", features = [

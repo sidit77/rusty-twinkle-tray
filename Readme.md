@@ -1,9 +1,22 @@
 # Rusty Twinkle Tray
 
-Rusty Twinkle Tray is a work-in-progress (WIP) rewrite of Twinkle Tray in Rust. A central goal of this rewrite is to start much faster so that monitor brightness can be adjusted as soon as possible after logging in.
+A small utility for easily adjusting the brightness of external monitors using the DDC/CI protocol.
+
+Rusty Twinkle Tray is a work-in-progress rewrite of Twinkle Tray in Rust. A central goal of this rewrite is to start much faster so that monitor brightness can be adjusted as soon as possible after logging in.
 
 ## Screenshot
-![image](https://github.com/sidit77/rusty-twinkle-tray/assets/5053369/d4b3d3b3-fd2f-4e06-844e-dbae24b73046)
+![image](https://github.com/user-attachments/assets/7f4c05d9-865d-4cdf-ae66-8f649b262912)
+
+## Features
+- Can automatically restore the last set brightness after¹:
+  - Changing display settings
+  - Waking up from sleep
+- Small (~800kb) standable executable
+- Built using native OS controls instead of electron
+- As inactive as possible when not in use
+- Minimal dependencies
+
+¹*Many monitors tend to "forget" settings set over DDC/CI after, temporarly, losing power*
 
 ## Precompiled Binaries
 *Coming soon*

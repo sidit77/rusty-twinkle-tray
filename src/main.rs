@@ -236,8 +236,14 @@ fn run() -> Result<()> {
                     }
                 }
                 CustomEvent::MonitorAdded { path, name } => {
-                    info!("Found monitor: {}", name);
-                    flyout.register_monitor(name, path, controller.create_proxy())?;
+                    let display_name = config
+                        .lock_no_poison()
+                        .monitor(&path)
+                        .custom_name
+                        .clone()
+                        .unwrap_or_else(|| name.clone());
+                    info!("Found monitor: {} [{}]", name, display_name);
+                    flyout.register_monitor(display_name, path, controller.create_proxy())?;
                 }
                 CustomEvent::MonitorRemoved { path } => {
                     info!("Monitor removed: {:?}", path);

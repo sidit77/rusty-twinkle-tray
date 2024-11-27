@@ -19,31 +19,25 @@ use std::time::{Duration, Instant};
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use futures_lite::stream::or;
 use futures_lite::{FutureExt, StreamExt};
-use log::{info, trace, warn, LevelFilter};
-use windows::core::{h, IInspectable};
-use windows::Foundation::{Size, TypedEventHandler};
+use log::{debug, info, trace, warn, LevelFilter};
+use windows::Foundation::{TypedEventHandler};
 use windows::Win32::Foundation::RECT;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows::UI::ViewManagement::UISettings;
-use windows_ext::UI::Xaml::Controls::Control;
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
-use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
 use windows_ext::UI::Xaml::ElementTheme;
 
 use crate::backend::MonitorController;
 use crate::config::{autostart, Config};
-use crate::interface::XamlGui;
 use crate::monitors::MonitorPath;
 use crate::runtime::{FutureStream, Timer};
 use crate::theme::{ColorSet, SystemSettings};
-use crate::ui::container::StackPanel;
-use crate::ui::controls::{Flyout, FlyoutPlacementMode, TextBlock};
 pub use crate::utils::error::Result;
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
-use crate::views::SettingsWindow;
+use crate::views::{BrightnessFlyout, ProxyWindow, SettingsWindow};
 use crate::watchers::{EventWatcher, PowerEvent};
-use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect, WindowBuilder, WindowLevel};
+use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect};
 
 include!("../assets/ids.rs");
 
@@ -126,43 +120,10 @@ fn run() -> Result<()> {
         Ok(())
     })))?;
 
-    let mut gui = XamlGui::new(wnd_sender.clone())?;
 
-    let proxy_window = WindowBuilder::default()
-        .with_position(0, 0)
-        .with_size(10, 10)
-        .with_hidden(true)
-        .build()?;
-    let proxy_content = TextBlock::with_text("This should be invisible!")?;
-    proxy_window.set_content(&proxy_content)?;
-
-    let content = StackPanel::vertical()?
-        .with_theme(colors.theme)?
-        .with_width(400.0)?
-        .with_child(gui.ui())?;
-
-    let background_brush = {
-        let brush = AcrylicBrush::new()?;
-        brush.SetBackgroundSource(AcrylicBackgroundSource::HostBackdrop)?;
-        brush.SetFallbackColor(colors.fallback)?;
-        brush.SetTintColor(colors.tint)?;
-        brush.SetTintOpacity(colors.opacity)?;
-        brush
-    };
-
+    let proxy_window = ProxyWindow::new()?;
+    let mut flyout = BrightnessFlyout::new(wnd_sender.clone(), &colors)?;
     let mut settings_window: Option<SettingsWindow> = None;
-
-    let flyout = Flyout::new(&content)?
-        .with_style(|style| {
-            style
-                .with_setter(&Control::BackgroundProperty()?, &background_brush)?
-                .with_setter(&Control::CornerRadiusProperty()?, &IInspectable::try_from(h!("10.0"))?)?
-                .with_setter(&Control::PaddingProperty()?, &IInspectable::try_from(h!("0.0"))?)
-        })?
-        .with_closed_handler(cloned!([wnd_sender] move || {
-            wnd_sender.filter_send_ignore(Some(CustomEvent::FocusLost));
-            Ok(())
-        }))?;
 
     if settings_mode {
         wnd_sender.send(CustomEvent::OpenSettings).unwrap();
@@ -179,9 +140,9 @@ fn run() -> Result<()> {
                     return Ok(());
                 }
                 CustomEvent::Show => {
-                    if flyout.is_open()? {
+                    if flyout.is_open() {
                         trace!("Flyout already open. Closing it instead");
-                        flyout.close()?;
+                        flyout.close();
                         continue;
                     }
                     if last_close.elapsed() >= Duration::from_millis(250) {
@@ -191,19 +152,10 @@ fn run() -> Result<()> {
                         let right = workspace.right - gap;
                         let bottom = workspace.bottom - gap;
 
-                        proxy_window.set_window_pos(Some(WindowLevel::AlwaysOnTop), Some((0, 0)), None, Some(true));
-                        proxy_window.focus();
-                        if !proxy_window.set_foreground() {
+                        if !proxy_window.activate() {
                             // This happens when opening the flyout while the start menu is open
-                            log::debug!("Failed to set window foreground");
-                            let size = content.measure().unwrap_or_else(|err| {
-                                log::warn!("Failed to measure content: {err}");
-                                // Make a guess
-                                Size {
-                                    Width: 400.0,
-                                    Height: 62.0 + 86.0 * gui.number_of_monitors() as f32
-                                }
-                            });
+                            debug!("Failed to set window foreground");
+                            let size = flyout.size();
                             click_watcher.set(async move {
                                 trace!("Calculated flyout size: {:?}", size);
                                 let click = async {
@@ -228,33 +180,25 @@ fn run() -> Result<()> {
                             });
                         }
 
-                        flyout.show_at(
-                            &proxy_content,
-                            right as f32 * idpi,
-                            bottom as f32 * idpi,
-                            FlyoutPlacementMode::LeftEdgeAlignedBottom
-                        )?;
+                        flyout.show(&proxy_window, right as f32 * idpi, bottom as f32 * idpi);
                         controller.refresh_brightness();
                     }
                 }
                 CustomEvent::FocusLost => {
                     click_watcher.clear();
-                    proxy_window.set_window_pos(None, None, None, Some(false));
+                    proxy_window.deactivate();
                     config.lock_no_poison().save_if_dirty()?;
                     last_close = Instant::now();
                 }
                 CustomEvent::ClickedOutside => {
-                    flyout.close()?;
+                    flyout.close();
                 }
                 CustomEvent::ThemeChange => {
                     colors = SystemSettings::new()
                         .map_err(|err| log::warn!("Failed to read system settings: {err}"))
                         .ok()
                         .map_or_else(ColorSet::dark, |system_settings| ColorSet::system(&system_settings, &ui_settings));
-                    background_brush.SetFallbackColor(colors.fallback)?;
-                    background_brush.SetTintColor(colors.tint)?;
-                    background_brush.SetOpacity(colors.opacity)?;
-                    content.set_theme(colors.theme)?;
+                    flyout.update_theme(&colors)?;
                     tray.set_icon(Icon::from_resource(
                         if colors.theme == ElementTheme::Light {
                             BRIGHTNESS_LIGHT_ICON
@@ -271,7 +215,7 @@ fn run() -> Result<()> {
                 }
                 CustomEvent::Refresh => {
                     log::info!("Restarting backend...");
-                    gui.clear_monitors()?;
+                    flyout.clear_monitors();
                     controller = MonitorController::new(wnd_sender.clone(), config.clone());
                 }
                 CustomEvent::OpenSettings => {
@@ -294,14 +238,14 @@ fn run() -> Result<()> {
                 }
                 CustomEvent::MonitorAdded { path, name } => {
                     info!("Found monitor: {}", name);
-                    gui.register_monitor(name, path, controller.create_proxy())?
+                    flyout.register_monitor(name, path, controller.create_proxy())
                 }
                 CustomEvent::MonitorRemoved { path } => {
                     info!("Monitor removed: {:?}", path);
-                    gui.unregister_monitor(&path)?;
+                    flyout.unregister_monitor(&path);
                 }
                 CustomEvent::BrightnessChanged { path, value } => {
-                    gui.update_brightness(path, value)?;
+                    flyout.update_brightness(path, value);
                 }
             }
         }

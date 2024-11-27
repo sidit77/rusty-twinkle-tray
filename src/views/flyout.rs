@@ -1,18 +1,21 @@
+use std::collections::BTreeMap;
 use log::{debug, warn};
 use loole::Sender;
 use windows::core::{h, IInspectable};
 use windows::Foundation::Size;
+use windows::UI::Color;
 use windows_ext::UI::Xaml::Controls::Control;
 use windows_ext::UI::Xaml::Controls::Primitives::FlyoutPlacementMode;
-use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush};
-use crate::interface::XamlGui;
-use crate::ui::container::StackPanel;
-use crate::ui::controls::{Flyout, TextBlock};
+use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
+use windows_ext::UI::Xaml::{TextAlignment, VerticalAlignment};
+use crate::ui::container::{Grid, GridSize, StackPanel};
+use crate::ui::controls::{AppBarButton, Flyout, FontIcon, Slider, TextBlock};
 use crate::windowing::{Window, WindowBuilder, WindowLevel};
-use crate::{cloned, CustomEvent, Result};
+use crate::{cloned, hformat, CustomEvent, Result};
 use crate::backend::MonitorControllerProxy;
 use crate::monitors::MonitorPath;
 use crate::theme::ColorSet;
+use crate::ui::FontWeight;
 use crate::utils::extensions::ChannelExt;
 
 pub struct ProxyWindow {
@@ -54,7 +57,8 @@ pub struct BrightnessFlyout {
     background: AcrylicBrush,
     container: StackPanel,
 
-    gui: XamlGui
+    monitor_panel: StackPanel,
+    monitor_controls: BTreeMap<MonitorPath, MonitorEntry>
 }
 
 impl BrightnessFlyout {
@@ -63,12 +67,60 @@ impl BrightnessFlyout {
 
 
     pub fn new(sender: Sender<CustomEvent>, colors: &ColorSet) -> Result<Self> {
-        let gui = XamlGui::new(sender.clone())?;
+
+        let settings = AppBarButton::new()?
+            .with_icon(&FontIcon::new('\u{E713}')?)?
+            .with_label("Settings")?
+            //.with_enabled(false)?;
+            .with_click_handler(cloned!([sender] move|| {
+                sender
+                    .send(CustomEvent::OpenSettings)
+                    .unwrap_or_else(|_| log::warn!("Failed to send settings event"));
+                Ok(())
+            }))?;
+
+        let refresh = AppBarButton::new()?
+            .with_icon(&FontIcon::new('\u{E72C}')?)?
+            .with_label("Refresh")?
+            .with_click_handler(cloned!([sender] move || {
+                sender
+                    .send(CustomEvent::Refresh)
+                    .unwrap_or_else(|_| log::warn!("Failed to send refresh event"));
+                Ok(())
+            }))?;
+
+        // Create a new stack panel for the bottom bar
+        let bottom_bar = Grid::new()?
+            //.with_padding(20.0)?
+            .with_column_widths([GridSize::Fraction(1.0), GridSize::Auto])?
+            .with_background(&SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 70 })?)?
+            .with_child(
+                &TextBlock::with_text("Adjust Brightness")?
+                    .with_font_size(15.0)?
+                    .with_vertical_alignment(VerticalAlignment::Center)?
+                    .with_padding((20.0, 0.0, 0.0, 0.0))?,
+                0,
+                0
+            )?
+            .with_child(
+                &StackPanel::horizontal()?
+                    .with_child(&refresh)?
+                    .with_child(&settings)?,
+                0,
+                1
+            )?;
+
+        let monitor_panel = StackPanel::vertical()?
+            .with_spacing(20.0)?
+            .with_padding((20.0, 14.0))?;
 
         let container = StackPanel::vertical()?
             .with_theme(colors.theme)?
             .with_width(Self::WIDTH)?
-            .with_child(gui.ui())?;
+            .with_child(&Grid::new()?
+                .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?
+                .with_child(&monitor_panel, 0, 0)?
+                .with_child(&bottom_bar, 2, 0)?)?;
 
         let background = {
             let brush = AcrylicBrush::new()?;
@@ -91,7 +143,7 @@ impl BrightnessFlyout {
                 Ok(())
             }))?;
 
-        Ok(Self { flyout, background, container, gui })
+        Ok(Self { flyout, background, container, monitor_panel, monitor_controls: BTreeMap::new() })
     }
 
     pub fn update_theme(&self, colors: &ColorSet) -> Result<()> {
@@ -126,30 +178,100 @@ impl BrightnessFlyout {
             .unwrap_or_else(|e| {
                 debug!("Failed to get measured size of flyout: {}", e);
                 // Make a guess
-                Size { Width: Self::WIDTH as f32, Height: 62.0 + 86.0 * self.gui.number_of_monitors() as f32 }
+                Size { Width: Self::WIDTH as f32, Height: 62.0 + 86.0 * self.monitor_controls.len() as f32 }
             })
     }
 
 
 
-    pub fn register_monitor(&mut self, name: String, path: MonitorPath, proxy: MonitorControllerProxy) {
-        self.gui.register_monitor(name, path, proxy)
-            .unwrap_or_else(|e| warn!("Failed to register monitor: {}", e));
+    pub fn register_monitor(&mut self, name: String, path: MonitorPath, proxy: MonitorControllerProxy) -> Result<()> {
+        assert!(!self.monitor_controls.contains_key(&path));
+        let monitor = MonitorEntry::create(name, path.clone(), proxy)?;
+        self.monitor_panel.add_child(monitor.ui())?;
+        self.monitor_controls.insert(path, monitor);
+
+        Ok(())
     }
 
-    pub fn unregister_monitor(&mut self, path: &MonitorPath) {
-        self.gui.unregister_monitor(path)
-            .unwrap_or_else(|e| warn!("Failed to unregister monitor: {}", e));
+    pub fn unregister_monitor(&mut self, path: &MonitorPath) -> Result<()> {
+        if self.monitor_controls.remove(path).is_none() {
+            warn!("Monitor is not registered: {:?}", path);
+        } else {
+            self.monitor_panel.clear_children()?;
+            for monitor in self.monitor_controls.values() {
+                self.monitor_panel.add_child(monitor.ui())?;
+            }
+        }
+        Ok(())
     }
 
-    pub fn clear_monitors(&mut self) {
-        self.gui.clear_monitors()
-            .unwrap_or_else(|e| warn!("Failed to clear monitors: {}", e));
+    pub fn clear_monitors(&mut self) -> Result<()> {
+        self.monitor_panel.clear_children()?;
+        self.monitor_controls.clear();
+        Ok(())
     }
 
-    pub fn update_brightness(&self, path: MonitorPath, new_brightness: u32) {
-        self.gui.update_brightness(path, new_brightness)
-            .unwrap_or_else(|e| warn!("Failed to update slider: {}", e));
+    pub fn update_brightness(&self, path: MonitorPath, new_brightness: u32) -> Result<()> {
+        match self.monitor_controls.get(&path) {
+            None => log::warn!("Monitor is not registered: {:?}", path),
+            Some(entry) => entry.set_brightness(new_brightness)?
+        }
+        Ok(())
     }
 
+}
+
+
+struct MonitorEntry {
+    ui: StackPanel,
+    slider: Slider
+}
+
+impl MonitorEntry {
+    pub fn create(name: String, path: MonitorPath, proxy: MonitorControllerProxy) -> Result<Self> {
+        let label = TextBlock::new()?
+            .with_vertical_alignment(VerticalAlignment::Center)?
+            .with_text_alignment(TextAlignment::Center)?
+            .with_font_size(20.0)?
+            .with_font_weight(FontWeight::Medium)?;
+
+        let slider = Slider::new()?
+            .with_vertical_alignment(VerticalAlignment::Center)?
+            .with_value(0.0)?
+            .with_mouse_scrollable()?
+            .with_value_changed_handler(cloned!([label] move |args| {
+                let new = args.NewValue()? as u32;
+                label.set_text(hformat!("{}", new))?;
+                proxy.set_brightness(path.clone(), new);
+                Ok(())
+            }))?;
+
+        label.set_text(hformat!("{}", slider.get_value()?))?;
+
+        let ui = StackPanel::vertical()?
+            .with_spacing(4.0)?
+            .with_child(
+                &StackPanel::horizontal()?
+                    .with_spacing(8.0)?
+                    .with_child(&FontIcon::new('\u{E7f4}')?.with_font_weight(FontWeight::Medium)?)?
+                    .with_child(&TextBlock::with_text(name)?.with_font_size(20.0)?)?
+            )?
+            .with_child(
+                &Grid::new()?
+                    .with_column_widths([GridSize::Fraction(1.0), GridSize::Pixel(40.0)])?
+                    .with_column_spacing(8.0)?
+                    .with_child(&slider, 0, 0)?
+                    .with_child(&label, 0, 1)?
+            )?;
+
+        Ok(Self { ui, slider })
+    }
+
+    pub fn set_brightness(&self, value: u32) -> Result<()> {
+        self.slider.set_value(value as f64)
+    }
+
+    pub fn ui(&self) -> &StackPanel {
+        &self.ui
+    }
 }

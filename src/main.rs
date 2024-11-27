@@ -2,7 +2,6 @@
 
 mod backend;
 mod config;
-mod interface;
 mod monitors;
 pub mod runtime;
 mod theme;
@@ -215,7 +214,7 @@ fn run() -> Result<()> {
                 }
                 CustomEvent::Refresh => {
                     log::info!("Restarting backend...");
-                    flyout.clear_monitors();
+                    flyout.clear_monitors()?;
                     controller = MonitorController::new(wnd_sender.clone(), config.clone());
                 }
                 CustomEvent::OpenSettings => {
@@ -238,14 +237,14 @@ fn run() -> Result<()> {
                 }
                 CustomEvent::MonitorAdded { path, name } => {
                     info!("Found monitor: {}", name);
-                    flyout.register_monitor(name, path, controller.create_proxy())
+                    flyout.register_monitor(name, path, controller.create_proxy())?;
                 }
                 CustomEvent::MonitorRemoved { path } => {
                     info!("Monitor removed: {:?}", path);
-                    flyout.unregister_monitor(&path);
+                    flyout.unregister_monitor(&path)?;
                 }
                 CustomEvent::BrightnessChanged { path, value } => {
-                    flyout.update_brightness(path, value);
+                    flyout.update_brightness(path, value)?;
                 }
             }
         }

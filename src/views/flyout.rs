@@ -1,4 +1,3 @@
-use std::collections::BTreeMap;
 use log::{debug, warn};
 use loole::Sender;
 use windows::core::{h, IInspectable};
@@ -11,12 +10,13 @@ use windows_ext::UI::Xaml::{TextAlignment, VerticalAlignment};
 use crate::ui::container::{Grid, GridSize, StackPanel};
 use crate::ui::controls::{AppBarButton, Flyout, FontIcon, Slider, TextBlock};
 use crate::windowing::{Window, WindowBuilder, WindowLevel};
-use crate::{cloned, hformat, CustomEvent, Result};
+use crate::{cloned, hformat, log_assert, CustomEvent, Result};
 use crate::backend::MonitorControllerProxy;
 use crate::monitors::MonitorPath;
 use crate::theme::ColorSet;
 use crate::ui::FontWeight;
 use crate::utils::extensions::ChannelExt;
+use crate::utils::ordered_map::{OrderedMap, SortKeyExtract};
 
 pub struct ProxyWindow {
     window: Window,
@@ -58,7 +58,7 @@ pub struct BrightnessFlyout {
     container: StackPanel,
 
     monitor_panel: StackPanel,
-    monitor_controls: BTreeMap<MonitorPath, MonitorEntry>
+    monitor_controls: OrderedMap<MonitorPath, MonitorEntry>
 }
 
 impl BrightnessFlyout {
@@ -143,7 +143,12 @@ impl BrightnessFlyout {
                 Ok(())
             }))?;
 
-        Ok(Self { flyout, background, container, monitor_panel, monitor_controls: BTreeMap::new() })
+        Ok(Self {
+            flyout,
+            background,
+            container,
+            monitor_panel,
+            monitor_controls: OrderedMap::new() })
     }
 
     pub fn update_theme(&self, colors: &ColorSet) -> Result<()> {
@@ -183,37 +188,35 @@ impl BrightnessFlyout {
     }
 
 
-
-    pub fn register_monitor(&mut self, name: String, path: MonitorPath, proxy: MonitorControllerProxy) -> Result<()> {
-        assert!(!self.monitor_controls.contains_key(&path));
-        let monitor = MonitorEntry::create(name, path.clone(), proxy)?;
-        self.monitor_panel.add_child(monitor.ui())?;
-        self.monitor_controls.insert(path, monitor);
-
-        Ok(())
-    }
-
-    pub fn unregister_monitor(&mut self, path: &MonitorPath) -> Result<()> {
-        if self.monitor_controls.remove(path).is_none() {
-            warn!("Monitor is not registered: {:?}", path);
-        } else {
-            self.monitor_panel.clear_children()?;
-            for monitor in self.monitor_controls.values() {
-                self.monitor_panel.add_child(monitor.ui())?;
-            }
+    fn repopulate_monitor_list(&self) -> Result<()> {
+        self.monitor_panel.clear_children()?;
+        for monitor in self.monitor_controls.values() {
+            self.monitor_panel.add_child(monitor.ui())?;
         }
         Ok(())
     }
 
+    pub fn register_monitor(&mut self, name: String, path: MonitorPath, position: i32, proxy: MonitorControllerProxy) -> Result<()> {
+        log_assert!(self.monitor_controls.insert(path.clone(), MonitorEntry::create(name, path, position, proxy)?).is_none());
+        self.repopulate_monitor_list()?;
+        Ok(())
+    }
+
+    pub fn unregister_monitor(&mut self, path: &MonitorPath) -> Result<()> {
+        log_assert!(self.monitor_controls.remove(path).is_some());
+        self.repopulate_monitor_list()?;
+        Ok(())
+    }
+
     pub fn clear_monitors(&mut self) -> Result<()> {
-        self.monitor_panel.clear_children()?;
         self.monitor_controls.clear();
+        self.repopulate_monitor_list()?;
         Ok(())
     }
 
     pub fn update_brightness(&self, path: MonitorPath, new_brightness: u32) -> Result<()> {
         match self.monitor_controls.get(&path) {
-            None => log::warn!("Monitor is not registered: {:?}", path),
+            None => warn!("Monitor is not registered: {:?}", path),
             Some(entry) => entry.set_brightness(new_brightness)?
         }
         Ok(())
@@ -223,12 +226,13 @@ impl BrightnessFlyout {
 
 
 struct MonitorEntry {
+    position: i32,
     ui: StackPanel,
     slider: Slider
 }
 
 impl MonitorEntry {
-    pub fn create(name: String, path: MonitorPath, proxy: MonitorControllerProxy) -> Result<Self> {
+    pub fn create(name: String, path: MonitorPath, position: i32, proxy: MonitorControllerProxy) -> Result<Self> {
         let label = TextBlock::new()?
             .with_vertical_alignment(VerticalAlignment::Center)?
             .with_text_alignment(TextAlignment::Center)?
@@ -254,7 +258,7 @@ impl MonitorEntry {
                 &StackPanel::horizontal()?
                     .with_spacing(8.0)?
                     .with_child(&FontIcon::new('\u{E7f4}')?.with_font_weight(FontWeight::Medium)?)?
-                    .with_child(&TextBlock::with_text(name)?.with_font_size(20.0)?)?
+                    .with_child(&TextBlock::with_text(&name)?.with_font_size(20.0)?)?
             )?
             .with_child(
                 &Grid::new()?
@@ -264,7 +268,7 @@ impl MonitorEntry {
                     .with_child(&label, 0, 1)?
             )?;
 
-        Ok(Self { ui, slider })
+        Ok(Self { position, ui, slider })
     }
 
     pub fn set_brightness(&self, value: u32) -> Result<()> {
@@ -273,5 +277,13 @@ impl MonitorEntry {
 
     pub fn ui(&self) -> &StackPanel {
         &self.ui
+    }
+}
+
+impl SortKeyExtract for MonitorEntry {
+    type Key = i32;
+
+    fn sort_key(&self) -> i32 {
+        self.position
     }
 }

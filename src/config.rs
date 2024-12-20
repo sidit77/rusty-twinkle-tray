@@ -36,7 +36,7 @@ impl Default for Config {
 pub struct MonitorSettings {
     pub saved_brightness: Option<u32>,
     pub custom_name: Option<String>,
-    pub order: Option<i32>
+    pub position: Option<i32>
 }
 
 impl Config {
@@ -87,7 +87,7 @@ impl Config {
         write!(file, "\r\n")?;
 
         for (path, settings) in &self.monitors {
-            if settings.saved_brightness.is_none() && settings.custom_name.is_none() && settings.order.is_none() {
+            if settings.saved_brightness.is_none() && settings.custom_name.is_none() && settings.position.is_none() {
                 continue;
             }
             write!(file, "[{}]\r\n", path.as_str())?;
@@ -97,8 +97,8 @@ impl Config {
             if let Some(name) = &settings.custom_name {
                 write!(file, "CustomName={}\r\n", name)?;
             }
-            if let Some(order) = settings.order {
-                write!(file, "Order={}\r\n", order)?;
+            if let Some(order) = settings.position {
+                write!(file, "Position={}\r\n", order)?;
             }
             write!(file, "\r\n")?;
         }
@@ -148,8 +148,8 @@ impl Config {
                         "CustomName" => {
                             settings.custom_name = Some(value.to_string());
                         },
-                        "Order" => {
-                            settings.order = Some(value.parse()?);
+                        "Position" => {
+                            settings.position = Some(value.parse()?);
                         },
                         _ => debug!("Ignoring unknown key in section {}: {}={}", section, key, value)
                     }

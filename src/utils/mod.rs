@@ -5,6 +5,7 @@ pub mod panic;
 pub mod string;
 pub mod winrt;
 pub mod elevation;
+pub mod ordered_map;
 
 #[macro_export]
 macro_rules! cloned {
@@ -14,4 +15,9 @@ macro_rules! cloned {
             $e
         }
     };
+}
+
+#[macro_export]
+macro_rules! log_assert {
+    ($cond:expr) => {{ if !$cond { log::warn!("Assertion failed: {}", stringify!($cond)); } }};
 }

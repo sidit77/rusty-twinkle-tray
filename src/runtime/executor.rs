@@ -4,6 +4,7 @@ use std::future::{poll_fn, Future};
 use std::mem::take;
 use std::pin::Pin;
 use std::task::Poll;
+
 use futures_lite::pin;
 
 type Task = Pin<Box<dyn Future<Output = ()> + 'static>>;
@@ -18,7 +19,6 @@ pub struct LocalExecutor {
 }
 
 impl LocalExecutor {
-
     fn queue_task(&self, task: Task) {
         let mut tasks = self.tasks.take();
         tasks.push_back(task);
@@ -34,13 +34,13 @@ impl LocalExecutor {
             local_buffer = self.tasks.replace(take(&mut local_buffer));
             while let Some(mut task) = local_buffer.pop_front() {
                 match task.as_mut().poll(cx) {
-                    Poll::Ready(()) => { /* task done; don't requeue */ },
-                    Poll::Pending => self.queue_task(task),
+                    Poll::Ready(()) => { /* task done; don't requeue */ }
+                    Poll::Pending => self.queue_task(task)
                 }
             }
             fut.as_mut().poll(cx)
-        }).await
-
+        })
+        .await
     }
 
     pub fn spawn(&self, fut: impl Future<Output = ()> + 'static) {
@@ -52,5 +52,4 @@ impl LocalExecutor {
         tasks.clear();
         self.tasks.set(tasks);
     }
-
 }

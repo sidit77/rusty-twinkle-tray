@@ -9,7 +9,7 @@ use windows_ext::UI::Xaml::{DependencyObject, RoutedEventHandler, UIElement};
 use super::{FontWeight, Padding, TextAlignment, VerticalAlignment};
 use crate::ui::style::Style;
 use crate::ui::NewType;
-use crate::utils::error::{WinOptionExt, TracedResultEx};
+use crate::utils::error::{TracedResultEx, WinOptionExt};
 use crate::Result;
 
 new_type!(Slider, windows_ext::UI::Xaml::Controls::Slider);
@@ -220,7 +220,6 @@ impl ToggleSwitch {
     pub fn set_enabled(&self, enabled: bool) -> Result<()> {
         Ok(self.0.SetIsEnabled(enabled)?)
     }
-
 }
 
 pub use windows_ext::UI::Xaml::Controls::Primitives::FlyoutPlacementMode;

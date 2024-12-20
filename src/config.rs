@@ -1,12 +1,12 @@
 use std::collections::BTreeMap;
 use std::ffi::OsString;
 use std::fs::File;
-use std::io::{BufRead, BufReader, BufWriter};
+use std::io::{BufRead, BufReader, BufWriter, Write};
 use std::os::windows::ffi::OsStringExt;
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
-use std::io::Write;
-use log::{debug};
+
+use log::debug;
 use windows::core::imp::CoTaskMemFree;
 use windows::Win32::UI::Shell::{FOLDERID_RoamingAppData, SHGetKnownFolderPath, KF_FLAG_DEFAULT};
 
@@ -129,7 +129,8 @@ impl Config {
                 return Err("No section".into());
             }
 
-            let (key, value) = line.split_once('=')
+            let (key, value) = line
+                .split_once('=')
                 .ok_or_else(|| format!("Line \"{line}\" (#{number}) is not a key value pair"))?;
 
             match section.as_str() {
@@ -147,23 +148,20 @@ impl Config {
                         }
                         "CustomName" => {
                             settings.custom_name = Some(value.to_string());
-                        },
+                        }
                         "Position" => {
                             settings.position = Some(value.parse()?);
-                        },
+                        }
                         _ => debug!("Ignoring unknown key in section {}: {}={}", section, key, value)
                     }
-                },
+                }
                 _ => debug!("Ignoring key in unknown section {}: {}={}", section, key, value)
             }
         }
 
         Ok(())
     }
-
 }
-
-
 
 pub mod autostart {
     use std::path::PathBuf;
@@ -208,10 +206,14 @@ pub mod autostart {
         use std::os::windows::ffi::{OsStrExt, OsStringExt};
         use std::path::PathBuf;
         use std::slice;
+
         use log::warn;
         use windows::core::{w, HRESULT, PCWSTR};
         use windows::Win32::Foundation::{ERROR_FILE_NOT_FOUND, ERROR_MORE_DATA};
-        use windows::Win32::System::Registry::{RegCloseKey, RegDeleteValueW, RegOpenKeyExW, RegQueryValueExW, RegSetValueExW, HKEY, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, REG_EXPAND_SZ, REG_SAM_FLAGS, REG_SZ, REG_VALUE_TYPE};
+        use windows::Win32::System::Registry::{
+            RegCloseKey, RegDeleteValueW, RegOpenKeyExW, RegQueryValueExW, RegSetValueExW, HKEY, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE,
+            REG_EXPAND_SZ, REG_SAM_FLAGS, REG_SZ, REG_VALUE_TYPE
+        };
 
         use crate::Result;
 
@@ -264,8 +266,12 @@ pub mod autostart {
             }
 
             pub fn write_path(&self, key: PCWSTR, path: &PathBuf) -> Result<()> {
-                let path = path.as_os_str().encode_wide().chain(Some(0)).collect::<Vec<_>>();
-                let path = unsafe { slice::from_raw_parts(path.as_ptr() as  _, path.len() * 2) };
+                let path = path
+                    .as_os_str()
+                    .encode_wide()
+                    .chain(Some(0))
+                    .collect::<Vec<_>>();
+                let path = unsafe { slice::from_raw_parts(path.as_ptr() as _, path.len() * 2) };
                 unsafe { RegSetValueExW(self.handle, key, 0, REG_SZ, Some(path))? };
                 Ok(())
             }
@@ -280,4 +286,3 @@ pub mod autostart {
         }
     }
 }
-

@@ -1,20 +1,22 @@
 use std::sync::{Arc, Mutex};
+
 use log::warn;
 use loole::Sender;
-use windows::core::{ComInterface};
+use windows::core::ComInterface;
 use windows::UI::Color;
 use windows_ext::IXamlSourceTransparency;
-use windows_ext::UI::Xaml::{ElementTheme, VerticalAlignment, Window as XamlWindow};
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
-use crate::windowing::{Window, WindowBuilder};
-use crate::{cloned, CustomEvent, Result, APP_ICON};
+use windows_ext::UI::Xaml::{ElementTheme, VerticalAlignment, Window as XamlWindow};
+
 use crate::config::{autostart, Config};
 use crate::ui::container::StackPanel;
 use crate::ui::controls::{TextBlock, ToggleSwitch};
-use crate::ui::{FontWeight};
+use crate::ui::FontWeight;
 use crate::utils::elevation::relaunch_as_elevated;
 use crate::utils::error::TracedError;
 use crate::utils::extensions::{FunctionalExt, MutexExt};
+use crate::windowing::{Window, WindowBuilder};
+use crate::{cloned, CustomEvent, Result, APP_ICON};
 
 thread_local! {
     static TRANSPARENT_BACKGROUND: bool = XamlWindow::Current()
@@ -28,7 +30,7 @@ pub struct SettingsWindow {
     window: Window,
     mica: bool,
     content: Option<StackPanel>,
-    background_brush: SolidColorBrush,
+    background_brush: SolidColorBrush
 }
 
 impl SettingsWindow {
@@ -61,7 +63,7 @@ impl SettingsWindow {
             window,
             mica,
             content: None,
-            background_brush: SolidColorBrush::new()?,
+            background_brush: SolidColorBrush::new()?
         };
         result.build_gui(config)?;
         result
@@ -86,8 +88,16 @@ impl SettingsWindow {
 
         let (color, dark) = match theme {
             ElementTheme::Dark => (Color { R: 45, G: 45, B: 45, A: 255 }, true),
-            ElementTheme::Light => (Color { R: 251, G: 251, B: 251, A: 255 }, false),
-            _ => unreachable!(),
+            ElementTheme::Light => (
+                Color {
+                    R: 251,
+                    G: 251,
+                    B: 251,
+                    A: 255
+                },
+                false
+            ),
+            _ => unreachable!()
         };
 
         self.background_brush.SetColor(color)?;
@@ -102,14 +112,19 @@ impl SettingsWindow {
 
         let border_brush = SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 30 })?;
 
-        let section = |title| Ok::<StackPanel, TracedError>(StackPanel::vertical()?
-            .apply_if(self.mica, |p| p
-                .with_win11_style(&self.background_brush, &border_brush))?
-            .with_padding(10.0)?
-            .with_spacing(7.0)?
-            .with_child(&TextBlock::with_text(title)?
-                .with_font_size(24.0)?
-                .with_font_weight(FontWeight::SemiLight)?)?);
+        let section = |title| {
+            Ok::<StackPanel, TracedError>(
+                StackPanel::vertical()?
+                    .apply_if(self.mica, |p| p.with_win11_style(&self.background_brush, &border_brush))?
+                    .with_padding(10.0)?
+                    .with_spacing(7.0)?
+                    .with_child(
+                        &TextBlock::with_text(title)?
+                            .with_font_size(24.0)?
+                            .with_font_weight(FontWeight::SemiLight)?
+                    )?
+            )
+        };
 
         let auto_start_priority = config.lock_no_poison().use_prioritized_autostart;
         let auto_start_enabled = autostart::is_enabled(!auto_start_priority);
@@ -143,34 +158,41 @@ impl SettingsWindow {
                 Ok(())
             }))?;
 
-         let general = section("General")?
-            .with_child(&StackPanel::horizontal()?
-                .with_child(&auto_start_toggle)?
-                .with_child(&TextBlock::with_text("Automatically run on startup")?
-                    .with_vertical_alignment(VerticalAlignment::Center)?)?)?
-             .with_child(&StackPanel::horizontal()?
-                 .with_child(&ToggleSwitch::new()?
-                     .with_width(TOGGLE_WIDTH)?
-                     .with_state(config.lock_no_poison().restore_from_config)?
-                     .with_toggled_handler(cloned!([config] move |state| {
-                         let mut config = config.lock_no_poison();
-                         config.restore_from_config = state.get_state()?;
-                         config.dirty = true;
-                         Ok(())
-                     }))?)?
-                 .with_child(&TextBlock::with_text("Automatically restore saved brightness")?
-                     .with_vertical_alignment(VerticalAlignment::Center)?)?)?;
+        let general = section("General")?
+            .with_child(
+                &StackPanel::horizontal()?
+                    .with_child(&auto_start_toggle)?
+                    .with_child(&TextBlock::with_text("Automatically run on startup")?.with_vertical_alignment(VerticalAlignment::Center)?)?
+            )?
+            .with_child(
+                &StackPanel::horizontal()?
+                    .with_child(
+                        &ToggleSwitch::new()?
+                            .with_width(TOGGLE_WIDTH)?
+                            .with_state(config.lock_no_poison().restore_from_config)?
+                            .with_toggled_handler(cloned!([config] move |state| {
+                                let mut config = config.lock_no_poison();
+                                config.restore_from_config = state.get_state()?;
+                                config.dirty = true;
+                                Ok(())
+                            }))?
+                    )?
+                    .with_child(
+                        &TextBlock::with_text("Automatically restore saved brightness")?.with_vertical_alignment(VerticalAlignment::Center)?
+                    )?
+            )?;
 
-        let advanced = section("Advanced")?
-            .with_child(&StackPanel::horizontal()?
+        let advanced = section("Advanced")?.with_child(
+            &StackPanel::horizontal()?
                 .with_child(&autostart_priority_toggle)?
-                .with_child(&TextBlock::with_text("Use higher autostart priority (requires admin permissions)")?
-                    .with_vertical_alignment(VerticalAlignment::Center)?)?)?;
-
+                .with_child(
+                    &TextBlock::with_text("Use higher autostart priority (requires admin permissions)")?
+                        .with_vertical_alignment(VerticalAlignment::Center)?
+                )?
+        )?;
 
         let main = StackPanel::vertical()?
-            .apply_if(!self.mica, |p| p
-                .with_background(&self.background_brush))?
+            .apply_if(!self.mica, |p| p.with_background(&self.background_brush))?
             .with_padding(10.0)?
             .with_spacing(7.0)?
             .with_child(&general)?
@@ -180,22 +202,17 @@ impl SettingsWindow {
         self.content = Some(main);
         Ok(())
     }
-
 }
 
 trait StackPanelExt: Sized {
-
     fn with_win11_style(self, background: &SolidColorBrush, border: &SolidColorBrush) -> Result<Self>;
-
 }
 
 impl StackPanelExt for StackPanel {
-
     fn with_win11_style(self, background: &SolidColorBrush, border: &SolidColorBrush) -> Result<Self> {
         self.with_background(background)?
             .with_border_thickness(1.0)?
             .with_border_brush(border)?
             .with_corner_radius(5.0)
     }
-
 }

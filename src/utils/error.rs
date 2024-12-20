@@ -4,6 +4,7 @@ use std::fmt::{Debug, Display, Formatter};
 use std::num::ParseIntError;
 use std::panic::Location;
 use std::str::ParseBoolError;
+
 use betrayer::{ErrorSource, TrayError};
 use windows::core::{Error, HRESULT};
 use windows::Win32::Foundation::{NO_ERROR, WIN32_ERROR};
@@ -157,7 +158,6 @@ impl From<ParseBoolError> for TracedError {
             backtrace: Trace::capture()
         }
     }
-
 }
 
 impl From<ParseIntError> for TracedError {
@@ -168,7 +168,6 @@ impl From<ParseIntError> for TracedError {
             backtrace: Trace::capture()
         }
     }
-
 }
 
 impl From<TrayError> for TracedError {

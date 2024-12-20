@@ -7,16 +7,17 @@ use windows_ext::UI::Xaml::Controls::Control;
 use windows_ext::UI::Xaml::Controls::Primitives::FlyoutPlacementMode;
 use windows_ext::UI::Xaml::Media::{AcrylicBackgroundSource, AcrylicBrush, SolidColorBrush};
 use windows_ext::UI::Xaml::{TextAlignment, VerticalAlignment};
-use crate::ui::container::{Grid, GridSize, StackPanel};
-use crate::ui::controls::{AppBarButton, Flyout, FontIcon, Slider, TextBlock};
-use crate::windowing::{Window, WindowBuilder, WindowLevel};
-use crate::{cloned, hformat, log_assert, CustomEvent, Result};
+
 use crate::backend::MonitorControllerProxy;
 use crate::monitors::MonitorPath;
 use crate::theme::ColorSet;
+use crate::ui::container::{Grid, GridSize, StackPanel};
+use crate::ui::controls::{AppBarButton, Flyout, FontIcon, Slider, TextBlock};
 use crate::ui::FontWeight;
 use crate::utils::extensions::ChannelExt;
 use crate::utils::ordered_map::{OrderedMap, SortKeyExtract};
+use crate::windowing::{Window, WindowBuilder, WindowLevel};
+use crate::{cloned, hformat, log_assert, CustomEvent, Result};
 
 pub struct ProxyWindow {
     window: Window,
@@ -24,7 +25,6 @@ pub struct ProxyWindow {
 }
 
 impl ProxyWindow {
-
     pub fn new() -> Result<Self> {
         let window = WindowBuilder::default()
             .with_position(0, 0)
@@ -37,7 +37,8 @@ impl ProxyWindow {
     }
 
     pub fn activate(&self) -> bool {
-        self.window.set_window_pos(Some(WindowLevel::AlwaysOnTop), Some((0, 0)), None, Some(true));
+        self.window
+            .set_window_pos(Some(WindowLevel::AlwaysOnTop), Some((0, 0)), None, Some(true));
         self.window.focus();
         self.window.set_foreground()
     }
@@ -49,7 +50,6 @@ impl ProxyWindow {
     pub fn dpi(&self) -> f32 {
         self.window.dpi()
     }
-
 }
 
 pub struct BrightnessFlyout {
@@ -62,12 +62,9 @@ pub struct BrightnessFlyout {
 }
 
 impl BrightnessFlyout {
-
     const WIDTH: f64 = 400.0;
 
-
     pub fn new(sender: Sender<CustomEvent>, colors: &ColorSet) -> Result<Self> {
-
         let settings = AppBarButton::new()?
             .with_icon(&FontIcon::new('\u{E713}')?)?
             .with_label("Settings")?
@@ -117,10 +114,12 @@ impl BrightnessFlyout {
         let container = StackPanel::vertical()?
             .with_theme(colors.theme)?
             .with_width(Self::WIDTH)?
-            .with_child(&Grid::new()?
-                .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?
-                .with_child(&monitor_panel, 0, 0)?
-                .with_child(&bottom_bar, 2, 0)?)?;
+            .with_child(
+                &Grid::new()?
+                    .with_row_heights([GridSize::Auto, GridSize::Fraction(1.0), GridSize::Auto])?
+                    .with_child(&monitor_panel, 0, 0)?
+                    .with_child(&bottom_bar, 2, 0)?
+            )?;
 
         let background = {
             let brush = AcrylicBrush::new()?;
@@ -148,7 +147,8 @@ impl BrightnessFlyout {
             background,
             container,
             monitor_panel,
-            monitor_controls: OrderedMap::new() })
+            monitor_controls: OrderedMap::new()
+        })
     }
 
     pub fn update_theme(&self, colors: &ColorSet) -> Result<()> {
@@ -160,33 +160,34 @@ impl BrightnessFlyout {
     }
 
     pub fn is_open(&self) -> bool {
-        self.flyout.is_open()
+        self.flyout
+            .is_open()
             .map_err(|e| warn!("Failed to check if flyout is open: {}", e))
             .unwrap_or(false)
     }
 
     pub fn close(&self) {
-        self.flyout.close()
+        self.flyout
+            .close()
             .unwrap_or_else(|e| warn!("Failed to close flyout: {}", e));
     }
 
     pub fn show(&self, proxy_window: &ProxyWindow, x: f32, y: f32) {
-        self.flyout.show_at(
-            &proxy_window.content,
-            x, y,
-            FlyoutPlacementMode::LeftEdgeAlignedBottom
-        ).unwrap_or_else(|e| warn!("Failed to show flyout: {}", e));
+        self.flyout
+            .show_at(&proxy_window.content, x, y, FlyoutPlacementMode::LeftEdgeAlignedBottom)
+            .unwrap_or_else(|e| warn!("Failed to show flyout: {}", e));
     }
 
     pub fn size(&self) -> Size {
-        self.container.measure()
-            .unwrap_or_else(|e| {
-                debug!("Failed to get measured size of flyout: {}", e);
-                // Make a guess
-                Size { Width: Self::WIDTH as f32, Height: 62.0 + 86.0 * self.monitor_controls.len() as f32 }
-            })
+        self.container.measure().unwrap_or_else(|e| {
+            debug!("Failed to get measured size of flyout: {}", e);
+            // Make a guess
+            Size {
+                Width: Self::WIDTH as f32,
+                Height: 62.0 + 86.0 * self.monitor_controls.len() as f32
+            }
+        })
     }
-
 
     fn repopulate_monitor_list(&self) -> Result<()> {
         self.monitor_panel.clear_children()?;
@@ -197,7 +198,10 @@ impl BrightnessFlyout {
     }
 
     pub fn register_monitor(&mut self, name: String, path: MonitorPath, position: i32, proxy: MonitorControllerProxy) -> Result<()> {
-        log_assert!(self.monitor_controls.insert(path.clone(), MonitorEntry::create(name, path, position, proxy)?).is_none());
+        log_assert!(self
+            .monitor_controls
+            .insert(path.clone(), MonitorEntry::create(name, path, position, proxy)?)
+            .is_none());
         self.repopulate_monitor_list()?;
         Ok(())
     }
@@ -221,9 +225,7 @@ impl BrightnessFlyout {
         }
         Ok(())
     }
-
 }
-
 
 struct MonitorEntry {
     position: i32,

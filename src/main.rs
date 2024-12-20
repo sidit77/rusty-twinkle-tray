@@ -7,9 +7,9 @@ pub mod runtime;
 mod theme;
 mod ui;
 mod utils;
+mod views;
 mod watchers;
 mod windowing;
-mod views;
 
 use std::process::ExitCode;
 use std::sync::{Arc, Mutex};
@@ -19,12 +19,12 @@ use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use futures_lite::stream::or;
 use futures_lite::{FutureExt, StreamExt};
 use log::{debug, info, trace, warn, LevelFilter};
-use windows::Foundation::{TypedEventHandler};
+use windows::Foundation::TypedEventHandler;
 use windows::Win32::Foundation::RECT;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows::UI::ViewManagement::UISettings;
-use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
 use windows_ext::UI::Xaml::ElementTheme;
+use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
 
 use crate::backend::MonitorController;
 use crate::config::{autostart, Config};
@@ -57,7 +57,10 @@ pub enum CustomEvent {
 
 fn run() -> Result<()> {
     // For changing the autostart setting with an elevated instance
-    if let Some(arg) = std::env::args().skip_while(|arg| arg != "--config-autostart").nth(1) {
+    if let Some(arg) = std::env::args()
+        .skip_while(|arg| arg != "--config-autostart")
+        .nth(1)
+    {
         match arg.as_str() {
             "enable" => autostart::set_enabled(false, true)?,
             "disable" => autostart::set_enabled(false, false)?,
@@ -70,7 +73,6 @@ fn run() -> Result<()> {
     unsafe { RoInitialize(RO_INIT_SINGLETHREADED)? };
 
     let _xaml_manager = WindowsXamlManager::InitializeForCurrentThread()?;
-
 
     let config = Arc::new(Mutex::new(Config::restore()?));
 
@@ -118,7 +120,6 @@ fn run() -> Result<()> {
         wnd_sender.filter_send_ignore(Some(CustomEvent::ThemeChange));
         Ok(())
     })))?;
-
 
     let proxy_window = ProxyWindow::new()?;
     let mut flyout = BrightnessFlyout::new(wnd_sender.clone(), &colors)?;
@@ -237,15 +238,9 @@ fn run() -> Result<()> {
                 }
                 CustomEvent::MonitorAdded { path, name } => {
                     let mut lock = config.lock_no_poison();
-                    let settings = lock
-                        .monitor(&path);
-                    let display_name = settings
-                        .custom_name
-                        .clone()
-                        .unwrap_or_else(|| name.clone());
-                    let position = settings
-                        .position
-                        .unwrap_or(0);
+                    let settings = lock.monitor(&path);
+                    let display_name = settings.custom_name.clone().unwrap_or_else(|| name.clone());
+                    let position = settings.position.unwrap_or(0);
                     info!("Found monitor: {} [{}]", name, display_name);
                     flyout.register_monitor(display_name, path, position, controller.create_proxy())?;
                 }

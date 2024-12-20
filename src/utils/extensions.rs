@@ -1,10 +1,10 @@
 use std::sync::{Mutex, MutexGuard};
+
 use crate::runtime::reducing_spsc::{Reducible, ReducingSender};
 
 pub trait ChannelExt<T> {
-
     #[track_caller]
-    fn filter_send_ignore(&self, msg: Option<T>){
+    fn filter_send_ignore(&self, msg: Option<T>) {
         if let Some(msg) = msg {
             self.send_ignore(msg);
         }
@@ -13,7 +13,6 @@ pub trait ChannelExt<T> {
 }
 
 impl<T> ChannelExt<T> for loole::Sender<T> {
-
     #[track_caller]
     fn send_ignore(&self, msg: T) {
         self.send(msg)
@@ -22,7 +21,6 @@ impl<T> ChannelExt<T> for loole::Sender<T> {
 }
 
 impl<T: Reducible> ChannelExt<T> for ReducingSender<T> {
-
     #[track_caller]
     fn send_ignore(&self, msg: T) {
         self.try_send(msg)
@@ -31,7 +29,6 @@ impl<T: Reducible> ChannelExt<T> for ReducingSender<T> {
 }
 
 pub trait FunctionalExt: Sized {
-
     fn apply_or<R, Y: FnOnce(Self) -> R, N: FnOnce(Self) -> R>(self, condition: bool, y: Y, n: N) -> R;
 
     fn apply_if<E, Y: FnOnce(Self) -> Result<Self, E>>(self, condition: bool, y: Y) -> Result<Self, E> {
@@ -64,7 +61,6 @@ impl<T> OptionExt<T> for Option<T> {
     }
 }
  */
-
 
 pub trait MutexExt {
     type Guard<'a>

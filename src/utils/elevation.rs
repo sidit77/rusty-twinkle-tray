@@ -1,10 +1,12 @@
 use std::os::windows::ffi::OsStrExt;
 use std::ptr::null_mut;
+
 use windows::core::{w, PCWSTR};
 use windows::Win32::Foundation::{CloseHandle, HANDLE, HWND, WAIT_FAILED};
 use windows::Win32::System::Threading::{WaitForSingleObject, INFINITE};
 use windows::Win32::UI::Shell::{ShellExecuteExW, SEE_MASK_NOCLOSEPROCESS, SEE_MASK_NO_CONSOLE, SHELLEXECUTEINFOW};
 use windows::Win32::UI::WindowsAndMessaging::SW_SHOWNORMAL;
+
 use crate::Result;
 
 pub fn relaunch_as_elevated(parent: HWND, cmd: &str) -> Result<()> {
@@ -14,13 +16,10 @@ pub fn relaunch_as_elevated(parent: HWND, cmd: &str) -> Result<()> {
         .encode_wide()
         .chain(Some(0))
         .collect::<Vec<_>>();
-    let args = cmd
-        .encode_utf16()
-        .chain(Some(0))
-        .collect::<Vec<_>>();
+    let args = cmd.encode_utf16().chain(Some(0)).collect::<Vec<_>>();
 
     let handle = unsafe {
-        let mut options = SHELLEXECUTEINFOW{
+        let mut options = SHELLEXECUTEINFOW {
             cbSize: size_of::<SHELLEXECUTEINFOW>() as u32,
             fMask: SEE_MASK_NOCLOSEPROCESS | SEE_MASK_NO_CONSOLE,
             hwnd: parent,
@@ -35,7 +34,7 @@ pub fn relaunch_as_elevated(parent: HWND, cmd: &str) -> Result<()> {
             hkeyClass: Default::default(),
             dwHotKey: 0,
             Anonymous: Default::default(),
-            hProcess: Default::default(),
+            hProcess: Default::default()
         };
         ShellExecuteExW(&mut options)?;
         ProcessHandle(options.hProcess)
@@ -62,8 +61,7 @@ impl ProcessHandle {
 impl Drop for ProcessHandle {
     fn drop(&mut self) {
         unsafe {
-            CloseHandle(self.0)
-                .unwrap_or_else(|e| log::warn!("Failed to close process handle: {e}"));
+            CloseHandle(self.0).unwrap_or_else(|e| log::warn!("Failed to close process handle: {e}"));
         };
     }
 }

@@ -12,10 +12,10 @@ use loole::{unbounded, Receiver, Sender};
 
 use crate::config::Config;
 use crate::monitors::{Monitor, MonitorConnection, MonitorPath};
+use crate::runtime::reducing_spsc::{Reducible, ReducingReceiver, ReducingSender, TryRecvError};
 use crate::runtime::{block_on, reducing_spsc, LocalExecutor, Timer};
 use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::CustomEvent;
-use crate::runtime::reducing_spsc::{Reducible, ReducingReceiver, ReducingSender, TryRecvError};
 
 #[derive(Debug, Clone)]
 enum BackendCommand {
@@ -64,7 +64,7 @@ impl MonitorController {
                                         .restore_from_config
                                         .then(|| config.monitors.get(p))
                                         .flatten()
-                                        .and_then( | s| s.saved_brightness)
+                                        .and_then(|s| s.saved_brightness)
                                 })
                             });
                         }
@@ -158,31 +158,23 @@ impl Drop for MonitorController {
 
 #[derive(Debug, Copy, Clone)]
 enum MonitorCommand {
-    QueryBrightness {
-        target: Option<u32>
-    },
-    SetBrightness {
-        value: u32,
-        notify: bool
-    }
+    QueryBrightness { target: Option<u32> },
+    SetBrightness { value: u32, notify: bool }
 }
 
 impl Reducible for MonitorCommand {
     fn reduce(self, other: Self) -> Self {
         use MonitorCommand::*;
         match (self, other) {
-            (QueryBrightness { target: current }, QueryBrightness { target: next })
-                => QueryBrightness { target: next.or(current) },
-            (QueryBrightness { .. }, SetBrightness { value, .. })
-                => QueryBrightness { target: Some(value) },
-            (SetBrightness { value, .. }, QueryBrightness { target })
-                => QueryBrightness { target: Some(target.unwrap_or(value)) },
-            (SetBrightness { .. }, SetBrightness { value, notify })
-                => SetBrightness { value, notify }
+            (QueryBrightness { target: current }, QueryBrightness { target: next }) => QueryBrightness { target: next.or(current) },
+            (QueryBrightness { .. }, SetBrightness { value, .. }) => QueryBrightness { target: Some(value) },
+            (SetBrightness { value, .. }, QueryBrightness { target }) => QueryBrightness {
+                target: Some(target.unwrap_or(value))
+            },
+            (SetBrightness { .. }, SetBrightness { value, notify }) => SetBrightness { value, notify }
         }
     }
 }
-
 
 async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, mut control: ReducingReceiver<MonitorCommand>) {
     let mut current_brightness = None;
@@ -198,7 +190,7 @@ async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, mut control
                 cached_connection = None;
                 next_command = control.recv().await;
             }
-            Ok(MonitorCommand::SetBrightness { value, ..}) if Some(value) == current_brightness => {
+            Ok(MonitorCommand::SetBrightness { value, .. }) if Some(value) == current_brightness => {
                 trace!("Brightness already at requested level {}", value);
             }
             Ok(command) => {

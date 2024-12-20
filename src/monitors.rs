@@ -9,16 +9,15 @@ use windows::Win32::Graphics::Gdi::HMONITOR;
 
 use crate::monitors::gdi::find_all_gdi_monitors;
 use crate::monitors::paths::{find_all_paths, get_gdi_name, get_name_and_path};
-use crate::utils::error::{WinOptionExt, Result};
+use crate::utils::error::{Result, WinOptionExt};
 use crate::utils::string::WStr;
 use crate::win_assert;
 
-#[derive(Clone, Eq, PartialEq, PartialOrd, Ord,)]
+#[derive(Clone, Eq, PartialEq, PartialOrd, Ord)]
 #[repr(transparent)]
 pub struct MonitorPath(Arc<Path>);
 
 impl MonitorPath {
-
     pub fn as_str(&self) -> &str {
         self.0.to_str().expect("MonitorPath is not valid UTF-8")
     }

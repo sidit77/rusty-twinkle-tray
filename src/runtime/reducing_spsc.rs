@@ -5,10 +5,8 @@ use std::future::{poll_fn, Future};
 use std::rc::Rc;
 use std::task::{Poll, Waker};
 
-
 pub trait Reducible {
     fn reduce(self, other: Self) -> Self;
-
 }
 
 pub fn channel<T: Reducible>() -> (ReducingSender<T>, ReducingReceiver<T>) {
@@ -26,7 +24,6 @@ struct Shared<T> {
     closed: Cell<bool>,
     waiter: Cell<Option<Waker>>
 }
-
 
 pub struct ReducingSender<T>(Rc<Shared<T>>);
 
@@ -71,19 +68,16 @@ impl<T> ReducingReceiver<T> {
         }
     }
 
-    pub fn recv(&mut self) -> impl Future<Output = Option<T>> + '_{
-        poll_fn(move |cx| {
-            match self.try_recv() {
-                Ok(v) => Poll::Ready(Some(v)),
-                Err(TryRecvError::Closed) => Poll::Ready(None),
-                Err(TryRecvError::Empty) => {
-                    self.0.waiter.replace(Some(cx.waker().clone()));
-                    Poll::Pending
-                }
+    pub fn recv(&mut self) -> impl Future<Output = Option<T>> + '_ {
+        poll_fn(move |cx| match self.try_recv() {
+            Ok(v) => Poll::Ready(Some(v)),
+            Err(TryRecvError::Closed) => Poll::Ready(None),
+            Err(TryRecvError::Empty) => {
+                self.0.waiter.replace(Some(cx.waker().clone()));
+                Poll::Pending
             }
         })
     }
-
 }
 
 impl<T> Drop for ReducingReceiver<T> {
@@ -104,7 +98,6 @@ impl Display for TrySendError {
 }
 
 impl Error for TrySendError {}
-
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum TryRecvError {

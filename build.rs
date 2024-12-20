@@ -1,4 +1,5 @@
 use std::fs::{read, read_to_string};
+
 use embedinator::{Icon, ResourceBuilder};
 
 include!("assets/ids.rs");
@@ -10,8 +11,7 @@ const ICONS: &[(u16, &str)] = &[
 ];
 
 fn main() {
-   let mut res = ResourceBuilder::from_env()
-        .add_manifest(read_to_string("assets/app.manifest").unwrap());
+    let mut res = ResourceBuilder::from_env().add_manifest(read_to_string("assets/app.manifest").unwrap());
 
     println!("cargo:rerun-if-changed=assets/app.manifest");
     println!("cargo:rerun-if-changed=assets/ids.rs");

@@ -13,7 +13,6 @@ use crate::ui::container::StackPanel;
 use crate::ui::controls::{TextBlock, ToggleSwitch};
 use crate::ui::FontWeight;
 use crate::utils::elevation::relaunch_as_elevated;
-use crate::utils::error::TracedError;
 use crate::utils::extensions::{FunctionalExt, MutexExt};
 use crate::windowing::{Window, WindowBuilder};
 use crate::{cloned, CustomEvent, Result, APP_ICON};
@@ -113,17 +112,15 @@ impl SettingsWindow {
         let border_brush = SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 30 })?;
 
         let section = |title| {
-            Ok::<StackPanel, TracedError>(
-                StackPanel::vertical()?
-                    .apply_if(self.mica, |p| p.with_win11_style(&self.background_brush, &border_brush))?
-                    .with_padding(10.0)?
-                    .with_spacing(7.0)?
-                    .with_child(
-                        &TextBlock::with_text(title)?
-                            .with_font_size(24.0)?
-                            .with_font_weight(FontWeight::SemiLight)?
-                    )?
-            )
+            StackPanel::vertical()?
+                .apply_if(self.mica, |p| p.with_win11_style(&self.background_brush, &border_brush))?
+                .with_padding(10.0)?
+                .with_spacing(7.0)?
+                .with_child(
+                    &TextBlock::with_text(title)?
+                        .with_font_size(24.0)?
+                        .with_font_weight(FontWeight::SemiLight)?
+                )
         };
 
         let auto_start_priority = config.lock_no_poison().use_prioritized_autostart;

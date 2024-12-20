@@ -194,7 +194,7 @@ pub mod autostart {
     pub fn set_enabled(user: bool, enabled: bool) -> crate::Result<()> {
         let reg = AutoStartRegKey::new(user, KEY_READ | KEY_SET_VALUE)?;
         match enabled {
-            true => reg.write_path(PROGRAM_KEY, &*EXE_PATH)?,
+            true => reg.write_path(PROGRAM_KEY, &EXE_PATH)?,
             false => reg.delete(PROGRAM_KEY)?
         }
         Ok(())
@@ -204,7 +204,7 @@ pub mod autostart {
         use std::ffi::OsString;
         use std::mem::zeroed;
         use std::os::windows::ffi::{OsStrExt, OsStringExt};
-        use std::path::PathBuf;
+        use std::path::{Path, PathBuf};
         use std::slice;
 
         use log::warn;
@@ -265,7 +265,7 @@ pub mod autostart {
                 Ok(())
             }
 
-            pub fn write_path(&self, key: PCWSTR, path: &PathBuf) -> Result<()> {
+            pub fn write_path(&self, key: PCWSTR, path: &Path) -> Result<()> {
                 let path = path
                     .as_os_str()
                     .encode_wide()

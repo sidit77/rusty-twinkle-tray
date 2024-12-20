@@ -16,7 +16,7 @@ members = [
 
 [dependencies]
 log = "0.4"
-betrayer = "0.3.0"
+betrayer = "0.4.0"
 loole = "0.4.0"
 futures-lite = { version = "2", default-features = false }
 dunce = "1"

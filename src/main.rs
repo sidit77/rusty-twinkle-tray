@@ -105,10 +105,10 @@ fn run() -> Result<()> {
     let _event_watcher = EventWatcher::new()?
         .on_power_event({
             let proxy = controller.create_proxy();
-            move |event| {
-                if event == PowerEvent::MonitorOn {
-                    proxy.refresh_brightness_in(Duration::from_secs(10));
-                }
+            move |event| match event {
+                PowerEvent::MonitorOn => proxy.refresh_brightness_in(Duration::from_secs(10)),
+                PowerEvent::Resume => proxy.refresh_monitors(),
+                _ => {}
             }
         })?
         .on_display_change({

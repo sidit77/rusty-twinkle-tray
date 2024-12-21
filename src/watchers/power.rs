@@ -1,8 +1,11 @@
+use log::trace;
 use windows::Win32::Foundation::{HANDLE, HWND, LPARAM, LRESULT, WPARAM};
 use windows::Win32::System::Power::{RegisterPowerSettingNotification, UnregisterPowerSettingNotification, HPOWERNOTIFY, POWERBROADCAST_SETTING};
 use windows::Win32::System::SystemServices::GUID_SESSION_DISPLAY_STATUS;
 use windows::Win32::UI::Shell::{DefSubclassProc, SetWindowSubclass};
-use windows::Win32::UI::WindowsAndMessaging::{DEVICE_NOTIFY_WINDOW_HANDLE, WM_DESTROY, WM_POWERBROADCAST};
+use windows::Win32::UI::WindowsAndMessaging::{
+    DEVICE_NOTIFY_WINDOW_HANDLE, PBT_APMRESUMEAUTOMATIC, PBT_APMRESUMESUSPEND, PBT_APMSUSPEND, PBT_POWERSETTINGCHANGE, WM_DESTROY, WM_POWERBROADCAST
+};
 
 use crate::Result;
 
@@ -11,7 +14,8 @@ use crate::Result;
 pub enum PowerEvent {
     MonitorOff,
     MonitorOn,
-    MonitorDim
+    MonitorDim,
+    Resume
 }
 
 pub struct PowerEventRegistration(HPOWERNOTIFY);
@@ -40,20 +44,32 @@ impl PowerEventRegistration {
                 drop(Box::from_raw(callback_ptr));
             }
             WM_POWERBROADCAST => {
-                let data = &*(lparam.0 as *const POWERBROADCAST_SETTING);
                 let (first, callback) = &mut *callback_ptr;
-                let event = match data.Data[0] {
-                    0 => Some(PowerEvent::MonitorOff),
-                    1 => Some(PowerEvent::MonitorOn),
-                    2 => Some(PowerEvent::MonitorDim),
-                    _ => None
-                };
-                if let Some(event) = event {
-                    if *first {
-                        *first = false;
-                    } else {
-                        callback(event);
+                match wparam.0 as u32 {
+                    PBT_APMRESUMEAUTOMATIC => callback(PowerEvent::Resume),
+                    PBT_POWERSETTINGCHANGE => {
+                        let data = &*(lparam.0 as *const POWERBROADCAST_SETTING);
+                        match data.PowerSetting {
+                            GUID_SESSION_DISPLAY_STATUS => {
+                                let event = match data.Data[0] {
+                                    0 => Some(PowerEvent::MonitorOff),
+                                    1 => Some(PowerEvent::MonitorOn),
+                                    2 => Some(PowerEvent::MonitorDim),
+                                    _ => None
+                                };
+                                if let Some(event) = event {
+                                    if *first {
+                                        *first = false;
+                                    } else {
+                                        callback(event);
+                                    }
+                                }
+                            }
+                            e => trace!("Unknown power setting: {e:?}")
+                        }
                     }
+                    PBT_APMSUSPEND | PBT_APMRESUMESUSPEND => { /* Ignore */ }
+                    e => trace!("Unknown power event: {e}")
                 }
             }
             _ => {}

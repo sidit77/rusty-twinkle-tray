@@ -264,7 +264,11 @@ fn run() -> Result<()> {
 
 fn main() -> ExitCode {
     panic::set_hook();
-    logger::init(LevelFilter::Trace, LevelFilter::Warn);
+    let level = std::env::args()
+        .find(|arg| arg.starts_with("--log-level="))
+        .and_then(|arg| arg.split('=').nth(1).map(|level| level.parse().expect("Invalid log level")))
+        .unwrap_or(LevelFilter::Warn);
+    logger::init(LevelFilter::Trace, level);
 
     match run() {
         Ok(()) => ExitCode::SUCCESS,

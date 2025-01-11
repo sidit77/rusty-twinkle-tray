@@ -136,9 +136,7 @@ impl MonitorController {
     }
 
     fn send_command(&self, command: BackendCommand) {
-        self.sender
-            .send(command)
-            .expect("Worker thread disappeared!");
+        self.sender.send_ignore(command)
     }
 
     pub fn create_proxy(&self) -> MonitorControllerProxy {
@@ -295,6 +293,6 @@ impl MonitorControllerProxy {
     }
 
     fn send_command(&self, command: BackendCommand) {
-        self.0.send(command).expect("Worker thread disappeared!");
+        self.0.send_ignore(command);
     }
 }

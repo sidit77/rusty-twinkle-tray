@@ -225,6 +225,13 @@ impl BrightnessFlyout {
         }
         Ok(())
     }
+
+    pub fn change_brightness(&self, new_brightness: i32) -> Result<()> {
+        for entry in self.monitor_controls.values() {
+            entry.change_brightness(new_brightness)?;
+        }
+        Ok(())
+    }
 }
 
 struct MonitorEntry {
@@ -275,6 +282,10 @@ impl MonitorEntry {
 
     pub fn set_brightness(&self, value: u32) -> Result<()> {
         self.slider.set_value(value as f64)
+    }
+
+    pub fn change_brightness(&self, value: i32) -> Result<()> {
+        self.slider.set_value(self.slider.get_value()? + value as f64)
     }
 
     pub fn ui(&self) -> &StackPanel {

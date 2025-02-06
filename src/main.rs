@@ -225,12 +225,12 @@ fn run() -> Result<()> {
                     }
                 }
                 CustomEvent::Refresh => {
-                    log::info!("Restarting backend...");
+                    info!("Restarting backend...");
                     flyout.clear_monitors()?;
                     controller = MonitorController::new(wnd_sender.clone(), config.clone());
                 }
                 CustomEvent::OpenSettings => {
-                    log::info!("Open Settings");
+                    info!("Open Settings");
                     if settings_window.is_none() {
                         trace!("Creating settings window");
 
@@ -262,8 +262,12 @@ fn run() -> Result<()> {
                 CustomEvent::BrightnessChanged { path, value } => {
                     flyout.update_brightness(path, value)?;
                 }
-                CustomEvent::IncreaseBrightnessHotkey => println!("Increase Brightness"),
-                CustomEvent::DecreaseBrightnessHotkey => println!("Decrease Brightness"),
+                CustomEvent::IncreaseBrightnessHotkey => {
+                    flyout.change_brightness(10)?;
+                },
+                CustomEvent::DecreaseBrightnessHotkey => {
+                    flyout.change_brightness(-10)?;
+                },
             }
         }
         Ok(())

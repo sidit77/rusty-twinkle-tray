@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::future::Future;
+use std::marker::PhantomData;
 use std::mem::replace;
 use std::pin::Pin;
 use std::task::{Context, Poll, Waker};
@@ -47,16 +48,17 @@ pub fn process_timers_for_current_thread() -> Option<Duration> {
 
 pub struct Timer {
     at: Option<Instant>,
-    id: Option<usize>
+    id: Option<usize>,
+    _unsend: PhantomData<*const ()>,
 }
 
 impl Timer {
     pub const fn never() -> Self {
-        Self { at: None, id: None }
+        Self { at: None, id: None, _unsend: PhantomData }
     }
 
     pub const fn at(instant: Instant) -> Self {
-        Self { at: Some(instant), id: None }
+        Self { at: Some(instant), id: None, _unsend: PhantomData }
     }
 
     pub fn after(duration: Duration) -> Self {

@@ -1,5 +1,6 @@
 mod event_loop;
 mod window;
+pub mod hotkey;
 
 use std::mem::size_of;
 use std::time::Duration;

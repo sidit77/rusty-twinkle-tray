@@ -11,12 +11,11 @@ use windows::Win32::System::Threading::{
     CreateEventExW, ResetEvent, SetEvent, CREATE_EVENT_INITIAL_SET, CREATE_EVENT_MANUAL_RESET, EVENT_MODIFY_STATE, INFINITE,
     SYNCHRONIZATION_SYNCHRONIZE
 };
-use windows::Win32::UI::WindowsAndMessaging::{
-    DispatchMessageW, MsgWaitForMultipleObjects, PeekMessageW, TranslateMessage, MSG, PM_REMOVE, QS_ALLINPUT
-};
+use windows::Win32::UI::WindowsAndMessaging::{DispatchMessageW, MsgWaitForMultipleObjects, PeekMessageW, TranslateMessage, MSG, PM_REMOVE, QS_ALLINPUT, WM_HOTKEY};
 
 use crate::runtime::process_timers_for_current_thread;
 use crate::Result;
+use crate::windowing::hotkey::process_hotkey_for_current_thread;
 
 struct LoopWaker {
     event: HANDLE,
@@ -145,6 +144,11 @@ fn pump_events() -> bool {
         while PeekMessageW(&mut message, None, 0, 0, PM_REMOVE).into() {
             TranslateMessage(&message);
             DispatchMessageW(&message);
+
+            if message.message == WM_HOTKEY {
+                process_hotkey_for_current_thread(message.wParam.0 as i32);
+            }
+
             limit -= 1;
             if limit <= 0 {
                 return false;

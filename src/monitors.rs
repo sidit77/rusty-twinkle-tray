@@ -13,7 +13,7 @@ use crate::utils::error::{Result, WinOptionExt};
 use crate::utils::string::WStr;
 use crate::win_assert;
 
-#[derive(Clone, Eq, PartialEq, PartialOrd, Ord)]
+#[derive(Clone, Eq, PartialEq, PartialOrd, Ord, Hash)]
 #[repr(transparent)]
 pub struct MonitorPath(Arc<Path>);
 

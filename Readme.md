@@ -44,6 +44,9 @@ Unfortunately, the Microsoft-provided [`windows-rs` crate](https://microsoft.git
   - [ ] Rename monitors
   - [ ] Reorder monitors
   - [ ] Change various delays/timeouts
+- [x] Hotkeys
+  - [ ] Allow for the customization of hotkeys
+  - [ ] Refresh the monitor brightness when the hotkey is pressed
 - [ ] Fluent design for Windows 11+
 - [x] Respect Dark/Light system setting
 - [x] Attempt to restore brightness after waking up from sleep

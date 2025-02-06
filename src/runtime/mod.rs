@@ -17,7 +17,7 @@ mod timer;
 pub enum FutureStream<T> {
     #[default]
     Empty,
-    Waiting(Pin<Box<dyn Future<Output = Option<T>> + Send>>)
+    Waiting(Pin<Box<dyn Future<Output = Option<T>>>>)
 }
 
 impl<T> FutureStream<T> {
@@ -31,7 +31,7 @@ impl<T> FutureStream<T> {
 
     pub fn set<F>(&mut self, future: F)
     where
-        F: Future<Output = Option<T>> + Send + 'static
+        F: Future<Output = Option<T>> + 'static
     {
         *self = FutureStream::Waiting(Box::pin(future));
     }

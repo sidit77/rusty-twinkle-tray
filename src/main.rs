@@ -16,13 +16,13 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
-use futures_lite::stream::or;
 use futures_lite::{FutureExt, StreamExt};
 use log::{debug, info, trace, warn, LevelFilter};
 use windows::Foundation::TypedEventHandler;
 use windows::Win32::Foundation::RECT;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows::UI::ViewManagement::UISettings;
+use windows::Win32::UI::Input::KeyboardAndMouse::{MOD_ALT, VK_F1, VK_F2};
 use windows_ext::UI::Xaml::ElementTheme;
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
 
@@ -36,6 +36,7 @@ use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
 use crate::views::{BrightnessFlyout, ProxyWindow, SettingsWindow};
 use crate::watchers::{EventWatcher, PowerEvent};
+use windowing::hotkey::HotKey;
 use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect};
 
 include!("../assets/ids.rs");
@@ -52,7 +53,9 @@ pub enum CustomEvent {
     CloseSettings,
     MonitorAdded { path: MonitorPath, name: String },
     MonitorRemoved { path: MonitorPath },
-    BrightnessChanged { path: MonitorPath, value: u32 }
+    BrightnessChanged { path: MonitorPath, value: u32 },
+    IncreaseBrightnessHotkey,
+    DecreaseBrightnessHotkey
 }
 
 fn run() -> Result<()> {
@@ -129,11 +132,19 @@ fn run() -> Result<()> {
         wnd_sender.send(CustomEvent::OpenSettings).unwrap();
     }
 
+    let mut hotkey_dec = HotKey::register(MOD_ALT, VK_F1)?;
+    let mut hotkey_inc = HotKey::register(MOD_ALT, VK_F2)?;
+
     let mut last_close = Instant::now();
     event_loop(async {
         let mut click_watcher = FutureStream::new();
         let mut events = wnd_receiver.into_stream();
-        while let Some(event) = or(&mut events, &mut click_watcher).next().await {
+        while let Some(event) =
+            (&mut events)
+            .or(&mut click_watcher)
+            .or((&mut hotkey_dec).map(|_| CustomEvent::DecreaseBrightnessHotkey))
+            .or((&mut hotkey_inc).map(|_| CustomEvent::IncreaseBrightnessHotkey))
+            .next().await {
             match event {
                 CustomEvent::Quit => {
                     controller.shutdown();
@@ -251,6 +262,8 @@ fn run() -> Result<()> {
                 CustomEvent::BrightnessChanged { path, value } => {
                     flyout.update_brightness(path, value)?;
                 }
+                CustomEvent::IncreaseBrightnessHotkey => println!("Increase Brightness"),
+                CustomEvent::DecreaseBrightnessHotkey => println!("Decrease Brightness"),
             }
         }
         Ok(())

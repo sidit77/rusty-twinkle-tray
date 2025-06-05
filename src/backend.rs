@@ -179,11 +179,21 @@ async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, mut control
     let mut cached_connection: Option<MonitorConnection> = None;
 
     let mut next_command = None;
+    let mut dirty = false;
 
     loop {
         match next_command.take().ok_or(()).or(control.try_recv()) {
             Err(TryRecvError::Closed) => break,
             Err(TryRecvError::Empty) => {
+                if dirty {
+                    debug!("Attempting to write save new settings for {}", monitor.name());
+                    if let Some(connection) = &cached_connection {
+                        retry(|| connection.save_settings())
+                            .await
+                            .unwrap_or_else(|err| warn!("Failed to save new settings for {}: {}", monitor.name(), err));
+                    }
+                    dirty = false;
+                }
                 trace!("Closing connection to {} and going to sleep", monitor.name());
                 cached_connection = None;
                 next_command = control.recv().await;
@@ -241,6 +251,7 @@ async fn monitor_task(monitor: Monitor, sender: Sender<CustomEvent>, mut control
                             .is_ok();
                         if success {
                             current_brightness = Some(value);
+                            dirty = true;
                         }
                         if notify {
                             if let Some(current) = current_brightness {

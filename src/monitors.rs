@@ -119,6 +119,12 @@ impl MonitorConnection {
         unsafe { BOOL(SetMonitorBrightness(self.handle, new)).ok()? };
         Ok(())
     }
+    
+    pub fn save_settings(&self) -> Result<()> {
+        unsafe { BOOL(SaveCurrentMonitorSettings(self.handle)).ok()? };
+        Ok(())
+    }
+    
 }
 
 #[cfg(test)]

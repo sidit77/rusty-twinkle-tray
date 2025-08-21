@@ -32,6 +32,21 @@ cargo build --release
 
 ## Contributing
 
+### Release Process
+
+This project includes an automated release workflow that builds and publishes executables when a new release is created:
+
+- **Build Release**: Automatically triggered when a new GitHub release is created
+- Builds the project in release mode for Windows (x86_64-pc-windows-msvc)
+- Generates artifact attestation to verify the build provenance
+- Uploads the executable to the release with a versioned filename (e.g., `rusty-twinkle-tray-v1.0.0-windows-x64.exe`)
+
+To create a new release:
+1. Create a new tag: `git tag v1.0.0`
+2. Push the tag: `git push origin v1.0.0`
+3. Create a release on GitHub using the tag
+4. The workflow will automatically build and attach the executable
+
 ### Toolkit
 This program uses the default [UWP Controls](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.controls?view=winrt-22621) hosted inside an XAML island.
 

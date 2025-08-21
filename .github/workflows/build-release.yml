@@ -1,7 +1,7 @@
 ---
 name: Build Release
 
-on:
+"on":
   release:
     types: [created]
 

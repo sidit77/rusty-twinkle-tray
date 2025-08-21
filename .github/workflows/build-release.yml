@@ -1,0 +1,73 @@
+---
+name: Build Release
+
+on:
+  release:
+    types: [created]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-and-upload:
+    runs-on: windows-latest
+
+    permissions:
+      contents: write
+      id-token: write  # Required for attestation
+      attestations: write  # Required for attestation
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-release-
+            ${{ runner.os }}-cargo-
+
+      - name: Build release
+        run: cargo build --release --verbose --target x86_64-pc-windows-msvc
+
+      - name: Verify build
+        run: |
+          $exe_path = "target/x86_64-pc-windows-msvc/release/rusty-twinkle-tray.exe"
+          if (Test-Path $exe_path) {
+            $size = (Get-Item $exe_path).length
+            $sizeMB = [math]::Round($size/1MB, 2)
+            Write-Output "✅ Build successful! Executable size: $sizeMB MB"
+          } else {
+            Write-Error "❌ Build failed! Executable not found at $exe_path"
+            exit 1
+          }
+
+      - name: Prepare release assets
+        run: |
+          $version = "${{ github.event.release.tag_name }}"
+          $source = "target/x86_64-pc-windows-msvc/release/rusty-twinkle-tray.exe"
+          $destination = "rusty-twinkle-tray-$version-windows-x64.exe"
+          Copy-Item $source $destination
+          Write-Output "ASSET_NAME=$destination" >> $env:GITHUB_ENV
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ env.ASSET_NAME }}
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ASSET_NAME }}
+          tag_name: ${{ github.event.release.tag_name }}

@@ -132,8 +132,8 @@ fn run() -> Result<()> {
         wnd_sender.send(CustomEvent::OpenSettings).unwrap();
     }
 
-    let mut hotkey_dec = HotKey::register(MOD_ALT, VK_F1)?;
-    let mut hotkey_inc = HotKey::register(MOD_ALT, VK_F2)?;
+    let mut hotkey_dec = HotKey::register(MOD_CONTROL, VK_DOWN)?;
+    let mut hotkey_inc = HotKey::register(MOD_CONTROL, VK_UP)?;
 
     let mut last_close = Instant::now();
     event_loop(async {

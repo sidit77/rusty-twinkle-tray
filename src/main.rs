@@ -18,7 +18,7 @@ use std::time::{Duration, Instant};
 
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
 use futures_lite::{FutureExt, StreamExt};
-use log::{debug, info, trace, warn, LevelFilter};
+use log::{debug, error, info, trace, warn, LevelFilter};
 use windows::Foundation::TypedEventHandler;
 use windows::Win32::Foundation::RECT;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
@@ -275,9 +275,16 @@ fn run() -> Result<()> {
                     let lock = config.lock_no_poison();
                     scroll_callback = None;
                     if lock.icon_scoll_enabled {
-                        scroll_callback = Some(TrayIconScrollCallback::new(cloned!([wnd_sender] move |delta| {
+                        let callback_result = TrayIconScrollCallback::new(cloned!([wnd_sender] move |delta| {
                             wnd_sender.send_ignore(CustomEvent::ChangeGeneralBrightness(5.0 * delta))
-                        }))?);
+                        }));
+                        match callback_result {
+                            Ok(r) => scroll_callback = Some(r),
+                            Err(err) => {
+                                error!("{:?}", err);
+                                panic::show_msg(format_args!("Failed to enable icon scroll:\n{}", err.message()));
+                            }
+                        }
                     }
 
                 }

@@ -7,6 +7,7 @@ classes = [
 
 features = [
     "Foundation",
+    "System",
     "UI_Core",
     "UI_Text",
     "UI_Input",
@@ -23,6 +24,7 @@ features = [
 
 reexports = [
     "Win32_Foundation",
+    "System",
     "Foundation",
     "Foundation_Collections",
     "UI",
@@ -66,6 +68,9 @@ PointerRoutedEventArgs = true
 
 TappedEventHandler = true
 TappedRoutedEventArgs = true
+
+KeyEventHandler = true
+KeyRoutedEventArgs = true
 
 RoutedEventHandler = true
 

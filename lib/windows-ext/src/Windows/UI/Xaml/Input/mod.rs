@@ -1182,7 +1182,10 @@ unsafe impl ::windows_core::ComInterface for IKeyRoutedEventArgs {
 #[doc(hidden)]
 pub struct IKeyRoutedEventArgs_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Key: usize,
+    pub Key: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::System::VirtualKey,
+    ) -> ::windows_core::HRESULT,
     pub KeyStatus: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut super::super::Core::CorePhysicalKeyStatus,
@@ -1217,7 +1220,10 @@ unsafe impl ::windows_core::ComInterface for IKeyRoutedEventArgs2 {
 #[doc(hidden)]
 pub struct IKeyRoutedEventArgs2_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    OriginalKey: usize,
+    pub OriginalKey: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::System::VirtualKey,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -1266,10 +1272,22 @@ unsafe impl ::windows_core::ComInterface for IKeyboardAccelerator {
 #[doc(hidden)]
 pub struct IKeyboardAccelerator_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Key: usize,
-    SetKey: usize,
-    Modifiers: usize,
-    SetModifiers: usize,
+    pub Key: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::System::VirtualKey,
+    ) -> ::windows_core::HRESULT,
+    pub SetKey: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::super::System::VirtualKey,
+    ) -> ::windows_core::HRESULT,
+    pub Modifiers: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::System::VirtualKeyModifiers,
+    ) -> ::windows_core::HRESULT,
+    pub SetModifiers: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        value: super::super::super::System::VirtualKeyModifiers,
+    ) -> ::windows_core::HRESULT,
     pub IsEnabled: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -2014,7 +2032,10 @@ pub struct IPointerRoutedEventArgs_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut *mut ::core::ffi::c_void,
     ) -> ::windows_core::HRESULT,
-    KeyModifiers: usize,
+    pub KeyModifiers: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::System::VirtualKeyModifiers,
+    ) -> ::windows_core::HRESULT,
     pub Handled: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -2081,8 +2102,14 @@ unsafe impl ::windows_core::ComInterface for IProcessKeyboardAcceleratorEventArg
 #[doc(hidden)]
 pub struct IProcessKeyboardAcceleratorEventArgs_Vtbl {
     pub base__: ::windows_core::IInspectable_Vtbl,
-    Key: usize,
-    Modifiers: usize,
+    pub Key: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::System::VirtualKey,
+    ) -> ::windows_core::HRESULT,
+    pub Modifiers: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::System::VirtualKeyModifiers,
+    ) -> ::windows_core::HRESULT,
     pub Handled: unsafe extern "system" fn(
         this: *mut ::core::ffi::c_void,
         result__: *mut bool,
@@ -3046,7 +3073,78 @@ unsafe impl ::core::marker::Sync for InputScopeName {}
     ::core::clone::Clone
 )]
 pub struct KeyRoutedEventArgs(::windows_core::IUnknown);
-impl KeyRoutedEventArgs {}
+impl KeyRoutedEventArgs {
+    pub fn Key(
+        &self,
+    ) -> ::windows_core::Result<super::super::super::System::VirtualKey> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Key)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn KeyStatus(
+        &self,
+    ) -> ::windows_core::Result<super::super::Core::CorePhysicalKeyStatus> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .KeyStatus)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn Handled(&self) -> ::windows_core::Result<bool> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .Handled)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn SetHandled(&self, value: bool) -> ::windows_core::Result<()> {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .SetHandled)(::windows_core::Interface::as_raw(this), value)
+                .ok()
+        }
+    }
+    pub fn OriginalKey(
+        &self,
+    ) -> ::windows_core::Result<super::super::super::System::VirtualKey> {
+        let this = &::windows_core::ComInterface::cast::<IKeyRoutedEventArgs2>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .OriginalKey)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn DeviceId(&self) -> ::windows_core::Result<::windows_core::HSTRING> {
+        let this = &::windows_core::ComInterface::cast::<IKeyRoutedEventArgs3>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .DeviceId)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn OriginalSource(
+        &self,
+    ) -> ::windows_core::Result<::windows_core::IInspectable> {
+        let this = &::windows_core::ComInterface::cast::<super::IRoutedEventArgs>(self)?;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .OriginalSource)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+}
 impl ::windows_core::RuntimeType for KeyRoutedEventArgs {
     const SIGNATURE: ::windows_core::imp::ConstBuffer = ::windows_core::imp::ConstBuffer::from_slice(
         b"rc(Windows.UI.Xaml.Input.KeyRoutedEventArgs;{d4cd3dfe-4079-42e9-a39a-3095d3f049c6})",
@@ -3411,6 +3509,17 @@ impl PointerRoutedEventArgs {
             let mut result__ = ::std::mem::zeroed();
             (::windows_core::Interface::vtable(this)
                 .Pointer)(::windows_core::Interface::as_raw(this), &mut result__)
+                .from_abi(result__)
+        }
+    }
+    pub fn KeyModifiers(
+        &self,
+    ) -> ::windows_core::Result<super::super::super::System::VirtualKeyModifiers> {
+        let this = self;
+        unsafe {
+            let mut result__ = ::std::mem::zeroed();
+            (::windows_core::Interface::vtable(this)
+                .KeyModifiers)(::windows_core::Interface::as_raw(this), &mut result__)
                 .from_abi(result__)
         }
     }
@@ -4411,7 +4520,37 @@ pub struct HoldingEventHandler_Vtbl {
     ::core::clone::Clone
 )]
 pub struct KeyEventHandler(pub ::windows_core::IUnknown);
-impl KeyEventHandler {}
+impl KeyEventHandler {
+    pub fn new<
+        F: FnMut(
+                ::core::option::Option<&::windows_core::IInspectable>,
+                ::core::option::Option<&KeyRoutedEventArgs>,
+            ) -> ::windows_core::Result<()> + ::core::marker::Send + 'static,
+    >(invoke: F) -> Self {
+        let com = KeyEventHandlerBox::<F> {
+            vtable: &KeyEventHandlerBox::<F>::VTABLE,
+            count: ::windows_core::imp::RefCount::new(1),
+            invoke,
+        };
+        unsafe { ::core::mem::transmute(::std::boxed::Box::new(com)) }
+    }
+    pub fn Invoke<P0, P1>(&self, sender: P0, e: P1) -> ::windows_core::Result<()>
+    where
+        P0: ::windows_core::IntoParam<::windows_core::IInspectable>,
+        P1: ::windows_core::IntoParam<KeyRoutedEventArgs>,
+    {
+        let this = self;
+        unsafe {
+            (::windows_core::Interface::vtable(this)
+                .Invoke)(
+                    ::windows_core::Interface::as_raw(this),
+                    sender.into_param().abi(),
+                    e.into_param().abi(),
+                )
+                .ok()
+        }
+    }
+}
 #[repr(C)]
 struct KeyEventHandlerBox<
     F: FnMut(

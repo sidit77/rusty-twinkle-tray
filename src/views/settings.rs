@@ -1,13 +1,17 @@
+use std::collections::HashSet;
 use std::sync::{Arc, Mutex};
 
 use log::warn;
 use loole::Sender;
-use windows::core::ComInterface;
+use windows::core::{ComInterface, IInspectable, HSTRING};
+use windows::System::VirtualKey;
 use windows::UI::Color;
+use windows::Win32::UI::Input::KeyboardAndMouse::{GetKeyState, VIRTUAL_KEY, VK_CONTROL, VK_LWIN, VK_MENU, VK_RWIN, VK_SHIFT};
 use windows_ext::IXamlSourceTransparency;
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
-use windows_ext::UI::Xaml::{ElementTheme, VerticalAlignment, Window as XamlWindow};
-
+use windows_ext::UI::Xaml::{ElementTheme, FocusState, RoutedEventHandler, TextAlignment, Thickness, VerticalAlignment, Window as XamlWindow};
+use windows_ext::UI::Xaml::Controls::{Button, ClickMode, TextBox};
+use windows_ext::UI::Xaml::Input::KeyEventHandler;
 use crate::config::{autostart, Config};
 use crate::ui::container::StackPanel;
 use crate::ui::controls::{TextBlock, ToggleSwitch};
@@ -16,6 +20,9 @@ use crate::utils::elevation::relaunch_as_elevated;
 use crate::utils::extensions::{ChannelExt, FunctionalExt, MutexExt};
 use crate::windowing::{Window, WindowBuilder};
 use crate::{cloned, CustomEvent, Result, APP_ICON};
+use crate::windowing::hotkey::Modifier;
+use std::fmt::Write;
+use crate::utils::error::TracedError;
 
 thread_local! {
     static TRANSPARENT_BACKGROUND: bool = XamlWindow::Current()
@@ -131,7 +138,9 @@ impl SettingsWindow {
             .with_state(auto_start_priority)?
             .with_enabled(!auto_start_enabled)?
             .with_toggled_handler(cloned!([config] move |ts | {
-                config.lock_no_poison().use_prioritized_autostart = ts.get_state()?;
+                let mut config = config.lock_no_poison();
+                config.use_prioritized_autostart = ts.get_state()?;
+                config.dirty = true;
                 Ok(())
             }))?;
 
@@ -159,7 +168,69 @@ impl SettingsWindow {
             .with_width(TOGGLE_WIDTH)?
             .with_state(config.lock_no_poison().icon_scoll_enabled)?
             .with_toggled_handler(cloned!([config, sender] move |ts | {
-                config.lock_no_poison().icon_scoll_enabled = ts.get_state()?;
+                let mut config = config.lock_no_poison();
+                config.icon_scoll_enabled = ts.get_state()?;
+                config.dirty = true;
+                sender.send_ignore(CustomEvent::ReinitializeControls);
+                Ok(())
+            }))?;
+
+        let make_hotkey_editor = || {
+            let hotkey = TextBox::new()?;
+            hotkey.SetIsReadOnly(true)?;
+            hotkey.SetText(&HSTRING::from("CTRL + SHIFT + ALT"))?;
+            hotkey.SetTextAlignment(TextAlignment::Center)?;
+            hotkey.SetWidth(200.0)?;
+            hotkey.SetMargin(Thickness {
+                Left: 30.0,
+                Top: 0.0,
+                Right: 20.0,
+                Bottom: 0.0,
+            })?;
+            let hk = hotkey.clone();
+            hotkey.PreviewKeyDown(&KeyEventHandler::new(move |sender, args| {
+                let args = args.unwrap();
+                args.SetHandled(true)?;
+                let key = args.Key()?;
+                let modifier_keys = [
+                    VirtualKey::LeftControl,
+                    VirtualKey::RightControl,
+                    VirtualKey::Control,
+                    VirtualKey::LeftShift,
+                    VirtualKey::RightShift,
+                    VirtualKey::Shift,
+                    VirtualKey::LeftMenu,
+                    VirtualKey::RightMenu,
+                    VirtualKey::Menu,
+                    VirtualKey::LeftWindows,
+                    VirtualKey::RightWindows
+                ];
+                if modifier_keys.contains(&key) {
+                    return Ok(());
+                }
+                let modifiers = get_modifier_state();
+                println!("{:?} {:?}", modifiers, key);
+                let mut text = String::new();
+                for m in modifiers {
+                    let _ = write!(text, "{:?} + ", m);
+                }
+                let _ = write!(text, "{}", key.0);
+                hk.SetText(&HSTRING::from(text.to_uppercase()))?;
+                Ok(())
+            }))?;
+            Ok::<_, TracedError>(hotkey)
+        };
+
+        let hotkey_increase = make_hotkey_editor()?;
+        let hotkey_decrease = make_hotkey_editor()?;
+        //let hotkey_decrease = TextBlock::with_text("ALT")?;
+
+        let hotkey_toggle = ToggleSwitch::new()?
+            .with_width(TOGGLE_WIDTH)?
+            .with_state(true)?
+            .with_toggled_handler(cloned!([config, sender, hotkey_increase, hotkey_decrease] move |ts| {
+                hotkey_increase.SetIsEnabled(ts.get_state()?)?;
+                hotkey_decrease.SetIsEnabled(ts.get_state()?)?;
                 sender.send_ignore(CustomEvent::ReinitializeControls);
                 Ok(())
             }))?;
@@ -188,12 +259,35 @@ impl SettingsWindow {
                     )?
             )?;
 
-        let controls = section("Controls")?.with_child(
+        let controls = section("Controls")?
+            .with_child(
             &StackPanel::horizontal()?
                 .with_child(&enable_icon_scroll)?
                 .with_child(&TextBlock::with_text("Adjust the brightness of all displays by scrolling over the tray icon")?
                     .with_vertical_alignment(VerticalAlignment::Center)?)?
-        )?;
+            )?
+            .with_child(
+                &StackPanel::vertical()?
+                    .with_spacing(5.0)?
+                    .with_child(
+                        &StackPanel::horizontal()?
+                            .with_child(&hotkey_toggle)?
+                            .with_child(&TextBlock::with_text("Adjust the brightness of all displays by pressing the following hotkeys:")?
+                                .with_vertical_alignment(VerticalAlignment::Center)?)?
+                    )?
+                    .with_child(
+                        &StackPanel::horizontal()?
+                            .with_child(&hotkey_increase)?
+                            .with_child(&TextBlock::with_text("Increase brightness")?
+                                .with_vertical_alignment(VerticalAlignment::Center)?)?
+                    )?
+                    .with_child(
+                        &StackPanel::horizontal()?
+                            .with_child(&hotkey_decrease)?
+                            .with_child(&TextBlock::with_text("Decrease brightness")?
+                                .with_vertical_alignment(VerticalAlignment::Center)?)?
+                    )?
+            )?;
 
         let advanced = section("Advanced")?.with_child(
             &StackPanel::horizontal()?
@@ -229,4 +323,23 @@ impl StackPanelExt for StackPanel {
             .with_border_brush(border)?
             .with_corner_radius(5.0)
     }
+}
+
+
+fn get_modifier_state() -> HashSet<Modifier> {
+    fn is_key_down(key: VIRTUAL_KEY) -> bool {
+        unsafe { GetKeyState(key.0 as i32) & (1 << 15) != 0 }
+    }
+
+    const MODIFIER_KEYS: &[(Modifier, &[VIRTUAL_KEY])] = &[
+        (Modifier::Shift, &[VK_SHIFT]),
+        (Modifier::Ctrl, &[VK_CONTROL]),
+        (Modifier::Alt, &[VK_MENU]),
+        (Modifier::Win, &[VK_LWIN, VK_RWIN]),
+    ];
+
+    [Modifier::Shift, Modifier::Ctrl, Modifier::Alt, Modifier::Win]
+        .into_iter()
+        .filter(|m| m.to_virtual_keys().iter().any(|k| is_key_down(*k)))
+        .collect()
 }

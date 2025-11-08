@@ -1,13 +1,25 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
+use std::fmt::{Debug, Formatter};
 use std::marker::PhantomData;
 use std::pin::Pin;
 use std::sync::atomic::{AtomicI32, Ordering};
 use std::task::{Context, Poll, Waker};
 use futures_lite::Stream;
 use log::{trace, warn};
-use windows::Win32::UI::Input::KeyboardAndMouse::{RegisterHotKey, UnregisterHotKey, HOT_KEY_MODIFIERS, VIRTUAL_KEY};
+use windows::Win32::UI::Input::KeyboardAndMouse::{RegisterHotKey, UnregisterHotKey, HOT_KEY_MODIFIERS, MOD_ALT, MOD_CONTROL, MOD_SHIFT, MOD_WIN, VIRTUAL_KEY};
 use crate::Result;
+
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+#[repr(u8)]
+pub enum Modifier {
+    Shift = MOD_SHIFT.0 as u8,
+    Ctrl = MOD_CONTROL.0 as u8,
+    Alt = MOD_ALT.0 as u8,
+    Win = MOD_WIN.0 as u8,
+}
+
+
 
 #[derive(Debug)]
 pub struct HotKey {

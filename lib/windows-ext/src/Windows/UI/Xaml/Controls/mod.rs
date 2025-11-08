@@ -26516,7 +26516,10 @@ pub struct ISearchBoxQuerySubmittedEventArgs_Vtbl {
         result__: *mut ::std::mem::MaybeUninit<::windows_core::HSTRING>,
     ) -> ::windows_core::HRESULT,
     LinguisticDetails: usize,
-    KeyModifiers: usize,
+    pub KeyModifiers: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::System::VirtualKeyModifiers,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]
@@ -26543,7 +26546,10 @@ pub struct ISearchBoxResultSuggestionChosenEventArgs_Vtbl {
         this: *mut ::core::ffi::c_void,
         result__: *mut ::std::mem::MaybeUninit<::windows_core::HSTRING>,
     ) -> ::windows_core::HRESULT,
-    KeyModifiers: usize,
+    pub KeyModifiers: unsafe extern "system" fn(
+        this: *mut ::core::ffi::c_void,
+        result__: *mut super::super::super::System::VirtualKeyModifiers,
+    ) -> ::windows_core::HRESULT,
 }
 #[doc(hidden)]
 #[repr(transparent)]

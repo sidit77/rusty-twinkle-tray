@@ -19,7 +19,7 @@ Rusty Twinkle Tray is a work-in-progress rewrite of Twinkle Tray in Rust. A cent
 ¹*Many monitors tend to "forget" settings set over DDC/CI after temporarily losing power*
 
 ## Precompiled Binaries
-| [**DOWNLOAD**](https://nightly.link/sidit77/rusty-twinkle-tray/workflows/build/main/rusty-twinkle-tray.exe.zip) |
+| [**DOWNLOAD**](https://github.com/sidit77/rusty-twinkle-tray/releases/latest) |
 |-----------------------------------------------------------------------------------------------------------------|
 
 ## Building

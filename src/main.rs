@@ -10,6 +10,7 @@ mod utils;
 mod views;
 mod watchers;
 mod windowing;
+mod mousehook;
 
 use std::process::ExitCode;
 use std::sync::{Arc, Mutex};
@@ -37,6 +38,7 @@ use crate::utils::{logger, panic};
 use crate::views::{BrightnessFlyout, ProxyWindow, SettingsWindow};
 use crate::watchers::{EventWatcher, PowerEvent};
 use windowing::hotkey::HotKey;
+use crate::mousehook::{TrayIconScrollCallback};
 use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect};
 
 include!("../assets/ids.rs");
@@ -54,8 +56,7 @@ pub enum CustomEvent {
     MonitorAdded { path: MonitorPath, name: String },
     MonitorRemoved { path: MonitorPath },
     BrightnessChanged { path: MonitorPath, value: u32 },
-    IncreaseBrightnessHotkey,
-    DecreaseBrightnessHotkey
+    ChangeGeneralBrightness(f32)
 }
 
 fn run() -> Result<()> {
@@ -135,6 +136,10 @@ fn run() -> Result<()> {
     let mut hotkey_dec = HotKey::register(MOD_ALT, VK_F1)?;
     let mut hotkey_inc = HotKey::register(MOD_ALT, VK_F2)?;
 
+    let _scroll_callback = TrayIconScrollCallback::new(cloned!([wnd_sender] move |delta| {
+         wnd_sender.filter_send_ignore(Some(CustomEvent::ChangeGeneralBrightness(5.0 * delta)))
+    }))?;
+
     let mut last_close = Instant::now();
     event_loop(async {
         let mut click_watcher = FutureStream::new();
@@ -142,8 +147,8 @@ fn run() -> Result<()> {
         while let Some(event) =
             (&mut events)
             .or(&mut click_watcher)
-            .or((&mut hotkey_dec).map(|_| CustomEvent::DecreaseBrightnessHotkey))
-            .or((&mut hotkey_inc).map(|_| CustomEvent::IncreaseBrightnessHotkey))
+            .or((&mut hotkey_dec).map(|_| CustomEvent::ChangeGeneralBrightness(-10.0)))
+            .or((&mut hotkey_inc).map(|_| CustomEvent::ChangeGeneralBrightness( 10.0)))
             .next().await {
             match event {
                 CustomEvent::Quit => {
@@ -262,12 +267,9 @@ fn run() -> Result<()> {
                 CustomEvent::BrightnessChanged { path, value } => {
                     flyout.update_brightness(path, value)?;
                 }
-                CustomEvent::IncreaseBrightnessHotkey => {
-                    flyout.change_brightness(10)?;
-                },
-                CustomEvent::DecreaseBrightnessHotkey => {
-                    flyout.change_brightness(-10)?;
-                },
+                CustomEvent::ChangeGeneralBrightness(value) => {
+                    flyout.change_brightness(value.round() as i32)?;
+                }
             }
         }
         Ok(())

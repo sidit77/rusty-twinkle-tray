@@ -4,7 +4,7 @@ use windows::Win32::UI::WindowsAndMessaging::WHEEL_DELTA;
 use windows_ext::UI::Xaml::Controls::Primitives::{FlyoutShowOptions, RangeBaseValueChangedEventArgs, RangeBaseValueChangedEventHandler};
 use windows_ext::UI::Xaml::Controls::{FlyoutPresenter, IconElement};
 use windows_ext::UI::Xaml::Input::PointerEventHandler;
-use windows_ext::UI::Xaml::{DependencyObject, RoutedEventHandler, UIElement};
+use windows_ext::UI::Xaml::{DependencyObject, RoutedEventHandler, TextWrapping, UIElement};
 
 use super::{FontWeight, Padding, TextAlignment, VerticalAlignment};
 use crate::ui::style::Style;
@@ -80,6 +80,7 @@ impl TextBlock {
     pub fn with_text<T: Into<HSTRING>>(text: T) -> Result<Self> {
         let block = Self::new()?;
         block.0.SetText(&text.into())?;
+        block.0.SetTextWrapping(TextWrapping::Wrap)?;
         Ok(block)
     }
 

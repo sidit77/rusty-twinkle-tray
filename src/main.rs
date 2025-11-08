@@ -56,7 +56,8 @@ pub enum CustomEvent {
     MonitorAdded { path: MonitorPath, name: String },
     MonitorRemoved { path: MonitorPath },
     BrightnessChanged { path: MonitorPath, value: u32 },
-    ChangeGeneralBrightness(f32)
+    ChangeGeneralBrightness(f32),
+    ReinitializeControls
 }
 
 fn run() -> Result<()> {
@@ -121,7 +122,7 @@ fn run() -> Result<()> {
         })?;
 
     ui_settings.ColorValuesChanged(&TypedEventHandler::new(cloned!([wnd_sender] move |_: &Option<UISettings>, _| {
-        wnd_sender.filter_send_ignore(Some(CustomEvent::ThemeChange));
+        wnd_sender.send_ignore(CustomEvent::ThemeChange);
         Ok(())
     })))?;
 
@@ -130,15 +131,15 @@ fn run() -> Result<()> {
     let mut settings_window: Option<SettingsWindow> = None;
 
     if settings_mode {
-        wnd_sender.send(CustomEvent::OpenSettings).unwrap();
+        wnd_sender.send_ignore(CustomEvent::OpenSettings);
     }
+
+    wnd_sender.send_ignore(CustomEvent::ReinitializeControls);
 
     let mut hotkey_dec = HotKey::register(MOD_ALT, VK_F1)?;
     let mut hotkey_inc = HotKey::register(MOD_ALT, VK_F2)?;
 
-    let _scroll_callback = TrayIconScrollCallback::new(cloned!([wnd_sender] move |delta| {
-         wnd_sender.filter_send_ignore(Some(CustomEvent::ChangeGeneralBrightness(5.0 * delta)))
-    }))?;
+    let mut scroll_callback = None;
 
     let mut last_close = Instant::now();
     event_loop(async {
@@ -269,6 +270,16 @@ fn run() -> Result<()> {
                 }
                 CustomEvent::ChangeGeneralBrightness(value) => {
                     flyout.change_brightness(value.round() as i32)?;
+                }
+                CustomEvent::ReinitializeControls => {
+                    let lock = config.lock_no_poison();
+                    scroll_callback = None;
+                    if lock.icon_scoll_enabled {
+                        scroll_callback = Some(TrayIconScrollCallback::new(cloned!([wnd_sender] move |delta| {
+                            wnd_sender.send_ignore(CustomEvent::ChangeGeneralBrightness(5.0 * delta))
+                        }))?);
+                    }
+
                 }
             }
         }

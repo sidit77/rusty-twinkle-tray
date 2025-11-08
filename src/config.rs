@@ -18,6 +18,7 @@ pub struct Config {
     pub dirty: bool,
     pub restore_from_config: bool,
     pub use_prioritized_autostart: bool,
+    pub icon_scoll_enabled: bool,
     pub monitors: BTreeMap<MonitorPath, MonitorSettings>
 }
 
@@ -27,6 +28,7 @@ impl Default for Config {
             dirty: true,
             restore_from_config: true,
             use_prioritized_autostart: false,
+            icon_scoll_enabled: false,
             monitors: Default::default()
         }
     }
@@ -84,6 +86,7 @@ impl Config {
         write!(file, "[General]\r\n")?;
         write!(file, "RestoreFromConfig={}\r\n", self.restore_from_config)?;
         write!(file, "UsePrioritizedAutostart={}\r\n", self.use_prioritized_autostart)?;
+        write!(file, "IconScrollEnabled={}\r\n", self.icon_scoll_enabled)?;
         write!(file, "\r\n")?;
 
         for (path, settings) in &self.monitors {
@@ -137,6 +140,7 @@ impl Config {
                 "General" => match key {
                     "RestoreFromConfig" => self.restore_from_config = value.parse()?,
                     "UsePrioritizedAutostart" => self.use_prioritized_autostart = value.parse()?,
+                    "IconScrollEnabled" => self.icon_scoll_enabled = value.parse()?,
                     _ => debug!("Ignoring unknown key in section {}: {}={}", section, key, value)
                 },
                 path if path.starts_with("\\\\?\\DISPLAY") => {

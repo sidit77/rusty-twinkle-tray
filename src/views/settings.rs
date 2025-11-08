@@ -13,7 +13,7 @@ use crate::ui::container::StackPanel;
 use crate::ui::controls::{TextBlock, ToggleSwitch};
 use crate::ui::FontWeight;
 use crate::utils::elevation::relaunch_as_elevated;
-use crate::utils::extensions::{FunctionalExt, MutexExt};
+use crate::utils::extensions::{ChannelExt, FunctionalExt, MutexExt};
 use crate::windowing::{Window, WindowBuilder};
 use crate::{cloned, CustomEvent, Result, APP_ICON};
 
@@ -39,7 +39,7 @@ impl SettingsWindow {
         //mica = false;
 
         let window = WindowBuilder::default()
-            .with_size(800, 800)
+            .with_size(900, 800)
             .with_title("Rusty Twinkle Tray Settings")
             .with_icon_resource(APP_ICON)
             .with_close_handler(cloned!([sender] move || sender
@@ -64,7 +64,7 @@ impl SettingsWindow {
             content: None,
             background_brush: SolidColorBrush::new()?
         };
-        result.build_gui(config)?;
+        result.build_gui(sender, config)?;
         result
             .sync_theme()
             .unwrap_or_else(|e| warn!("Failed to sync theme: {e}"));
@@ -106,7 +106,7 @@ impl SettingsWindow {
         Ok(())
     }
 
-    fn build_gui(&mut self, config: Arc<Mutex<Config>>) -> Result<()> {
+    fn build_gui(&mut self, sender: Sender<CustomEvent>, config: Arc<Mutex<Config>>) -> Result<()> {
         const TOGGLE_WIDTH: f64 = 100.0;
 
         let border_brush = SolidColorBrush::CreateInstanceWithColor(Color { R: 0, G: 0, B: 0, A: 30 })?;
@@ -155,6 +155,15 @@ impl SettingsWindow {
                 Ok(())
             }))?;
 
+        let enable_icon_scroll = ToggleSwitch::new()?
+            .with_width(TOGGLE_WIDTH)?
+            .with_state(config.lock_no_poison().icon_scoll_enabled)?
+            .with_toggled_handler(cloned!([config, sender] move |ts | {
+                config.lock_no_poison().icon_scoll_enabled = ts.get_state()?;
+                sender.send_ignore(CustomEvent::ReinitializeControls);
+                Ok(())
+            }))?;
+
         let general = section("General")?
             .with_child(
                 &StackPanel::horizontal()?
@@ -179,6 +188,13 @@ impl SettingsWindow {
                     )?
             )?;
 
+        let controls = section("Controls")?.with_child(
+            &StackPanel::horizontal()?
+                .with_child(&enable_icon_scroll)?
+                .with_child(&TextBlock::with_text("Adjust the brightness of all displays by scrolling over the tray icon")?
+                    .with_vertical_alignment(VerticalAlignment::Center)?)?
+        )?;
+
         let advanced = section("Advanced")?.with_child(
             &StackPanel::horizontal()?
                 .with_child(&autostart_priority_toggle)?
@@ -193,6 +209,7 @@ impl SettingsWindow {
             .with_padding(10.0)?
             .with_spacing(7.0)?
             .with_child(&general)?
+            .with_child(&controls)?
             .with_child(&advanced)?;
 
         self.window.set_content(&main)?;

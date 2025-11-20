@@ -22,6 +22,7 @@ use crate::windowing::{Window, WindowBuilder};
 use crate::{cloned, CustomEvent, Result, APP_ICON};
 use crate::windowing::hotkey::Modifier;
 use std::fmt::Write;
+use std::ops::Deref;
 use crate::utils::error::TracedError;
 
 thread_local! {
@@ -338,8 +339,13 @@ fn get_modifier_state() -> HashSet<Modifier> {
         (Modifier::Win, &[VK_LWIN, VK_RWIN]),
     ];
 
-    [Modifier::Shift, Modifier::Ctrl, Modifier::Alt, Modifier::Win]
+    MODIFIER_KEYS
         .into_iter()
-        .filter(|m| m.to_virtual_keys().iter().any(|k| is_key_down(*k)))
+        .copied()
+        .filter_map(|(m, keys)| keys
+            .iter()
+            .copied()
+            .any(is_key_down)
+            .then_some(m))
         .collect()
 }

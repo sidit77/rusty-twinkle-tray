@@ -38,6 +38,8 @@ This program uses the default [UWP Controls](https://learn.microsoft.com/en-us/u
 Unfortunately, the Microsoft-provided [`windows-rs` crate](https://microsoft.github.io/windows-docs-rs/doc/windows/) does not include bindings for the `Window.UI.Xaml` namespace. To nevertheless use it with Rust, this project directly uses [`windows-bindgen`](https://crates.io/crates/windows-bindgen) to manually generate the missing bindings (`libs/windows-ext`). However, the generated bindings are quite large (~1.5m LOC; ~1m of that in a single file). To keep the IDE happy, this project additionally uses a post-processor (`/libs/codegen`) that deletes many unused functions. The file `libs/windows-ext/Codegen.toml` controls which functions are kept. To regenerate the bindings after editing this file, run `just update-bindings` (requires [just](https://github.com/casey/just)).
 
 ### Todos
+- [ ] Improve the mess that is the current UI code
+  - Implement a reactive system using something like [reactive_graph](https://lib.rs/crates/reactive_graph)?
 - [x] Settings window
   - [x] Toggle autostart
   - [x] Toggle brightness restore

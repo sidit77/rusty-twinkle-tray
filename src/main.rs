@@ -23,7 +23,6 @@ use windows::Foundation::TypedEventHandler;
 use windows::Win32::Foundation::RECT;
 use windows::Win32::System::WinRT::{RoInitialize, RoUninitialize, RO_INIT_SINGLETHREADED};
 use windows::UI::ViewManagement::UISettings;
-use windows::Win32::UI::Input::KeyboardAndMouse::{MOD_ALT, VK_F1, VK_F2};
 use windows_ext::UI::Xaml::ElementTheme;
 use windows_ext::UI::Xaml::Hosting::WindowsXamlManager;
 
@@ -40,6 +39,7 @@ use crate::watchers::{EventWatcher, PowerEvent};
 use windowing::hotkey::HotKey;
 use crate::mousehook::{TrayIconScrollCallback};
 use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect};
+use crate::windowing::hotkey::{Modifier, VirtualKey};
 
 include!("../assets/ids.rs");
 
@@ -136,8 +136,8 @@ fn run() -> Result<()> {
 
     wnd_sender.send_ignore(CustomEvent::ReinitializeControls);
 
-    let mut hotkey_dec = HotKey::register(MOD_ALT, VK_F1)?;
-    let mut hotkey_inc = HotKey::register(MOD_ALT, VK_F2)?;
+    let mut hotkey_dec = HotKey::register(([Modifier::Alt], VirtualKey::F1))?;
+    let mut hotkey_inc = HotKey::register(([Modifier::Alt], VirtualKey::F2))?;
 
     let mut scroll_callback = None;
 

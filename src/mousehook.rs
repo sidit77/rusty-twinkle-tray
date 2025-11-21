@@ -1,15 +1,13 @@
 use std::cell::Cell;
 use std::fmt::{Debug, Formatter};
 use std::marker::PhantomData;
-use std::time::Instant;
-use log::{trace, warn};
-use windows::core::{w, GUID};
+use log::{warn};
+use windows::core::{GUID};
 use windows::Win32::Foundation::{BOOL, FALSE, HINSTANCE, HWND, LPARAM, LRESULT, RECT, TRUE, WPARAM};
 use windows::Win32::System::SystemInformation::GetTickCount64;
 use windows::Win32::UI::Shell::{Shell_NotifyIconGetRect, NOTIFYICONIDENTIFIER};
-use windows::Win32::UI::WindowsAndMessaging::{CallNextHookEx, EnumWindows, GetClassNameA, GetClassNameW, SetWindowsHookExW, UnhookWindowsHookEx, HC_ACTION, HHOOK, MSLLHOOKSTRUCT, WHEEL_DELTA, WH_MOUSE_LL, WM_MOUSEWHEEL};
+use windows::Win32::UI::WindowsAndMessaging::{CallNextHookEx, EnumWindows, GetClassNameA, SetWindowsHookExW, UnhookWindowsHookEx, HC_ACTION, HHOOK, MSLLHOOKSTRUCT, WHEEL_DELTA, WH_MOUSE_LL, WM_MOUSEWHEEL};
 use crate::Result;
-use crate::utils::error::Trace;
 
 struct CallbackContext {
     tray_id: NOTIFYICONIDENTIFIER,
@@ -60,7 +58,7 @@ impl Drop for TrayIconScrollCallback {
         CONTEXT.set(None);
         unsafe {
             UnhookWindowsHookEx(self.hook)
-                .unwrap_or_else(|err| warn!("Failed to remove mouse hook"));
+                .unwrap_or_else(|err| warn!("Failed to remove mouse hook: {err}"));
         }
     }
 }

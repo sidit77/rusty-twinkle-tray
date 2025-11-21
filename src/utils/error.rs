@@ -1,13 +1,14 @@
 use std::backtrace::Backtrace;
 use std::borrow::Cow;
 use std::fmt::{Debug, Display, Formatter};
-use std::num::ParseIntError;
+use std::num::{ParseFloatError, ParseIntError};
 use std::panic::Location;
 use std::str::ParseBoolError;
 
 use betrayer::{ErrorSource, TrayError};
 use windows::core::{Error, HRESULT};
 use windows::Win32::Foundation::{NO_ERROR, WIN32_ERROR};
+use crate::windowing::hotkey::ParseKeyCombinationError;
 
 pub type Result<T> = std::result::Result<T, TracedError>;
 
@@ -163,6 +164,26 @@ impl From<ParseBoolError> for TracedError {
 impl From<ParseIntError> for TracedError {
     #[track_caller]
     fn from(value: ParseIntError) -> Self {
+        Self {
+            inner: InnerError::External(value.into()),
+            backtrace: Trace::capture()
+        }
+    }
+}
+
+impl From<ParseFloatError> for TracedError {
+    #[track_caller]
+    fn from(value: ParseFloatError) -> Self {
+        Self {
+            inner: InnerError::External(value.into()),
+            backtrace: Trace::capture()
+        }
+    }
+}
+
+impl From<ParseKeyCombinationError> for TracedError {
+    #[track_caller]
+    fn from(value: ParseKeyCombinationError) -> Self {
         Self {
             inner: InnerError::External(value.into()),
             backtrace: Trace::capture()

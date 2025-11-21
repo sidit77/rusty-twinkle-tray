@@ -12,6 +12,7 @@ use windows::Win32::UI::Shell::{FOLDERID_RoamingAppData, SHGetKnownFolderPath, K
 
 use crate::monitors::MonitorPath;
 use crate::Result;
+use crate::windowing::hotkey::{KeyCombination, Modifier, VirtualKey};
 
 #[derive(Debug)]
 pub struct Config {
@@ -19,6 +20,11 @@ pub struct Config {
     pub restore_from_config: bool,
     pub use_prioritized_autostart: bool,
     pub icon_scoll_enabled: bool,
+    pub icon_scroll_step_size: f32,
+    pub hotkeys_enabled: bool,
+    pub hotkey_step_size: f32,
+    pub brightness_increase_hotkey: KeyCombination,
+    pub brightness_decrease_hotkey: KeyCombination,
     pub monitors: BTreeMap<MonitorPath, MonitorSettings>
 }
 
@@ -29,7 +35,12 @@ impl Default for Config {
             restore_from_config: true,
             use_prioritized_autostart: false,
             icon_scoll_enabled: false,
-            monitors: Default::default()
+            icon_scroll_step_size: 5.0,
+            hotkeys_enabled: false,
+            hotkey_step_size: 10.0,
+            brightness_increase_hotkey: KeyCombination::from(([Modifier::Alt], VirtualKey::F1)),
+            brightness_decrease_hotkey: KeyCombination::from(([Modifier::Alt], VirtualKey::F2)),
+            monitors: Default::default(),
         }
     }
 }
@@ -87,6 +98,12 @@ impl Config {
         write!(file, "RestoreFromConfig={}\r\n", self.restore_from_config)?;
         write!(file, "UsePrioritizedAutostart={}\r\n", self.use_prioritized_autostart)?;
         write!(file, "IconScrollEnabled={}\r\n", self.icon_scoll_enabled)?;
+        write!(file, "IconScrollStepSize={}\r\n", self.icon_scroll_step_size)?;
+        write!(file, "HotkeysEnabled={}\r\n", self.hotkeys_enabled)?;
+        write!(file, "HotkeyStepSize={}\r\n", self.hotkey_step_size)?;
+        write!(file, "BrightnessIncreaseHotkey={}\r\n", self.brightness_increase_hotkey.display(false))?;
+        write!(file, "BrightnessDecreaseHotkey={}\r\n", self.brightness_decrease_hotkey.display(false))?;
+
         write!(file, "\r\n")?;
 
         for (path, settings) in &self.monitors {
@@ -135,12 +152,17 @@ impl Config {
             let (key, value) = line
                 .split_once('=')
                 .ok_or_else(|| format!("Line \"{line}\" (#{number}) is not a key value pair"))?;
-
+            
             match section.as_str() {
                 "General" => match key {
                     "RestoreFromConfig" => self.restore_from_config = value.parse()?,
                     "UsePrioritizedAutostart" => self.use_prioritized_autostart = value.parse()?,
                     "IconScrollEnabled" => self.icon_scoll_enabled = value.parse()?,
+                    "IconScrollStepSize" => self.icon_scroll_step_size = value.parse()?,
+                    "HotkeysEnabled" => self.hotkeys_enabled = value.parse()?,
+                    "HotkeyStepSize" => self.hotkey_step_size = value.parse()?,
+                    "BrightnessIncreaseHotkey" => self.brightness_increase_hotkey = value.parse()?,
+                    "BrightnessDecreaseHotkey" => self.brightness_decrease_hotkey = value.parse()?,
                     _ => debug!("Ignoring unknown key in section {}: {}={}", section, key, value)
                 },
                 path if path.starts_with("\\\\?\\DISPLAY") => {

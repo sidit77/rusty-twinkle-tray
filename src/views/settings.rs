@@ -1,15 +1,14 @@
-use std::collections::HashSet;
 use std::sync::{Arc, Mutex};
 
 use log::warn;
 use loole::Sender;
-use windows::core::{ComInterface, IInspectable, HSTRING};
+use windows::core::{ComInterface, HSTRING};
 use windows::UI::Color;
 use windows::Win32::UI::Input::KeyboardAndMouse::{GetKeyState, VIRTUAL_KEY, VK_CONTROL, VK_LWIN, VK_MENU, VK_RWIN, VK_SHIFT};
 use windows_ext::IXamlSourceTransparency;
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
-use windows_ext::UI::Xaml::{ElementTheme, FocusState, RoutedEventHandler, TextAlignment, Thickness, VerticalAlignment, Window as XamlWindow};
-use windows_ext::UI::Xaml::Controls::{Button, ClickMode, TextBox};
+use windows_ext::UI::Xaml::{ElementTheme, TextAlignment, Thickness, VerticalAlignment, Window as XamlWindow};
+use windows_ext::UI::Xaml::Controls::{TextBox};
 use windows_ext::UI::Xaml::Input::KeyEventHandler;
 use crate::config::{autostart, Config};
 use crate::ui::container::StackPanel;
@@ -19,9 +18,7 @@ use crate::utils::elevation::relaunch_as_elevated;
 use crate::utils::extensions::{ChannelExt, FunctionalExt, MutexExt};
 use crate::windowing::{Window, WindowBuilder};
 use crate::{cloned, CustomEvent, Result, APP_ICON};
-use crate::windowing::hotkey::{Modifier, ModifierSet, VirtualKey};
-use std::fmt::Write;
-use std::ops::Deref;
+use crate::windowing::hotkey::{KeyCombination, Modifier, ModifierSet, VirtualKey};
 use crate::utils::error::TracedError;
 
 thread_local! {
@@ -197,12 +194,11 @@ impl SettingsWindow {
                 }
                 let modifiers = get_modifier_state();
                 println!("{:?} {:?}", modifiers, key);
-                let mut text = String::new();
-                for m in modifiers {
-                    let _ = write!(text, "{:?} + ", m);
-                }
-                let _ = write!(text, "{}", key.name());
-                hk.SetText(&HSTRING::from(text.to_uppercase()))?;
+                let key_combo = KeyCombination {
+                    modifiers,
+                    key,
+                };
+                hk.SetText(&HSTRING::from(format!("{}", key_combo.display(true)).to_uppercase()))?;
                 Ok(())
             }))?;
             Ok::<_, TracedError>(hotkey)

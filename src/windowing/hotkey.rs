@@ -5,12 +5,12 @@ use std::fmt::{Debug, Display, Formatter, Write};
 use std::marker::PhantomData;
 use std::num::{NonZeroU32, NonZeroUsize};
 use std::pin::Pin;
+use std::str::FromStr;
 use std::sync::atomic::{AtomicI32, Ordering};
 use std::task::{Context, Poll, Waker};
 use futures_lite::Stream;
 use log::{trace, warn};
-use windows::core::PWSTR;
-use windows::Win32::UI::Input::KeyboardAndMouse::{GetKeyNameTextW, MapVirtualKeyW, RegisterHotKey, ToUnicode, UnregisterHotKey, HOT_KEY_MODIFIERS, MAPVK_VK_TO_VSC, MOD_ALT, MOD_CONTROL, MOD_SHIFT, MOD_WIN, VIRTUAL_KEY, VK_CONTROL, VK_ESCAPE, VK_LCONTROL, VK_LMENU, VK_LSHIFT, VK_LWIN, VK_MENU, VK_RCONTROL, VK_RMENU, VK_RSHIFT, VK_RWIN, VK_SHIFT};
+use windows::Win32::UI::Input::KeyboardAndMouse::{GetKeyNameTextW, MapVirtualKeyW, RegisterHotKey, UnregisterHotKey, HOT_KEY_MODIFIERS, MAPVK_VK_TO_VSC, MOD_ALT, MOD_CONTROL, MOD_SHIFT, MOD_WIN, VIRTUAL_KEY, VK_CONTROL, VK_ESCAPE, VK_F1, VK_F2, VK_LCONTROL, VK_LMENU, VK_LSHIFT, VK_LWIN, VK_MENU, VK_RCONTROL, VK_RMENU, VK_RSHIFT, VK_RWIN, VK_SHIFT};
 use crate::Result;
 
 #[derive(Debug)]
@@ -20,11 +20,12 @@ pub struct HotKey {
 }
 
 impl HotKey {
-    pub fn register(modifiers: HOT_KEY_MODIFIERS, key: VIRTUAL_KEY) -> Result<Self> {
+    pub fn register(combo: impl Into<KeyCombination>) -> Result<Self> {
         static NEXT_ID: AtomicI32 = AtomicI32::new(0);
         let id = NEXT_ID.fetch_add(1, Ordering::Relaxed);
+        let KeyCombination { modifiers, key } = combo.into();
         unsafe {
-            RegisterHotKey(None, id, modifiers, key.0 as u32)?;
+            RegisterHotKey(None, id, modifiers.as_raw(), key.0)?;
         }
         Ok(Self {
             id,
@@ -78,12 +79,119 @@ pub fn process_hotkey_for_current_thread(id: i32) {
 }
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
+pub struct KeyCombination {
+    pub modifiers: ModifierSet,
+    pub key: VirtualKey,
+}
+
+impl From<VirtualKey> for KeyCombination {
+    fn from(value: VirtualKey) -> Self {
+        Self {
+            modifiers: ModifierSet::empty(),
+            key: value,
+        }
+    }
+}
+
+impl From<VIRTUAL_KEY> for KeyCombination {
+    fn from(value: VIRTUAL_KEY) -> Self {
+        Self::from(VirtualKey::from(value))
+    }
+}
+
+impl<const N: usize> From<([Modifier; N], VirtualKey)> for KeyCombination {
+    fn from((modifiers, key): ([Modifier; N], VirtualKey)) -> Self {
+        Self { modifiers: ModifierSet::from_iter(modifiers), key }
+    }
+
+}
+
+impl<const N: usize> From<([Modifier; N], VIRTUAL_KEY)> for KeyCombination {
+    fn from((modifiers, key): ([Modifier; N], VIRTUAL_KEY)) -> Self {
+        Self::from((modifiers, VirtualKey::from(key)))
+    }
+
+}
+
+impl KeyCombination {
+    pub fn display(self, use_key_name: bool) -> impl Display {
+        struct KeyCombinationDisplay(KeyCombination, bool);
+
+        impl Display for KeyCombinationDisplay {
+            fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+                for m in self.0.modifiers {
+                    f.write_fmt(format_args!("{} + ", m.name()))?;
+                }
+                if self.1 {
+                    f.write_fmt(format_args!("{}", self.0.key.name()))?;
+                } else {
+                    f.write_fmt(format_args!("0x{:X}", self.0.key.0))?;
+                }
+                Ok(())
+            }
+        }
+
+        KeyCombinationDisplay(self, use_key_name)
+    }
+}
+
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+pub enum ParseKeyCombinationError {
+    UnknownModifier,
+    MalformattedKeyCode
+}
+
+impl Display for ParseKeyCombinationError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::UnknownModifier => f.write_str("Unknown modifier"),
+            Self::MalformattedKeyCode => f.write_str("Malformatted key code")
+        }
+    }
+}
+
+impl std::error::Error for ParseKeyCombinationError {}
+
+impl FromStr for KeyCombination {
+    type Err = ParseKeyCombinationError;
+
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        let mut tokens = s.rsplit('+');
+        let keycode = tokens
+            .next()
+            .ok_or(ParseKeyCombinationError::MalformattedKeyCode)?
+            .trim()
+            .trim_start_matches("0x");
+        let keycode = u32::from_str_radix(keycode, 16)
+            .map_err(|_| ParseKeyCombinationError::MalformattedKeyCode)?;
+
+        let modifiers: ModifierSet = tokens
+            .map(str::trim)
+            .map(|s| [Modifier::Alt, Modifier::Ctrl, Modifier::Shift, Modifier::Shift]
+                .into_iter()
+                .find(|&m| m.name().eq_ignore_ascii_case(s))
+                .ok_or(ParseKeyCombinationError::UnknownModifier))
+            .collect::<std::result::Result<_, _>>()?;
+
+        Ok(Self {
+            modifiers,
+            key: VirtualKey(keycode),
+        })
+    }
+}
+
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
 #[repr(transparent)]
-pub struct VirtualKey(VIRTUAL_KEY);
+pub struct VirtualKey(u32);
 
 impl VirtualKey {
 
-    pub const ESCAPE: VirtualKey = VirtualKey(VK_ESCAPE);
+    pub const ESCAPE: VirtualKey = Self::from_vk(VK_ESCAPE);
+    pub const F1: VirtualKey = Self::from_vk(VK_F1);
+    pub const F2: VirtualKey = Self::from_vk(VK_F2);
+
+    const fn from_vk(vk: VIRTUAL_KEY) -> Self { Self(vk.0 as u32) }
+    const fn as_vk(self) -> VIRTUAL_KEY { VIRTUAL_KEY(self.0 as u16) }
 
     pub fn name(self) -> impl Display {
         struct KeyName(u32);
@@ -91,6 +199,7 @@ impl VirtualKey {
         impl Display for KeyName {
             fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
                 let mut buf = [0u16; 32];
+
 
                 let success = NonZeroU32::new(unsafe { MapVirtualKeyW(self.0, MAPVK_VK_TO_VSC) })
                     .map(|sc| (sc.get() as i32) << 16)
@@ -107,12 +216,12 @@ impl VirtualKey {
             }
         }
 
-        KeyName(self.0.0 as u32)
+        KeyName(self.0)
 
     }
 
     pub fn is_modifier(self) -> bool {
-        matches!(self.0,
+        matches!(self.as_vk(),
             VK_LMENU | VK_RMENU | VK_MENU |
             VK_LSHIFT | VK_RSHIFT | VK_SHIFT |
             VK_LCONTROL | VK_RCONTROL | VK_CONTROL |
@@ -123,13 +232,13 @@ impl VirtualKey {
 
 impl From<VIRTUAL_KEY> for VirtualKey {
     fn from(value: VIRTUAL_KEY) -> Self {
-        Self(value)
+        Self::from_vk(value)
     }
 }
 
 impl From<windows::System::VirtualKey> for VirtualKey {
     fn from(value: windows::System::VirtualKey) -> Self {
-        Self(VIRTUAL_KEY(value.0 as u16))
+        Self(value.0 as u32)
     }
 }
 
@@ -155,6 +264,14 @@ impl Modifier {
             _ => None
         }
     }
+    pub const fn name(self) -> &'static str {
+        match self {
+            Self::Shift => "Shift",
+            Self::Ctrl => "Ctrl",
+            Self::Alt => "Alt",
+            Self::Win => "Win",
+        }
+    }
 }
 
 #[derive(Default, Copy, Clone, Eq, PartialEq)]
@@ -162,6 +279,8 @@ impl Modifier {
 pub struct ModifierSet(HOT_KEY_MODIFIERS);
 
 impl ModifierSet {
+
+    const fn as_raw(self) -> HOT_KEY_MODIFIERS { self.0 }
 
     pub const fn empty() -> Self { Self(HOT_KEY_MODIFIERS(0)) }
 
@@ -173,6 +292,7 @@ impl ModifierSet {
         self.0.0 &= !modifier.as_raw().0;
     }
 
+    #[cfg(test)]
     pub const fn contains(&self, modifier: Modifier) -> bool {
         self.0.0 & modifier.as_raw().0 != 0
     }

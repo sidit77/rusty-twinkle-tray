@@ -4,7 +4,6 @@ use std::sync::{Arc, Mutex};
 use log::warn;
 use loole::Sender;
 use windows::core::{ComInterface, IInspectable, HSTRING};
-use windows::System::VirtualKey;
 use windows::UI::Color;
 use windows::Win32::UI::Input::KeyboardAndMouse::{GetKeyState, VIRTUAL_KEY, VK_CONTROL, VK_LWIN, VK_MENU, VK_RWIN, VK_SHIFT};
 use windows_ext::IXamlSourceTransparency;
@@ -20,7 +19,7 @@ use crate::utils::elevation::relaunch_as_elevated;
 use crate::utils::extensions::{ChannelExt, FunctionalExt, MutexExt};
 use crate::windowing::{Window, WindowBuilder};
 use crate::{cloned, CustomEvent, Result, APP_ICON};
-use crate::windowing::hotkey::Modifier;
+use crate::windowing::hotkey::{Modifier, ModifierSet, VirtualKey};
 use std::fmt::Write;
 use std::ops::Deref;
 use crate::utils::error::TracedError;
@@ -192,21 +191,8 @@ impl SettingsWindow {
             hotkey.PreviewKeyDown(&KeyEventHandler::new(move |sender, args| {
                 let args = args.unwrap();
                 args.SetHandled(true)?;
-                let key = args.Key()?;
-                let modifier_keys = [
-                    VirtualKey::LeftControl,
-                    VirtualKey::RightControl,
-                    VirtualKey::Control,
-                    VirtualKey::LeftShift,
-                    VirtualKey::RightShift,
-                    VirtualKey::Shift,
-                    VirtualKey::LeftMenu,
-                    VirtualKey::RightMenu,
-                    VirtualKey::Menu,
-                    VirtualKey::LeftWindows,
-                    VirtualKey::RightWindows
-                ];
-                if modifier_keys.contains(&key) {
+                let key = VirtualKey::from(args.Key()?);
+                if key.is_modifier() || key == VirtualKey::ESCAPE {
                     return Ok(());
                 }
                 let modifiers = get_modifier_state();
@@ -215,7 +201,7 @@ impl SettingsWindow {
                 for m in modifiers {
                     let _ = write!(text, "{:?} + ", m);
                 }
-                let _ = write!(text, "{}", key.0);
+                let _ = write!(text, "{}", key.name());
                 hk.SetText(&HSTRING::from(text.to_uppercase()))?;
                 Ok(())
             }))?;
@@ -327,7 +313,7 @@ impl StackPanelExt for StackPanel {
 }
 
 
-fn get_modifier_state() -> HashSet<Modifier> {
+fn get_modifier_state() -> ModifierSet {
     fn is_key_down(key: VIRTUAL_KEY) -> bool {
         unsafe { GetKeyState(key.0 as i32) & (1 << 15) != 0 }
     }

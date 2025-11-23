@@ -12,12 +12,14 @@ mod watchers;
 mod windowing;
 mod mousehook;
 
+use std::pin::Pin;
 use std::process::ExitCode;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use betrayer::{ClickType, Icon, Menu, MenuItem, TrayEvent, TrayIconBuilder};
-use futures_lite::{FutureExt, StreamExt};
+use futures_lite::{FutureExt, Stream, StreamExt};
+use futures_lite::stream::pending;
 use log::{debug, error, info, trace, warn, LevelFilter};
 use windows::Foundation::TypedEventHandler;
 use windows::Win32::Foundation::RECT;
@@ -39,7 +41,6 @@ use crate::watchers::{EventWatcher, PowerEvent};
 use windowing::hotkey::HotKey;
 use crate::mousehook::{TrayIconScrollCallback};
 use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect};
-use crate::windowing::hotkey::{Modifier, VirtualKey};
 
 include!("../assets/ids.rs");
 
@@ -136,8 +137,8 @@ fn run() -> Result<()> {
 
     wnd_sender.send_ignore(CustomEvent::ReinitializeControls);
 
-    let mut hotkey_dec = HotKey::register(([Modifier::Alt], VirtualKey::F1))?;
-    let mut hotkey_inc = HotKey::register(([Modifier::Alt], VirtualKey::F2))?;
+    let mut hotkey_dec: Pin<Box<dyn Stream<Item=CustomEvent>>> = Box::pin(pending()); //HotKey::register(([Modifier::Alt], VirtualKey::F1))?;
+    let mut hotkey_inc: Pin<Box<dyn Stream<Item=CustomEvent>>> = Box::pin(pending()); //HotKey::register(([Modifier::Alt], VirtualKey::F2))?;
 
     let mut scroll_callback = None;
 
@@ -148,8 +149,8 @@ fn run() -> Result<()> {
         while let Some(event) =
             (&mut events)
             .or(&mut click_watcher)
-            .or((&mut hotkey_dec).map(|_| CustomEvent::ChangeGeneralBrightness(-10.0)))
-            .or((&mut hotkey_inc).map(|_| CustomEvent::ChangeGeneralBrightness( 10.0)))
+            .or(&mut hotkey_dec)
+            .or(&mut hotkey_inc)
             .next().await {
             match event {
                 CustomEvent::Quit => {
@@ -274,9 +275,12 @@ fn run() -> Result<()> {
                 CustomEvent::ReinitializeControls => {
                     let lock = config.lock_no_poison();
                     scroll_callback = None;
+                    hotkey_inc = Box::pin(pending());
+                    hotkey_dec = Box::pin(pending());
                     if lock.icon_scoll_enabled {
+                        let factor = lock.icon_scroll_step_size;
                         let callback_result = TrayIconScrollCallback::new(cloned!([wnd_sender] move |delta| {
-                            wnd_sender.send_ignore(CustomEvent::ChangeGeneralBrightness(5.0 * delta))
+                            wnd_sender.send_ignore(CustomEvent::ChangeGeneralBrightness(factor * delta))
                         }));
                         match callback_result {
                             Ok(r) => scroll_callback = Some(r),
@@ -286,7 +290,27 @@ fn run() -> Result<()> {
                             }
                         }
                     }
-
+                    if lock.hotkeys_enabled {
+                        let factor = lock.hotkey_step_size;
+                        match HotKey::register(lock.brightness_increase_hotkey) {
+                            Ok(hk) => hotkey_inc = Box::pin(hk.map(move |_| CustomEvent::ChangeGeneralBrightness(factor))),
+                            Err(err) => {
+                                error!("{:?}", err);
+                                panic::show_msg(format_args!("Failed to register hotkey {}:\n{}",
+                                                             lock.brightness_increase_hotkey.display(true),
+                                                             err.message()));
+                            }
+                        }
+                        match HotKey::register(lock.brightness_decrease_hotkey) {
+                            Ok(hk) => hotkey_dec = Box::pin(hk.map(move |_| CustomEvent::ChangeGeneralBrightness(-factor))),
+                            Err(err) => {
+                                error!("{:?}", err);
+                                panic::show_msg(format_args!("Failed to register hotkey {}:\n{}",
+                                                             lock.brightness_decrease_hotkey.display(true),
+                                                             err.message()));
+                            }
+                        }
+                    }
                 }
             }
         }

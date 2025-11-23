@@ -19,7 +19,7 @@ use crate::utils::extensions::{ChannelExt, FunctionalExt, MutexExt};
 use crate::windowing::{Window, WindowBuilder};
 use crate::{cloned, CustomEvent, Result, APP_ICON};
 use crate::windowing::hotkey::{KeyCombination, Modifier, ModifierSet, VirtualKey};
-use crate::utils::error::TracedError;
+use crate::utils::error::{WinOptionExt};
 
 thread_local! {
     static TRANSPARENT_BACKGROUND: bool = XamlWindow::Current()
@@ -172,49 +172,18 @@ impl SettingsWindow {
                 Ok(())
             }))?;
 
-        let make_hotkey_editor = || {
-            let hotkey = TextBox::new()?;
-            hotkey.SetIsReadOnly(true)?;
-            hotkey.SetText(&HSTRING::from("CTRL + SHIFT + ALT"))?;
-            hotkey.SetTextAlignment(TextAlignment::Center)?;
-            hotkey.SetWidth(200.0)?;
-            hotkey.SetMargin(Thickness {
-                Left: 30.0,
-                Top: 0.0,
-                Right: 20.0,
-                Bottom: 0.0,
-            })?;
-            let hk = hotkey.clone();
-            hotkey.PreviewKeyDown(&KeyEventHandler::new(move |sender, args| {
-                let args = args.unwrap();
-                args.SetHandled(true)?;
-                let key = VirtualKey::from(args.Key()?);
-                if key.is_modifier() || key == VirtualKey::ESCAPE {
-                    return Ok(());
-                }
-                let modifiers = get_modifier_state();
-                println!("{:?} {:?}", modifiers, key);
-                let key_combo = KeyCombination {
-                    modifiers,
-                    key,
-                };
-                hk.SetText(&HSTRING::from(format!("{}", key_combo.display(true)).to_uppercase()))?;
-                Ok(())
-            }))?;
-            Ok::<_, TracedError>(hotkey)
-        };
-
-        let hotkey_increase = make_hotkey_editor()?;
-        let hotkey_decrease = make_hotkey_editor()?;
-        //let hotkey_decrease = TextBlock::with_text("ALT")?;
+        let hotkey_increase = make_hotkey_editor(sender.clone(), config.clone(), |c| &mut c.brightness_increase_hotkey)?;
+        let hotkey_decrease = make_hotkey_editor(sender.clone(), config.clone(), |c| &mut c.brightness_decrease_hotkey)?;
 
         let hotkey_toggle = ToggleSwitch::new()?
             .with_width(TOGGLE_WIDTH)?
-            .with_state(true)?
+            .with_state(config.lock_no_poison().hotkeys_enabled)?
             .with_toggled_handler(cloned!([config, sender, hotkey_increase, hotkey_decrease] move |ts| {
+                config.lock_no_poison().hotkeys_enabled = ts.get_state()?;
+                config.lock_no_poison().dirty = true;
+                sender.send_ignore(CustomEvent::ReinitializeControls);
                 hotkey_increase.SetIsEnabled(ts.get_state()?)?;
                 hotkey_decrease.SetIsEnabled(ts.get_state()?)?;
-                sender.send_ignore(CustomEvent::ReinitializeControls);
                 Ok(())
             }))?;
 
@@ -293,6 +262,41 @@ impl SettingsWindow {
         self.content = Some(main);
         Ok(())
     }
+}
+
+fn make_hotkey_editor(sender: Sender<CustomEvent>, config: Arc<Mutex<Config>>, mapper: fn(&mut Config) -> &mut KeyCombination) -> Result<TextBox> {
+    let hotkey = TextBox::new()?;
+    hotkey.SetIsReadOnly(true)?;
+    hotkey.SetText(&HSTRING::from(format!("{}", mapper(&mut config.lock_no_poison()).display(true)).to_uppercase()))?;
+    hotkey.SetIsEnabled(config.lock_no_poison().hotkeys_enabled)?;
+    hotkey.SetTextAlignment(TextAlignment::Center)?;
+    hotkey.SetWidth(200.0)?;
+    hotkey.SetMargin(Thickness {
+        Left: 30.0,
+        Top: 0.0,
+        Right: 20.0,
+        Bottom: 0.0,
+    })?;
+    hotkey.PreviewKeyDown(&KeyEventHandler::new(cloned!([sender, config] move |this, args| {
+        let args = args.some()?;
+        args.SetHandled(true)?;
+        let key = VirtualKey::from(args.Key()?);
+        if key.is_modifier() || key == VirtualKey::ESCAPE {
+            return Ok(());
+        }
+        let modifiers = get_modifier_state();
+        let key_combo = KeyCombination { modifiers, key };
+        this
+            .some()?
+            .cast::<TextBox>()?
+            .SetText(&HSTRING::from(format!("{}", key_combo.display(true)).to_uppercase()))?;
+        let mut config = config.lock_no_poison();
+        *mapper(&mut config) = key_combo;
+        config.dirty = true;
+        sender.send_ignore(CustomEvent::ReinitializeControls);
+        Ok(())
+    })))?;
+    Ok(hotkey)
 }
 
 trait StackPanelExt: Sized {

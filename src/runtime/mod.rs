@@ -57,6 +57,7 @@ impl<T> Stream for FutureStream<T> {
     }
 }
 
+
 struct Signal {
     thread: Thread,
     signaled: AtomicBool

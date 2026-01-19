@@ -6,7 +6,7 @@ use std::os::windows::ffi::OsStringExt;
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
-use log::debug;
+use log::{debug, warn};
 use windows::core::imp::CoTaskMemFree;
 use windows::Win32::UI::Shell::{FOLDERID_RoamingAppData, SHGetKnownFolderPath, KF_FLAG_DEFAULT};
 
@@ -146,7 +146,8 @@ impl Config {
             }
 
             if section.is_empty() {
-                return Err("No section".into());
+                warn!("Line \"{line}\" (#{number}) is not in a section, ignoring it");
+                continue;
             }
 
             let (key, value) = line
@@ -181,6 +182,7 @@ impl Config {
                         _ => debug!("Ignoring unknown key in section {}: {}={}", section, key, value)
                     }
                 }
+                "" => debug!("Ignoring key without section: {}={}", key, value),
                 _ => debug!("Ignoring key in unknown section {}: {}={}", section, key, value)
             }
         }

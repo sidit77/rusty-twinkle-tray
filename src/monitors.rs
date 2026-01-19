@@ -60,6 +60,10 @@ impl Monitor {
                 let hmonitor = monitors.iter().find(|(n, _)| n == &gdi).some()?.1;
                 Ok(Monitor { name, path, hmonitor })
             })
+            .filter(|r| r
+                .as_ref()
+                .map(|m| !m.path.0.as_os_str().is_empty())
+                .unwrap_or(false))
             .collect()
     }
 

@@ -218,6 +218,14 @@ impl BrightnessFlyout {
         Ok(())
     }
 
+    pub fn rename_monitor(&self, path: &MonitorPath, name: String) -> Result<()> {
+        match self.monitor_controls.get(path) {
+            None => warn!("Monitor is not registered: {:?}", path),
+            Some(entry) => entry.set_name(&name)?
+        }
+        Ok(())
+    }
+
     pub fn update_brightness(&self, path: MonitorPath, new_brightness: u32) -> Result<()> {
         match self.monitor_controls.get(&path) {
             None => warn!("Monitor is not registered: {:?}", path),
@@ -237,7 +245,8 @@ impl BrightnessFlyout {
 struct MonitorEntry {
     position: i32,
     ui: StackPanel,
-    slider: Slider
+    slider: Slider,
+    name_label: TextBlock
 }
 
 impl MonitorEntry {
@@ -247,6 +256,8 @@ impl MonitorEntry {
             .with_text_alignment(TextAlignment::Center)?
             .with_font_size(20.0)?
             .with_font_weight(FontWeight::Medium)?;
+
+        let name_label = TextBlock::with_text(&name)?.with_font_size(20.0)?;
 
         let slider = Slider::new()?
             .with_vertical_alignment(VerticalAlignment::Center)?
@@ -267,7 +278,7 @@ impl MonitorEntry {
                 &StackPanel::horizontal()?
                     .with_spacing(8.0)?
                     .with_child(&FontIcon::new('\u{E7f4}')?.with_font_weight(FontWeight::Medium)?)?
-                    .with_child(&TextBlock::with_text(&name)?.with_font_size(20.0)?)?
+                    .with_child(&name_label)?
             )?
             .with_child(
                 &Grid::new()?
@@ -277,7 +288,11 @@ impl MonitorEntry {
                     .with_child(&label, 0, 1)?
             )?;
 
-        Ok(Self { position, ui, slider })
+        Ok(Self { position, ui, slider, name_label })
+    }
+
+    pub fn set_name(&self, name: &str) -> Result<()> {
+        self.name_label.set_text(name)
     }
 
     pub fn set_brightness(&self, value: u32) -> Result<()> {

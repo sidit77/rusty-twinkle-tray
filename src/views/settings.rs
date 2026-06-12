@@ -7,7 +7,7 @@ use windows::UI::Color;
 use windows::Win32::UI::Input::KeyboardAndMouse::{GetKeyState, VIRTUAL_KEY, VK_CONTROL, VK_LWIN, VK_MENU, VK_RWIN, VK_SHIFT};
 use windows_ext::IXamlSourceTransparency;
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
-use windows_ext::UI::Xaml::{ElementTheme, RoutedEventHandler, TextAlignment, Thickness, VerticalAlignment, Window as XamlWindow};
+use windows_ext::UI::Xaml::{ElementTheme, HorizontalAlignment, RoutedEventHandler, TextAlignment, Thickness, VerticalAlignment, Window as XamlWindow};
 use windows_ext::UI::Xaml::Controls::{TextBox};
 use windows_ext::UI::Xaml::Input::KeyEventHandler;
 use crate::config::{autostart, Config};
@@ -332,6 +332,13 @@ fn make_monitor_rename_editor(
         editor.SetText(&HSTRING::from(name.as_str()))?;
     }
     editor.SetWidth(300.0)?;
+    editor.SetHorizontalAlignment(HorizontalAlignment::Left)?;
+    editor.SetMargin(Thickness {
+        Left: 30.0,
+        Top: 0.0,
+        Right: 0.0,
+        Bottom: 0.0,
+    })?;
     editor.LostFocus(&RoutedEventHandler::new(cloned!([sender, config] move |this, _| {
         let text = this
             .some()?

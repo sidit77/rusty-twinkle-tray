@@ -7,10 +7,11 @@ use windows::UI::Color;
 use windows::Win32::UI::Input::KeyboardAndMouse::{GetKeyState, VIRTUAL_KEY, VK_CONTROL, VK_LWIN, VK_MENU, VK_RWIN, VK_SHIFT};
 use windows_ext::IXamlSourceTransparency;
 use windows_ext::UI::Xaml::Media::SolidColorBrush;
-use windows_ext::UI::Xaml::{ElementTheme, TextAlignment, Thickness, VerticalAlignment, Window as XamlWindow};
+use windows_ext::UI::Xaml::{ElementTheme, HorizontalAlignment, RoutedEventHandler, TextAlignment, Thickness, VerticalAlignment, Window as XamlWindow};
 use windows_ext::UI::Xaml::Controls::{TextBox};
 use windows_ext::UI::Xaml::Input::KeyEventHandler;
 use crate::config::{autostart, Config};
+use crate::monitors::{Monitor, MonitorPath};
 use crate::ui::container::StackPanel;
 use crate::ui::controls::{TextBlock, ToggleSwitch};
 use crate::ui::FontWeight;
@@ -241,6 +242,25 @@ impl SettingsWindow {
                     )?
             )?;
 
+        let monitors = section("Monitors")?
+            .with_child(
+                &TextBlock::with_text("Rename your displays. Leave a field empty to use its default name.")?
+                    .with_font_size(14.0)?
+            )?;
+        match Monitor::find_all() {
+            Ok(found) => {
+                for monitor in found {
+                    let default_name = monitor.name().to_string();
+                    let editor = make_monitor_rename_editor(sender.clone(), config.clone(), monitor.path().clone(), default_name)?;
+                    monitors.add_child(&editor)?;
+                }
+            }
+            Err(e) => {
+                warn!("Failed to enumerate monitors for settings: {e}");
+                monitors.add_child(&TextBlock::with_text("Failed to detect monitors.")?)?;
+            }
+        }
+
         let advanced = section("Advanced")?.with_child(
             &StackPanel::horizontal()?
                 .with_child(&autostart_priority_toggle)?
@@ -256,6 +276,7 @@ impl SettingsWindow {
             .with_spacing(7.0)?
             .with_child(&general)?
             .with_child(&controls)?
+            .with_child(&monitors)?
             .with_child(&advanced)?;
 
         self.window.set_content(&main)?;
@@ -297,6 +318,47 @@ fn make_hotkey_editor(sender: Sender<CustomEvent>, config: Arc<Mutex<Config>>, m
         Ok(())
     })))?;
     Ok(hotkey)
+}
+
+fn make_monitor_rename_editor(
+    sender: Sender<CustomEvent>,
+    config: Arc<Mutex<Config>>,
+    path: MonitorPath,
+    default_name: String
+) -> Result<TextBox> {
+    let editor = TextBox::new()?;
+    editor.SetPlaceholderText(&HSTRING::from(default_name.as_str()))?;
+    if let Some(name) = config.lock_no_poison().monitor(&path).custom_name.clone() {
+        editor.SetText(&HSTRING::from(name.as_str()))?;
+    }
+    editor.SetWidth(300.0)?;
+    editor.SetHorizontalAlignment(HorizontalAlignment::Left)?;
+    editor.SetMargin(Thickness {
+        Left: 30.0,
+        Top: 0.0,
+        Right: 0.0,
+        Bottom: 0.0,
+    })?;
+    editor.LostFocus(&RoutedEventHandler::new(cloned!([sender, config] move |this, _| {
+        let text = this
+            .some()?
+            .cast::<TextBox>()?
+            .Text()?
+            .to_string();
+        let trimmed = text.trim();
+        let new_name = (!trimmed.is_empty()).then(|| trimmed.to_string());
+        let mut config = config.lock_no_poison();
+        let settings = config.monitor(&path);
+        if settings.custom_name == new_name {
+            return Ok(());
+        }
+        settings.custom_name = new_name.clone();
+        config.dirty = true;
+        let display_name = new_name.unwrap_or_else(|| default_name.clone());
+        sender.send_ignore(CustomEvent::MonitorRenamed { path: path.clone(), name: display_name });
+        Ok(())
+    })))?;
+    Ok(editor)
 }
 
 trait StackPanelExt: Sized {

@@ -56,6 +56,7 @@ pub enum CustomEvent {
     CloseSettings,
     MonitorAdded { path: MonitorPath, name: String },
     MonitorRemoved { path: MonitorPath },
+    MonitorRenamed { path: MonitorPath, name: String },
     BrightnessChanged { path: MonitorPath, value: u32 },
     ChangeGeneralBrightness(f32),
     ReinitializeControls
@@ -265,6 +266,10 @@ fn run() -> Result<()> {
                 CustomEvent::MonitorRemoved { path } => {
                     info!("Monitor removed: {:?}", path);
                     flyout.unregister_monitor(&path)?;
+                }
+                CustomEvent::MonitorRenamed { path, name } => {
+                    info!("Monitor renamed: {:?} -> {}", path, name);
+                    flyout.rename_monitor(&path, name)?;
                 }
                 CustomEvent::BrightnessChanged { path, value } => {
                     flyout.update_brightness(path, value)?;

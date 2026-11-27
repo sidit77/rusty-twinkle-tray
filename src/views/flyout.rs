@@ -1,3 +1,5 @@
+use std::cell::Cell;
+
 use log::{debug, warn};
 use loole::Sender;
 use windows::core::{h, IInspectable};
@@ -58,7 +60,8 @@ pub struct BrightnessFlyout {
     container: StackPanel,
 
     monitor_panel: StackPanel,
-    monitor_controls: OrderedMap<MonitorPath, MonitorEntry>
+    monitor_controls: OrderedMap<MonitorPath, MonitorEntry>,
+    sender: Sender<CustomEvent>
 }
 
 impl BrightnessFlyout {
@@ -147,7 +150,8 @@ impl BrightnessFlyout {
             background,
             container,
             monitor_panel,
-            monitor_controls: OrderedMap::new()
+            monitor_controls: OrderedMap::new(),
+            sender
         })
     }
 
@@ -200,7 +204,7 @@ impl BrightnessFlyout {
     pub fn register_monitor(&mut self, name: String, path: MonitorPath, position: i32, proxy: MonitorControllerProxy) -> Result<()> {
         log_assert!(self
             .monitor_controls
-            .insert(path.clone(), MonitorEntry::create(name, path, position, proxy)?)
+            .insert(path.clone(), MonitorEntry::create(name, path, position, proxy, self.sender.clone())?)
             .is_none());
         self.repopulate_monitor_list()?;
         Ok(())
@@ -240,17 +244,28 @@ impl BrightnessFlyout {
         }
         Ok(())
     }
+
+    /// The level the monitor is currently set to
+    pub fn brightness(&self, path: &MonitorPath) -> Option<u32> {
+        self.monitor_controls
+            .get(path)
+            .filter(|entry| entry.level_known.get())
+            .and_then(|entry| entry.slider.get_value().ok())
+            .map(|value| value.round() as u32)
+    }
 }
 
 struct MonitorEntry {
     position: i32,
     ui: StackPanel,
     slider: Slider,
-    name_label: TextBlock
+    name_label: TextBlock,
+    /// The slider starts at 0 until the monitor's actual level has been read
+    level_known: Cell<bool>
 }
 
 impl MonitorEntry {
-    pub fn create(name: String, path: MonitorPath, position: i32, proxy: MonitorControllerProxy) -> Result<Self> {
+    pub fn create(name: String, path: MonitorPath, position: i32, proxy: MonitorControllerProxy, sender: Sender<CustomEvent>) -> Result<Self> {
         let label = TextBlock::new()?
             .with_vertical_alignment(VerticalAlignment::Center)?
             .with_text_alignment(TextAlignment::Center)?
@@ -267,6 +282,7 @@ impl MonitorEntry {
                 let new = args.NewValue()? as u32;
                 label.set_text(hformat!("{}", new))?;
                 proxy.set_brightness(path.clone(), new);
+                sender.send_ignore(CustomEvent::MonitorLevelChanged);
                 Ok(())
             }))?;
 
@@ -288,7 +304,13 @@ impl MonitorEntry {
                     .with_child(&label, 0, 1)?
             )?;
 
-        Ok(Self { position, ui, slider, name_label })
+        Ok(Self {
+            position,
+            ui,
+            slider,
+            name_label,
+            level_known: Cell::new(false)
+        })
     }
 
     pub fn set_name(&self, name: &str) -> Result<()> {
@@ -296,6 +318,7 @@ impl MonitorEntry {
     }
 
     pub fn set_brightness(&self, value: u32) -> Result<()> {
+        self.level_known.set(true);
         self.slider.set_value(value as f64)
     }
 

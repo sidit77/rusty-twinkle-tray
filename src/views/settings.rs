@@ -173,6 +173,17 @@ impl SettingsWindow {
                 Ok(())
             }))?;
 
+        let follow_windows_brightness = ToggleSwitch::new()?
+            .with_width(TOGGLE_WIDTH)?
+            .with_state(config.lock_no_poison().follow_windows_brightness)?
+            .with_toggled_handler(cloned!([config, sender] move |ts | {
+                let mut config = config.lock_no_poison();
+                config.follow_windows_brightness = ts.get_state()?;
+                config.dirty = true;
+                sender.send_ignore(CustomEvent::ReinitializeControls);
+                Ok(())
+            }))?;
+
         let hotkey_increase = make_hotkey_editor(sender.clone(), config.clone(), |c| &mut c.brightness_increase_hotkey)?;
         let hotkey_decrease = make_hotkey_editor(sender.clone(), config.clone(), |c| &mut c.brightness_decrease_hotkey)?;
 
@@ -217,6 +228,12 @@ impl SettingsWindow {
             &StackPanel::horizontal()?
                 .with_child(&enable_icon_scroll)?
                 .with_child(&TextBlock::with_text("Adjust the brightness of all displays by scrolling over the tray icon")?
+                    .with_vertical_alignment(VerticalAlignment::Center)?)?
+            )?
+            .with_child(
+            &StackPanel::horizontal()?
+                .with_child(&follow_windows_brightness)?
+                .with_child(&TextBlock::with_text("Keep all displays in sync with the Windows brightness (brightness keys, Windows slider)")?
                     .with_vertical_alignment(VerticalAlignment::Center)?)?
             )?
             .with_child(

@@ -74,6 +74,17 @@ impl Monitor {
         &self.path
     }
 
+    pub fn is_primary(&self) -> bool {
+        use windows::Win32::Graphics::Gdi::{GetMonitorInfoW, MONITORINFO};
+        use windows::Win32::UI::WindowsAndMessaging::MONITORINFOF_PRIMARY;
+
+        let mut mi = MONITORINFO {
+            cbSize: std::mem::size_of::<MONITORINFO>() as u32,
+            ..Default::default()
+        };
+        unsafe { GetMonitorInfoW(self.hmonitor, &mut mi) }.as_bool() && mi.dwFlags & MONITORINFOF_PRIMARY != 0
+    }
+
     pub fn open(&self) -> Result<MonitorConnection> {
         MonitorConnection::open(self.hmonitor)
     }
@@ -148,6 +159,11 @@ mod tests {
         }
         Ok(())
     }
+
+    #[test]
+    fn builtin_display() {
+        println!("Built-in display: {}", has_builtin_display());
+    }
 }
 
 impl Drop for MonitorConnection {
@@ -177,6 +193,28 @@ bitflags! {
 }
  */
 
+/// Whether the computer has a built-in screen, like the panel of a laptop or an all-in-one.
+/// Windows already controls the brightness of those screens itself.
+pub fn has_builtin_display() -> bool {
+    paths::find_all_possible_paths()
+        .map(|paths| {
+            paths.iter().any(|p| {
+                matches!(
+                    p.targetInfo.outputTechnology,
+                    DISPLAYCONFIG_OUTPUT_TECHNOLOGY_INTERNAL
+                        | DISPLAYCONFIG_OUTPUT_TECHNOLOGY_DISPLAYPORT_EMBEDDED
+                        | DISPLAYCONFIG_OUTPUT_TECHNOLOGY_UDI_EMBEDDED
+                        | DISPLAYCONFIG_OUTPUT_TECHNOLOGY_LVDS
+                )
+            })
+        })
+        .unwrap_or_else(|err| {
+            // Assume there is one, which keeps features that would interfere with it opt-in
+            log::warn!("Failed to check for a built-in display: {err}");
+            true
+        })
+}
+
 type GdiName = WStr<32>;
 mod paths {
     use std::mem::size_of;
@@ -184,7 +222,7 @@ mod paths {
     use windows::Win32::Devices::Display::{
         DisplayConfigGetDeviceInfo, GetDisplayConfigBufferSizes, QueryDisplayConfig, DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME,
         DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME, DISPLAYCONFIG_DEVICE_INFO_HEADER, DISPLAYCONFIG_MODE_INFO, DISPLAYCONFIG_PATH_INFO,
-        DISPLAYCONFIG_SOURCE_DEVICE_NAME, DISPLAYCONFIG_TARGET_DEVICE_NAME, QDC_ONLY_ACTIVE_PATHS
+        DISPLAYCONFIG_SOURCE_DEVICE_NAME, DISPLAYCONFIG_TARGET_DEVICE_NAME, QDC_ALL_PATHS, QDC_ONLY_ACTIVE_PATHS, QUERY_DISPLAY_CONFIG_FLAGS
     };
     use windows::Win32::Foundation::WIN32_ERROR;
 
@@ -192,22 +230,25 @@ mod paths {
     use crate::utils::error::Result;
 
     pub fn find_all_paths() -> Result<Vec<DISPLAYCONFIG_PATH_INFO>> {
+        query_paths(QDC_ONLY_ACTIVE_PATHS)
+    }
+
+    /// Also includes inactive paths, like the panel of a laptop whose lid is closed
+    pub fn find_all_possible_paths() -> Result<Vec<DISPLAYCONFIG_PATH_INFO>> {
+        query_paths(QDC_ALL_PATHS)
+    }
+
+    fn query_paths(flags: QUERY_DISPLAY_CONFIG_FLAGS) -> Result<Vec<DISPLAYCONFIG_PATH_INFO>> {
         unsafe {
             let mut path_count = 0;
             let mut mode_count = 0;
-            GetDisplayConfigBufferSizes(QDC_ONLY_ACTIVE_PATHS, &mut path_count, &mut mode_count)?;
+            GetDisplayConfigBufferSizes(flags, &mut path_count, &mut mode_count)?;
 
             let mut paths = vec![DISPLAYCONFIG_PATH_INFO::default(); path_count as usize];
             let mut modes = vec![DISPLAYCONFIG_MODE_INFO::default(); mode_count as usize];
 
-            QueryDisplayConfig(
-                QDC_ONLY_ACTIVE_PATHS,
-                &mut path_count,
-                paths.as_mut_ptr(),
-                &mut mode_count,
-                modes.as_mut_ptr(),
-                None
-            )?;
+            QueryDisplayConfig(flags, &mut path_count, paths.as_mut_ptr(), &mut mode_count, modes.as_mut_ptr(), None)?;
+            paths.truncate(path_count as usize);
 
             Ok(paths)
         }

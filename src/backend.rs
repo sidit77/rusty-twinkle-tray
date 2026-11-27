@@ -76,6 +76,14 @@ impl MonitorController {
                             debug!("Skipping over unnamed monitors as they are likely integrated displays");
                             current_monitors.retain(|m| !m.name().is_empty());
 
+                            // Windows shows its brightness popup on the primary display, so that's the one to mirror
+                            let primary = current_monitors
+                                .iter()
+                                .find(|m| m.is_primary())
+                                .or(current_monitors.first())
+                                .map(|m| m.path().clone());
+                            sender.send_ignore(CustomEvent::PrimaryMonitorChanged(primary));
+
                             let old_monitors = take(&mut monitor_map).into_keys().collect::<BTreeSet<_>>();
 
                             // Yield to allow the monitor tasks to finish

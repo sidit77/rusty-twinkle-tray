@@ -25,6 +25,7 @@ pub struct Config {
     pub hotkey_step_size: f32,
     pub brightness_increase_hotkey: KeyCombination,
     pub brightness_decrease_hotkey: KeyCombination,
+    pub follow_windows_brightness: bool,
     pub monitors: BTreeMap<MonitorPath, MonitorSettings>
 }
 
@@ -40,6 +41,9 @@ impl Default for Config {
             hotkey_step_size: 10.0,
             brightness_increase_hotkey: KeyCombination::from(([Modifier::Alt], VirtualKey::F1)),
             brightness_decrease_hotkey: KeyCombination::from(([Modifier::Alt], VirtualKey::F2)),
+            // On by default where Windows controls no screen itself, so there's nothing to interfere with:
+            // the brightness keys don't do anything useful on such computers otherwise
+            follow_windows_brightness: !crate::monitors::has_builtin_display(),
             monitors: Default::default(),
         }
     }
@@ -103,6 +107,7 @@ impl Config {
         write!(file, "HotkeyStepSize={}\r\n", self.hotkey_step_size)?;
         write!(file, "BrightnessIncreaseHotkey={}\r\n", self.brightness_increase_hotkey.display(false))?;
         write!(file, "BrightnessDecreaseHotkey={}\r\n", self.brightness_decrease_hotkey.display(false))?;
+        write!(file, "FollowWindowsBrightness={}\r\n", self.follow_windows_brightness)?;
 
         write!(file, "\r\n")?;
 
@@ -164,6 +169,7 @@ impl Config {
                     "HotkeyStepSize" => self.hotkey_step_size = value.parse()?,
                     "BrightnessIncreaseHotkey" => self.brightness_increase_hotkey = value.parse()?,
                     "BrightnessDecreaseHotkey" => self.brightness_decrease_hotkey = value.parse()?,
+                    "FollowWindowsBrightness" => self.follow_windows_brightness = value.parse()?,
                     _ => debug!("Ignoring unknown key in section {}: {}={}", section, key, value)
                 },
                 path if path.starts_with("\\\\?\\DISPLAY") => {

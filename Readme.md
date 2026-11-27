@@ -11,6 +11,7 @@ Rusty Twinkle Tray is a work-in-progress rewrite of Twinkle Tray in Rust. A cent
 - Can automatically restore the last set brightness after¹:
   - Changing display settings
   - Waking up from sleep
+- Keeps external monitors in sync with the Windows brightness, so the keyboard's brightness keys and the Windows brightness slider work for them too
 - Small (~900kb) standalone executable
 - Built using native OS controls instead of electron
 - As inactive as possible when not in use

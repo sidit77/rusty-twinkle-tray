@@ -10,6 +10,7 @@ mod utils;
 mod views;
 mod watchers;
 mod windowing;
+mod windows_brightness;
 mod mousehook;
 
 use std::pin::Pin;
@@ -38,6 +39,7 @@ use crate::utils::extensions::{ChannelExt, MutexExt};
 use crate::utils::{logger, panic};
 use crate::views::{BrightnessFlyout, ProxyWindow, SettingsWindow};
 use crate::watchers::{EventWatcher, PowerEvent};
+use crate::windows_brightness::WindowsBrightness;
 use windowing::hotkey::HotKey;
 use crate::mousehook::{TrayIconScrollCallback};
 use crate::windowing::{event_loop, get_primary_work_area, poll_for_click_outside_of_rect};
@@ -59,8 +61,16 @@ pub enum CustomEvent {
     MonitorRenamed { path: MonitorPath, name: String },
     BrightnessChanged { path: MonitorPath, value: u32 },
     ChangeGeneralBrightness(f32),
+    WindowsBrightnessChanged { value: u32, initial: bool },
+    PrimaryMonitorChanged(Option<MonitorPath>),
+    MonitorLevelChanged,
+    MirrorWindowsBrightness,
     ReinitializeControls
 }
+
+/// How long the primary monitor has to stay unchanged before its level is written back to Windows.
+/// Keeps us from writing the power plan for every step while a slider is being dragged.
+const MIRROR_DELAY: Duration = Duration::from_millis(300);
 
 fn run() -> Result<()> {
     // For changing the autostart setting with an elevated instance
@@ -112,9 +122,11 @@ fn run() -> Result<()> {
     let _event_watcher = EventWatcher::new()?
         .on_power_event({
             let proxy = controller.create_proxy();
+            let sender = wnd_sender.clone();
             move |event| match event {
                 PowerEvent::MonitorOn => proxy.refresh_brightness_in(Duration::from_secs(10)),
                 PowerEvent::Resume => proxy.refresh_monitors(),
+                PowerEvent::WindowsBrightness { value, initial } => sender.send_ignore(CustomEvent::WindowsBrightnessChanged { value, initial }),
                 _ => {}
             }
         })?
@@ -142,14 +154,18 @@ fn run() -> Result<()> {
     let mut hotkey_inc: Pin<Box<dyn Stream<Item=CustomEvent>>> = Box::pin(pending()); //HotKey::register(([Modifier::Alt], VirtualKey::F2))?;
 
     let mut scroll_callback = None;
+    let mut windows_brightness = WindowsBrightness::new();
+    let mut primary_monitor: Option<MonitorPath> = None;
 
     let mut last_close = Instant::now();
     event_loop(async {
         let mut click_watcher = FutureStream::new();
+        let mut mirror_timer = FutureStream::new();
         let mut events = wnd_receiver.into_stream();
         while let Some(event) =
             (&mut events)
             .or(&mut click_watcher)
+            .or(&mut mirror_timer)
             .or(&mut hotkey_dec)
             .or(&mut hotkey_inc)
             .next().await {
@@ -277,11 +293,43 @@ fn run() -> Result<()> {
                 CustomEvent::ChangeGeneralBrightness(value) => {
                     flyout.change_brightness(value.round() as i32)?;
                 }
+                CustomEvent::WindowsBrightnessChanged { value, initial } => {
+                    // Always track the value, so that enabling the setting later starts from the right number
+                    let change = windows_brightness.on_windows_changed(value, initial);
+                    if let Some(change) = change.filter(|_| config.lock_no_poison().follow_windows_brightness) {
+                        debug!("Windows brightness changed to {} ({:+}), following", value, change);
+                        flyout.change_brightness(change)?;
+                    }
+                }
+                CustomEvent::PrimaryMonitorChanged(path) => {
+                    debug!("Mirroring the brightness of {:?} into Windows", path);
+                    primary_monitor = path;
+                }
+                CustomEvent::MonitorLevelChanged => {
+                    // Restarting the timer on every change: only the final level gets written
+                    mirror_timer.set(async {
+                        Timer::after(MIRROR_DELAY).await;
+                        Some(CustomEvent::MirrorWindowsBrightness)
+                    });
+                }
+                CustomEvent::MirrorWindowsBrightness => {
+                    if config.lock_no_poison().follow_windows_brightness {
+                        // Changes that came from Windows already match its value, so only changes made
+                        // through the app (slider, scroll, hotkeys, restore) result in a write
+                        if let Some(level) = primary_monitor.as_ref().and_then(|p| flyout.brightness(p)) {
+                            windows_brightness.mirror(level);
+                        }
+                    }
+                }
                 CustomEvent::ReinitializeControls => {
                     let lock = config.lock_no_poison();
                     scroll_callback = None;
                     hotkey_inc = Box::pin(pending());
                     hotkey_dec = Box::pin(pending());
+                    if lock.follow_windows_brightness {
+                        // Bring Windows in line with the monitors right away, not only after the next change
+                        wnd_sender.send_ignore(CustomEvent::MirrorWindowsBrightness);
+                    }
                     if lock.icon_scoll_enabled {
                         let factor = lock.icon_scroll_step_size;
                         let callback_result = TrayIconScrollCallback::new(cloned!([wnd_sender] move |delta| {
